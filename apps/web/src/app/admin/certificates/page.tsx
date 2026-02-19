@@ -46,7 +46,7 @@ const GRADE_CONFIG: Record<string, { label: string; className: string }> = {
 };
 
 export default function AdminCertificatesPage() {
-  const { token } = useAuthStore();
+  const { token, adminLocale } = useAuthStore();
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -268,7 +268,7 @@ export default function AdminCertificatesPage() {
                             </code>
                           </button>
                           <a
-                            href={`/certificate/${cert.uniqueCode}`}
+                            href={`${adminLocale && adminLocale !== 'az' ? `/${adminLocale}` : ''}/certificate/${cert.uniqueCode}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-1.5 rounded-lg hover:bg-gray-800/50 text-gray-500 hover:text-primary-400 transition-colors"
@@ -318,7 +318,7 @@ export default function AdminCertificatesPage() {
                         )}
                       </button>
                       <a
-                        href={`/certificate/${cert.uniqueCode}`}
+                        href={`${adminLocale && adminLocale !== 'az' ? `/${adminLocale}` : ''}/certificate/${cert.uniqueCode}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-1.5 rounded-lg hover:bg-gray-800/50 text-gray-500 hover:text-primary-400 transition-colors"

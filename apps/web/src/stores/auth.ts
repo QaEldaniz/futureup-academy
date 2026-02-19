@@ -15,9 +15,11 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  adminLocale: string;
   login: (token: string, user: User) => void;
   logout: () => void;
   setLoading: (loading: boolean) => void;
+  setAdminLocale: (locale: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -27,6 +29,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       isAuthenticated: false,
       isLoading: true,
+      adminLocale: 'az',
       login: (token, user) =>
         set({
           token,
@@ -42,6 +45,7 @@ export const useAuthStore = create<AuthState>()(
           isLoading: false,
         }),
       setLoading: (loading) => set({ isLoading: loading }),
+      setAdminLocale: (locale) => set({ adminLocale: locale }),
     }),
     {
       name: 'futureup-auth',
@@ -49,6 +53,7 @@ export const useAuthStore = create<AuthState>()(
         token: state.token,
         user: state.user,
         isAuthenticated: state.isAuthenticated,
+        adminLocale: state.adminLocale,
       }),
     }
   )

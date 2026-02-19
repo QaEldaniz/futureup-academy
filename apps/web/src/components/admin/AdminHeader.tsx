@@ -14,7 +14,7 @@ interface AdminHeaderProps {
 export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, logout } = useAuthStore();
+  const { user, logout, adminLocale, setAdminLocale } = useAuthStore();
   const { theme, setTheme } = useTheme();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -27,17 +27,11 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
     { code: 'en', label: 'EN', flag: '🇬🇧' },
   ];
 
-  // Get current locale from pathname
-  const currentLocale = (() => {
-    if (pathname.startsWith('/ru/')) return 'ru';
-    if (pathname.startsWith('/en/')) return 'en';
-    return 'az';
-  })();
+  // Language preference stored in Zustand (admin routes don't use URL locale)
+  const currentLocale = adminLocale || 'az';
 
   const switchLanguage = (locale: string) => {
-    const pathWithoutLocale = pathname.replace(/^\/(az|ru|en)/, '') || '/';
-    const newPath = locale === 'az' ? `/admin${pathWithoutLocale.replace('/admin', '') || ''}` : `/${locale}/admin${pathWithoutLocale.replace('/admin', '') || ''}`;
-    router.push(newPath.replace('//', '/'));
+    setAdminLocale(locale);
     setLangOpen(false);
   };
 

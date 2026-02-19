@@ -50,3 +50,6 @@ apps/api/prisma/*.db
 
 # Uploads
 uploads/
+
+# Generated certificates
+apps/api/certificates/*.pdf
