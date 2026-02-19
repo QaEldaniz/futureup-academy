@@ -1,4 +1,12 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+// Нормализуем: убираем trailing slash, гарантируем /api в конце
+const API_URL = (() => {
+  let url = RAW_API_URL.replace(/\/+$/, '');
+  if (!url.endsWith('/api')) {
+    url = url + '/api';
+  }
+  return url;
+})();
 
 type FetchOptions = RequestInit & {
   token?: string;
@@ -8,7 +16,7 @@ class ApiClient {
   private baseUrl: string;
 
   constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
+    this.baseUrl = baseUrl.replace(/\/+$/, '');
   }
 
   private async request<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {

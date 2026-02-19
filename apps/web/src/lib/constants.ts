@@ -1,6 +1,7 @@
 export const SITE_NAME = 'FutureUp Academy';
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://futureup.az';
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const _rawApiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api').replace(/\/+$/, '');
+export const API_URL = _rawApiUrl.endsWith('/api') ? _rawApiUrl : _rawApiUrl + '/api';
 
 export const STATS = {
   students: 500,
