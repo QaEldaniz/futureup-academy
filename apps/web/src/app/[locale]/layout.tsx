@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { ThemeProvider } from '@/components/shared/ThemeProvider';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { WhatsAppButton } from '@/components/shared/WhatsAppButton';
+import { CourseAdvisor } from '@/components/shared/CourseAdvisor';
 import { locales } from '@/i18n/config';
 import type { Metadata } from 'next';
 
@@ -51,6 +53,8 @@ export default async function LocaleLayout({ children, params }: Props) {
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
+          <CourseAdvisor />
+          <WhatsAppButton />
         </div>
       </ThemeProvider>
     </NextIntlClientProvider>

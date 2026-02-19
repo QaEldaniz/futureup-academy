@@ -15,12 +15,25 @@ import {
   MapPin,
   Globe,
   CheckCircle2,
+  Clock,
+  MessageCircle,
+  Map,
 } from 'lucide-react';
 
 interface SiteSettings {
   phone: string;
   email: string;
   address: string;
+  addressAz: string;
+  addressRu: string;
+  addressEn: string;
+  whatsapp: string;
+  workingHours: string;
+  workingHoursAz: string;
+  workingHoursRu: string;
+  workingHoursEn: string;
+  googleMapsEmbed: string;
+  googleMapsLink: string;
   facebook: string;
   instagram: string;
   linkedin: string;
@@ -45,11 +58,48 @@ const CONTACT_FIELDS = [
     type: 'email',
   },
   {
-    key: 'address',
-    label: 'Address',
-    icon: MapPin,
-    placeholder: 'Baku, Azerbaijan',
-    type: 'text',
+    key: 'whatsapp',
+    label: 'WhatsApp Number',
+    icon: MessageCircle,
+    placeholder: '+994 50 123 45 67',
+    type: 'tel',
+    hint: 'Number for WhatsApp chat button (floating on all pages)',
+  },
+];
+
+const ADDRESS_FIELDS = [
+  {
+    key: 'addressAz',
+    label: 'Address (Azerbaijani)',
+    placeholder: 'Bakı, Azərbaycan, Nizami küç. 42',
+  },
+  {
+    key: 'addressRu',
+    label: 'Address (Russian)',
+    placeholder: 'Баку, Азербайджан, ул. Низами 42',
+  },
+  {
+    key: 'addressEn',
+    label: 'Address (English)',
+    placeholder: 'Baku, Azerbaijan, Nizami Street 42',
+  },
+];
+
+const HOURS_FIELDS = [
+  {
+    key: 'workingHoursAz',
+    label: 'Working Hours (Azerbaijani)',
+    placeholder: 'B.e - Cümə: 09:00 - 18:00, Şənbə: 10:00 - 15:00',
+  },
+  {
+    key: 'workingHoursRu',
+    label: 'Working Hours (Russian)',
+    placeholder: 'Пн - Пт: 09:00 - 18:00, Сб: 10:00 - 15:00',
+  },
+  {
+    key: 'workingHoursEn',
+    label: 'Working Hours (English)',
+    placeholder: 'Mon - Fri: 09:00 - 18:00, Sat: 10:00 - 15:00',
   },
 ];
 
@@ -95,6 +145,16 @@ const defaultSettings: SiteSettings = {
   phone: '',
   email: '',
   address: '',
+  addressAz: '',
+  addressRu: '',
+  addressEn: '',
+  whatsapp: '',
+  workingHours: '',
+  workingHoursAz: '',
+  workingHoursRu: '',
+  workingHoursEn: '',
+  googleMapsEmbed: '',
+  googleMapsLink: '',
   facebook: '',
   instagram: '',
   linkedin: '',
@@ -224,9 +284,133 @@ export default function AdminSettingsPage() {
                     placeholder={field.placeholder}
                     className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
+                  {'hint' in field && field.hint && (
+                    <p className="text-[11px] text-gray-500 mt-1.5 ml-1">{field.hint}</p>
+                  )}
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* Address (multilingual) */}
+        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+          <h3 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-accent-400" />
+            Address (Multilingual)
+          </h3>
+          <p className="text-xs text-gray-500 mb-6">
+            Office address in all supported languages.
+          </p>
+
+          <div className="space-y-4">
+            {ADDRESS_FIELDS.map((field) => (
+              <div key={field.key}>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                  {field.label}
+                </label>
+                <input
+                  type="text"
+                  value={settings[field.key]}
+                  onChange={(e) => updateField(field.key, e.target.value)}
+                  placeholder={field.placeholder}
+                  className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Working Hours (multilingual) */}
+        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+          <h3 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
+            <Clock className="w-4 h-4 text-orange-400" />
+            Working Hours (Multilingual)
+          </h3>
+          <p className="text-xs text-gray-500 mb-6">
+            Business working hours in all supported languages.
+          </p>
+
+          <div className="space-y-4">
+            {HOURS_FIELDS.map((field) => (
+              <div key={field.key}>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                  {field.label}
+                </label>
+                <input
+                  type="text"
+                  value={settings[field.key]}
+                  onChange={(e) => updateField(field.key, e.target.value)}
+                  placeholder={field.placeholder}
+                  className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Google Maps */}
+        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+          <h3 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
+            <Map className="w-4 h-4 text-green-400" />
+            Google Maps
+          </h3>
+          <p className="text-xs text-gray-500 mb-6">
+            Embedded map for the contact page. Get embed URL from Google Maps &rarr; Share &rarr; Embed a map.
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                Google Maps Embed URL
+              </label>
+              <input
+                type="url"
+                value={settings.googleMapsEmbed}
+                onChange={(e) => updateField('googleMapsEmbed', e.target.value)}
+                placeholder="https://www.google.com/maps/embed?pb=..."
+                className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              />
+              <p className="text-[11px] text-gray-500 mt-1.5 ml-1">
+                Go to Google Maps &rarr; Find your location &rarr; Share &rarr; Embed a map &rarr; Copy the src URL from iframe code
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                Google Maps Link (optional)
+              </label>
+              <input
+                type="url"
+                value={settings.googleMapsLink}
+                onChange={(e) => updateField('googleMapsLink', e.target.value)}
+                placeholder="https://maps.google.com/?q=..."
+                className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              />
+              <p className="text-[11px] text-gray-500 mt-1.5 ml-1">
+                Direct link to open in Google Maps app (for the address card click)
+              </p>
+            </div>
+
+            {/* Map preview */}
+            {settings.googleMapsEmbed && (
+              <div className="mt-4">
+                <label className="block text-xs font-medium text-gray-400 mb-2">
+                  Preview
+                </label>
+                <div className="rounded-xl overflow-hidden border border-gray-700/50 h-48">
+                  <iframe
+                    src={settings.googleMapsEmbed}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

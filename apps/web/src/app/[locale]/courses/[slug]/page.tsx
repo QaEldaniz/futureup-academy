@@ -85,6 +85,14 @@ function getLocalized(item: Record<string, unknown>, field: string, locale: stri
   return (item[`${field}${suffix}`] as string) || (item[`${field}En`] as string) || '';
 }
 
+function formatDuration(duration: string, locale: string, t: (key: string) => string): string {
+  const match = duration.match(/(\d+)/);
+  if (match) {
+    return `${match[1]} ${t('months')}`;
+  }
+  return duration;
+}
+
 function AccordionItem({ module, index }: { module: SyllabusModule; index: number }) {
   const [isOpen, setIsOpen] = useState(index === 0);
 
@@ -208,7 +216,7 @@ export default function CourseDetailPage() {
               </span>
               <div className="flex items-center gap-1.5 text-gray-500">
                 <Clock className="w-4 h-4" />
-                <span>{course.duration}</span>
+                <span>{formatDuration(course.duration, locale, t)}</span>
               </div>
               <div className="flex items-center gap-1.5 text-gray-500">
                 <BookOpen className="w-4 h-4" />
@@ -292,7 +300,7 @@ export default function CourseDetailPage() {
                   <IconComp className="w-12 h-12 text-white" />
                 </div>
                 <div className="text-3xl font-extrabold text-gray-900 dark:text-white mb-1">{course.price} ₼</div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{course.duration}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{formatDuration(course.duration, locale, t)}</p>
 
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">

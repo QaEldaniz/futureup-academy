@@ -185,7 +185,9 @@ export function CoursesSection() {
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {courses.map((course) => (
-            <CourseCardComponent key={course.titleKey} course={course} />
+            <Link key={course.titleKey} href="/courses" className="cursor-pointer">
+              <CourseCardComponent course={course} />
+            </Link>
           ))}
         </div>
 

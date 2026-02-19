@@ -103,9 +103,8 @@
       "testimonial3Course": "Data Analitika",
       "testimonial3Text": "Data Analytics kursu sayəsində analitik düşüncə bacarıqlarımı inkişaf etdirdim."
     },
-    "partners": {
-      "title": "Tərəfdaşlarımız"
-    },
+    "partnersLabel": "Tərəfdaşlar",
+    "partnersTitle": "Etibarlı Tərəfdaşlarımız",
     "cta": {
       "title": "Gələcəyinə İndi Başla!",
       "subtitle": "İlk addımı at — pulsuz məsləhət üçün müraciət et",
@@ -290,6 +289,10 @@
     "invalidEmail": "Düzgün e-poçt daxil edin",
     "invalidPhone": "Düzgün telefon nömrəsi daxil edin",
     "selectCourse": "Kurs seçin",
+    "namePlaceholder": "Ad və soyadınızı daxil edin",
+    "emailPlaceholder": "example@email.com",
+    "phonePlaceholder": "+994 XX XXX XX XX",
+    "messagePlaceholder": "Sualınızı və ya mesajınızı buraya yazın...",
     "successTitle": "Müraciət Göndərildi!",
     "successDesc": "24 saat ərzində sizinlə əlaqə saxlayacağıq"
   },
@@ -324,5 +327,29 @@
     "completionDate": "Tamamlanma Tarixi",
     "certificateNumber": "Sertifikat Nömrəsi",
     "downloadPdf": "PDF Yüklə"
+  },
+  "advisor": {
+    "title": "Kurs Məsləhətçisi",
+    "subtitle": "Sizə uyğun kursu tapaq",
+    "welcome": "Salam! Mən FutureUp-un kurs məsləhətçisiyəm. Hansı sahə sizi maraqlandırır?",
+    "askLevel": "Əla seçim! Hazırkı təcrübə səviyyəniz necədir?",
+    "askGoal": "Yaxşı! Əsas məqsədiniz nədir?",
+    "resultsFound": "Sizin üçün ən uyğun kursları tapdım! Daha ətraflı baxmaq üçün kliklə:",
+    "noResults": "Təəssüf ki, bu meyarlara uyğun kurs tapılmadı. Bütün kurslarımıza baxmağı tövsiyə edirəm.",
+    "interestFrontend": "Frontend",
+    "interestBackend": "Backend",
+    "interestDesign": "UI/UX Dizayn",
+    "interestData": "Data Analitika",
+    "interestCyber": "Kibertəhlükəsizlik",
+    "interestMarketing": "Rəqəmsal Marketinq",
+    "levelBeginner": "Başlanğıc",
+    "levelIntermediate": "Orta",
+    "levelAdvanced": "İrəli",
+    "goalCareer": "Yeni karyera qurmaq",
+    "goalSkills": "Bacarıqlarımı artırmaq",
+    "goalFreelance": "Frilanser işləmək",
+    "viewAll": "Bütün kursları gör",
+    "restart": "Yenidən başla",
+    "poweredBy": "FutureUp Academy"
   }
 }

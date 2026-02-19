@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
+import { getLocalized } from '@/lib/admin-locale';
 import { cn } from '@/lib/utils';
 import {
   Plus,
@@ -59,7 +60,7 @@ const levelConfig: Record<string, { label: string; className: string }> = {
 
 export default function AdminCoursesPage() {
   const router = useRouter();
-  const { token } = useAuthStore();
+  const { token, adminLocale } = useAuthStore();
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
@@ -305,7 +306,7 @@ export default function AdminCoursesPage() {
                     {course.image ? (
                       <Image
                         src={course.image}
-                        alt={course.titleAz}
+                        alt={getLocalized(course, 'title', adminLocale)}
                         width={48}
                         height={48}
                         className="w-full h-full object-cover"
@@ -317,7 +318,7 @@ export default function AdminCoursesPage() {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{course.titleAz}</p>
+                    <p className="text-sm font-medium text-white truncate">{getLocalized(course, 'title', adminLocale)}</p>
                     <p className="text-xs text-gray-500 truncate">{course.slug}</p>
                   </div>
                 </div>
@@ -325,7 +326,7 @@ export default function AdminCoursesPage() {
                 {/* Category */}
                 <div>
                   <span className="text-sm text-gray-400">
-                    {course.category?.nameAz || course.category?.nameEn || '-'}
+                    {getLocalized(course.category, 'name', adminLocale)}
                   </span>
                 </div>
 
@@ -480,7 +481,7 @@ export default function AdminCoursesPage() {
 
             <p className="text-sm text-gray-300 mb-6">
               Are you sure you want to delete{' '}
-              <span className="font-semibold text-white">&quot;{deleteModal.course.titleAz}&quot;</span>?
+              <span className="font-semibold text-white">&quot;{getLocalized(deleteModal.course, 'title', adminLocale)}&quot;</span>?
               All associated data will be permanently removed.
             </p>
 

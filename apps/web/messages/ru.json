@@ -103,9 +103,8 @@
       "testimonial3Course": "Аналитика Данных",
       "testimonial3Text": "Благодаря курсу Data Analytics я развил аналитическое мышление."
     },
-    "partners": {
-      "title": "Наши Партнёры"
-    },
+    "partnersLabel": "Партнёры",
+    "partnersTitle": "Наши Надёжные Партнёры",
     "cta": {
       "title": "Начни Своё Будущее Сегодня!",
       "subtitle": "Сделай первый шаг — подай заявку на бесплатную консультацию",
@@ -290,6 +289,10 @@
     "invalidEmail": "Введите корректный email",
     "invalidPhone": "Введите корректный номер телефона",
     "selectCourse": "Выберите курс",
+    "namePlaceholder": "Введите ваше имя и фамилию",
+    "emailPlaceholder": "example@email.com",
+    "phonePlaceholder": "+994 XX XXX XX XX",
+    "messagePlaceholder": "Напишите ваш вопрос или сообщение...",
     "successTitle": "Заявка Отправлена!",
     "successDesc": "Мы свяжемся с вами в течение 24 часов"
   },
@@ -324,5 +327,29 @@
     "completionDate": "Дата Завершения",
     "certificateNumber": "Номер Сертификата",
     "downloadPdf": "Скачать PDF"
+  },
+  "advisor": {
+    "title": "Подбор Курса",
+    "subtitle": "Найдём подходящий курс для вас",
+    "welcome": "Привет! Я помощник FutureUp по подбору курсов. Какая сфера вас интересует?",
+    "askLevel": "Отличный выбор! Какой у вас текущий уровень?",
+    "askGoal": "Хорошо! Какова ваша основная цель?",
+    "resultsFound": "Нашёл самые подходящие курсы для вас! Нажмите для подробностей:",
+    "noResults": "К сожалению, не нашёл курсов по этим критериям. Рекомендую посмотреть все наши курсы.",
+    "interestFrontend": "Frontend",
+    "interestBackend": "Backend",
+    "interestDesign": "UI/UX Дизайн",
+    "interestData": "Data Аналитика",
+    "interestCyber": "Кибербезопасность",
+    "interestMarketing": "Цифровой Маркетинг",
+    "levelBeginner": "Начинающий",
+    "levelIntermediate": "Средний",
+    "levelAdvanced": "Продвинутый",
+    "goalCareer": "Построить новую карьеру",
+    "goalSkills": "Улучшить навыки",
+    "goalFreelance": "Работать на фрилансе",
+    "viewAll": "Смотреть все курсы",
+    "restart": "Начать заново",
+    "poweredBy": "FutureUp Academy"
   }
 }

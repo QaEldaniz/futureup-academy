@@ -1,8 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useState, useEffect, useRef } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
 import { cn } from '@/lib/utils';
@@ -12,7 +10,6 @@ import {
   Pencil,
   Trash2,
   ExternalLink,
-  GripVertical,
   X,
   Save,
   Loader2,
@@ -20,26 +17,27 @@ import {
   Inbox,
   ArrowUp,
   ArrowDown,
+  Upload,
 } from 'lucide-react';
 
 interface Partner {
   id: string;
   name: string;
-  logo?: string;
+  logoUrl?: string;
   website?: string;
   order: number;
 }
 
 interface PartnerForm {
   name: string;
-  logo: string;
+  logoUrl: string;
   website: string;
   order: number;
 }
 
 const emptyForm: PartnerForm = {
   name: '',
-  logo: '',
+  logoUrl: '',
   website: '',
   order: 0,
 };
@@ -56,6 +54,8 @@ export default function AdminPartnersPage() {
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchPartners();
@@ -90,12 +90,34 @@ export default function AdminPartnersPage() {
       id: partner.id,
       form: {
         name: partner.name,
-        logo: partner.logo || '',
+        logoUrl: partner.logoUrl || '',
         website: partner.website || '',
         order: partner.order,
       },
     });
     setError('');
+  }
+
+  async function handleImageUpload(file: File) {
+    if (!file) return;
+    try {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await api.upload<{ success: boolean; data: { url: string } }>(
+        '/upload/image',
+        formData,
+        { token: token || undefined }
+      );
+      if (res.success && res.data?.url && modal) {
+        setModal({ ...modal, form: { ...modal.form, logoUrl: res.data.url } });
+      }
+    } catch (err) {
+      console.error('Upload failed:', err);
+      setError('Failed to upload image. You can paste a direct URL instead.');
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function handleSave() {
@@ -166,11 +188,9 @@ export default function AdminPartnersPage() {
     newPartners[idx].order = newPartners[swapIdx].order;
     newPartners[swapIdx].order = tempOrder;
 
-    // Swap positions
     [newPartners[idx], newPartners[swapIdx]] = [newPartners[swapIdx], newPartners[idx]];
     setPartners(newPartners);
 
-    // Persist both order changes
     try {
       await Promise.all([
         api.put(
@@ -186,7 +206,7 @@ export default function AdminPartnersPage() {
       ]);
     } catch (err) {
       console.error('Failed to update order:', err);
-      fetchPartners(); // Revert on error
+      fetchPartners();
     }
   }
 
@@ -237,9 +257,9 @@ export default function AdminPartnersPage() {
             >
               {/* Logo */}
               <div className="w-full h-20 rounded-xl bg-gray-800/30 border border-gray-700/20 flex items-center justify-center mb-4 overflow-hidden">
-                {partner.logo ? (
+                {partner.logoUrl ? (
                   <img
-                    src={partner.logo}
+                    src={partner.logoUrl}
                     alt={partner.name}
                     className="max-h-full max-w-full object-contain p-3"
                   />
@@ -354,24 +374,66 @@ export default function AdminPartnersPage() {
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   <span className="flex items-center gap-1.5">
                     <ImageIcon className="w-3.5 h-3.5" />
-                    Logo URL
+                    Logo
                   </span>
                 </label>
-                <input
-                  type="text"
-                  value={modal.form.logo}
-                  onChange={(e) =>
-                    setModal({ ...modal, form: { ...modal.form, logo: e.target.value } })
-                  }
-                  placeholder="https://example.com/logo.png"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
-                />
-                {modal.form.logo && (
-                  <div className="mt-3 h-16 rounded-xl bg-gray-800/30 border border-gray-700/20 flex items-center justify-center overflow-hidden">
+                {/* Upload + URL input */}
+                <div className="space-y-3">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImageUpload(file);
+                      e.target.value = '';
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    className={cn(
+                      'w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-dashed transition-all text-sm font-medium',
+                      uploading
+                        ? 'border-primary-500/30 bg-primary-500/5 text-primary-400 cursor-wait'
+                        : 'border-gray-700/50 hover:border-primary-500/50 hover:bg-primary-500/5 text-gray-400 hover:text-primary-400'
+                    )}
+                  >
+                    {uploading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4" />
+                        Upload Logo Image
+                      </>
+                    )}
+                  </button>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-px bg-gray-700/30" />
+                    <span className="text-xs text-gray-500">or paste URL</span>
+                    <div className="flex-1 h-px bg-gray-700/30" />
+                  </div>
+                  <input
+                    type="text"
+                    value={modal.form.logoUrl}
+                    onChange={(e) =>
+                      setModal({ ...modal, form: { ...modal.form, logoUrl: e.target.value } })
+                    }
+                    placeholder="https://example.com/logo.png"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  />
+                </div>
+                {modal.form.logoUrl && (
+                  <div className="mt-3 h-20 rounded-xl bg-gray-800/30 border border-gray-700/20 flex items-center justify-center overflow-hidden">
                     <img
-                      src={modal.form.logo}
+                      src={modal.form.logoUrl}
                       alt="Preview"
-                      className="max-h-full max-w-full object-contain p-2"
+                      className="max-h-full max-w-full object-contain p-3"
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = 'none';
                       }}

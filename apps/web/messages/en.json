@@ -103,9 +103,8 @@
       "testimonial3Course": "Data Analytics",
       "testimonial3Text": "Thanks to the Data Analytics course, I developed my analytical thinking skills."
     },
-    "partners": {
-      "title": "Our Partners"
-    },
+    "partnersLabel": "Partners",
+    "partnersTitle": "Our Trusted Partners",
     "cta": {
       "title": "Start Your Future Today!",
       "subtitle": "Take the first step — apply for a free consultation",
@@ -294,6 +293,10 @@
     "invalidEmail": "Please enter a valid email",
     "invalidPhone": "Please enter a valid phone number",
     "selectCourse": "Select a course",
+    "namePlaceholder": "Enter your full name",
+    "emailPlaceholder": "example@email.com",
+    "phonePlaceholder": "+994 XX XXX XX XX",
+    "messagePlaceholder": "Write your question or message here...",
     "successTitle": "Application Submitted!",
     "successDesc": "We'll contact you within 24 hours"
   },
@@ -328,5 +331,29 @@
     "completionDate": "Completion Date",
     "certificateNumber": "Certificate Number",
     "downloadPdf": "Download PDF"
+  },
+  "advisor": {
+    "title": "Course Advisor",
+    "subtitle": "Find the right course for you",
+    "welcome": "Hi! I'm FutureUp's course advisor. What field interests you?",
+    "askLevel": "Great choice! What's your current experience level?",
+    "askGoal": "Nice! What's your main goal?",
+    "resultsFound": "Found the best courses for you! Click to learn more:",
+    "noResults": "Unfortunately, no courses match these criteria. I recommend browsing all our courses.",
+    "interestFrontend": "Frontend",
+    "interestBackend": "Backend",
+    "interestDesign": "UI/UX Design",
+    "interestData": "Data Analytics",
+    "interestCyber": "Cybersecurity",
+    "interestMarketing": "Digital Marketing",
+    "levelBeginner": "Beginner",
+    "levelIntermediate": "Intermediate",
+    "levelAdvanced": "Advanced",
+    "goalCareer": "Build a new career",
+    "goalSkills": "Improve my skills",
+    "goalFreelance": "Work as a freelancer",
+    "viewAll": "View all courses",
+    "restart": "Start over",
+    "poweredBy": "FutureUp Academy"
   }
 }

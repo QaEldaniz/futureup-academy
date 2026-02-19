@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -20,39 +20,85 @@
       width: 100%;
       height: 100%;
       position: relative;
-      background: #ffffff;
+      background: linear-gradient(160deg, #fdfcff 0%, #f8f6ff 30%, #ffffff 60%, #f0f7ff 100%);
     }
 
-    /* Decorative gradient border */
-    .border-frame {
+    /* Outer border — double line effect */
+    .border-outer {
       position: absolute;
-      inset: 0;
-      border: 3.5mm solid transparent;
-      background-image:
-        linear-gradient(white, white),
-        linear-gradient(135deg, #6C3CE1, #1E40AF, #06B6D4, #1E40AF, #6C3CE1);
-      background-origin: border-box;
-      background-clip: padding-box, border-box;
+      inset: 4mm;
+      border: 0.6mm solid;
+      border-image: linear-gradient(135deg, #6C3CE1, #1E40AF, #06B6D4, #1E40AF, #6C3CE1) 1;
       pointer-events: none;
     }
 
-    /* Corner decorations */
-    .corner {
+    .border-inner {
       position: absolute;
-      width: 30mm;
-      height: 30mm;
-      opacity: 0.06;
+      inset: 7mm;
+      border: 0.3mm solid;
+      border-image: linear-gradient(135deg, rgba(108,60,225,0.3), rgba(30,64,175,0.3), rgba(6,182,212,0.3)) 1;
+      pointer-events: none;
     }
-    .corner-tl { top: 8mm; left: 8mm; background: radial-gradient(circle at top left, #6C3CE1, transparent 70%); }
-    .corner-tr { top: 8mm; right: 8mm; background: radial-gradient(circle at top right, #06B6D4, transparent 70%); }
-    .corner-bl { bottom: 8mm; left: 8mm; background: radial-gradient(circle at bottom left, #06B6D4, transparent 70%); }
-    .corner-br { bottom: 8mm; right: 8mm; background: radial-gradient(circle at bottom right, #6C3CE1, transparent 70%); }
+
+    /* Corner ornaments — elegant geometric patterns */
+    .ornament {
+      position: absolute;
+      width: 28mm;
+      height: 28mm;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .ornament-tl { top: 9mm; left: 9mm; }
+    .ornament-tr { top: 9mm; right: 9mm; transform: scaleX(-1); }
+    .ornament-bl { bottom: 9mm; left: 9mm; transform: scaleY(-1); }
+    .ornament-br { bottom: 9mm; right: 9mm; transform: scale(-1, -1); }
+
+    .ornament svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Subtle watermark pattern */
+    .watermark-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.018;
+      background-image:
+        radial-gradient(circle at 15% 25%, #6C3CE1 0.5mm, transparent 0.5mm),
+        radial-gradient(circle at 85% 25%, #1E40AF 0.5mm, transparent 0.5mm),
+        radial-gradient(circle at 15% 75%, #1E40AF 0.5mm, transparent 0.5mm),
+        radial-gradient(circle at 85% 75%, #6C3CE1 0.5mm, transparent 0.5mm);
+      pointer-events: none;
+    }
+
+    /* Subtle radial glow behind content */
+    .glow-top {
+      position: absolute;
+      top: -20mm;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200mm;
+      height: 100mm;
+      background: radial-gradient(ellipse, rgba(108,60,225,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .glow-bottom {
+      position: absolute;
+      bottom: -10mm;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180mm;
+      height: 80mm;
+      background: radial-gradient(ellipse, rgba(6,182,212,0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
 
     /* Content container */
     .content {
       position: relative;
-      z-index: 1;
-      padding: 18mm 25mm;
+      z-index: 3;
+      padding: 16mm 30mm;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -62,96 +108,184 @@
     /* Header */
     .header {
       text-align: center;
-      margin-bottom: 4mm;
+      margin-bottom: 2mm;
     }
 
-    .header-bar {
-      width: 80mm;
-      height: 1.5mm;
-      background: linear-gradient(90deg, transparent, #6C3CE1, #1E40AF, #06B6D4, transparent);
-      border-radius: 1mm;
-      margin: 0 auto 5mm;
+    /* Gold flourish ornamental line */
+    .flourish {
+      width: 60mm;
+      height: 3mm;
+      margin: 0 auto 4mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2mm;
+    }
+
+    .flourish-line {
+      flex: 1;
+      height: 0.3mm;
+      background: linear-gradient(90deg, transparent, #6C3CE1, rgba(108,60,225,0.3));
+    }
+
+    .flourish-line-r {
+      flex: 1;
+      height: 0.3mm;
+      background: linear-gradient(90deg, rgba(108,60,225,0.3), #6C3CE1, transparent);
+    }
+
+    .flourish-diamond {
+      width: 2.5mm;
+      height: 2.5mm;
+      background: linear-gradient(135deg, #6C3CE1, #1E40AF);
+      transform: rotate(45deg);
+      flex-shrink: 0;
     }
 
     .academy-name {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 13pt;
+      font-size: 11pt;
       font-weight: 700;
       color: #6C3CE1;
-      letter-spacing: 4px;
+      letter-spacing: 6px;
       text-transform: uppercase;
     }
 
     .certificate-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 30pt;
-      font-weight: 700;
-      background: linear-gradient(135deg, #6C3CE1, #1E40AF);
+      font-family: 'Playfair Display', serif;
+      font-size: 38pt;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6C3CE1 0%, #1E40AF 50%, #6C3CE1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-top: 2mm;
-      line-height: 1.2;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+    }
+
+    .of-completion {
+      font-family: 'Playfair Display', serif;
+      font-size: 16pt;
+      font-weight: 500;
+      font-style: italic;
+      color: #6b7280;
+      margin-top: 0mm;
+      letter-spacing: 3px;
     }
 
     .subtitle {
-      font-size: 10pt;
-      color: #6b7280;
-      margin-top: 3mm;
+      font-size: 9pt;
+      color: #9ca3af;
+      margin-top: 4mm;
       font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
 
-    /* Divider line */
+    /* Decorative divider */
     .divider {
-      width: 40mm;
-      height: 0.5mm;
+      width: 50mm;
+      height: 0.3mm;
       background: linear-gradient(90deg, transparent, #d1d5db, transparent);
-      margin: 4mm auto;
+      margin: 2mm auto;
     }
 
-    /* Student name */
+    .divider-ornate {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3mm;
+      margin: 3mm auto;
+    }
+
+    .divider-ornate-line {
+      width: 25mm;
+      height: 0.3mm;
+      background: linear-gradient(90deg, transparent, rgba(108,60,225,0.4));
+    }
+
+    .divider-ornate-line-r {
+      width: 25mm;
+      height: 0.3mm;
+      background: linear-gradient(90deg, rgba(108,60,225,0.4), transparent);
+    }
+
+    .divider-ornate-dot {
+      width: 1.5mm;
+      height: 1.5mm;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6C3CE1, #1E40AF);
+    }
+
+    /* Student name — BIG premium serif */
     .student-name {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 28pt;
-      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      font-size: 36pt;
+      font-weight: 800;
       color: #111827;
-      margin: 3mm 0;
+      margin: 2mm 0;
       text-align: center;
-      line-height: 1.2;
+      line-height: 1.15;
+      letter-spacing: 0.5px;
+    }
+
+    /* Name underline */
+    .name-underline {
+      width: 100mm;
+      height: 0.8mm;
+      background: linear-gradient(90deg, transparent, #6C3CE1, #1E40AF, #06B6D4, #1E40AF, #6C3CE1, transparent);
+      border-radius: 0.5mm;
+      margin: 1mm auto 2mm;
     }
 
     /* Course details */
     .course-label {
-      font-size: 10pt;
-      color: #6b7280;
+      font-size: 9pt;
+      color: #9ca3af;
       margin-top: 2mm;
+      letter-spacing: 1px;
     }
 
     .course-name {
-      font-size: 15pt;
-      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16pt;
+      font-weight: 700;
       color: #1E40AF;
       margin-top: 1mm;
       text-align: center;
+      letter-spacing: 0.3px;
     }
 
     /* Meta info row */
     .meta-row {
       display: flex;
       justify-content: center;
-      gap: 20mm;
+      gap: 15mm;
       margin-top: 5mm;
     }
 
     .meta-item {
       text-align: center;
+      position: relative;
+    }
+
+    .meta-item + .meta-item::before {
+      content: '';
+      position: absolute;
+      left: -7.5mm;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0.3mm;
+      height: 8mm;
+      background: linear-gradient(to bottom, transparent, #d1d5db, transparent);
     }
 
     .meta-label {
-      font-size: 7pt;
+      font-size: 6.5pt;
       color: #9ca3af;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
       font-weight: 600;
     }
 
@@ -164,31 +298,47 @@
 
     .grade-badge {
       display: inline-block;
-      padding: 1mm 4mm;
+      padding: 1mm 5mm;
       background: linear-gradient(135deg, #6C3CE1, #1E40AF);
       color: white;
       border-radius: 3mm;
       font-size: 9pt;
-      font-weight: 600;
+      font-weight: 700;
       margin-top: 1mm;
+      letter-spacing: 0.5px;
+      box-shadow: 0 1mm 3mm rgba(108,60,225,0.25);
     }
 
     /* Teacher review */
     .review-section {
       margin-top: 4mm;
-      padding: 3mm 6mm;
-      background: #f8f6ff;
-      border-left: 2.5px solid #6C3CE1;
+      padding: 3mm 8mm;
+      background: linear-gradient(135deg, rgba(108,60,225,0.04), rgba(30,64,175,0.03));
+      border-left: 2mm solid;
+      border-image: linear-gradient(to bottom, #6C3CE1, #1E40AF) 1;
       border-radius: 0 2mm 2mm 0;
-      max-width: 220mm;
+      max-width: 200mm;
       width: 100%;
+      position: relative;
+    }
+
+    .review-section::before {
+      content: '\201C';
+      font-family: 'Playfair Display', serif;
+      font-size: 28pt;
+      color: rgba(108,60,225,0.15);
+      position: absolute;
+      top: -1mm;
+      left: 3mm;
+      line-height: 1;
     }
 
     .review-text {
-      font-size: 8.5pt;
+      font-size: 8pt;
       color: #4b5563;
       font-style: italic;
-      line-height: 1.5;
+      line-height: 1.6;
+      padding-left: 4mm;
     }
 
     /* Footer */
@@ -198,6 +348,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
+      padding-top: 3mm;
     }
 
     .signature-block {
@@ -207,20 +358,22 @@
     .signature-line {
       width: 50mm;
       height: 0.3mm;
-      background: #d1d5db;
+      background: linear-gradient(90deg, transparent 5%, #c4b5fd 25%, #6C3CE1 50%, #c4b5fd 75%, transparent 95%);
       margin-bottom: 2mm;
     }
 
     .signature-name {
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 10pt;
       font-weight: 600;
       color: #374151;
     }
 
     .signature-role {
-      font-size: 7.5pt;
+      font-size: 7pt;
       color: #9ca3af;
       margin-top: 0.5mm;
+      letter-spacing: 0.5px;
     }
 
     .qr-block {
@@ -228,71 +381,154 @@
     }
 
     .qr-code img {
-      width: 22mm;
-      height: 22mm;
-      border: 0.5mm solid #e5e7eb;
+      width: 20mm;
+      height: 20mm;
+      border: 0.4mm solid #e5e7eb;
       border-radius: 2mm;
-      padding: 1mm;
+      padding: 0.8mm;
+      background: white;
     }
 
     .cert-code {
       font-family: 'Space Grotesk', monospace;
-      font-size: 7pt;
+      font-size: 6.5pt;
       color: #9ca3af;
       margin-top: 1mm;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }
 
     .verify-text {
-      font-size: 6pt;
-      color: #d1d5db;
-      margin-top: 0.5mm;
+      font-size: 5.5pt;
+      color: #c4b5fd;
+      margin-top: 0.3mm;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
 
     /* Bottom gradient bar */
     .bottom-bar {
       position: absolute;
-      bottom: 10mm;
-      left: 25mm;
-      right: 25mm;
-      height: 1mm;
-      background: linear-gradient(90deg, transparent, #6C3CE1, #1E40AF, #06B6D4, transparent);
+      bottom: 5.5mm;
+      left: 10mm;
+      right: 10mm;
+      height: 0.8mm;
+      background: linear-gradient(90deg, transparent, #6C3CE1, #1E40AF, #06B6D4, #1E40AF, #6C3CE1, transparent);
+      border-radius: 0.5mm;
+    }
+
+    /* Top gradient bar */
+    .top-bar {
+      position: absolute;
+      top: 5.5mm;
+      left: 10mm;
+      right: 10mm;
+      height: 0.8mm;
+      background: linear-gradient(90deg, transparent, #6C3CE1, #1E40AF, #06B6D4, #1E40AF, #6C3CE1, transparent);
       border-radius: 0.5mm;
     }
   </style>
 </head>
 <body>
   <div class="certificate">
-    <div class="border-frame"></div>
-    <div class="corner corner-tl"></div>
-    <div class="corner corner-tr"></div>
-    <div class="corner corner-bl"></div>
-    <div class="corner corner-br"></div>
+    <!-- Border frame -->
+    <div class="border-outer"></div>
+    <div class="border-inner"></div>
+    <div class="top-bar"></div>
+    <div class="bottom-bar"></div>
+
+    <!-- Decorative corner ornaments -->
+    <div class="ornament ornament-tl">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 0 L40 0 L40 3 L3 3 L3 40 L0 40 Z" fill="url(#grad1)" opacity="0.5"/>
+        <path d="M0 0 L25 0 L25 1.5 L1.5 1.5 L1.5 25 L0 25 Z" fill="url(#grad1)" opacity="0.3"/>
+        <circle cx="8" cy="8" r="2" fill="url(#grad1)" opacity="0.4"/>
+        <path d="M15 0 L15 15 L0 15" stroke="url(#grad1)" stroke-width="0.5" fill="none" opacity="0.2"/>
+        <path d="M30 0 L30 5 M35 0 L35 3" stroke="url(#grad1)" stroke-width="0.5" opacity="0.15"/>
+        <path d="M0 30 L5 30 M0 35 L3 35" stroke="url(#grad1)" stroke-width="0.5" opacity="0.15"/>
+        <defs>
+          <linearGradient id="grad1" x1="0" y1="0" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6C3CE1"/>
+            <stop offset="100%" stop-color="#1E40AF"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="ornament ornament-tr">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 0 L40 0 L40 3 L3 3 L3 40 L0 40 Z" fill="url(#grad2)" opacity="0.5"/>
+        <path d="M0 0 L25 0 L25 1.5 L1.5 1.5 L1.5 25 L0 25 Z" fill="url(#grad2)" opacity="0.3"/>
+        <circle cx="8" cy="8" r="2" fill="url(#grad2)" opacity="0.4"/>
+        <path d="M15 0 L15 15 L0 15" stroke="url(#grad2)" stroke-width="0.5" fill="none" opacity="0.2"/>
+        <path d="M30 0 L30 5 M35 0 L35 3" stroke="url(#grad2)" stroke-width="0.5" opacity="0.15"/>
+        <path d="M0 30 L5 30 M0 35 L3 35" stroke="url(#grad2)" stroke-width="0.5" opacity="0.15"/>
+        <defs>
+          <linearGradient id="grad2" x1="0" y1="0" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1E40AF"/>
+            <stop offset="100%" stop-color="#06B6D4"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="ornament ornament-bl">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 0 L40 0 L40 3 L3 3 L3 40 L0 40 Z" fill="url(#grad3)" opacity="0.5"/>
+        <path d="M0 0 L25 0 L25 1.5 L1.5 1.5 L1.5 25 L0 25 Z" fill="url(#grad3)" opacity="0.3"/>
+        <circle cx="8" cy="8" r="2" fill="url(#grad3)" opacity="0.4"/>
+        <path d="M15 0 L15 15 L0 15" stroke="url(#grad3)" stroke-width="0.5" fill="none" opacity="0.2"/>
+        <defs>
+          <linearGradient id="grad3" x1="0" y1="0" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1E40AF"/>
+            <stop offset="100%" stop-color="#06B6D4"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="ornament ornament-br">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 0 L40 0 L40 3 L3 3 L3 40 L0 40 Z" fill="url(#grad4)" opacity="0.5"/>
+        <path d="M0 0 L25 0 L25 1.5 L1.5 1.5 L1.5 25 L0 25 Z" fill="url(#grad4)" opacity="0.3"/>
+        <circle cx="8" cy="8" r="2" fill="url(#grad4)" opacity="0.4"/>
+        <path d="M15 0 L15 15 L0 15" stroke="url(#grad4)" stroke-width="0.5" fill="none" opacity="0.2"/>
+        <defs>
+          <linearGradient id="grad4" x1="0" y1="0" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6C3CE1"/>
+            <stop offset="100%" stop-color="#1E40AF"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- Subtle background effects -->
+    <div class="watermark-pattern"></div>
+    <div class="glow-top"></div>
+    <div class="glow-bottom"></div>
 
     <div class="content">
       <!-- Header -->
       <div class="header">
-        <div class="header-bar"></div>
+        <div class="flourish">
+          <div class="flourish-line"></div>
+          <div class="flourish-diamond"></div>
+          <div class="flourish-line-r"></div>
+        </div>
         <div class="academy-name">FutureUp Academy</div>
-        <div class="certificate-title">Certificate of Completion</div>
-        <div class="subtitle">This is to certify that</div>
+        <div class="certificate-title">Certificate</div>
+        <div class="of-completion">of Completion</div>
+        <div class="subtitle">This is proudly presented to</div>
       </div>
-
-      <div class="divider"></div>
 
       <!-- Student Name -->
       <div class="student-name">{{studentName}}</div>
-
-      <div class="divider"></div>
+      <div class="name-underline"></div>
 
       <!-- Course -->
-      <div class="course-label">has successfully completed the course</div>
+      <div class="course-label">for successfully completing the course</div>
       <div class="course-name">{{courseName}}</div>
 
       <!-- Meta Row -->
       <div class="meta-row">
         <div class="meta-item">
-          <div class="meta-label">Date</div>
+          <div class="meta-label">Date Issued</div>
           <div class="meta-value">{{issueDate}}</div>
         </div>
         {{#if grade}}
@@ -310,7 +546,7 @@
       <!-- Teacher Review -->
       {{#if teacherReview}}
       <div class="review-section">
-        <div class="review-text">&ldquo;{{teacherReview}}&rdquo;</div>
+        <div class="review-text">{{teacherReview}}</div>
       </div>
       {{/if}}
 
@@ -337,8 +573,6 @@
         </div>
       </div>
     </div>
-
-    <div class="bottom-bar"></div>
   </div>
 </body>
 </html>

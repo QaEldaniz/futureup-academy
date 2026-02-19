@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
+import { getLocalized } from '@/lib/admin-locale';
 import { cn } from '@/lib/utils';
 import {
   Newspaper,

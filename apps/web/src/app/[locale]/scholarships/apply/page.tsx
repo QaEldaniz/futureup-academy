@@ -2,6 +2,7 @@
 
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/Button';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 import { motion } from 'framer-motion';
 import { useLocale } from 'next-intl';
 import { cn } from '@/lib/utils';
@@ -267,29 +268,23 @@ export default function ScholarshipApplyPage() {
 
                   {/* Scholarship Select */}
                   <div>
-                    <label htmlFor="scholarshipId" className={labelClasses}>
+                    <label className={labelClasses}>
                       <span className="flex items-center gap-2">
                         <GraduationCap className="w-4 h-4 text-primary-500" />
                         {getText(locale, 'Təqaüd Proqramı', 'Стипендиальная Программа', 'Scholarship Program')}
                       </span>
                     </label>
-                    <select
-                      id="scholarshipId"
-                      name="scholarshipId"
-                      value={formData.scholarshipId}
-                      onChange={handleChange}
+                    <CustomSelect
                       required
-                      className={cn(inputClasses, 'appearance-none cursor-pointer')}
-                    >
-                      <option value="">
-                        {getText(locale, 'Proqram seçin...', 'Выберите программу...', 'Select a program...')}
-                      </option>
-                      {scholarships.map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {getLocalizedText(s as unknown as Record<string, unknown>, 'title', locale)}
-                        </option>
-                      ))}
-                    </select>
+                      searchable
+                      value={formData.scholarshipId}
+                      onChange={(val) => setFormData((prev) => ({ ...prev, scholarshipId: val }))}
+                      placeholder={getText(locale, 'Proqram seçin...', 'Выберите программу...', 'Select a program...')}
+                      options={scholarships.map((s) => ({
+                        value: s.id,
+                        label: getLocalizedText(s as unknown as Record<string, unknown>, 'title', locale),
+                      }))}
+                    />
                   </div>
 
                   {/* Motivation Letter */}

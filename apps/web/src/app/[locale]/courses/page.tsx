@@ -74,6 +74,14 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const } },
 };
 
+function formatDuration(duration: string, locale: string, t: (key: string) => string): string {
+  const match = duration.match(/(\d+)/);
+  if (match) {
+    return `${match[1]} ${t('months')}`;
+  }
+  return duration;
+}
+
 function CourseCard({ course, locale }: { course: Course; locale: string }) {
   const t = useTranslations('courses');
   const title = getLocalized(course as unknown as Record<string, unknown>, 'title', locale);
@@ -114,7 +122,7 @@ function CourseCard({ course, locale }: { course: Course; locale: string }) {
               </span>
               <div className="flex items-center gap-1.5 text-gray-400">
                 <Clock className="w-3.5 h-3.5" />
-                <span className="text-xs font-medium">{course.duration}</span>
+                <span className="text-xs font-medium">{formatDuration(course.duration, locale, t)}</span>
               </div>
             </div>
             <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
