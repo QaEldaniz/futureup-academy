@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:developers.institute)",
+      "WebFetch(domain:www.itc.tech)",
+      "WebFetch(domain:itstep.az)",
+      "WebFetch(domain:code.edu.az)",
+      "WebFetch(domain:www.ironhack.com)",
+      "WebFetch(domain:www.lewagon.com)",
+      "WebFetch(domain:abbtech.az)",
+      "WebFetch(domain:generalassemb.ly)",
+      "Bash(npm install:*)",
+      "Bash(npm ls:*)",
+      "Bash(npx next build:*)",
+      "Bash(grep:*)"
+    ]
+  }
+}

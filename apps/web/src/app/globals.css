@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode for next-themes */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Primary */
+  --color-primary-50: #f3f0ff;
+  --color-primary-100: #e9e3ff;
+  --color-primary-200: #d5cbff;
+  --color-primary-300: #b5a3ff;
+  --color-primary-400: #9370ff;
+  --color-primary-500: #6c3ce1;
+  --color-primary-600: #5c2dd6;
+  --color-primary-700: #4d1fb8;
+  --color-primary-800: #411a96;
+  --color-primary-900: #36177b;
+
+  /* Secondary (Deep Blue) */
+  --color-secondary-50: #eff3ff;
+  --color-secondary-100: #dbe3fe;
+  --color-secondary-200: #bfcdfe;
+  --color-secondary-300: #93aafc;
+  --color-secondary-400: #607df8;
+  --color-secondary-500: #3b5bf4;
+  --color-secondary-600: #1e40af;
+  --color-secondary-700: #1a369a;
+  --color-secondary-800: #1b307d;
+  --color-secondary-900: #1c2d68;
+
+  /* Accent (Cyan) */
+  --color-accent-50: #ecfeff;
+  --color-accent-100: #cffafe;
+  --color-accent-200: #a5f3fc;
+  --color-accent-300: #67e8f9;
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #06b6d4;
+  --color-accent-600: #0891b2;
+  --color-accent-700: #0e7490;
+  --color-accent-800: #155e75;
+  --color-accent-900: #164e63;
+
+  /* Surface */
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #141927;
+
+  /* Background */
+  --color-bg-light: #fafbff;
+  --color-bg-dark: #0b0f1a;
+
+  /* Fonts */
+  --font-heading: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-accent: 'Space Grotesk', sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-300);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-500);
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-primary-700);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-500);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+  66% {
+    transform: translateY(10px) rotate(-1deg);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

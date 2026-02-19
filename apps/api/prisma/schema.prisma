@@ -1,0 +1,512 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// ADMIN USERS
+// ==========================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(ADMIN)
+  avatar    String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+// ==========================================
+// COURSES
+// ==========================================
+
+model Course {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  titleAz     String
+  titleRu     String
+  titleEn     String
+  descAz      String   @db.Text
+  descRu      String   @db.Text
+  descEn      String   @db.Text
+  shortDescAz String?  @db.VarChar(300)
+  shortDescRu String?  @db.VarChar(300)
+  shortDescEn String?  @db.VarChar(300)
+  image       String?
+  duration    String // e.g., "3 ay", "6 months"
+  price       Decimal? @db.Decimal(10, 2)
+  level       Level    @default(BEGINNER)
+  categoryId  String
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  order       Int      @default(0)
+  syllabus    Json? // [{module: string, topics: string[], hours: number}]
+  features    Json? // ["Sertifikat", "Mentor", ...]
+
+  category     Category        @relation(fields: [categoryId], references: [id])
+  teachers     TeacherCourse[]
+  students     StudentCourse[]
+  certificates Certificate[]
+  applications Application[]
+  groups       Group[]
+  reviews      Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("courses")
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model Category {
+  id      String   @id @default(cuid())
+  nameAz  String
+  nameRu  String
+  nameEn  String
+  slug    String   @unique
+  icon    String? // Lucide icon name
+  order   Int      @default(0)
+  courses Course[]
+
+  createdAt DateTime @default(now())
+
+  @@map("categories")
+}
+
+// ==========================================
+// TEACHERS
+// ==========================================
+
+model Teacher {
+  id             String  @id @default(cuid())
+  email          String? @unique // For Teacher Portal login
+  password       String? // Hashed password for Teacher Portal
+  nameAz         String
+  nameRu         String
+  nameEn         String
+  bioAz          String? @db.Text
+  bioRu          String? @db.Text
+  bioEn          String? @db.Text
+  photo          String?
+  specialization String?
+  linkedin       String?
+  github         String?
+  website        String?
+  isActive       Boolean @default(true)
+  order          Int     @default(0)
+
+  courses         TeacherCourse[]
+  certificates    Certificate[]
+  reviewsGiven    Review[]        @relation("TeacherReviews")
+  reviewsReceived Review[]        @relation("ReviewsAboutTeacher")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("teachers")
+}
+
+model TeacherCourse {
+  teacherId String
+  courseId   String
+  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  course    Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@id([teacherId, courseId])
+  @@map("teacher_courses")
+}
+
+// ==========================================
+// STUDENTS
+// ==========================================
+
+model Student {
+  id    String  @id @default(cuid())
+  name  String
+  email String  @unique
+  phone String?
+  photo String?
+
+  courses         StudentCourse[]
+  certificates    Certificate[]
+  reviewsGiven    Review[]        @relation("StudentReviews")
+  reviewsReceived Review[]        @relation("ReviewsAboutStudent")
+  groupId         String?
+  group           Group?          @relation(fields: [groupId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("students")
+}
+
+model StudentCourse {
+  studentId String
+  courseId   String
+  status    EnrollmentStatus @default(ACTIVE)
+  startDate DateTime?
+  endDate   DateTime?
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@id([studentId, courseId])
+  @@map("student_courses")
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+}
+
+model Group {
+  id        String    @id @default(cuid())
+  name      String // e.g., "Frontend Batch #5"
+  courseId   String
+  startDate DateTime?
+  endDate   DateTime?
+
+  course   Course    @relation(fields: [courseId], references: [id])
+  students Student[]
+
+  createdAt DateTime @default(now())
+
+  @@map("groups")
+}
+
+// ==========================================
+// CERTIFICATES
+// ==========================================
+
+model Certificate {
+  id            String            @id @default(cuid())
+  uniqueCode    String            @unique @default(cuid())
+  studentId     String
+  courseId       String
+  teacherId     String
+  issueDate     DateTime          @default(now())
+  pdfUrl        String?
+  qrCodeUrl     String?
+  teacherReview String?           @db.Text
+  grade         String? // "Excellent", "Good", etc.
+  status        CertificateStatus @default(ACTIVE)
+
+  student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+  teacher Teacher @relation(fields: [teacherId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@map("certificates")
+}
+
+enum CertificateStatus {
+  ACTIVE
+  REVOKED
+}
+
+// ==========================================
+// APPLICATIONS
+// ==========================================
+
+model Application {
+  id       String            @id @default(cuid())
+  name     String
+  email    String
+  phone    String
+  courseId  String?
+  message  String?           @db.Text
+  status   ApplicationStatus @default(NEW)
+  notes    String?           @db.Text // Admin notes
+
+  course Course? @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("applications")
+}
+
+enum ApplicationStatus {
+  NEW
+  CONTACTED
+  ENROLLED
+  REJECTED
+}
+
+// ==========================================
+// NEWS / BLOG
+// ==========================================
+
+model News {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  titleAz     String
+  titleRu     String
+  titleEn     String
+  contentAz   String    @db.Text
+  contentRu   String    @db.Text
+  contentEn   String    @db.Text
+  excerptAz   String?   @db.VarChar(300)
+  excerptRu   String?   @db.VarChar(300)
+  excerptEn   String?   @db.VarChar(300)
+  image       String?
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("news")
+}
+
+// ==========================================
+// TESTIMONIALS
+// ==========================================
+
+model Testimonial {
+  id       String  @id @default(cuid())
+  name     String
+  photo    String?
+  textAz   String  @db.Text
+  textRu   String  @db.Text
+  textEn   String  @db.Text
+  rating   Int     @default(5)
+  courseAz String?
+  courseRu String?
+  courseEn String?
+  isActive Boolean @default(true)
+  order    Int     @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@map("testimonials")
+}
+
+// ==========================================
+// PARTNERS
+// ==========================================
+
+model Partner {
+  id      String  @id @default(cuid())
+  name    String
+  logoUrl String
+  website String?
+  order   Int     @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@map("partners")
+}
+
+// ==========================================
+// REVIEWS (with moderation)
+// ==========================================
+
+model Review {
+  id     String     @id @default(cuid())
+  type   ReviewType
+  text   String     @db.Text
+  rating Int        @default(5)
+
+  // Author (who writes the review)
+  studentAuthorId String?
+  teacherAuthorId String?
+
+  studentAuthor Student? @relation("StudentReviews", fields: [studentAuthorId], references: [id], onDelete: Cascade)
+  teacherAuthor Teacher? @relation("TeacherReviews", fields: [teacherAuthorId], references: [id], onDelete: Cascade)
+
+  // Subject (what/who the review is about)
+  aboutCourseId  String?
+  aboutTeacherId String?
+  aboutStudentId String?
+
+  aboutCourse  Course?  @relation(fields: [aboutCourseId], references: [id], onDelete: Cascade)
+  aboutTeacher Teacher? @relation("ReviewsAboutTeacher", fields: [aboutTeacherId], references: [id], onDelete: Cascade)
+  aboutStudent Student? @relation("ReviewsAboutStudent", fields: [aboutStudentId], references: [id], onDelete: Cascade)
+
+  // Moderation
+  status      ReviewStatus @default(PENDING)
+  moderatedBy String? // Admin user ID
+  moderatedAt DateTime?
+  adminNote   String?      @db.Text // Rejection reason
+
+  isPublic Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reviews")
+}
+
+enum ReviewType {
+  STUDENT_ABOUT_COURSE
+  STUDENT_ABOUT_TEACHER
+  TEACHER_ABOUT_STUDENT
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// ==========================================
+// SCHOLARSHIPS (Стипендионные программы)
+// ==========================================
+
+model Scholarship {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  titleAz     String
+  titleRu     String
+  titleEn     String
+  descAz      String   @db.Text
+  descRu      String   @db.Text
+  descEn      String   @db.Text
+  coverageAz  String?  @db.Text // Что покрывает стипендия
+  coverageRu  String?  @db.Text
+  coverageEn  String?  @db.Text
+  eligibilityAz String? @db.Text // Критерии
+  eligibilityRu String? @db.Text
+  eligibilityEn String? @db.Text
+  amount      Decimal? @db.Decimal(10, 2) // Сумма или процент скидки
+  percentage  Int?     // Процент покрытия (50%, 100%)
+  deadline    DateTime?
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  image       String?
+
+  applications ScholarshipApplication[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("scholarships")
+}
+
+model ScholarshipApplication {
+  id            String              @id @default(cuid())
+  scholarshipId String
+  name          String
+  email         String
+  phone         String
+  motivation    String?             @db.Text // Мотивационное письмо
+  resume        String?             // URL к резюме
+  status        ScholarshipAppStatus @default(PENDING)
+  notes         String?             @db.Text // Заметки админа
+
+  scholarship Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("scholarship_applications")
+}
+
+enum ScholarshipAppStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+// ==========================================
+// CORPORATE / B2B (Корпоративные решения)
+// ==========================================
+
+model CorporateService {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  type        CorporateServiceType
+  titleAz     String
+  titleRu     String
+  titleEn     String
+  descAz      String   @db.Text
+  descRu      String   @db.Text
+  descEn      String   @db.Text
+  shortDescAz String?  @db.VarChar(300)
+  shortDescRu String?  @db.VarChar(300)
+  shortDescEn String?  @db.VarChar(300)
+  icon        String?  // Lucide icon name
+  image       String?
+  features    Json?    // Ключевые возможности
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+
+  inquiries CorporateInquiry[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("corporate_services")
+}
+
+enum CorporateServiceType {
+  TRAINING        // Корпоративные тренинги
+  UPSKILLING      // Повышение квалификации
+  IT_SOLUTION     // IT-решения (QA, пентест, разработка)
+}
+
+model CorporateInquiry {
+  id          String              @id @default(cuid())
+  serviceId   String?
+  companyName String
+  contactName String
+  email       String
+  phone       String
+  message     String?             @db.Text
+  employeeCount String?           // Количество сотрудников
+  budget      String?             // Бюджет
+  status      CorporateInqStatus  @default(NEW)
+  notes       String?             @db.Text
+
+  service CorporateService? @relation(fields: [serviceId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("corporate_inquiries")
+}
+
+enum CorporateInqStatus {
+  NEW
+  CONTACTED
+  PROPOSAL_SENT
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+// ==========================================
+// SITE SETTINGS
+// ==========================================
+
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String @db.Text
+
+  @@map("site_settings")
+}
