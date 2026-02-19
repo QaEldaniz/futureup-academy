@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { ScholarshipAppStatus } from '@prisma/client';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function scholarshipRoutes(server: FastifyInstance) {
@@ -286,7 +287,10 @@ export async function scholarshipApplicationRoutes(server: FastifyInstance) {
 
     const application = await server.prisma.scholarshipApplication.update({
       where: { id },
-      data: body,
+      data: {
+        ...body,
+        status: body.status ? (body.status as ScholarshipAppStatus) : undefined,
+      },
       include: {
         scholarship: {
           select: { id: true, titleAz: true, titleRu: true, titleEn: true },

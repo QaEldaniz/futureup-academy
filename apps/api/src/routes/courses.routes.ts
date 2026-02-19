@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
+import { Level } from '@prisma/client';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function courseRoutes(server: FastifyInstance) {
@@ -150,6 +151,7 @@ export async function courseRoutes(server: FastifyInstance) {
     const course = await server.prisma.course.create({
       data: {
         ...courseData,
+        level: courseData.level ? (courseData.level as Level) : undefined,
         price: courseData.price != null ? courseData.price : undefined,
         teachers: teacherIds?.length
           ? {
@@ -216,7 +218,10 @@ export async function courseRoutes(server: FastifyInstance) {
 
     const course = await server.prisma.course.update({
       where: { id },
-      data: courseData,
+      data: {
+        ...courseData,
+        level: courseData.level ? (courseData.level as Level) : undefined,
+      },
       include: {
         category: true,
         teachers: {

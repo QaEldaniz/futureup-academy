@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { CorporateServiceType, CorporateInqStatus } from '@prisma/client';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function corporateServiceRoutes(server: FastifyInstance) {
@@ -85,7 +86,10 @@ export async function corporateServiceRoutes(server: FastifyInstance) {
     };
 
     const service = await server.prisma.corporateService.create({
-      data: body,
+      data: {
+        ...body,
+        type: body.type as CorporateServiceType,
+      },
     });
 
     return reply.status(201).send({ success: true, data: service });
@@ -120,7 +124,10 @@ export async function corporateServiceRoutes(server: FastifyInstance) {
 
     const service = await server.prisma.corporateService.update({
       where: { id },
-      data: body,
+      data: {
+        ...body,
+        type: body.type ? (body.type as CorporateServiceType) : undefined,
+      },
     });
 
     return reply.send({ success: true, data: service });
@@ -276,7 +283,10 @@ export async function corporateInquiryRoutes(server: FastifyInstance) {
 
     const inquiry = await server.prisma.corporateInquiry.update({
       where: { id },
-      data: body,
+      data: {
+        ...body,
+        status: body.status ? (body.status as CorporateInqStatus) : undefined,
+      },
       include: {
         service: {
           select: { id: true, titleAz: true, titleRu: true, titleEn: true, type: true },

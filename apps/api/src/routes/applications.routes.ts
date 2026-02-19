@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
+import { ApplicationStatus } from '@prisma/client';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function applicationRoutes(server: FastifyInstance) {
@@ -125,7 +126,10 @@ export async function applicationRoutes(server: FastifyInstance) {
 
     const application = await server.prisma.application.update({
       where: { id },
-      data: body,
+      data: {
+        ...body,
+        status: body.status ? (body.status as ApplicationStatus) : undefined,
+      },
       include: {
         course: {
           select: { id: true, titleAz: true, titleRu: true, titleEn: true },

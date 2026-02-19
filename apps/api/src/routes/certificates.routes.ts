@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
+import { CertificateStatus } from '@prisma/client';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function certificateRoutes(server: FastifyInstance) {
@@ -209,7 +210,10 @@ export async function certificateRoutes(server: FastifyInstance) {
 
     const certificate = await server.prisma.certificate.update({
       where: { id },
-      data: body,
+      data: {
+        ...body,
+        status: body.status ? (body.status as CertificateStatus) : undefined,
+      },
       include: {
         student: {
           select: { id: true, name: true, email: true },

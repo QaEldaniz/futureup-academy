@@ -124,7 +124,7 @@ export async function buildApp() {
   await app.register(corporateInquiryRoutes, { prefix: '/api/admin/corporate-inquiries' });
 
   // Error handler
-  app.setErrorHandler((error, _request, reply) => {
+  app.setErrorHandler((error: any, _request, reply) => {
     app.log.error(error);
     reply.status(error.statusCode || 500).send({
       success: false,
