@@ -1,9 +1,10 @@
 'use client';
 
-import { Menu, Bell, Search, LogOut, User, ChevronDown } from 'lucide-react';
+import { Menu, Bell, Search, LogOut, User, ChevronDown, Sun, Moon, Globe } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
+import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 
 interface AdminHeaderProps {
@@ -12,15 +13,42 @@ interface AdminHeaderProps {
 
 export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, logout } = useAuthStore();
+  const { theme, setTheme } = useTheme();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const langRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown on outside click
+  const languages = [
+    { code: 'az', label: 'AZ', flag: '🇦🇿' },
+    { code: 'ru', label: 'RU', flag: '🇷🇺' },
+    { code: 'en', label: 'EN', flag: '🇬🇧' },
+  ];
+
+  // Get current locale from pathname
+  const currentLocale = (() => {
+    if (pathname.startsWith('/ru/')) return 'ru';
+    if (pathname.startsWith('/en/')) return 'en';
+    return 'az';
+  })();
+
+  const switchLanguage = (locale: string) => {
+    const pathWithoutLocale = pathname.replace(/^\/(az|ru|en)/, '') || '/';
+    const newPath = locale === 'az' ? `/admin${pathWithoutLocale.replace('/admin', '') || ''}` : `/${locale}/admin${pathWithoutLocale.replace('/admin', '') || ''}`;
+    router.push(newPath.replace('//', '/'));
+    setLangOpen(false);
+  };
+
+  // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
+      }
+      if (langRef.current && !langRef.current.contains(event.target as Node)) {
+        setLangOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -59,7 +87,46 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          {/* Theme toggle */}
+          <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="p-2 rounded-lg hover:bg-gray-800/50 text-gray-400 hover:text-white transition-colors"
+            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          >
+            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+
+          {/* Language switcher */}
+          <div className="relative" ref={langRef}>
+            <button
+              onClick={() => setLangOpen(!langOpen)}
+              className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg hover:bg-gray-800/50 text-gray-400 hover:text-white transition-colors"
+            >
+              <Globe className="w-4 h-4" />
+              <span className="text-xs font-medium uppercase">{currentLocale}</span>
+            </button>
+            {langOpen && (
+              <div className="absolute right-0 top-full mt-1 w-36 rounded-xl bg-[#1a2035] border border-gray-700/50 shadow-2xl shadow-black/30 overflow-hidden z-50">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => switchLanguage(lang.code)}
+                    className={cn(
+                      'flex items-center gap-2.5 w-full px-4 py-2.5 text-sm transition-colors',
+                      currentLocale === lang.code
+                        ? 'bg-primary-500/10 text-primary-400'
+                        : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
+                    )}
+                  >
+                    <span className="text-base">{lang.flag}</span>
+                    {lang.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Notifications */}
           <button className="relative p-2 rounded-lg hover:bg-gray-800/50 text-gray-400 hover:text-white transition-colors">
             <Bell className="w-5 h-5" />

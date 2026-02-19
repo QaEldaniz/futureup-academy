@@ -24,15 +24,41 @@ import {
 
 interface Review {
   id: string;
-  authorName: string;
-  authorType: 'STUDENT' | 'TEACHER';
-  targetType: 'COURSE' | 'TEACHER' | 'STUDENT';
-  targetName?: string;
+  type: string;
   text: string;
   rating: number;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  rejectReason?: string;
+  adminNote?: string;
   createdAt: string;
+  studentAuthor?: { id: string; name: string; email?: string; photo?: string };
+  teacherAuthor?: { id: string; nameAz: string; nameRu: string; nameEn: string; photo?: string };
+  aboutCourse?: { id: string; titleAz: string; titleRu: string; titleEn: string };
+  aboutTeacher?: { id: string; nameAz: string; nameRu: string; nameEn: string };
+  aboutStudent?: { id: string; name: string };
+}
+
+function getAuthorName(review: Review): string {
+  if (review.studentAuthor) return review.studentAuthor.name;
+  if (review.teacherAuthor) return review.teacherAuthor.nameEn || review.teacherAuthor.nameAz;
+  return 'Unknown';
+}
+
+function getTargetName(review: Review): string {
+  if (review.aboutCourse) return review.aboutCourse.titleEn || review.aboutCourse.titleAz;
+  if (review.aboutTeacher) return review.aboutTeacher.nameEn || review.aboutTeacher.nameAz;
+  if (review.aboutStudent) return review.aboutStudent.name;
+  return '';
+}
+
+function getTargetType(review: Review): string {
+  if (review.aboutCourse) return 'COURSE';
+  if (review.aboutTeacher) return 'TEACHER';
+  if (review.aboutStudent) return 'STUDENT';
+  return review.type || 'COURSE';
+}
+
+function getAuthorType(review: Review): 'STUDENT' | 'TEACHER' {
+  return review.teacherAuthor ? 'TEACHER' : 'STUDENT';
 }
 
 const TAB_OPTIONS = [
@@ -60,12 +86,12 @@ export default function AdminReviewsPage() {
     try {
       setLoading(true);
       const params = activeTab !== 'ALL' ? `?status=${activeTab}` : '';
-      const res = await api.get<{ success: boolean; data: Review[] }>(
-        `/admin/reviews${params}`,
+      const res = await api.get<{ success: boolean; data: Review[]; total?: number }>(
+        `/admin/reviews${params}&limit=50`,
         { token: token || undefined }
       );
       if (res.success) {
-        setReviews(res.data);
+        setReviews(Array.isArray(res.data) ? res.data : []);
       }
     } catch (err) {
       console.error('Failed to fetch reviews:', err);
@@ -104,13 +130,13 @@ export default function AdminReviewsPage() {
       setProcessingId(rejectModal.id);
       await api.put(
         `/admin/reviews/${rejectModal.id}/reject`,
-        { reason: rejectModal.reason },
+        { adminNote: rejectModal.reason },
         { token: token || undefined }
       );
       setReviews((prev) =>
         prev.map((r) =>
           r.id === rejectModal.id
-            ? { ...r, status: 'REJECTED' as const, rejectReason: rejectModal.reason }
+            ? { ...r, status: 'REJECTED' as const, adminNote: rejectModal.reason }
             : r
         )
       );
@@ -249,7 +275,11 @@ export default function AdminReviewsPage() {
       ) : (
         <div className="space-y-3">
           {filteredReviews.map((review) => {
-            const typeConfig = REVIEW_TYPE_CONFIG[review.targetType];
+            const authorName = getAuthorName(review);
+            const authorType = getAuthorType(review);
+            const targetType = getTargetType(review);
+            const targetName = getTargetName(review);
+            const typeConfig = REVIEW_TYPE_CONFIG[targetType];
             const TypeIcon = typeConfig?.icon || User;
             return (
               <div
@@ -265,26 +295,26 @@ export default function AdminReviewsPage() {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500/20 to-secondary-500/20 flex items-center justify-center text-primary-400 font-bold text-sm shrink-0">
-                      {review.authorName.charAt(0).toUpperCase()}
+                      {authorName.charAt(0).toUpperCase()}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
                         <p className="text-sm font-semibold text-white">
-                          {review.authorName}
+                          {authorName}
                         </p>
                         <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-800/50 text-gray-400 font-medium">
-                          {review.authorType === 'STUDENT' ? 'Student' : 'Teacher'}
+                          {authorType === 'STUDENT' ? 'Student' : 'Teacher'}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 mt-0.5">
                         <span className={cn('flex items-center gap-1 text-xs', typeConfig?.color || 'text-gray-400')}>
                           <TypeIcon className="w-3 h-3" />
-                          {typeConfig?.label || review.targetType}
+                          {typeConfig?.label || targetType}
                         </span>
-                        {review.targetName && (
+                        {targetName && (
                           <>
                             <span className="text-gray-600 text-xs">&rarr;</span>
-                            <span className="text-xs text-gray-400">{review.targetName}</span>
+                            <span className="text-xs text-gray-400">{targetName}</span>
                           </>
                         )}
                       </div>
@@ -302,13 +332,13 @@ export default function AdminReviewsPage() {
                 </p>
 
                 {/* Reject reason */}
-                {review.status === 'REJECTED' && review.rejectReason && (
+                {review.status === 'REJECTED' && review.adminNote && (
                   <div className="ml-[52px] mb-3 p-3 rounded-xl bg-red-500/5 border border-red-500/10">
                     <p className="text-xs text-red-400 flex items-center gap-1.5">
                       <AlertTriangle className="w-3 h-3" />
                       Rejection reason:
                     </p>
-                    <p className="text-xs text-gray-400 mt-1">{review.rejectReason}</p>
+                    <p className="text-xs text-gray-400 mt-1">{review.adminNote}</p>
                   </div>
                 )}
 

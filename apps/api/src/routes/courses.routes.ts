@@ -3,6 +3,16 @@ import { Level } from '@prisma/client';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function courseRoutes(server: FastifyInstance) {
+  // GET /list - Simple list for dropdowns (admin auth)
+  server.get('/list', { preHandler: [adminAuth] }, async (request, reply) => {
+    const courses = await server.prisma.course.findMany({
+      select: { id: true, titleAz: true, titleRu: true, titleEn: true },
+      orderBy: { titleEn: 'asc' },
+    });
+    const data = courses.map((c: any) => ({ id: c.id, name: c.titleEn || c.titleAz }));
+    return reply.send({ success: true, data });
+  });
+
   // GET / - List active courses (public, with filters and pagination)
   server.get('/', async (request, reply) => {
     const {

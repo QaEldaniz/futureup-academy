@@ -2,6 +2,15 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function studentRoutes(server: FastifyInstance) {
+  // GET /list - Simple list for dropdowns (admin auth)
+  server.get('/list', { preHandler: [adminAuth] }, async (request, reply) => {
+    const students = await server.prisma.student.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: 'asc' },
+    });
+    return reply.send({ success: true, data: students });
+  });
+
   // GET / - List students with pagination/search (admin auth)
   server.get('/', { preHandler: [adminAuth] }, async (request, reply) => {
     const {

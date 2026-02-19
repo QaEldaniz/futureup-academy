@@ -3,6 +3,16 @@ import bcrypt from 'bcrypt';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function teacherRoutes(server: FastifyInstance) {
+  // GET /list - Simple list for dropdowns (admin auth)
+  server.get('/list', { preHandler: [adminAuth] }, async (request, reply) => {
+    const teachers = await server.prisma.teacher.findMany({
+      select: { id: true, nameAz: true, nameRu: true, nameEn: true },
+      orderBy: { nameEn: 'asc' },
+    });
+    const data = teachers.map((t: any) => ({ id: t.id, name: t.nameEn || t.nameAz }));
+    return reply.send({ success: true, data });
+  });
+
   // GET / - List active teachers (public)
   server.get('/', async (request, reply) => {
     const teachers = await server.prisma.teacher.findMany({
