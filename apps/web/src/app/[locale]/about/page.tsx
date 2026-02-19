@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
 import { ArrowRight, Award, Lightbulb, Users, Globe, Wrench, TrendingUp, Sparkles, Target, Eye } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useState, useEffect } from 'react';
+import { api } from '@/lib/api';
 
 const values = [
   { icon: Award, key: 'value1', gradient: 'from-primary-500 to-secondary-500' },
@@ -16,12 +18,12 @@ const values = [
   { icon: TrendingUp, key: 'value6', gradient: 'from-pink-500 to-rose-500' },
 ];
 
-const stats = [
-  { value: '500+', labelKey: 'students' },
-  { value: '15+', labelKey: 'courses' },
-  { value: '92%', labelKey: 'employment' },
-  { value: '20+', labelKey: 'teachers' },
-];
+interface PublicStats {
+  totalCourses: number;
+  totalStudents: number;
+  totalTeachers: number;
+  totalCertificates: number;
+}
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -36,6 +38,25 @@ const itemVariants = {
 export default function AboutPage() {
   const t = useTranslations('about');
   const statsT = useTranslations('home');
+  const [publicStats, setPublicStats] = useState<PublicStats | null>(null);
+
+  useEffect(() => {
+    api
+      .get<{ success: boolean; data: PublicStats }>('/admin/dashboard/public-stats')
+      .then((res) => {
+        if (res.success) setPublicStats(res.data);
+      })
+      .catch(() => {
+        // Will use fallback values
+      });
+  }, []);
+
+  const stats = [
+    { value: publicStats ? `${publicStats.totalStudents}+` : '500+', labelKey: 'students' },
+    { value: publicStats ? `${publicStats.totalCourses}+` : '15+', labelKey: 'courses' },
+    { value: '92%', labelKey: 'employment' },
+    { value: publicStats ? `${publicStats.totalTeachers}+` : '20+', labelKey: 'teachers' },
+  ];
 
   return (
     <>

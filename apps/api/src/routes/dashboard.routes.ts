@@ -2,6 +2,26 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function dashboardRoutes(server: FastifyInstance) {
+  // GET /public-stats - Public stats for the About page (no auth)
+  server.get('/public-stats', async (_request, reply) => {
+    const [totalCourses, totalStudents, totalTeachers, totalCertificates] = await Promise.all([
+      server.prisma.course.count({ where: { isActive: true } }),
+      server.prisma.student.count(),
+      server.prisma.teacher.count({ where: { isActive: true } }),
+      server.prisma.certificate.count(),
+    ]);
+
+    return reply.send({
+      success: true,
+      data: {
+        totalCourses,
+        totalStudents,
+        totalTeachers,
+        totalCertificates,
+      },
+    });
+  });
+
   // GET / - Get dashboard stats (admin auth)
   server.get('/', { preHandler: [adminAuth] }, async (request, reply) => {
     const [

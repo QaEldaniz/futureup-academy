@@ -3,13 +3,17 @@
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock, Send, Sparkles } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, Sparkles, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { api } from '@/lib/api';
 
 export default function ContactPage() {
   const t = useTranslations('contact');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
 
   const contactCards = [
     { icon: MapPin, title: t('addressTitle'), text: t('addressText'), gradient: 'from-primary-500 to-secondary-500' },
@@ -17,10 +21,25 @@ export default function ContactPage() {
     { icon: Mail, title: t('emailTitle'), text: t('emailText'), gradient: 'from-green-500 to-accent-500' },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setLoading(true);
+    setError('');
+    try {
+      await api.post('/applications', {
+        name: form.name,
+        email: form.email,
+        phone: form.phone || '-',
+        message: form.subject ? `[${form.subject}] ${form.message}` : form.message,
+      });
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 5000);
+      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -90,14 +109,17 @@ export default function ContactPage() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
-                    <input type="text" placeholder={t('name')} required className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
+                    {error && (
+                      <div className="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-sm">{error}</div>
+                    )}
+                    <input type="text" placeholder={t('name')} required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <input type="email" placeholder={t('email')} required className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
-                      <input type="tel" placeholder={t('phone')} className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
+                      <input type="email" placeholder={t('email')} required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
+                      <input type="tel" placeholder={t('phone')} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
                     </div>
-                    <input type="text" placeholder={t('subject')} required className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
-                    <textarea placeholder={t('message')} rows={4} required className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
-                    <Button type="submit" className="w-full" size="lg" rightIcon={<Send className="w-4 h-4" />}>{t('send')}</Button>
+                    <input type="text" placeholder={t('subject')} required value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
+                    <textarea placeholder={t('message')} rows={4} required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none" />
+                    <Button type="submit" className="w-full" size="lg" disabled={loading} rightIcon={loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}>{loading ? '...' : t('send')}</Button>
                   </form>
                 )}
               </div>

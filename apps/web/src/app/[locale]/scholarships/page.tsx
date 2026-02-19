@@ -94,73 +94,10 @@ function getText(locale: string, az: string, ru: string, en: string): string {
   return az;
 }
 
-// Demo data used as fallback when API is not available
-const demoScholarships: Scholarship[] = [
-  {
-    id: '1',
-    titleAz: 'Tam Təqaüd Proqramı',
-    titleRu: 'Полная стипендиальная программа',
-    titleEn: 'Full Scholarship Program',
-    descAz: 'Tam ödənişsiz təhsil imkanı. Bütün kurs xərcləri tam şəkildə ödənilir.',
-    descRu: 'Полностью бесплатное обучение. Все расходы на курс полностью покрываются.',
-    descEn: 'Fully funded education. All course expenses are completely covered.',
-    percentage: 100,
-    eligibilityAz: 'Aztəminatlı ailələrdən olan tələbələr, qabiliyyət imtahanından keçənlər',
-    eligibilityRu: 'Студенты из малообеспеченных семей, прошедшие тест на способности',
-    eligibilityEn: 'Students from low-income families who pass the aptitude test',
-    deadline: '2026-04-15',
-    isActive: true,
-  },
-  {
-    id: '2',
-    titleAz: 'Bacarıq Təqaüdü',
-    titleRu: 'Стипендия за навыки',
-    titleEn: 'Merit Scholarship',
-    descAz: 'Akademik nailiyyətlərə görə verilən təqaüd proqramı.',
-    descRu: 'Стипендиальная программа за академические достижения.',
-    descEn: 'Scholarship program for academic achievements.',
-    percentage: 75,
-    eligibilityAz: 'GPA 3.5+ olan tələbələr, portfel təqdim edənlər',
-    eligibilityRu: 'Студенты с GPA 3.5+, представившие портфолио',
-    eligibilityEn: 'Students with GPA 3.5+, portfolio submission required',
-    deadline: '2026-05-01',
-    isActive: true,
-  },
-  {
-    id: '3',
-    titleAz: 'Qadınlar üçün IT Təqaüdü',
-    titleRu: 'IT Стипендия для женщин',
-    titleEn: 'Women in IT Scholarship',
-    descAz: 'IT sahəsində qadınların iştirakını dəstəkləyən xüsusi təqaüd proqramı.',
-    descRu: 'Специальная стипендиальная программа для поддержки участия женщин в IT.',
-    descEn: 'Special scholarship program supporting women in IT.',
-    percentage: 50,
-    eligibilityAz: 'IT sahəsinə maraq göstərən qadın tələbələr',
-    eligibilityRu: 'Женщины-студенты, интересующиеся IT сферой',
-    eligibilityEn: 'Female students interested in the IT field',
-    deadline: '2026-03-30',
-    isActive: true,
-  },
-  {
-    id: '4',
-    titleAz: 'Erkən Qeydiyyat Endirimi',
-    titleRu: 'Скидка за раннюю регистрацию',
-    titleEn: 'Early Bird Discount',
-    descAz: 'Erkən qeydiyyat zamanı xüsusi endirim təqaüdü.',
-    descRu: 'Специальная стипендия со скидкой при ранней регистрации.',
-    descEn: 'Special discount scholarship for early registration.',
-    percentage: 25,
-    eligibilityAz: 'Son tarixdən əvvəl qeydiyyatdan keçən bütün namizədlər',
-    eligibilityRu: 'Все кандидаты, зарегистрировавшиеся до крайнего срока',
-    eligibilityEn: 'All candidates who register before the deadline',
-    deadline: '2026-03-15',
-    isActive: true,
-  },
-];
 
 export default function ScholarshipsPage() {
   const locale = useLocale();
-  const [scholarships, setScholarships] = useState<Scholarship[]>(demoScholarships);
+  const [scholarships, setScholarships] = useState<Scholarship[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -168,12 +105,12 @@ export default function ScholarshipsPage() {
       .get<{ success: boolean; data: Scholarship[] }>('/scholarships')
       .then((res) => {
         const items = Array.isArray(res) ? res : res.data;
-        if (Array.isArray(items) && items.length > 0) {
+        if (Array.isArray(items)) {
           setScholarships(items);
         }
       })
       .catch(() => {
-        // API not available, keep demo data
+        // API not available
       })
       .finally(() => setLoading(false));
   }, []);
@@ -282,6 +219,16 @@ export default function ScholarshipsPage() {
                   <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-xl w-1/3" />
                 </div>
               ))}
+            </div>
+          ) : scholarships.length === 0 ? (
+            <div className="text-center py-16">
+              <GraduationCap className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+              <p className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                {getText(locale, 'Hazırda təqaüd proqramı yoxdur', 'Сейчас нет стипендиальных программ', 'No scholarship programs available')}
+              </p>
+              <p className="text-gray-500 dark:text-gray-400">
+                {getText(locale, 'Yeni proqramlar tezliklə əlavə olunacaq', 'Новые программы будут добавлены в ближайшее время', 'New programs will be added soon')}
+              </p>
             </div>
           ) : (
             <motion.div
