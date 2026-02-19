@@ -168,11 +168,15 @@ export default function CoursesPage() {
   }, []);
 
   const filteredCourses = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
     return courses.filter((course) => {
       if (!course.isActive) return false;
       const matchesCategory = selectedCategory === 'all' || course.category.slug === selectedCategory;
+      if (!q) return matchesCategory;
       const title = getLocalized(course as unknown as Record<string, unknown>, 'title', locale).toLowerCase();
-      const matchesSearch = searchQuery === '' || title.includes(searchQuery.toLowerCase()) || course.slug.includes(searchQuery.toLowerCase());
+      const desc = getLocalized(course as unknown as Record<string, unknown>, 'shortDesc', locale).toLowerCase();
+      const catName = getLocalized(course.category as unknown as Record<string, unknown>, 'name', locale).toLowerCase();
+      const matchesSearch = title.includes(q) || desc.includes(q) || catName.includes(q) || course.slug.includes(q);
       return matchesCategory && matchesSearch;
     });
   }, [courses, selectedCategory, searchQuery, locale]);

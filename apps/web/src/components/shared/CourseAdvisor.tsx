@@ -55,9 +55,10 @@ function getLocalized(item: Record<string, unknown>, field: string, locale: stri
   return (item[`${field}${suffix}`] as string) || (item[`${field}Az`] as string) || '';
 }
 
-/** Parse [[course:slug]] markers from AI response and return matching courses */
+/** Parse [[course:slug]] or [[/courses/slug]] markers from AI response and return matching courses */
 function parseCourseMarkers(text: string, courses: Course[]): Course[] {
-  const regex = /\[\[course:([\w-]+)\]\]/g;
+  // Match both [[course:slug]] and [[/courses/slug]] formats
+  const regex = /\[\[(?:course:|\/courses\/)([\w-]+)\]\]/g;
   const slugs: string[] = [];
   let match;
   while ((match = regex.exec(text)) !== null) {
@@ -67,9 +68,9 @@ function parseCourseMarkers(text: string, courses: Course[]): Course[] {
   return courses.filter((c) => slugs.includes(c.slug));
 }
 
-/** Remove [[course:slug]] markers from text for display */
+/** Remove [[course:slug]] or [[/courses/slug]] markers from text for display */
 function cleanCourseMarkers(text: string): string {
-  return text.replace(/\[\[course:[\w-]+\]\]/g, '').trim();
+  return text.replace(/\[\[(?:course:|\/courses\/)[\w-]+\]\]/g, '').trim();
 }
 
 /** Simple markdown-ish renderer: bold, newlines, bullet lists */
