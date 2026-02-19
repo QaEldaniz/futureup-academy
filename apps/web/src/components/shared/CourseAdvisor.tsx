@@ -106,6 +106,15 @@ function boldify(text: string): string {
   return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 }
 
+/** Format duration like "3 ay" → "3 месяца" / "3 months" based on locale */
+function formatDuration(duration: string, locale: string): string {
+  const match = duration.match(/(\d+)/);
+  if (!match) return duration;
+  const num = match[1];
+  const words: Record<string, string> = { az: 'ay', ru: 'мес.', en: 'months' };
+  return `${num} ${words[locale] || words.az}`;
+}
+
 /* ------------------------------------------------------------------ */
 /* Quick action presets per locale                                     */
 /* ------------------------------------------------------------------ */
@@ -514,7 +523,7 @@ export function CourseAdvisor() {
                                       <div className="flex items-center gap-2 mt-1">
                                         {course.duration && (
                                           <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
-                                            {course.duration}
+                                            {formatDuration(course.duration, locale)}
                                           </span>
                                         )}
                                         {course.level && (
