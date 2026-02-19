@@ -343,6 +343,7 @@
     "quickSchedule": "Schedule",
     "quickContact": "Contact",
     "errorGeneric": "An error occurred. Please try again.",
+    "errorRateLimit": "Too many requests. Please wait a few seconds and try again.",
     "errorNetwork": "Network error. Check your internet connection.",
     "levelBeginner": "Beginner",
     "levelIntermediate": "Intermediate",

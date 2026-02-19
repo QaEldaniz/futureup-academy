@@ -223,6 +223,9 @@ export function CourseAdvisor() {
     });
 
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('RATE_LIMIT');
+      }
       throw new Error(`HTTP ${response.status}`);
     }
 
@@ -306,14 +309,15 @@ export function CourseAdvisor() {
         }
         return updated;
       });
-    } catch {
+    } catch (err: any) {
+      const errorMsg = err?.message === 'RATE_LIMIT' ? t('errorRateLimit') : t('errorGeneric');
       setMessages((prev) => {
         const updated = [...prev];
         const last = updated[updated.length - 1];
         if (last && last.role === 'assistant' && !last.content) {
           return [
             ...updated.slice(0, -1),
-            { ...last, content: t('errorGeneric') },
+            { ...last, content: errorMsg },
           ];
         }
         return updated;
@@ -357,12 +361,13 @@ export function CourseAdvisor() {
             return updated;
           });
         })
-        .catch(() => {
+        .catch((err: any) => {
+          const errorMsg = err?.message === 'RATE_LIMIT' ? t('errorRateLimit') : t('errorGeneric');
           setMessages((prev) => {
             const updated = [...prev];
             const last = updated[updated.length - 1];
             if (last && last.role === 'assistant' && !last.content) {
-              return [...updated.slice(0, -1), { ...last, content: t('errorGeneric') }];
+              return [...updated.slice(0, -1), { ...last, content: errorMsg }];
             }
             return updated;
           });

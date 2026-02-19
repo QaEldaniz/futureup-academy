@@ -154,7 +154,7 @@ export async function chatRoutes(server: FastifyInstance) {
         const coursesContext = courses
           .map((c: any, i: number) => {
             const title = c[`title${suffix}`] || c.titleAz || c.titleEn || 'Course';
-            const desc = c[`desc${suffix}`] || c[`shortDesc${suffix}`] || c.descAz || c.shortDescAz || '';
+            const desc = c[`shortDesc${suffix}`] || c.shortDescAz || '';
             const catName = c.category
               ? c.category[`name${suffix}`] || c.category.nameAz || ''
               : '';
@@ -162,15 +162,13 @@ export async function chatRoutes(server: FastifyInstance) {
             const duration = c.duration || 'N/A';
             const level = c.level || 'ALL';
 
-            // Build syllabus info
+            // Build syllabus info (module names only to save tokens)
             let syllabusInfo = '';
             if (c.syllabus && Array.isArray(c.syllabus)) {
-              syllabusInfo = '\n   Syllabus modules:\n' + (c.syllabus as any[])
-                .map((mod: any, j: number) => {
-                  const topics = Array.isArray(mod.topics) ? mod.topics.join(', ') : '';
-                  return `   ${j + 1}. ${mod.module}${mod.hours ? ` (${mod.hours}h)` : ''}${topics ? `: ${topics}` : ''}`;
-                })
-                .join('\n');
+              const modules = (c.syllabus as any[]).map((mod: any) => mod.module).filter(Boolean);
+              if (modules.length > 0) {
+                syllabusInfo = '\n   Modules: ' + modules.join(', ');
+              }
             }
 
             // Build teachers info
@@ -206,7 +204,8 @@ export async function chatRoutes(server: FastifyInstance) {
               ?.map((tc: any) => tc.course?.[`title${suffix}`] || tc.course?.titleAz || '')
               .filter(Boolean)
               .join(', ');
-            return `- ${name}${t.specialization ? ` (${t.specialization})` : ''}${teacherCourses ? ` — teaches: ${teacherCourses}` : ''}${bio ? `\n  Bio: ${bio}` : ''}`;
+            const shortBio = bio && bio.length > 100 ? bio.slice(0, 100) + '...' : bio;
+            return `- ${name}${t.specialization ? ` (${t.specialization})` : ''}${teacherCourses ? ` — teaches: ${teacherCourses}` : ''}${shortBio ? ` — ${shortBio}` : ''}`;
           })
           .join('\n');
 

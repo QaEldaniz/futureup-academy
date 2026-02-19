@@ -339,6 +339,7 @@
     "quickSchedule": "Cədvəl",
     "quickContact": "Əlaqə",
     "errorGeneric": "Xəta baş verdi. Yenidən cəhd edin.",
+    "errorRateLimit": "Çox sayda sorğu göndərdiniz. Bir neçə saniyə gözləyin və yenidən cəhd edin.",
     "errorNetwork": "Şəbəkə xətası. İnternet bağlantınızı yoxlayın.",
     "levelBeginner": "Başlanğıc",
     "levelIntermediate": "Orta",
