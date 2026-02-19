@@ -23,6 +23,7 @@ import { dashboardRoutes } from './routes/dashboard.routes.js';
 import { teacherPortalRoutes } from './routes/teacher-portal.routes.js';
 import { scholarshipRoutes, scholarshipApplicationRoutes } from './routes/scholarships.routes.js';
 import { corporateServiceRoutes, corporateInquiryRoutes } from './routes/corporate.routes.js';
+import { chatRoutes } from './routes/chat.routes.js';
 
 // Extend Fastify types
 declare module 'fastify' {
@@ -114,6 +115,7 @@ export async function buildApp() {
   await app.register(scholarshipApplicationRoutes, { prefix: '/api/scholarship-applications' });
   await app.register(corporateServiceRoutes, { prefix: '/api/corporate-services' });
   await app.register(corporateInquiryRoutes, { prefix: '/api/corporate-inquiries' });
+  await app.register(chatRoutes, { prefix: '/api/chat' });
   await app.register(dashboardRoutes, { prefix: '/api/admin/dashboard' });
   await app.register(teacherPortalRoutes, { prefix: '/api/teacher' });
 
