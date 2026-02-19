@@ -9,7 +9,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bot,
   X,
-  Send,
   Sparkles,
   ArrowRight,
   RotateCcw,
@@ -20,6 +19,7 @@ import {
   Shield,
   Megaphone,
   ChevronRight,
+  HelpCircle,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -42,7 +42,17 @@ interface Course {
   category?: { nameAz: string; nameRu: string; nameEn: string; slug: string };
 }
 
-type Step = 'welcome' | 'interest' | 'level' | 'goal' | 'results';
+type Step =
+  | 'welcome'
+  | 'interest'
+  | 'level'
+  | 'goal'
+  | 'results'
+  | 'quiz_q1'
+  | 'quiz_q2'
+  | 'quiz_q3'
+  | 'quiz_q4'
+  | 'quiz_result';
 
 interface Message {
   id: string;
@@ -50,6 +60,69 @@ interface Message {
   text: string;
   options?: { label: string; value: string; icon?: React.ReactNode }[];
   courses?: Course[];
+}
+
+/* ------------------------------------------------------------------ */
+/* Quiz scoring logic                                                  */
+/* ------------------------------------------------------------------ */
+
+// Each quiz answer adds points to relevant interest areas
+const quizScoring: Record<string, Record<string, number>> = {
+  // Q1: What activity do you enjoy most?
+  q1_create: { frontend: 2, design: 3, marketing: 1 },
+  q1_solve: { backend: 3, data: 2, cyber: 1 },
+  q1_analyze: { data: 3, backend: 1, cyber: 2 },
+  q1_communicate: { marketing: 3, design: 1, frontend: 1 },
+
+  // Q2: What interests you on the internet?
+  q2_websites: { frontend: 3, design: 2, backend: 1 },
+  q2_apps: { backend: 3, frontend: 2 },
+  q2_social: { marketing: 3, design: 1 },
+  q2_security: { cyber: 3, backend: 1 },
+
+  // Q3: What type of work do you prefer?
+  q3_visual: { design: 3, frontend: 2 },
+  q3_logic: { backend: 3, data: 2, cyber: 1 },
+  q3_numbers: { data: 3, backend: 1 },
+  q3_people: { marketing: 3, design: 1 },
+
+  // Q4: What's your dream project?
+  q4_website: { frontend: 3, backend: 2, design: 1 },
+  q4_mobile: { backend: 2, frontend: 2 },
+  q4_business: { data: 3, marketing: 2 },
+  q4_protect: { cyber: 3, backend: 1 },
+};
+
+function calculateQuizResult(quizAnswers: string[]): string {
+  const scores: Record<string, number> = {
+    frontend: 0,
+    backend: 0,
+    design: 0,
+    data: 0,
+    cyber: 0,
+    marketing: 0,
+  };
+
+  quizAnswers.forEach((answer) => {
+    const scoring = quizScoring[answer];
+    if (scoring) {
+      Object.entries(scoring).forEach(([area, points]) => {
+        scores[area] += points;
+      });
+    }
+  });
+
+  // Find area with highest score
+  let maxArea = 'frontend';
+  let maxScore = 0;
+  Object.entries(scores).forEach(([area, score]) => {
+    if (score > maxScore) {
+      maxScore = score;
+      maxArea = area;
+    }
+  });
+
+  return maxArea;
 }
 
 /* ------------------------------------------------------------------ */
@@ -70,6 +143,15 @@ const interestIcons: Record<string, React.ReactNode> = {
   marketing: <Megaphone className="w-4 h-4" />,
 };
 
+const interestLabels: Record<string, string> = {
+  frontend: 'interestFrontend',
+  backend: 'interestBackend',
+  design: 'interestDesign',
+  data: 'interestData',
+  cyber: 'interestCyber',
+  marketing: 'interestMarketing',
+};
+
 /* ------------------------------------------------------------------ */
 /* Component                                                           */
 /* ------------------------------------------------------------------ */
@@ -87,6 +169,7 @@ export function CourseAdvisor() {
     level: '',
     goal: '',
   });
+  const [quizAnswers, setQuizAnswers] = useState<string[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [hasBeenOpened, setHasBeenOpened] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -103,12 +186,17 @@ export function CourseAdvisor() {
       .catch(() => {});
   }, []);
 
-  // Auto-scroll
+  // Auto-scroll — delay a bit more so buttons/options fully render before scroll
   useEffect(() => {
     if (scrollRef.current) {
+      const el = scrollRef.current;
       setTimeout(() => {
-        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-      }, 100);
+        el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+      }, 150);
+      // Second pass to catch any late-rendering content (buttons/options)
+      setTimeout(() => {
+        el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+      }, 500);
     }
   }, [messages, isTyping]);
 
@@ -154,6 +242,7 @@ export function CourseAdvisor() {
       { label: t('interestData'), value: 'data', icon: interestIcons.data },
       { label: t('interestCyber'), value: 'cyber', icon: interestIcons.cyber },
       { label: t('interestMarketing'), value: 'marketing', icon: interestIcons.marketing },
+      { label: t('interestUnsure'), value: 'unsure', icon: <HelpCircle className="w-4 h-4" /> },
     ];
   }
 
@@ -173,10 +262,47 @@ export function CourseAdvisor() {
     ];
   }
 
+  /* ---------- quiz option builders ---------- */
+
+  function getQuizQ1Options(): Message['options'] {
+    return [
+      { label: t('quizQ1_create'), value: 'q1_create' },
+      { label: t('quizQ1_solve'), value: 'q1_solve' },
+      { label: t('quizQ1_analyze'), value: 'q1_analyze' },
+      { label: t('quizQ1_communicate'), value: 'q1_communicate' },
+    ];
+  }
+
+  function getQuizQ2Options(): Message['options'] {
+    return [
+      { label: t('quizQ2_websites'), value: 'q2_websites' },
+      { label: t('quizQ2_apps'), value: 'q2_apps' },
+      { label: t('quizQ2_social'), value: 'q2_social' },
+      { label: t('quizQ2_security'), value: 'q2_security' },
+    ];
+  }
+
+  function getQuizQ3Options(): Message['options'] {
+    return [
+      { label: t('quizQ3_visual'), value: 'q3_visual' },
+      { label: t('quizQ3_logic'), value: 'q3_logic' },
+      { label: t('quizQ3_numbers'), value: 'q3_numbers' },
+      { label: t('quizQ3_people'), value: 'q3_people' },
+    ];
+  }
+
+  function getQuizQ4Options(): Message['options'] {
+    return [
+      { label: t('quizQ4_website'), value: 'q4_website' },
+      { label: t('quizQ4_mobile'), value: 'q4_mobile' },
+      { label: t('quizQ4_business'), value: 'q4_business' },
+      { label: t('quizQ4_protect'), value: 'q4_protect' },
+    ];
+  }
+
   /* ---------- recommendation engine ---------- */
 
   function getRecommendations(interest: string, level: string): Course[] {
-    // Keyword mapping for matching courses to interests
     const keywords: Record<string, string[]> = {
       frontend: ['frontend', 'front-end', 'react', 'javascript', 'html', 'css', 'vue', 'angular', 'web'],
       backend: ['backend', 'back-end', 'node', 'python', 'java', 'server', 'api', 'database', 'sql'],
@@ -199,7 +325,6 @@ export function CourseAdvisor() {
       return interestKeywords.some((kw) => searchText.includes(kw));
     });
 
-    // Filter by level if available
     if (level && results.length > 3) {
       const levelFiltered = results.filter((c) => c.level === level);
       if (levelFiltered.length > 0) {
@@ -207,7 +332,6 @@ export function CourseAdvisor() {
       }
     }
 
-    // Return top 3
     return results.slice(0, 3);
   }
 
@@ -217,10 +341,62 @@ export function CourseAdvisor() {
     addUserMessage(label);
 
     if (step === 'interest') {
-      setAnswers((prev) => ({ ...prev, interest: value }));
+      if (value === 'unsure') {
+        // Start the quiz flow
+        setStep('quiz_q1');
+        setQuizAnswers([]);
+        setTimeout(() => {
+          addBotMessage(t('quizIntro'), undefined);
+          setTimeout(() => {
+            addBotMessage(t('quizQ1'), getQuizQ1Options());
+          }, 800);
+        }, 300);
+      } else {
+        setAnswers((prev) => ({ ...prev, interest: value }));
+        setStep('level');
+        setTimeout(() => {
+          addBotMessage(t('askLevel'), getLevelOptions());
+        }, 300);
+      }
+    } else if (step === 'quiz_q1') {
+      setQuizAnswers((prev) => [...prev, value]);
+      setStep('quiz_q2');
+      setTimeout(() => {
+        addBotMessage(t('quizQ2'), getQuizQ2Options());
+      }, 300);
+    } else if (step === 'quiz_q2') {
+      setQuizAnswers((prev) => [...prev, value]);
+      setStep('quiz_q3');
+      setTimeout(() => {
+        addBotMessage(t('quizQ3'), getQuizQ3Options());
+      }, 300);
+    } else if (step === 'quiz_q3') {
+      setQuizAnswers((prev) => [...prev, value]);
+      setStep('quiz_q4');
+      setTimeout(() => {
+        addBotMessage(t('quizQ4'), getQuizQ4Options());
+      }, 300);
+    } else if (step === 'quiz_q4') {
+      const allQuizAnswers = [...quizAnswers, value];
+      setQuizAnswers(allQuizAnswers);
+
+      // Calculate result
+      const detectedInterest = calculateQuizResult(allQuizAnswers);
+      setAnswers((prev) => ({ ...prev, interest: detectedInterest }));
+
+      // Show quiz result with detected area name
+      const areaLabelKey = interestLabels[detectedInterest] || 'interestFrontend';
+      const areaName = t(areaLabelKey);
+
       setStep('level');
       setTimeout(() => {
-        addBotMessage(t('askLevel'), getLevelOptions());
+        addBotMessage(
+          t('quizResultMsg', { area: areaName }),
+          undefined
+        );
+        setTimeout(() => {
+          addBotMessage(t('askLevel'), getLevelOptions());
+        }, 1000);
       }, 300);
     } else if (step === 'level') {
       setAnswers((prev) => ({ ...prev, level: value }));
@@ -247,6 +423,7 @@ export function CourseAdvisor() {
   function handleReset() {
     setMessages([]);
     setAnswers({ interest: '', level: '', goal: '' });
+    setQuizAnswers([]);
     setStep('interest');
     setIsTyping(false);
     setTimeout(() => {
@@ -305,7 +482,7 @@ export function CourseAdvisor() {
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                {step === 'results' && (
+                {(step === 'results' || step.startsWith('quiz_')) && (
                   <button
                     onClick={handleReset}
                     className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
@@ -353,25 +530,50 @@ export function CourseAdvisor() {
 
                         {/* Options */}
                         {msg.options && (
-                          <div className="pl-9 flex flex-wrap gap-2">
-                            {msg.options.map((opt) => (
+                          <div className="pl-9 space-y-2">
+                            <div className="flex flex-wrap gap-2">
+                              {msg.options
+                                .filter((opt) => opt.value !== 'unsure')
+                                .map((opt) => (
+                                  <button
+                                    key={opt.value}
+                                    onClick={() => handleOptionSelect(opt.value, opt.label)}
+                                    className={cn(
+                                      'flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all',
+                                      'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
+                                      'text-gray-600 dark:text-gray-300',
+                                      'hover:border-primary-300 dark:hover:border-primary-600',
+                                      'hover:bg-primary-50 dark:hover:bg-primary-900/20',
+                                      'hover:text-primary-600 dark:hover:text-primary-400',
+                                      'active:scale-95'
+                                    )}
+                                  >
+                                    {opt.icon}
+                                    {opt.label}
+                                  </button>
+                                ))}
+                            </div>
+                            {/* "Not sure" button — full width, separated */}
+                            {msg.options.find((opt) => opt.value === 'unsure') && (
                               <button
-                                key={opt.value}
-                                onClick={() => handleOptionSelect(opt.value, opt.label)}
+                                onClick={() => {
+                                  const unsureOpt = msg.options!.find((opt) => opt.value === 'unsure')!;
+                                  handleOptionSelect(unsureOpt.value, unsureOpt.label);
+                                }}
                                 className={cn(
-                                  'flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all',
-                                  'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
-                                  'text-gray-600 dark:text-gray-300',
-                                  'hover:border-primary-300 dark:hover:border-primary-600',
-                                  'hover:bg-primary-50 dark:hover:bg-primary-900/20',
-                                  'hover:text-primary-600 dark:hover:text-primary-400',
-                                  'active:scale-95'
+                                  'w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all',
+                                  'bg-amber-50 dark:bg-amber-900/20 border-2 border-dashed border-amber-300 dark:border-amber-700',
+                                  'text-amber-600 dark:text-amber-400',
+                                  'hover:border-amber-400 dark:hover:border-amber-500',
+                                  'hover:bg-amber-100 dark:hover:bg-amber-900/30',
+                                  'hover:text-amber-700 dark:hover:text-amber-300',
+                                  'active:scale-[0.98]'
                                 )}
                               >
-                                {opt.icon}
-                                {opt.label}
+                                <HelpCircle className="w-4 h-4" />
+                                {msg.options.find((opt) => opt.value === 'unsure')!.label}
                               </button>
-                            ))}
+                            )}
                           </div>
                         )}
 
@@ -410,9 +612,11 @@ export function CourseAdvisor() {
                                         )}
                                         {course.level && (
                                           <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400">
-                                            {course.level === 'BEGINNER' ? t('levelBeginner') :
-                                             course.level === 'INTERMEDIATE' ? t('levelIntermediate') :
-                                             t('levelAdvanced')}
+                                            {course.level === 'BEGINNER'
+                                              ? t('levelBeginner')
+                                              : course.level === 'INTERMEDIATE'
+                                                ? t('levelIntermediate')
+                                                : t('levelAdvanced')}
                                           </span>
                                         )}
                                       </div>
@@ -471,7 +675,7 @@ export function CourseAdvisor() {
                 <span className="text-[10px] text-gray-400 dark:text-gray-500">
                   {t('poweredBy')}
                 </span>
-                {step === 'results' && (
+                {(step === 'results' || step.startsWith('quiz_')) && (
                   <button
                     onClick={handleReset}
                     className="flex items-center gap-1 text-[11px] font-medium text-primary-500 hover:text-primary-600 transition-colors"
