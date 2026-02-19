@@ -112,14 +112,26 @@ export function WhySection() {
   return (
     <section className="py-20 sm:py-28 bg-bg-light dark:bg-bg-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
-        <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
-            {t('why.title')}
-          </h2>
-          <p className="max-w-2xl mx-auto text-lg text-gray-500 dark:text-gray-400">
-            {t('why.subtitle')}
-          </p>
+        {/* Section header with image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-14">
+          <div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
+              {t('why.title')}
+            </h2>
+            <p className="text-lg text-gray-500 dark:text-gray-400">
+              {t('why.subtitle')}
+            </p>
+          </div>
+          <div className="relative hidden lg:block">
+            <div className="rounded-2xl overflow-hidden shadow-2xl shadow-primary-500/10">
+              <img
+                src="/images/team-discussion.jpg"
+                alt="Team collaboration"
+                className="w-full h-[280px] object-cover"
+              />
+            </div>
+            <div className="absolute -bottom-3 -left-3 w-20 h-20 rounded-2xl bg-gradient-to-br from-accent-500 to-primary-500 opacity-15 blur-xl" />
+          </div>
         </div>
 
         {/* Features grid */}

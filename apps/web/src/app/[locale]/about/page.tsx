@@ -80,10 +80,24 @@ export default function AboutPage() {
       {/* Story */}
       <section className="py-16 bg-bg-light dark:bg-bg-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{t('storyTitle')}</h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">{t('storyText')}</p>
-          </motion.div>
+          {/* Story with image */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{t('storyTitle')}</h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">{t('storyText')}</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative">
+              <div className="rounded-2xl overflow-hidden shadow-2xl shadow-primary-500/10">
+                <img
+                  src="/images/students-learning.jpg"
+                  alt="Students learning together"
+                  className="w-full h-[320px] object-cover"
+                />
+              </div>
+              {/* Decorative accent */}
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 opacity-20 blur-xl" />
+            </motion.div>
+          </div>
 
           {/* Mission & Vision */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">

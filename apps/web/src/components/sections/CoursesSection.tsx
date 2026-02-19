@@ -160,14 +160,26 @@ export function CoursesSection() {
   return (
     <section className="py-20 sm:py-28 bg-gray-50/50 dark:bg-gray-900/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
-        <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
-            {t('courses.title')}
-          </h2>
-          <p className="max-w-2xl mx-auto text-lg text-gray-500 dark:text-gray-400">
-            {t('courses.subtitle')}
-          </p>
+        {/* Section header with image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-14">
+          <div className="relative hidden lg:block">
+            <div className="rounded-2xl overflow-hidden shadow-2xl shadow-secondary-500/10">
+              <img
+                src="/images/coding-workspace.jpg"
+                alt="Modern coding workspace"
+                className="w-full h-[280px] object-cover"
+              />
+            </div>
+            <div className="absolute -top-3 -right-3 w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 opacity-15 blur-xl" />
+          </div>
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
+              {t('courses.title')}
+            </h2>
+            <p className="max-w-2xl mx-auto lg:mx-0 text-lg text-gray-500 dark:text-gray-400">
+              {t('courses.subtitle')}
+            </p>
+          </div>
         </div>
 
         {/* Grid */}
