@@ -19,44 +19,79 @@ export function HeroSection() {
         <div className="absolute top-1/3 right-1/3 w-[400px] h-[400px] bg-accent-500/8 dark:bg-accent-500/5 rounded-full blur-3xl" />
       </div>
 
-      {/* Animated floating shapes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Orb 1 */}
-        <div
-          className={cn(
-            'absolute w-20 h-20 rounded-full',
-            'bg-gradient-to-br from-primary-400/20 to-primary-600/20 dark:from-primary-400/10 dark:to-primary-600/10',
-            'top-[15%] left-[10%] animate-[float_8s_ease-in-out_infinite]'
-          )}
-        />
-        {/* Orb 2 */}
-        <div
-          className={cn(
-            'absolute w-32 h-32 rounded-full',
-            'bg-gradient-to-br from-accent-400/15 to-accent-600/15 dark:from-accent-400/10 dark:to-accent-600/10',
-            'top-[20%] right-[15%] animate-[float_10s_ease-in-out_infinite_1s]'
-          )}
-        />
-        {/* Orb 3 */}
-        <div
-          className={cn(
-            'absolute w-16 h-16 rounded-full',
-            'bg-gradient-to-br from-secondary-400/20 to-secondary-600/20 dark:from-secondary-400/10 dark:to-secondary-600/10',
-            'bottom-[25%] left-[20%] animate-[float_7s_ease-in-out_infinite_2s]'
-          )}
-        />
-        {/* Orb 4 */}
-        <div
-          className={cn(
-            'absolute w-24 h-24 rounded-full',
-            'bg-gradient-to-br from-primary-300/15 to-accent-400/15 dark:from-primary-300/10 dark:to-accent-400/10',
-            'bottom-[15%] right-[10%] animate-[float_9s_ease-in-out_infinite_3s]'
-          )}
-        />
-        {/* Small decorative dots */}
-        <div className="absolute w-3 h-3 rounded-full bg-primary-400/30 top-[40%] left-[5%] animate-[pulse_3s_ease-in-out_infinite]" />
-        <div className="absolute w-2 h-2 rounded-full bg-accent-400/30 top-[60%] right-[8%] animate-[pulse_4s_ease-in-out_infinite_1s]" />
-        <div className="absolute w-4 h-4 rounded-full bg-secondary-400/20 top-[10%] right-[40%] animate-[pulse_5s_ease-in-out_infinite_2s]" />
+      {/* Floating code snippets & tech elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
+        {/* Code snippet - top left */}
+        <div className="absolute top-[12%] left-[5%] animate-[float_8s_ease-in-out_infinite] hidden sm:block">
+          <div className="bg-gray-900/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg px-4 py-3 border border-gray-700/30 shadow-xl shadow-primary-500/5 font-mono text-[11px] leading-relaxed">
+            <div className="text-gray-500 mb-1">{'// Build your future'}</div>
+            <div>
+              <span className="text-purple-400">const</span>{' '}
+              <span className="text-blue-300">skills</span>{' '}
+              <span className="text-gray-400">=</span>{' '}
+              <span className="text-amber-300">[</span>
+            </div>
+            <div className="pl-4">
+              <span className="text-emerald-400">{'"React"'}</span>
+              <span className="text-gray-500">,</span>{' '}
+              <span className="text-emerald-400">{'"Node.js"'}</span>
+            </div>
+            <div>
+              <span className="text-amber-300">]</span>
+              <span className="text-gray-400">;</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Terminal snippet - top right */}
+        <div className="absolute top-[18%] right-[6%] animate-[float_10s_ease-in-out_infinite_1s] hidden md:block">
+          <div className="bg-gray-900/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg px-4 py-3 border border-gray-700/30 shadow-xl shadow-accent-500/5 font-mono text-[11px]">
+            <div className="flex items-center gap-1.5 mb-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+            </div>
+            <div className="text-green-400">$ npm run dev</div>
+            <div className="text-gray-400">{'> ready on localhost:3000'}</div>
+            <div className="text-emerald-300 animate-pulse">{'> '}&#9608;</div>
+          </div>
+        </div>
+
+        {/* HTML/JSX tag - bottom left */}
+        <div className="absolute bottom-[22%] left-[8%] animate-[float_7s_ease-in-out_infinite_2s] hidden sm:block">
+          <div className="bg-gray-900/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg px-4 py-2.5 border border-gray-700/30 shadow-xl shadow-secondary-500/5 font-mono text-[11px]">
+            <span className="text-gray-500">{'<'}</span>
+            <span className="text-blue-400">FutureUp</span>
+            <span className="text-gray-500">{' '}</span>
+            <span className="text-purple-300">career</span>
+            <span className="text-gray-400">{'='}</span>
+            <span className="text-emerald-400">{'"dream"'}</span>
+            <span className="text-gray-500">{' />'}</span>
+          </div>
+        </div>
+
+        {/* Database query - bottom right */}
+        <div className="absolute bottom-[16%] right-[8%] animate-[float_9s_ease-in-out_infinite_3s] hidden md:block">
+          <div className="bg-gray-900/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg px-4 py-2.5 border border-gray-700/30 shadow-xl shadow-primary-500/5 font-mono text-[11px]">
+            <span className="text-purple-400">SELECT</span>{' '}
+            <span className="text-blue-300">*</span>{' '}
+            <span className="text-purple-400">FROM</span>{' '}
+            <span className="text-amber-300">students</span>
+            <br />
+            <span className="text-purple-400">WHERE</span>{' '}
+            <span className="text-blue-300">success</span>{' '}
+            <span className="text-gray-400">=</span>{' '}
+            <span className="text-emerald-400">true</span>
+            <span className="text-gray-400">;</span>
+          </div>
+        </div>
+
+        {/* Floating tech symbols */}
+        <div className="absolute top-[42%] left-[3%] text-primary-500/20 dark:text-primary-400/10 text-4xl font-mono animate-[float_6s_ease-in-out_infinite_1s]">{'</>'}</div>
+        <div className="absolute top-[55%] right-[5%] text-accent-500/20 dark:text-accent-400/10 text-3xl font-mono animate-[float_8s_ease-in-out_infinite_2s]">{'{ }'}</div>
+        <div className="absolute top-[8%] right-[35%] text-secondary-500/15 dark:text-secondary-400/10 text-2xl font-mono animate-[pulse_5s_ease-in-out_infinite]">{'#'}</div>
+        <div className="absolute bottom-[35%] left-[30%] text-primary-400/15 dark:text-primary-400/8 text-xl font-mono animate-[pulse_4s_ease-in-out_infinite_1s]">{'&&'}</div>
+        <div className="absolute top-[65%] left-[45%] text-accent-400/15 dark:text-accent-400/8 text-lg font-mono animate-[pulse_6s_ease-in-out_infinite_3s]">{'=>'}</div>
       </div>
 
       {/* Grid overlay */}
