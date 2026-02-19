@@ -4,15 +4,6 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
-  outputFileTracingExcludes: {
-    '*': [
-      '@parcel/watcher',
-      '@parcel/watcher-linux-x64-glibc',
-      '@parcel/watcher-wasm',
-      '@swc/core',
-    ],
-  },
   images: {
     remotePatterns: [
       {
