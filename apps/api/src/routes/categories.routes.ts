@@ -2,8 +2,40 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function categoryRoutes(server: FastifyInstance) {
-  // GET / - List all categories (public)
+  // GET / - List all categories (public, optional audience filter)
   server.get('/', async (request, reply) => {
+    const { audience } = request.query as { audience?: string };
+
+    // If audience filter provided, only return categories that have courses for that audience
+    if (audience && (audience === 'KIDS' || audience === 'ADULTS')) {
+      const categories = await server.prisma.category.findMany({
+        where: {
+          courses: {
+            some: {
+              audience: audience as any,
+              isActive: true,
+            },
+          },
+        },
+        include: {
+          _count: {
+            select: {
+              courses: {
+                where: {
+                  audience: audience as any,
+                  isActive: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: [{ order: 'asc' }, { nameEn: 'asc' }],
+      });
+
+      return reply.send({ success: true, data: categories });
+    }
+
+    // No filter — return all categories with total course count
     const categories = await server.prisma.category.findMany({
       include: {
         _count: {

@@ -73,6 +73,9 @@ interface CourseFormData {
   descAz: string;
   descRu: string;
   descEn: string;
+  shortDescAz: string;
+  shortDescRu: string;
+  shortDescEn: string;
   slug: string;
   image: string;
   duration: string;
@@ -103,6 +106,9 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
     descAz: '',
     descRu: '',
     descEn: '',
+    shortDescAz: '',
+    shortDescRu: '',
+    shortDescEn: '',
     slug: '',
     image: '',
     duration: '',
@@ -136,6 +142,9 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
             descAz: c.descAz || '',
             descRu: c.descRu || '',
             descEn: c.descEn || '',
+            shortDescAz: (c as any).shortDescAz || '',
+            shortDescRu: (c as any).shortDescRu || '',
+            shortDescEn: (c as any).shortDescEn || '',
             slug: c.slug || '',
             image: c.image || '',
             duration: c.duration || '',
@@ -333,6 +342,26 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                   className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
+            </div>
+
+            {/* Short Description */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Short Description ({activeTab.toUpperCase()}) <span className="text-gray-500 text-xs">max 300 chars</span>
+              </label>
+              <input
+                type="text"
+                maxLength={300}
+                value={form[`shortDesc${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}` as keyof CourseFormData] as string}
+                onChange={(e) =>
+                  updateField(
+                    `shortDesc${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}` as keyof CourseFormData,
+                    e.target.value
+                  )
+                }
+                placeholder={`Short description for cards (${langTabs.find((t) => t.key === activeTab)?.label})`}
+                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              />
             </div>
 
             {/* Description */}

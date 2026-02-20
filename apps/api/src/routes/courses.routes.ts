@@ -106,12 +106,13 @@ export async function courseRoutes(server: FastifyInstance) {
     });
   });
 
-  // GET /:slug - Get course by slug
-  server.get('/:slug', async (request, reply) => {
-    const { slug } = request.params as { slug: string };
+  // GET /:slugOrId - Get course by slug OR by id (for admin edit page)
+  server.get('/:slugOrId', async (request, reply) => {
+    const { slugOrId } = request.params as { slugOrId: string };
 
-    const course = await server.prisma.course.findUnique({
-      where: { slug },
+    // Try by slug first, then by id
+    let course = await server.prisma.course.findUnique({
+      where: { slug: slugOrId },
       include: {
         category: true,
         teachers: {
@@ -134,6 +135,34 @@ export async function courseRoutes(server: FastifyInstance) {
         },
       },
     });
+
+    if (!course) {
+      // Fallback: try by id (for admin edit pages that use course.id)
+      course = await server.prisma.course.findUnique({
+        where: { id: slugOrId },
+        include: {
+          category: true,
+          teachers: {
+            include: {
+              teacher: {
+                select: {
+                  id: true,
+                  nameAz: true,
+                  nameRu: true,
+                  nameEn: true,
+                  photo: true,
+                  specialization: true,
+                  bioAz: true,
+                  bioRu: true,
+                  bioEn: true,
+                  linkedin: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    }
 
     if (!course) {
       return reply.status(404).send({ success: false, message: 'Course not found' });

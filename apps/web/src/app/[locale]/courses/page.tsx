@@ -200,23 +200,33 @@ export default function CoursesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch courses once
   useEffect(() => {
-    async function fetchData() {
+    async function fetchCourses() {
       try {
-        const [coursesRes, categoriesRes] = await Promise.all([
-          api.get<{ success: boolean; data: Course[] }>('/courses?limit=50'),
-          api.get<{ success: boolean; data: Category[] }>('/categories'),
-        ]);
+        const coursesRes = await api.get<{ success: boolean; data: Course[] }>('/courses?limit=50');
         setCourses(coursesRes.data || []);
-        setCategories(categoriesRes.data || []);
       } catch (err) {
         console.error('Failed to fetch courses:', err);
       } finally {
         setLoading(false);
       }
     }
-    fetchData();
+    fetchCourses();
   }, []);
+
+  // Fetch categories filtered by audience (re-fetch when audience changes)
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const categoriesRes = await api.get<{ success: boolean; data: Category[] }>(`/categories?audience=${selectedAudience}`);
+        setCategories(categoriesRes.data || []);
+      } catch (err) {
+        console.error('Failed to fetch categories:', err);
+      }
+    }
+    fetchCategories();
+  }, [selectedAudience]);
 
   const filteredCourses = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
