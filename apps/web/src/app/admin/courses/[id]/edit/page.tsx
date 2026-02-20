@@ -48,6 +48,7 @@ interface CourseData {
   price?: number | null;
   level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
   audience?: 'KIDS' | 'ADULTS';
+  ageGroup?: string | null;
   categoryId?: string;
   isActive: boolean;
 }
@@ -78,9 +79,17 @@ interface CourseFormData {
   price: string;
   level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
   audience: 'KIDS' | 'ADULTS';
+  ageGroup: string;
   categoryId: string;
   isActive: boolean;
 }
+
+const AGE_GROUPS = [
+  { value: 'AGE_6_8', label: '6-8 yaş (1-2 sinif)', emoji: '🧒' },
+  { value: 'AGE_9_11', label: '9-11 yaş (3-5 sinif)', emoji: '👦' },
+  { value: 'AGE_12_14', label: '12-14 yaş (6-8 sinif)', emoji: '🧑' },
+  { value: 'AGE_15_17', label: '15-17 yaş (9-11 sinif)', emoji: '🎓' },
+];
 
 export default function AdminEditCoursePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -100,6 +109,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
     price: '',
     level: 'BEGINNER',
     audience: 'ADULTS',
+    ageGroup: '',
     categoryId: '',
     isActive: true,
   });
@@ -132,6 +142,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
             price: c.price != null ? String(c.price) : '',
             level: c.level || 'BEGINNER',
             audience: c.audience || 'ADULTS',
+            ageGroup: c.ageGroup || '',
             categoryId: c.categoryId || '',
             isActive: c.isActive ?? true,
           });
@@ -185,6 +196,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
         ...form,
         price: form.price ? Number(form.price) : null,
         slug: form.slug || slugify(form.titleEn || form.titleAz),
+        ageGroup: form.audience === 'KIDS' && form.ageGroup ? form.ageGroup : null,
       };
 
       const res = await api.put<{ success: boolean }>(`/admin/courses/${id}`, payload, {
@@ -492,6 +504,31 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                 </button>
               </div>
             </div>
+
+            {/* Age Group (only for KIDS) */}
+            {form.audience === 'KIDS' && (
+              <div className="sm:col-span-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">Age Group</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {AGE_GROUPS.map((ag) => (
+                    <button
+                      key={ag.value}
+                      type="button"
+                      onClick={() => updateField('ageGroup', ag.value)}
+                      className={cn(
+                        'flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-medium border transition-all',
+                        form.ageGroup === ag.value
+                          ? 'bg-orange-500/15 border-orange-500/40 text-orange-400'
+                          : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                      )}
+                    >
+                      <span>{ag.emoji}</span>
+                      {ag.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Category */}
             <div>

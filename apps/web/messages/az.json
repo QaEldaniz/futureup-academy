@@ -57,7 +57,13 @@
       "pythonKids": "Uşaqlar Üçün Python",
       "pythonKidsDesc": "Python ilə əsl proqramlaşdırma öyrənin. Oyunlar və maraqlı layihələr qurun.",
       "webKids": "Yeniyetmələr Üçün Web",
-      "webKidsDesc": "HTML, CSS və JavaScript ilə öz veb saytlarınızı yaradın."
+      "webKidsDesc": "HTML, CSS və JavaScript ilə öz veb saytlarınızı yaradın.",
+      "cyberKids": "İnternet Təhlükəsizliyi",
+      "cyberKidsDesc": "Onlayn təhlükəsizlik qaydaları, şəxsi məlumat qorunması və kiberbullinqdən müdafiə.",
+      "aiKids": "Süni İntellekt Kəşfiyyatçısı",
+      "aiKidsDesc": "AI dünyasını kəşf edin, AI alətləri ilə yaradıcı layihələr qurun.",
+      "roblox": "Roblox Oyun Yaratma",
+      "robloxDesc": "Roblox Studio-da Lua proqramlaşdırma dili ilə 3D oyunlar yaradın."
     },
     "why": {
       "title": "Niyə FutureUp?",
@@ -142,7 +148,8 @@
     "kidsTitle": "Uşaqlar Üçün IT Kursları",
     "kidsSubtitle": "7-16 yaşlı uşaqlar üçün maraqlı və əyləncəli proqramlaşdırma",
     "adultsTitle": "Kurslar",
-    "adultsSubtitle": "Bütün peşəkar kurslarımız"
+    "adultsSubtitle": "Bütün peşəkar kurslarımız",
+    "allAges": "Bütün yaşlar"
   },
   "courseDetail": {
     "breadcrumbHome": "Ana Səhifə",

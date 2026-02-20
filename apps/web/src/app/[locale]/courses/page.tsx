@@ -8,7 +8,7 @@ import {
   Code2, Server, Palette, BarChart3, Shield, Megaphone,
   ArrowRight, Clock, Signal, Search, SlidersHorizontal,
   GraduationCap, Sparkles, Monitor, Briefcase, Container,
-  Loader2, Users, Baby, Gamepad2,
+  Loader2, Users, Baby, Gamepad2, Brain,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useMemo, useEffect } from 'react';
@@ -16,7 +16,7 @@ import { api } from '@/lib/api';
 
 const iconMap: Record<string, React.ElementType> = {
   Monitor, Briefcase, Megaphone, BarChart3, Code2, Container, Shield,
-  Server, Palette, Gamepad2,
+  Server, Palette, Gamepad2, Brain,
 };
 
 const gradientMap: Record<string, string> = {
@@ -27,6 +27,9 @@ const gradientMap: Record<string, string> = {
   'sw-engineering': 'from-blue-500 to-cyan-500',
   'dev-team': 'from-green-500 to-emerald-500',
   'cyber-security': 'from-red-500 to-rose-600',
+  'kids-coding': 'from-sky-500 to-indigo-500',
+  'kids-cybersecurity': 'from-red-500 to-orange-500',
+  'kids-ai': 'from-violet-500 to-purple-600',
 };
 
 interface Category {
@@ -53,6 +56,7 @@ interface Course {
   price: string;
   level: string;
   audience: 'KIDS' | 'ADULTS';
+  ageGroup?: string | null;
   categoryId: string;
   isActive: boolean;
   isFeatured: boolean;
@@ -107,9 +111,14 @@ function CourseCard({ course, locale, isKids }: { course: Course; locale: string
             isKids ? 'h-2' : 'h-1.5'
           )} />
 
-          {/* Kids badge */}
+          {/* Kids badge + age group */}
           {isKids && (
-            <div className="absolute top-4 right-4 z-10">
+            <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5">
+              {course.ageGroup && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold bg-amber-500 text-white shadow-lg shadow-amber-500/30">
+                  {course.ageGroup === 'AGE_6_8' ? '6-8' : course.ageGroup === 'AGE_9_11' ? '9-11' : course.ageGroup === 'AGE_12_14' ? '12-14' : '15-17'} {locale === 'az' ? 'yaş' : locale === 'ru' ? 'лет' : 'y.o.'}
+                </span>
+              )}
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-orange-500 text-white shadow-lg shadow-orange-500/30">
                 <Gamepad2 className="w-3 h-3" />
                 IT Kids
@@ -186,6 +195,7 @@ export default function CoursesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedAudience, setSelectedAudience] = useState<'ADULTS' | 'KIDS'>('ADULTS');
+  const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -214,6 +224,8 @@ export default function CoursesPage() {
       if (!course.isActive) return false;
       const matchesAudience = (course.audience || 'ADULTS') === selectedAudience;
       if (!matchesAudience) return false;
+      const matchesAgeGroup = selectedAgeGroup === 'all' || course.ageGroup === selectedAgeGroup;
+      if (!matchesAgeGroup) return false;
       const matchesCategory = selectedCategory === 'all' || course.category.slug === selectedCategory;
       if (!q) return matchesCategory;
       const title = getLocalized(course as unknown as Record<string, unknown>, 'title', locale).toLowerCase();
@@ -222,7 +234,7 @@ export default function CoursesPage() {
       const matchesSearch = title.includes(q) || desc.includes(q) || catName.includes(q) || course.slug.includes(q);
       return matchesCategory && matchesSearch;
     });
-  }, [courses, selectedCategory, selectedAudience, searchQuery, locale]);
+  }, [courses, selectedCategory, selectedAudience, selectedAgeGroup, searchQuery, locale]);
 
   const isKids = selectedAudience === 'KIDS';
 
@@ -274,7 +286,7 @@ export default function CoursesPage() {
           {/* Audience Tabs */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex items-center justify-center gap-3 mt-8">
             <button
-              onClick={() => { setSelectedAudience('ADULTS'); setSelectedCategory('all'); }}
+              onClick={() => { setSelectedAudience('ADULTS'); setSelectedCategory('all'); setSelectedAgeGroup('all'); }}
               className={cn(
                 'inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300',
                 selectedAudience === 'ADULTS'
@@ -286,7 +298,7 @@ export default function CoursesPage() {
               {t('adults')}
             </button>
             <button
-              onClick={() => { setSelectedAudience('KIDS'); setSelectedCategory('all'); }}
+              onClick={() => { setSelectedAudience('KIDS'); setSelectedCategory('all'); setSelectedAgeGroup('all'); }}
               className={cn(
                 'inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300',
                 selectedAudience === 'KIDS'
@@ -326,6 +338,35 @@ export default function CoursesPage() {
                     : 'bg-white dark:bg-surface-dark border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-primary-500/50 focus:border-primary-300'
                 )} />
             </div>
+
+            {/* Age Group Filter (only for KIDS) */}
+            {isKids && (
+              <div className="flex flex-wrap gap-2">
+                <button onClick={() => setSelectedAgeGroup('all')}
+                  className={cn('inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all',
+                    selectedAgeGroup === 'all'
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25'
+                      : 'bg-white dark:bg-surface-dark text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-orange-300')}>
+                  {t('allAges')}
+                </button>
+                {[
+                  { value: 'AGE_6_8', label: '6-8', desc: locale === 'az' ? '1-2 sinif' : locale === 'ru' ? '1-2 класс' : 'Grade 1-2' },
+                  { value: 'AGE_9_11', label: '9-11', desc: locale === 'az' ? '3-5 sinif' : locale === 'ru' ? '3-5 класс' : 'Grade 3-5' },
+                  { value: 'AGE_12_14', label: '12-14', desc: locale === 'az' ? '6-8 sinif' : locale === 'ru' ? '6-8 класс' : 'Grade 6-8' },
+                  { value: 'AGE_15_17', label: '15-17', desc: locale === 'az' ? '9-11 sinif' : locale === 'ru' ? '9-11 класс' : 'Grade 9-11' },
+                ].map((ag) => (
+                  <button key={ag.value} onClick={() => setSelectedAgeGroup(ag.value)}
+                    className={cn('inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all',
+                      selectedAgeGroup === ag.value
+                        ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25'
+                        : 'bg-white dark:bg-surface-dark text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-orange-300')}>
+                    <span className="font-bold">{ag.label}</span>
+                    <span className="text-xs opacity-75">{ag.desc}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
             <div className="flex flex-wrap gap-2">
               <button onClick={() => setSelectedCategory('all')}
                 className={cn('inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all',
@@ -368,7 +409,7 @@ export default function CoursesPage() {
               <p className="text-lg text-gray-500">{t('noResults')}</p>
             </div>
           ) : (
-            <motion.div variants={containerVariants} initial="hidden" animate="visible" key={selectedCategory + searchQuery + selectedAudience} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <motion.div variants={containerVariants} initial="hidden" animate="visible" key={selectedCategory + searchQuery + selectedAudience + selectedAgeGroup} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredCourses.map((course) => (
                 <CourseCard key={course.id} course={course} locale={locale} isKids={isKids} />
               ))}

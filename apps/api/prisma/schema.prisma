@@ -51,7 +51,8 @@ model Course {
   duration    String // e.g., "3 ay", "6 months"
   price       Decimal? @db.Decimal(10, 2)
   level       Level    @default(BEGINNER)
-  audience    Audience @default(ADULTS)
+  audience    Audience  @default(ADULTS)
+  ageGroup    AgeGroup? // Only for KIDS courses
   categoryId  String
   isActive    Boolean  @default(true)
   isFeatured  Boolean  @default(false)
@@ -82,6 +83,14 @@ enum Level {
 enum Audience {
   KIDS
   ADULTS
+}
+
+// Age group for kids courses (school grades / age ranges)
+enum AgeGroup {
+  AGE_6_8    // 1-2 sinif
+  AGE_9_11   // 3-5 sinif
+  AGE_12_14  // 6-8 sinif
+  AGE_15_17  // 9-11 sinif
 }
 
 model Category {

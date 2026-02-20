@@ -36,6 +36,7 @@ interface Course {
   price?: number;
   level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
   audience?: 'KIDS' | 'ADULTS';
+  ageGroup?: string | null;
   isActive: boolean;
   category?: {
     id: string;
@@ -374,6 +375,11 @@ export default function AdminCoursesPage() {
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium border bg-orange-500/10 text-orange-400 border-orange-500/20">
                       <Baby className="w-3 h-3" />
                       Kids
+                    </span>
+                  )}
+                  {course.ageGroup && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                      {course.ageGroup === 'AGE_6_8' ? '6-8' : course.ageGroup === 'AGE_9_11' ? '9-11' : course.ageGroup === 'AGE_12_14' ? '12-14' : '15-17'} yaş
                     </span>
                   )}
                 </div>

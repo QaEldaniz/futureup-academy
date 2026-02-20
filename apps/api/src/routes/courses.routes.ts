@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import { Level, Audience } from '@prisma/client';
+import { Level, Audience, AgeGroup } from '@prisma/client';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function courseRoutes(server: FastifyInstance) {
@@ -23,6 +23,7 @@ export async function courseRoutes(server: FastifyInstance) {
       search,
       featured,
       audience,
+      ageGroup,
     } = request.query as {
       page?: string;
       limit?: string;
@@ -31,6 +32,7 @@ export async function courseRoutes(server: FastifyInstance) {
       search?: string;
       featured?: string;
       audience?: string;
+      ageGroup?: string;
     };
 
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
@@ -53,6 +55,10 @@ export async function courseRoutes(server: FastifyInstance) {
 
     if (audience && (audience === 'KIDS' || audience === 'ADULTS')) {
       where.audience = audience;
+    }
+
+    if (ageGroup && ['AGE_6_8', 'AGE_9_11', 'AGE_12_14', 'AGE_15_17'].includes(ageGroup)) {
+      where.ageGroup = ageGroup;
     }
 
     if (search) {
@@ -154,6 +160,7 @@ export async function courseRoutes(server: FastifyInstance) {
       price?: number;
       level?: string;
       audience?: string;
+      ageGroup?: string;
       categoryId: string;
       isActive?: boolean;
       isFeatured?: boolean;
@@ -170,6 +177,7 @@ export async function courseRoutes(server: FastifyInstance) {
         ...courseData,
         level: courseData.level ? (courseData.level as Level) : undefined,
         audience: courseData.audience ? (courseData.audience as Audience) : undefined,
+        ageGroup: courseData.ageGroup ? (courseData.ageGroup as AgeGroup) : undefined,
         price: courseData.price != null ? courseData.price : undefined,
         teachers: teacherIds?.length
           ? {
@@ -209,6 +217,7 @@ export async function courseRoutes(server: FastifyInstance) {
       price?: number;
       level?: string;
       audience?: string;
+      ageGroup?: string | null;
       categoryId?: string;
       isActive?: boolean;
       isFeatured?: boolean;
@@ -241,6 +250,7 @@ export async function courseRoutes(server: FastifyInstance) {
         ...courseData,
         level: courseData.level ? (courseData.level as Level) : undefined,
         audience: courseData.audience ? (courseData.audience as Audience) : undefined,
+        ageGroup: courseData.ageGroup === null ? null : courseData.ageGroup ? (courseData.ageGroup as AgeGroup) : undefined,
       },
       include: {
         category: true,

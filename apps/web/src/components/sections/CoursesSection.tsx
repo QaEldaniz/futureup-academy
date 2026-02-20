@@ -17,6 +17,8 @@ import {
   Baby,
   Gamepad2,
   Blocks,
+  Brain,
+  Cpu,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -108,13 +110,40 @@ const kidsCourses: CourseCard[] = [
     borderGradient: 'from-green-500/50 to-teal-500/50',
   },
   {
+    icon: Shield,
+    titleKey: 'cyberKids',
+    descriptionKey: 'cyberKidsDesc',
+    level: 'Beginner',
+    duration: '2 months',
+    gradient: 'from-red-500 to-orange-500',
+    borderGradient: 'from-red-500/50 to-orange-500/50',
+  },
+  {
+    icon: Brain,
+    titleKey: 'aiKids',
+    descriptionKey: 'aiKidsDesc',
+    level: 'Beginner',
+    duration: '2 months',
+    gradient: 'from-violet-500 to-purple-500',
+    borderGradient: 'from-violet-500/50 to-purple-500/50',
+  },
+  {
+    icon: Cpu,
+    titleKey: 'roblox',
+    descriptionKey: 'robloxDesc',
+    level: 'Beginner',
+    duration: '3 months',
+    gradient: 'from-sky-500 to-blue-500',
+    borderGradient: 'from-sky-500/50 to-blue-500/50',
+  },
+  {
     icon: Code2,
     titleKey: 'webKids',
     descriptionKey: 'webKidsDesc',
     level: 'Intermediate',
-    duration: '4 months',
-    gradient: 'from-sky-500 to-blue-500',
-    borderGradient: 'from-sky-500/50 to-blue-500/50',
+    duration: '5 months',
+    gradient: 'from-indigo-500 to-blue-500',
+    borderGradient: 'from-indigo-500/50 to-blue-500/50',
   },
 ];
 

@@ -57,7 +57,13 @@
       "pythonKids": "Python for Kids",
       "pythonKidsDesc": "Learn real programming with Python. Build games and fun projects.",
       "webKids": "Web Development for Teens",
-      "webKidsDesc": "Create your own websites with HTML, CSS and JavaScript."
+      "webKidsDesc": "Create your own websites with HTML, CSS and JavaScript.",
+      "cyberKids": "Internet Safety",
+      "cyberKidsDesc": "Online safety rules, personal data protection and cyberbullying defense.",
+      "aiKids": "AI Explorer",
+      "aiKidsDesc": "Discover AI, build creative projects with AI tools and learn how machines think.",
+      "roblox": "Roblox Game Dev",
+      "robloxDesc": "Create 3D games in Roblox Studio using Lua programming language."
     },
     "why": {
       "title": "Why FutureUp?",
@@ -142,7 +148,8 @@
     "kidsTitle": "IT Courses for Kids",
     "kidsSubtitle": "Fun and engaging programming for young learners aged 7-16",
     "adultsTitle": "Courses",
-    "adultsSubtitle": "All our professional courses"
+    "adultsSubtitle": "All our professional courses",
+    "allAges": "All Ages"
   },
   "courseDetail": {
     "breadcrumbHome": "Home",
