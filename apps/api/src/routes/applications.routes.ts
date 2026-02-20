@@ -11,6 +11,9 @@ export async function applicationRoutes(server: FastifyInstance) {
       phone: string;
       courseId?: string;
       message?: string;
+      utmSource?: string;
+      utmMedium?: string;
+      utmCampaign?: string;
     };
 
     if (!body.name || !body.email || !body.phone) {
@@ -37,6 +40,9 @@ export async function applicationRoutes(server: FastifyInstance) {
         phone: body.phone,
         courseId: body.courseId || null,
         message: body.message || null,
+        utmSource: body.utmSource || null,
+        utmMedium: body.utmMedium || null,
+        utmCampaign: body.utmCampaign || null,
       },
       include: {
         course: {
@@ -56,12 +62,14 @@ export async function applicationRoutes(server: FastifyInstance) {
       status,
       search,
       courseId,
+      source,
     } = request.query as {
       page?: string;
       limit?: string;
       status?: string;
       search?: string;
       courseId?: string;
+      source?: string;
     };
 
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
@@ -76,6 +84,10 @@ export async function applicationRoutes(server: FastifyInstance) {
 
     if (courseId) {
       where.courseId = courseId;
+    }
+
+    if (source) {
+      where.utmSource = source;
     }
 
     if (search) {

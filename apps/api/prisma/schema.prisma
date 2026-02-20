@@ -240,6 +240,11 @@ model Application {
   status   ApplicationStatus @default(NEW)
   notes    String?           @db.Text // Admin notes
 
+  // UTM tracking fields (from ads)
+  utmSource   String?    // e.g., "instagram", "facebook", "tiktok"
+  utmMedium   String?    // e.g., "cpc", "social", "email"
+  utmCampaign String?    // e.g., "summer2026", "launch-promo"
+
   course Course? @relation(fields: [courseId], references: [id])
 
   createdAt DateTime @default(now())

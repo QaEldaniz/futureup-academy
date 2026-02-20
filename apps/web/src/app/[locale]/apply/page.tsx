@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/Button';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { motion } from 'framer-motion';
 import { Send, CheckCircle2, GraduationCap, Loader2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { api } from '@/lib/api';
 
 interface Course {
@@ -15,9 +16,16 @@ interface Course {
   titleEn: string;
 }
 
-export default function ApplyPage() {
+function ApplyPageContent() {
   const t = useTranslations('application');
   const locale = useLocale();
+  const searchParams = useSearchParams();
+
+  // Read UTM params from URL
+  const utmSource = searchParams.get('utm_source') || '';
+  const utmMedium = searchParams.get('utm_medium') || '';
+  const utmCampaign = searchParams.get('utm_campaign') || '';
+
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -56,6 +64,12 @@ export default function ApplyPage() {
         phone: form.phone,
       };
       if (form.courseId) payload.courseId = form.courseId;
+
+      // UTM tracking
+      if (utmSource) payload.utmSource = utmSource;
+      if (utmMedium) payload.utmMedium = utmMedium;
+      if (utmCampaign) payload.utmCampaign = utmCampaign;
+
       const parts = [];
       if (form.hearAbout) parts.push(`Source: ${form.hearAbout}`);
       if (form.message) parts.push(form.message);
@@ -163,5 +177,13 @@ export default function ApplyPage() {
         </div>
       </section>
     </>
+  );
+}
+
+export default function ApplyPage() {
+  return (
+    <Suspense>
+      <ApplyPageContent />
+    </Suspense>
   );
 }

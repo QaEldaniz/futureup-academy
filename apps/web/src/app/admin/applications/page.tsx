@@ -1,13 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
 import { cn } from '@/lib/utils';
 import {
-  FileText,
   Search,
   Filter,
   ChevronDown,
@@ -18,6 +15,7 @@ import {
   StickyNote,
   RefreshCw,
   Inbox,
+  Globe,
 } from 'lucide-react';
 
 interface Application {
@@ -27,8 +25,12 @@ interface Application {
   phone: string;
   courseName?: string;
   courseId?: string;
+  message?: string;
   status: 'NEW' | 'CONTACTED' | 'ENROLLED' | 'REJECTED';
   notes?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
   createdAt: string;
 }
 
@@ -41,12 +43,35 @@ const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
   REJECTED: { label: 'Rejected', className: 'bg-red-500/10 text-red-400 border-red-500/20' },
 };
 
+const SOURCE_OPTIONS = [
+  { value: 'ALL', label: 'All Sources' },
+  { value: 'instagram', label: 'Instagram' },
+  { value: 'facebook', label: 'Facebook' },
+  { value: 'tiktok', label: 'TikTok' },
+  { value: 'google', label: 'Google' },
+  { value: 'linkedin', label: 'LinkedIn' },
+  { value: 'youtube', label: 'YouTube' },
+];
+
+function extractHearAbout(message?: string): string | null {
+  if (!message) return null;
+  const match = message.match(/^Source:\s*(.+)$/m);
+  return match ? match[1] : null;
+}
+
+function getSourceDisplay(app: Application): string {
+  if (app.utmSource) return app.utmSource;
+  const hearAbout = extractHearAbout(app.message);
+  return hearAbout || '-';
+}
+
 export default function AdminApplicationsPage() {
   const { token } = useAuthStore();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
+  const [filterSource, setFilterSource] = useState<string>('ALL');
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [editingNotes, setEditingNotes] = useState<{ id: string; notes: string } | null>(null);
@@ -54,9 +79,12 @@ export default function AdminApplicationsPage() {
   const fetchApplications = useCallback(async () => {
     try {
       setLoading(true);
-      const params = filterStatus !== 'ALL' ? `?status=${filterStatus}` : '';
+      const params = new URLSearchParams();
+      if (filterStatus !== 'ALL') params.set('status', filterStatus);
+      if (filterSource !== 'ALL') params.set('source', filterSource);
+      const queryString = params.toString() ? `?${params.toString()}` : '';
       const res = await api.get<{ success: boolean; data: Application[] }>(
-        `/admin/applications${params}`,
+        `/admin/applications${queryString}`,
         { token: token || undefined }
       );
       if (res.success) {
@@ -67,7 +95,7 @@ export default function AdminApplicationsPage() {
     } finally {
       setLoading(false);
     }
-  }, [token, filterStatus]);
+  }, [token, filterStatus, filterSource]);
 
   useEffect(() => {
     fetchApplications();
@@ -176,6 +204,21 @@ export default function AdminApplicationsPage() {
           </select>
           <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
         </div>
+        <div className="relative">
+          <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <select
+            value={filterSource}
+            onChange={(e) => setFilterSource(e.target.value)}
+            className="pl-11 pr-10 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer"
+          >
+            {SOURCE_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+        </div>
       </div>
 
       {/* Status summary */}
@@ -220,7 +263,7 @@ export default function AdminApplicationsPage() {
             <Inbox className="w-12 h-12 text-gray-600 mx-auto mb-3" />
             <p className="text-gray-400 font-medium">No applications found</p>
             <p className="text-gray-500 text-sm mt-1">
-              {searchQuery || filterStatus !== 'ALL'
+              {searchQuery || filterStatus !== 'ALL' || filterSource !== 'ALL'
                 ? 'Try adjusting your filters'
                 : 'Applications will appear here'}
             </p>
@@ -232,9 +275,10 @@ export default function AdminApplicationsPage() {
               <div className="col-span-3">Applicant</div>
               <div className="col-span-2">Contact</div>
               <div className="col-span-2">Course</div>
+              <div className="col-span-1">Source</div>
               <div className="col-span-2">Status</div>
               <div className="col-span-1">Date</div>
-              <div className="col-span-2">Actions</div>
+              <div className="col-span-1">Actions</div>
             </div>
 
             <div className="divide-y divide-gray-800/30">
@@ -273,6 +317,20 @@ export default function AdminApplicationsPage() {
                       </span>
                     </div>
 
+                    {/* Source */}
+                    <div className="col-span-1">
+                      <span className={cn(
+                        'inline-block px-2 py-0.5 rounded-md text-xs font-medium truncate max-w-full',
+                        app.utmSource
+                          ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                          : extractHearAbout(app.message)
+                            ? 'bg-gray-700/50 text-gray-400'
+                            : 'text-gray-600'
+                      )}>
+                        {getSourceDisplay(app)}
+                      </span>
+                    </div>
+
                     {/* Status */}
                     <div className="col-span-2">
                       <select
@@ -305,7 +363,7 @@ export default function AdminApplicationsPage() {
                     </div>
 
                     {/* Actions */}
-                    <div className="col-span-2 flex items-center gap-2">
+                    <div className="col-span-1 flex items-center gap-2">
                       <button
                         onClick={() => toggleNotes(app.id)}
                         className={cn(
@@ -316,7 +374,6 @@ export default function AdminApplicationsPage() {
                         )}
                       >
                         <StickyNote className="w-3 h-3" />
-                        Notes
                         {expandedNotes.has(app.id) ? (
                           <ChevronUp className="w-3 h-3" />
                         ) : (
@@ -330,6 +387,27 @@ export default function AdminApplicationsPage() {
                   {expandedNotes.has(app.id) && (
                     <div className="px-6 pb-4 bg-gray-800/10">
                       <div className="ml-0 lg:ml-[calc(25%+0.75rem)]">
+                        {/* UTM details */}
+                        {(app.utmSource || app.utmMedium || app.utmCampaign) && (
+                          <div className="mb-3 flex flex-wrap gap-2">
+                            {app.utmSource && (
+                              <span className="px-2 py-1 rounded-md bg-purple-500/10 text-purple-400 text-xs">
+                                source: {app.utmSource}
+                              </span>
+                            )}
+                            {app.utmMedium && (
+                              <span className="px-2 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs">
+                                medium: {app.utmMedium}
+                              </span>
+                            )}
+                            {app.utmCampaign && (
+                              <span className="px-2 py-1 rounded-md bg-amber-500/10 text-amber-400 text-xs">
+                                campaign: {app.utmCampaign}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
                         {editingNotes?.id === app.id ? (
                           <div className="space-y-2">
                             <textarea

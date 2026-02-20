@@ -57,20 +57,9 @@ export async function buildApp() {
     await prisma.$disconnect();
   });
 
-  // CORS
-  const allowedOrigins = [
-    'http://localhost:3000',
-    process.env.FRONTEND_URL,
-  ].filter(Boolean) as string[];
-
+  // CORS — open to all origins (public endpoints are unauthenticated, admin endpoints are JWT-protected)
   await app.register(cors, {
-    origin: (origin, cb) => {
-      if (!origin || allowedOrigins.some(allowed => origin.startsWith(allowed)) || origin.endsWith('.up.railway.app')) {
-        cb(null, true);
-      } else {
-        cb(null, false);
-      }
-    },
+    origin: true,
     credentials: true,
   });
 

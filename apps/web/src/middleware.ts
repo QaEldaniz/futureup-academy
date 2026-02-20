@@ -7,8 +7,8 @@ const intlMiddleware = createMiddleware(routing);
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip i18n for admin and teacher-portal routes
-  if (pathname.startsWith('/admin') || pathname.startsWith('/teacher-portal')) {
+  // Skip i18n for admin, teacher-portal and embed routes
+  if (pathname.startsWith('/admin') || pathname.startsWith('/teacher-portal') || pathname.startsWith('/embed')) {
     return NextResponse.next();
   }
 
@@ -21,5 +21,5 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/(az|ru|en)/:path*', '/((?!_next|_vercel|api|admin|teacher-portal|.*\\..*).*)',],
+  matcher: ['/', '/(az|ru|en)/:path*', '/((?!_next|_vercel|api|admin|teacher-portal|embed|.*\\..*).*)',],
 };
