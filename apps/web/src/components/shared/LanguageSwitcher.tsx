@@ -1,14 +1,12 @@
 'use client';
 
 import { useLocale } from 'next-intl';
-import { usePathname } from '@/i18n/routing';
 import { locales, defaultLocale, localeNames, localeFlags, type Locale } from '@/i18n/config';
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Globe } from 'lucide-react';
 
 export function LanguageSwitcher() {
   const locale = useLocale() as Locale;
-  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -24,12 +22,29 @@ export function LanguageSwitcher() {
 
   const handleChange = (newLocale: Locale) => {
     setIsOpen(false);
-    // Build the new URL with the target locale prefix
-    const newPath = newLocale === defaultLocale
-      ? pathname  // Default locale (az) has no prefix
-      : `/${newLocale}${pathname}`;
-    // Full page navigation ensures locale actually changes
-    window.location.href = newPath;
+    if (newLocale === locale) return;
+
+    const currentPath = window.location.pathname;
+    const search = window.location.search; // preserve query params (?utm_source=...)
+
+    // Strip existing locale prefix from pathname
+    const localeRegex = /^\/(az|ru|en)(\/|$)/;
+    const stripped = currentPath.replace(localeRegex, '/');
+    const basePath = stripped === '' ? '/' : stripped;
+
+    // Build new path with target locale
+    let newPath: string;
+    if (newLocale === defaultLocale) {
+      // Default locale (az) — no prefix
+      newPath = basePath;
+    } else {
+      // Non-default locale — add prefix
+      newPath = basePath === '/'
+        ? `/${newLocale}`
+        : `/${newLocale}${basePath}`;
+    }
+
+    window.location.href = newPath + search;
   };
 
   return (
