@@ -1,14 +1,13 @@
 'use client';
 
 import { useLocale } from 'next-intl';
-import { useRouter, usePathname } from '@/i18n/routing';
-import { locales, localeNames, localeFlags, type Locale } from '@/i18n/config';
+import { usePathname } from '@/i18n/routing';
+import { locales, defaultLocale, localeNames, localeFlags, type Locale } from '@/i18n/config';
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Globe } from 'lucide-react';
 
 export function LanguageSwitcher() {
   const locale = useLocale() as Locale;
-  const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -24,8 +23,13 @@ export function LanguageSwitcher() {
   }, []);
 
   const handleChange = (newLocale: Locale) => {
-    router.replace(pathname, { locale: newLocale });
     setIsOpen(false);
+    // Build the new URL with the target locale prefix
+    const newPath = newLocale === defaultLocale
+      ? pathname  // Default locale (az) has no prefix
+      : `/${newLocale}${pathname}`;
+    // Full page navigation ensures locale actually changes
+    window.location.href = newPath;
   };
 
   return (
