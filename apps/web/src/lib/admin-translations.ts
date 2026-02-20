@@ -45,6 +45,7 @@ const translations = {
     reviews: { az: 'Qiymətləndirmələr', ru: 'Оценки', en: 'Reviews' },
     scholarships: { az: 'Təqaüdlər', ru: 'Стипендии', en: 'Scholarships' },
     corporate: { az: 'Korporativ', ru: 'Корпоративное', en: 'Corporate' },
+    parents: { az: 'Valideynlər', ru: 'Родители', en: 'Parents' },
     partners: { az: 'Tərəfdaşlar', ru: 'Партнёры', en: 'Partners' },
     settings: { az: 'Parametrlər', ru: 'Настройки', en: 'Settings' },
     adminSettings: { az: 'Admin parametrləri', ru: 'Настройки админа', en: 'Admin Settings' },

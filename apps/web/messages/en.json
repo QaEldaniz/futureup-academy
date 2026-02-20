@@ -374,5 +374,21 @@
     "viewAll": "View all courses",
     "restart": "Start over",
     "poweredBy": "FutureUp AI"
+  },
+  "login": {
+    "title": "Sign In",
+    "subtitle": "Access your FutureUp Academy account",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "loginButton": "Sign In",
+    "loggingIn": "Signing in...",
+    "invalidCredentials": "Invalid email or password",
+    "networkError": "Network error. Please try again.",
+    "backToHome": "Back to home",
+    "or": "or",
+    "noAccount": "Don't have an account?",
+    "register": "Register as student",
+    "roleHint": "Students, teachers, and parents can sign in with their email"
   }
 }

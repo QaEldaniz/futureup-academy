@@ -1,13 +1,19 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export type UserType = 'admin' | 'teacher' | 'student' | 'parent';
+
 interface User {
   id: string;
   email: string;
-  name: string;
+  name?: string;
+  nameAz?: string;
+  nameRu?: string;
+  nameEn?: string;
   role: string;
   avatar?: string | null;
-  type: 'admin' | 'teacher';
+  photo?: string | null;
+  type: UserType;
 }
 
 interface AuthState {

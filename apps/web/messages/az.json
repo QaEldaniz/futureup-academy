@@ -370,5 +370,21 @@
     "viewAll": "Bütün kursları gör",
     "restart": "Yenidən başla",
     "poweredBy": "FutureUp AI"
+  },
+  "login": {
+    "title": "Daxil ol",
+    "subtitle": "FutureUp Academy hesabiniza daxil olun",
+    "email": "E-poct",
+    "emailPlaceholder": "sizin@email.com",
+    "password": "Shifre",
+    "loginButton": "Daxil ol",
+    "loggingIn": "Daxil olunur...",
+    "invalidCredentials": "Email ve ya shifre sehvdir",
+    "networkError": "Shebekhe xetasi. Yeniden cehd edin.",
+    "backToHome": "Ana sehifeye qayit",
+    "or": "ve ya",
+    "noAccount": "Hesabiniz yoxdur?",
+    "register": "Telebeq kimi qeydiyyatdan kec",
+    "roleHint": "Telebeler, muelliimler ve valideyinler email ile daxil ola biler"
   }
 }

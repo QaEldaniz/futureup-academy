@@ -370,5 +370,21 @@
     "viewAll": "Смотреть все курсы",
     "restart": "Начать заново",
     "poweredBy": "FutureUp AI"
+  },
+  "login": {
+    "title": "Войти",
+    "subtitle": "Войдите в свой аккаунт FutureUp Academy",
+    "email": "Email",
+    "emailPlaceholder": "ваш@email.com",
+    "password": "Пароль",
+    "loginButton": "Войти",
+    "loggingIn": "Вход...",
+    "invalidCredentials": "Неверный email или пароль",
+    "networkError": "Ошибка сети. Попробуйте снова.",
+    "backToHome": "На главную",
+    "or": "или",
+    "noAccount": "Нет аккаунта?",
+    "register": "Регистрация студента",
+    "roleHint": "Студенты, преподаватели и родители могут войти по email"
   }
 }

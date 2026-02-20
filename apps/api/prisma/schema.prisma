@@ -68,6 +68,9 @@ model Course {
   groups       Group[]
   reviews      Review[]
   lessons      Lesson[]
+  courseProgress  CourseProgress[]
+  teacherComments TeacherComment[]
+  attendance      Attendance[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -135,6 +138,7 @@ model Teacher {
   certificates    Certificate[]
   reviewsGiven    Review[]        @relation("TeacherReviews")
   reviewsReceived Review[]        @relation("ReviewsAboutTeacher")
+  teacherComments TeacherComment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -157,11 +161,14 @@ model TeacherCourse {
 // ==========================================
 
 model Student {
-  id    String  @id @default(cuid())
-  name  String
-  email String  @unique
-  phone String?
-  photo String?
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  photo     String?
+  password  String?  // bcrypt hash for Student Portal login
+  isActive  Boolean  @default(true)
+  lastLoginAt DateTime?
 
   courses         StudentCourse[]
   certificates    Certificate[]
@@ -169,6 +176,11 @@ model Student {
   reviewsReceived Review[]        @relation("ReviewsAboutStudent")
   groupId         String?
   group           Group?          @relation(fields: [groupId], references: [id])
+  parents         StudentParent[]
+  lessonProgress  LessonProgress[]
+  courseProgress   CourseProgress[]
+  teacherComments TeacherComment[]
+  attendance      Attendance[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -538,6 +550,8 @@ model Lesson {
 
   course     Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
   materials  LessonMaterial[]
+  lessonProgress  LessonProgress[]
+  teacherComments TeacherComment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -567,6 +581,151 @@ enum MaterialType {
   SPREADSHEET  // Google Sheets, Excel
   LINK         // Generic link
   FILE         // Downloadable file
+}
+
+// ==========================================
+// PARENTS (LMS)
+// ==========================================
+
+model Parent {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String   // bcrypt hash
+  nameAz      String
+  nameRu      String
+  nameEn      String
+  phone       String?
+  avatar      String?
+  isActive    Boolean  @default(true)
+  lastLoginAt DateTime?
+
+  children StudentParent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("parents")
+}
+
+model StudentParent {
+  id        String         @id @default(cuid())
+  studentId String
+  parentId  String
+  relation  ParentRelation @default(PARENT)
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  parent  Parent  @relation(fields: [parentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, parentId])
+  @@map("student_parents")
+}
+
+enum ParentRelation {
+  MOTHER
+  FATHER
+  GUARDIAN
+  PARENT
+}
+
+// ==========================================
+// PROGRESS TRACKING (LMS)
+// ==========================================
+
+model LessonProgress {
+  id          String         @id @default(cuid())
+  studentId   String
+  lessonId    String
+  status      ProgressStatus @default(NOT_STARTED)
+  startedAt   DateTime?
+  completedAt DateTime?
+  timeSpentSec Int           @default(0)
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson  Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, lessonId])
+  @@map("lesson_progress")
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model CourseProgress {
+  id             String   @id @default(cuid())
+  studentId      String
+  courseId        String
+  percentage     Float    @default(0)
+  lastAccessedAt DateTime?
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+  @@map("course_progress")
+}
+
+// ==========================================
+// TEACHER COMMENTS (LMS)
+// ==========================================
+
+model TeacherComment {
+  id        String      @id @default(cuid())
+  teacherId String
+  studentId String
+  courseId   String
+  lessonId  String?
+  comment   String      @db.Text
+  type      CommentType @default(PROGRESS)
+
+  teacher Teacher @relation(fields: [teacherId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+  lesson  Lesson? @relation(fields: [lessonId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@map("teacher_comments")
+}
+
+enum CommentType {
+  PROGRESS
+  BEHAVIOR
+  ACHIEVEMENT
+  GENERAL
+}
+
+// ==========================================
+// ATTENDANCE (LMS)
+// ==========================================
+
+model Attendance {
+  id        String           @id @default(cuid())
+  studentId String
+  courseId   String
+  groupId   String?
+  date      DateTime
+  status    AttendanceStatus @default(PRESENT)
+  note      String?
+
+  student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, courseId, date])
+  @@map("attendance")
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
 }
 
 // ==========================================

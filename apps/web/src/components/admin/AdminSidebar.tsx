@@ -22,6 +22,7 @@ import {
   UserCog,
   Wallet,
   Building2,
+  Baby,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -29,13 +30,14 @@ interface AdminSidebarProps {
   onClose: () => void;
 }
 
-type SidebarKey = 'dashboard' | 'courses' | 'teachers' | 'students' | 'applications' | 'certificates' | 'news' | 'testimonials' | 'reviews' | 'scholarships' | 'corporate' | 'partners' | 'settings';
+type SidebarKey = 'dashboard' | 'courses' | 'teachers' | 'students' | 'parents' | 'applications' | 'certificates' | 'news' | 'testimonials' | 'reviews' | 'scholarships' | 'corporate' | 'partners' | 'settings';
 
 const menuItems: { key: SidebarKey; href: string; icon: typeof LayoutDashboard }[] = [
   { key: 'dashboard', href: '/admin', icon: LayoutDashboard },
   { key: 'courses', href: '/admin/courses', icon: BookOpen },
   { key: 'teachers', href: '/admin/teachers', icon: Users },
   { key: 'students', href: '/admin/students', icon: GraduationCap },
+  { key: 'parents', href: '/admin/parents', icon: Baby },
   { key: 'applications', href: '/admin/applications', icon: FileText },
   { key: 'certificates', href: '/admin/certificates', icon: Award },
   { key: 'news', href: '/admin/news', icon: Newspaper },

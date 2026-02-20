@@ -25,6 +25,9 @@ import { scholarshipRoutes, scholarshipApplicationRoutes } from './routes/schola
 import { corporateServiceRoutes, corporateInquiryRoutes } from './routes/corporate.routes.js';
 import { chatRoutes } from './routes/chat.routes.js';
 import { lessonRoutes } from './routes/lessons.routes.js';
+import { studentPortalRoutes } from './routes/student-portal.routes.js';
+import { parentPortalRoutes } from './routes/parent-portal.routes.js';
+import { parentRoutes } from './routes/parents.routes.js';
 
 // Extend Fastify types
 declare module 'fastify' {
@@ -35,8 +38,8 @@ declare module 'fastify' {
 
 declare module '@fastify/jwt' {
   interface FastifyJWT {
-    payload: { id: string; role: string; type: 'admin' | 'teacher' };
-    user: { id: string; role: string; type: 'admin' | 'teacher' };
+    payload: { id: string; role: string; type: 'admin' | 'teacher' | 'student' | 'parent' };
+    user: { id: string; role: string; type: 'admin' | 'teacher' | 'student' | 'parent' };
   }
 }
 
@@ -109,6 +112,8 @@ export async function buildApp() {
   await app.register(lessonRoutes, { prefix: '/api/lessons' });
   await app.register(dashboardRoutes, { prefix: '/api/admin/dashboard' });
   await app.register(teacherPortalRoutes, { prefix: '/api/teacher' });
+  await app.register(studentPortalRoutes, { prefix: '/api/student' });
+  await app.register(parentPortalRoutes, { prefix: '/api/parent' });
 
   // Admin routes (same handlers, /api/admin/* prefix for frontend admin panel)
   await app.register(courseRoutes, { prefix: '/api/admin/courses' });
@@ -127,6 +132,7 @@ export async function buildApp() {
   await app.register(corporateServiceRoutes, { prefix: '/api/admin/corporate-services' });
   await app.register(corporateInquiryRoutes, { prefix: '/api/admin/corporate-inquiries' });
   await app.register(lessonRoutes, { prefix: '/api/admin/lessons' });
+  await app.register(parentRoutes, { prefix: '/api/admin/parents' });
 
   // Error handler
   app.setErrorHandler((error: any, _request, reply) => {
