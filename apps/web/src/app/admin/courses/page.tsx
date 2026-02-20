@@ -412,6 +412,13 @@ export default function AdminCoursesPage() {
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-1">
                   <button
+                    onClick={() => router.push(`/admin/courses/${course.id}/lessons`)}
+                    className="p-2 rounded-lg text-gray-500 hover:text-amber-400 hover:bg-amber-500/10 transition-all"
+                    title="Lessons & Materials"
+                  >
+                    <BookOpen className="w-4 h-4" />
+                  </button>
+                  <button
                     onClick={() => router.push(`/admin/courses/${course.id}/edit`)}
                     className="p-2 rounded-lg text-gray-500 hover:text-primary-400 hover:bg-primary-500/10 transition-all"
                     title={t.editCourse}
