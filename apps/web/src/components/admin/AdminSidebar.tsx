@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/stores/auth';
+import { getAdminT } from '@/lib/admin-translations';
 import {
   LayoutDashboard,
   BookOpen,
@@ -27,24 +29,28 @@ interface AdminSidebarProps {
   onClose: () => void;
 }
 
-const menuItems = [
-  { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { label: 'Courses', href: '/admin/courses', icon: BookOpen },
-  { label: 'Teachers', href: '/admin/teachers', icon: Users },
-  { label: 'Students', href: '/admin/students', icon: GraduationCap },
-  { label: 'Applications', href: '/admin/applications', icon: FileText },
-  { label: 'Certificates', href: '/admin/certificates', icon: Award },
-  { label: 'News', href: '/admin/news', icon: Newspaper },
-  { label: 'Testimonials', href: '/admin/testimonials', icon: MessageSquare },
-  { label: 'Reviews', href: '/admin/reviews', icon: Star },
-  { label: 'Scholarships', href: '/admin/scholarships', icon: Wallet },
-  { label: 'Corporate', href: '/admin/corporate', icon: Building2 },
-  { label: 'Partners', href: '/admin/partners', icon: Handshake },
-  { label: 'Settings', href: '/admin/settings', icon: Settings },
+type SidebarKey = 'dashboard' | 'courses' | 'teachers' | 'students' | 'applications' | 'certificates' | 'news' | 'testimonials' | 'reviews' | 'scholarships' | 'corporate' | 'partners' | 'settings';
+
+const menuItems: { key: SidebarKey; href: string; icon: typeof LayoutDashboard }[] = [
+  { key: 'dashboard', href: '/admin', icon: LayoutDashboard },
+  { key: 'courses', href: '/admin/courses', icon: BookOpen },
+  { key: 'teachers', href: '/admin/teachers', icon: Users },
+  { key: 'students', href: '/admin/students', icon: GraduationCap },
+  { key: 'applications', href: '/admin/applications', icon: FileText },
+  { key: 'certificates', href: '/admin/certificates', icon: Award },
+  { key: 'news', href: '/admin/news', icon: Newspaper },
+  { key: 'testimonials', href: '/admin/testimonials', icon: MessageSquare },
+  { key: 'reviews', href: '/admin/reviews', icon: Star },
+  { key: 'scholarships', href: '/admin/scholarships', icon: Wallet },
+  { key: 'corporate', href: '/admin/corporate', icon: Building2 },
+  { key: 'partners', href: '/admin/partners', icon: Handshake },
+  { key: 'settings', href: '/admin/settings', icon: Settings },
 ];
 
 export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
+  const { adminLocale } = useAuthStore();
+  const t = getAdminT('sidebar', adminLocale);
 
   const isActive = (href: string) => {
     if (href === '/admin') return pathname === '/admin';
@@ -96,7 +102,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
               )}
             >
               <Icon className={cn('w-[18px] h-[18px]', active && 'text-primary-400')} />
-              {item.label}
+              {t[item.key]}
               {active && (
                 <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-400" />
               )}
@@ -112,7 +118,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all"
         >
           <UserCog className="w-[18px] h-[18px]" />
-          Admin Settings
+          {t.adminSettings}
         </Link>
       </div>
     </aside>

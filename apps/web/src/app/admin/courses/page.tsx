@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
 import { getLocalized } from '@/lib/admin-locale';
+import { getAdminT } from '@/lib/admin-translations';
 import { cn } from '@/lib/utils';
 import {
   Plus,
@@ -52,15 +53,17 @@ interface CoursesResponse {
 
 const LEVELS = ['ALL', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'] as const;
 
-const levelConfig: Record<string, { label: string; className: string }> = {
-  BEGINNER: { label: 'Beginner', className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
-  INTERMEDIATE: { label: 'Intermediate', className: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
-  ADVANCED: { label: 'Advanced', className: 'bg-rose-500/10 text-rose-400 border-rose-500/20' },
-};
-
 export default function AdminCoursesPage() {
   const router = useRouter();
   const { token, adminLocale } = useAuthStore();
+  const t = getAdminT('courses', adminLocale);
+  const tCommon = getAdminT('common', adminLocale);
+
+  const levelConfig: Record<string, { label: string; className: string }> = {
+    BEGINNER: { label: t.beginner, className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
+    INTERMEDIATE: { label: t.intermediate, className: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
+    ADVANCED: { label: t.advanced, className: 'bg-rose-500/10 text-rose-400 border-rose-500/20' },
+  };
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
@@ -150,9 +153,9 @@ export default function AdminCoursesPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Courses</h1>
+          <h1 className="text-2xl font-bold text-white">{t.title}</h1>
           <p className="text-gray-400 mt-1">
-            Manage all courses in the academy{total > 0 && ` (${total} total)`}
+            {t.description}{total > 0 && ` (${total} ${t.total})`}
           </p>
         </div>
         <Link
@@ -165,7 +168,7 @@ export default function AdminCoursesPage() {
           )}
         >
           <Plus className="w-4 h-4" />
-          Add Course
+          {t.addCourse}
         </Link>
       </div>
 
@@ -179,7 +182,7 @@ export default function AdminCoursesPage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search courses by title..."
+              placeholder={t.searchPlaceholder}
               className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
             />
             {search && (
@@ -203,7 +206,7 @@ export default function AdminCoursesPage() {
             )}
           >
             <Filter className="w-4 h-4" />
-            Filters
+            {tCommon.filters}
           </button>
         </div>
 
@@ -211,7 +214,7 @@ export default function AdminCoursesPage() {
         {showFilters && (
           <div className="mt-4 pt-4 border-t border-gray-800/50">
             <div className="flex flex-wrap gap-2">
-              <span className="text-xs text-gray-500 uppercase tracking-wider self-center mr-2">Level:</span>
+              <span className="text-xs text-gray-500 uppercase tracking-wider self-center mr-2">{t.level}</span>
               {LEVELS.map((level) => (
                 <button
                   key={level}
@@ -223,7 +226,7 @@ export default function AdminCoursesPage() {
                       : 'bg-gray-900/30 border-gray-700/40 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
                   )}
                 >
-                  {level === 'ALL' ? 'All Levels' : level.charAt(0) + level.slice(1).toLowerCase()}
+                  {level === 'ALL' ? t.allLevels : levelConfig[level]?.label || level}
                 </button>
               ))}
             </div>
@@ -235,12 +238,12 @@ export default function AdminCoursesPage() {
       <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
         {/* Table Header */}
         <div className="hidden md:grid md:grid-cols-[3.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-3.5 border-b border-gray-800/50 bg-gray-900/30">
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Course</span>
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Category</span>
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Level</span>
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Price</span>
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</span>
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Actions</span>
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t.courseCol}</span>
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t.category}</span>
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t.level.replace(':', '')}</span>
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t.price}</span>
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{tCommon.status}</span>
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">{tCommon.actions}</span>
         </div>
 
         {/* Loading Skeleton */}
@@ -274,11 +277,11 @@ export default function AdminCoursesPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gray-800/50 mb-4">
               <BookOpen className="w-7 h-7 text-gray-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-300 mb-1">No courses found</h3>
+            <h3 className="text-lg font-semibold text-gray-300 mb-1">{t.noCourses}</h3>
             <p className="text-sm text-gray-500 mb-6">
               {search || levelFilter !== 'ALL'
-                ? 'Try adjusting your search or filters.'
-                : 'Get started by creating your first course.'}
+                ? t.tryAdjusting
+                : t.getStarted}
             </p>
             {!search && levelFilter === 'ALL' && (
               <Link
@@ -286,7 +289,7 @@ export default function AdminCoursesPage() {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 transition-all shadow-lg shadow-primary-500/25"
               >
                 <Plus className="w-4 h-4" />
-                Create Course
+                {t.createCourse}
               </Link>
             )}
           </div>
@@ -345,7 +348,7 @@ export default function AdminCoursesPage() {
                 {/* Price */}
                 <div>
                   <span className="text-sm font-medium text-gray-300">
-                    {course.price != null ? `${course.price} AZN` : 'Free'}
+                    {course.price != null ? `${course.price} AZN` : tCommon.free}
                   </span>
                 </div>
 
@@ -372,14 +375,14 @@ export default function AdminCoursesPage() {
                   <button
                     onClick={() => router.push(`/admin/courses/${course.id}/edit`)}
                     className="p-2 rounded-lg text-gray-500 hover:text-primary-400 hover:bg-primary-500/10 transition-all"
-                    title="Edit course"
+                    title={t.editCourse}
                   >
                     <Edit3 className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setDeleteModal({ open: true, course })}
                     className="p-2 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-all"
-                    title="Delete course"
+                    title={t.deleteCourse}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -394,7 +397,7 @@ export default function AdminCoursesPage() {
       {!loading && totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-gray-500">
-            Page {page} of {totalPages}
+            {tCommon.page} {page} {tCommon.of} {totalPages}
           </p>
           <div className="flex items-center gap-2">
             <button
@@ -408,7 +411,7 @@ export default function AdminCoursesPage() {
               )}
             >
               <ChevronLeft className="w-4 h-4" />
-              Previous
+              {tCommon.previous}
             </button>
 
             {/* Page Numbers */}
@@ -451,7 +454,7 @@ export default function AdminCoursesPage() {
                   : 'border-gray-700/50 text-gray-300 hover:text-white hover:border-gray-600/50 hover:bg-gray-800/30'
               )}
             >
-              Next
+              {tCommon.next}
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
@@ -474,15 +477,15 @@ export default function AdminCoursesPage() {
                 <AlertTriangle className="w-6 h-6 text-red-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Delete Course</h3>
-                <p className="text-sm text-gray-400">This action cannot be undone.</p>
+                <h3 className="text-lg font-semibold text-white">{t.deleteTitle}</h3>
+                <p className="text-sm text-gray-400">{t.cannotUndo}</p>
               </div>
             </div>
 
             <p className="text-sm text-gray-300 mb-6">
-              Are you sure you want to delete{' '}
+              {t.confirmDelete}{' '}
               <span className="font-semibold text-white">&quot;{getLocalized(deleteModal.course, 'title', adminLocale)}&quot;</span>?
-              All associated data will be permanently removed.
+              {t.allDataRemoved}
             </p>
 
             <div className="flex items-center justify-end gap-3">
@@ -491,7 +494,7 @@ export default function AdminCoursesPage() {
                 disabled={deleting}
                 className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-800/30 transition-all disabled:opacity-50"
               >
-                Cancel
+                {tCommon.cancel}
               </button>
               <button
                 onClick={handleDelete}
@@ -504,10 +507,10 @@ export default function AdminCoursesPage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    Deleting...
+                    {tCommon.deleting}
                   </span>
                 ) : (
-                  'Delete Course'
+                  t.deleteTitle
                 )}
               </button>
             </div>

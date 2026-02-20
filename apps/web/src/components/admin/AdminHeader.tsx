@@ -5,32 +5,35 @@ import {
   LayoutDashboard, BookOpen, Users, GraduationCap, Newspaper, MessageSquare, Award, Settings,
   Handshake, Wallet, Building2, X,
 } from 'lucide-react';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { api } from '@/lib/api';
+import { getAdminT } from '@/lib/admin-translations';
 
-const searchableItems = [
-  { label: 'Dashboard', href: '/admin', icon: LayoutDashboard, keywords: 'home overview stats' },
-  { label: 'Courses', href: '/admin/courses', icon: BookOpen, keywords: 'course class program' },
-  { label: 'Add New Course', href: '/admin/courses/new', icon: BookOpen, keywords: 'create new course' },
-  { label: 'Teachers', href: '/admin/teachers', icon: Users, keywords: 'teacher instructor mentor' },
-  { label: 'Add New Teacher', href: '/admin/teachers/new', icon: Users, keywords: 'create new teacher' },
-  { label: 'Students', href: '/admin/students', icon: GraduationCap, keywords: 'student pupil learner' },
-  { label: 'Add New Student', href: '/admin/students/new', icon: GraduationCap, keywords: 'create new student' },
-  { label: 'Applications', href: '/admin/applications', icon: FileText, keywords: 'application apply form request' },
-  { label: 'Certificates', href: '/admin/certificates', icon: Award, keywords: 'certificate diploma award' },
-  { label: 'Create Certificate', href: '/admin/certificates/new', icon: Award, keywords: 'create new certificate' },
-  { label: 'News', href: '/admin/news', icon: Newspaper, keywords: 'news article blog post' },
-  { label: 'Add News Article', href: '/admin/news/new', icon: Newspaper, keywords: 'create new news article' },
-  { label: 'Testimonials', href: '/admin/testimonials', icon: MessageSquare, keywords: 'testimonial feedback' },
-  { label: 'Reviews', href: '/admin/reviews', icon: Star, keywords: 'review rating' },
-  { label: 'Scholarships', href: '/admin/scholarships', icon: Wallet, keywords: 'scholarship grant' },
-  { label: 'Corporate', href: '/admin/corporate', icon: Building2, keywords: 'corporate b2b business' },
-  { label: 'Partners', href: '/admin/partners', icon: Handshake, keywords: 'partner company logo' },
-  { label: 'Settings', href: '/admin/settings', icon: Settings, keywords: 'settings configuration profile' },
+type SearchKey = 'dashboard' | 'courses' | 'addNewCourse' | 'teachers' | 'addNewTeacher' | 'students' | 'addNewStudent' | 'applications' | 'certificates' | 'createCertificate' | 'news' | 'addNewsArticle' | 'testimonials' | 'reviews' | 'scholarships' | 'corporate' | 'partners' | 'settings';
+
+const searchableItemDefs: { key: SearchKey; href: string; icon: typeof LayoutDashboard; keywords: string }[] = [
+  { key: 'dashboard', href: '/admin', icon: LayoutDashboard, keywords: 'home overview stats' },
+  { key: 'courses', href: '/admin/courses', icon: BookOpen, keywords: 'course class program' },
+  { key: 'addNewCourse', href: '/admin/courses/new', icon: BookOpen, keywords: 'create new course' },
+  { key: 'teachers', href: '/admin/teachers', icon: Users, keywords: 'teacher instructor mentor' },
+  { key: 'addNewTeacher', href: '/admin/teachers/new', icon: Users, keywords: 'create new teacher' },
+  { key: 'students', href: '/admin/students', icon: GraduationCap, keywords: 'student pupil learner' },
+  { key: 'addNewStudent', href: '/admin/students/new', icon: GraduationCap, keywords: 'create new student' },
+  { key: 'applications', href: '/admin/applications', icon: FileText, keywords: 'application apply form request' },
+  { key: 'certificates', href: '/admin/certificates', icon: Award, keywords: 'certificate diploma award' },
+  { key: 'createCertificate', href: '/admin/certificates/new', icon: Award, keywords: 'create new certificate' },
+  { key: 'news', href: '/admin/news', icon: Newspaper, keywords: 'news article blog post' },
+  { key: 'addNewsArticle', href: '/admin/news/new', icon: Newspaper, keywords: 'create new news article' },
+  { key: 'testimonials', href: '/admin/testimonials', icon: MessageSquare, keywords: 'testimonial feedback' },
+  { key: 'reviews', href: '/admin/reviews', icon: Star, keywords: 'review rating' },
+  { key: 'scholarships', href: '/admin/scholarships', icon: Wallet, keywords: 'scholarship grant' },
+  { key: 'corporate', href: '/admin/corporate', icon: Building2, keywords: 'corporate b2b business' },
+  { key: 'partners', href: '/admin/partners', icon: Handshake, keywords: 'partner company logo' },
+  { key: 'settings', href: '/admin/settings', icon: Settings, keywords: 'settings configuration profile' },
 ];
 
 interface RecentApplication {
@@ -62,18 +65,6 @@ interface AdminHeaderProps {
   onMenuClick: () => void;
 }
 
-function timeAgo(dateStr: string): string {
-  const now = new Date();
-  const date = new Date(dateStr);
-  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-  if (diff < 60) return 'just now';
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`;
-  return date.toLocaleDateString();
-}
-
 export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -92,14 +83,58 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
   const notifRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  const currentLocale = adminLocale || 'az';
+  const t = getAdminT('header', currentLocale);
+  const tCommon = getAdminT('common', currentLocale);
+  const tSidebar = getAdminT('sidebar', currentLocale);
+
+  // Build translated search items
+  const searchLabelMap: Record<SearchKey, string> = useMemo(() => ({
+    dashboard: tSidebar.dashboard,
+    courses: tSidebar.courses,
+    addNewCourse: t.addNewCourse,
+    teachers: tSidebar.teachers,
+    addNewTeacher: t.addNewTeacher,
+    students: tSidebar.students,
+    addNewStudent: t.addNewStudent,
+    applications: tSidebar.applications,
+    certificates: tSidebar.certificates,
+    createCertificate: t.createCertificate,
+    news: tSidebar.news,
+    addNewsArticle: t.addNewsArticle,
+    testimonials: tSidebar.testimonials,
+    reviews: tSidebar.reviews,
+    scholarships: tSidebar.scholarships,
+    corporate: tSidebar.corporate,
+    partners: tSidebar.partners,
+    settings: tSidebar.settings,
+  }), [t, tSidebar]);
+
+  const searchableItems = useMemo(() =>
+    searchableItemDefs.map((item) => ({
+      ...item,
+      label: searchLabelMap[item.key],
+    })),
+    [searchLabelMap]
+  );
+
+  function timeAgo(dateStr: string): string {
+    const now = new Date();
+    const date = new Date(dateStr);
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diff < 60) return t.justNow;
+    if (diff < 3600) return `${Math.floor(diff / 60)}${t.mAgo}`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}${t.hAgo}`;
+    if (diff < 604800) return `${Math.floor(diff / 86400)}${t.dAgo}`;
+    return date.toLocaleDateString();
+  }
+
   const languages = [
     { code: 'az', label: 'AZ', flag: '🇦🇿' },
     { code: 'ru', label: 'RU', flag: '🇷🇺' },
     { code: 'en', label: 'EN', flag: '🇬🇧' },
   ];
-
-  // Language preference stored in Zustand (admin routes don't use URL locale)
-  const currentLocale = adminLocale || 'az';
 
   const switchLanguage = (locale: string) => {
     setAdminLocale(locale);
@@ -129,7 +164,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
   // Fetch on mount and periodically
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 60000); // every 60s
+    const interval = setInterval(fetchNotifications, 60000);
     return () => clearInterval(interval);
   }, [fetchNotifications]);
 
@@ -227,7 +262,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
             className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-800/30 border border-gray-700/30 w-64 lg:w-80 hover:bg-gray-800/50 transition-colors"
           >
             <Search className="w-4 h-4 text-gray-500" />
-            <span className="text-sm text-gray-500 flex-1 text-left">Search...</span>
+            <span className="text-sm text-gray-500 flex-1 text-left">{tCommon.search}</span>
             <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 rounded bg-gray-700/50 text-[10px] text-gray-400 font-mono">
               ⌘K
             </kbd>
@@ -240,7 +275,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className="p-2 rounded-lg hover:bg-gray-800/50 text-gray-400 hover:text-white transition-colors"
-            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            title={theme === 'dark' ? t.lightMode : t.darkMode}
           >
             {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
@@ -296,10 +331,10 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
               <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-xl bg-[#1a2035] border border-gray-700/50 shadow-2xl shadow-black/30 overflow-hidden z-50">
                 {/* Header */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700/50">
-                  <h3 className="text-sm font-semibold text-white">Notifications</h3>
+                  <h3 className="text-sm font-semibold text-white">{t.notifications}</h3>
                   {totalPending > 0 && (
                     <span className="text-xs font-medium text-primary-400 bg-primary-500/10 px-2 py-0.5 rounded-full">
-                      {totalPending} pending
+                      {totalPending} {t.pending}
                     </span>
                   )}
                 </div>
@@ -326,9 +361,9 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                           </div>
                           <div className="text-left flex-1 min-w-0">
                             <p className="text-sm font-medium text-white">
-                              {notifData!.pendingApplications} new application{notifData!.pendingApplications > 1 ? 's' : ''}
+                              {notifData!.pendingApplications} {notifData!.pendingApplications > 1 ? t.newApplications : t.newApplication}
                             </p>
-                            <p className="text-xs text-gray-400 mt-0.5">Waiting for review</p>
+                            <p className="text-xs text-gray-400 mt-0.5">{t.waitingForReview}</p>
                           </div>
                           <span className="text-xs text-amber-400 font-medium bg-amber-500/10 px-2 py-0.5 rounded-full shrink-0">
                             NEW
@@ -350,9 +385,9 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                           </div>
                           <div className="text-left flex-1 min-w-0">
                             <p className="text-sm font-medium text-white">
-                              {notifData!.pendingReviews} pending review{notifData!.pendingReviews > 1 ? 's' : ''}
+                              {notifData!.pendingReviews} {notifData!.pendingReviews > 1 ? t.pendingReviews : t.pendingReview}
                             </p>
-                            <p className="text-xs text-gray-400 mt-0.5">Awaiting moderation</p>
+                            <p className="text-xs text-gray-400 mt-0.5">{t.awaitingModeration}</p>
                           </div>
                           <span className="text-xs text-purple-400 font-medium bg-purple-500/10 px-2 py-0.5 rounded-full shrink-0">
                             PENDING
@@ -364,7 +399,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                       {notifData?.recentApplications && notifData.recentApplications.length > 0 && (
                         <>
                           <div className="px-4 py-2 bg-gray-800/20">
-                            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Recent Applications</p>
+                            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{t.recentApplications}</p>
                           </div>
                           {notifData.recentApplications.slice(0, 3).map((app) => (
                             <button
@@ -380,7 +415,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                               </div>
                               <div className="text-left flex-1 min-w-0">
                                 <p className="text-xs font-medium text-gray-200 truncate">{app.fullName}</p>
-                                <p className="text-[11px] text-gray-500 truncate">{app.course?.titleAz || 'Course'}</p>
+                                <p className="text-[11px] text-gray-500 truncate">{app.course?.titleAz || t.course}</p>
                               </div>
                               <span className="text-[10px] text-gray-500 shrink-0">{timeAgo(app.createdAt)}</span>
                             </button>
@@ -392,8 +427,8 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                       {totalPending === 0 && (!notifData?.recentApplications || notifData.recentApplications.length === 0) && (
                         <div className="flex flex-col items-center py-8 text-center">
                           <Bell className="w-8 h-8 text-gray-600 mb-2" />
-                          <p className="text-sm text-gray-400">No notifications</p>
-                          <p className="text-xs text-gray-500 mt-0.5">You&#39;re all caught up!</p>
+                          <p className="text-sm text-gray-400">{t.noNotifications}</p>
+                          <p className="text-xs text-gray-500 mt-0.5">{t.allCaughtUp}</p>
                         </div>
                       )}
                     </>
@@ -409,7 +444,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                     }}
                     className="w-full px-4 py-2.5 text-xs font-medium text-primary-400 hover:bg-gray-800/50 transition-colors text-center"
                   >
-                    View Dashboard
+                    {t.viewDashboard}
                   </button>
                 </div>
               </div>
@@ -430,7 +465,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                   {user?.name || 'Admin'}
                 </p>
                 <p className="text-[11px] text-gray-500 leading-tight">
-                  {user?.role || 'Administrator'}
+                  {user?.role || t.administrator}
                 </p>
               </div>
               <ChevronDown
@@ -457,14 +492,14 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                     className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800/50 hover:text-white transition-colors"
                   >
                     <User className="w-4 h-4" />
-                    Profile Settings
+                    {t.profileSettings}
                   </button>
                   <button
                     onClick={handleLogout}
                     className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
-                    Sign Out
+                    {t.signOut}
                   </button>
                 </div>
               </div>
@@ -486,7 +521,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleSearchKeyDown}
-                placeholder="Search pages..."
+                placeholder={tCommon.searchPages}
                 className="bg-transparent text-sm text-white placeholder-gray-500 outline-none w-full"
               />
               <button onClick={() => setSearchOpen(false)} className="p-1 rounded-lg hover:bg-gray-700/50 text-gray-400">
@@ -499,7 +534,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
               {filteredSearch.length === 0 ? (
                 <div className="px-4 py-8 text-center">
                   <Search className="w-8 h-8 text-gray-600 mx-auto mb-2" />
-                  <p className="text-sm text-gray-400">No results found</p>
+                  <p className="text-sm text-gray-400">{tCommon.noResults}</p>
                 </div>
               ) : (
                 filteredSearch.map((item, i) => {
@@ -532,9 +567,9 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
 
             {/* Footer hint */}
             <div className="flex items-center gap-4 px-4 py-2 border-t border-gray-700/50 text-[10px] text-gray-500">
-              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-700/50 font-mono">↑↓</kbd> Navigate</span>
-              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-700/50 font-mono">↵</kbd> Open</span>
-              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-700/50 font-mono">Esc</kbd> Close</span>
+              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-700/50 font-mono">↑↓</kbd> {tCommon.navigate}</span>
+              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-700/50 font-mono">↵</kbd> {tCommon.open}</span>
+              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-700/50 font-mono">Esc</kbd> {tCommon.close}</span>
             </div>
           </div>
         </div>

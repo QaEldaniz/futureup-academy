@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
 import { getLocalized } from '@/lib/admin-locale';
+import { getAdminT } from '@/lib/admin-translations';
 import { cn } from '@/lib/utils';
 import {
   Users,
@@ -49,6 +50,8 @@ interface TeachersResponse {
 export default function AdminTeachersPage() {
   const router = useRouter();
   const { token, adminLocale } = useAuthStore();
+  const t = getAdminT('teachers', adminLocale);
+  const tCommon = getAdminT('common', adminLocale);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -117,10 +120,10 @@ export default function AdminTeachersPage() {
             <div className="p-2 rounded-xl bg-secondary-500/10">
               <Users className="w-6 h-6 text-secondary-400" />
             </div>
-            Teachers
+            {t.title}
           </h1>
           <p className="text-gray-400 mt-1">
-            Manage your academy&apos;s teaching staff
+            {t.description}
           </p>
         </div>
         <Link
@@ -128,7 +131,7 @@ export default function AdminTeachersPage() {
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-500 to-secondary-600 text-white text-sm font-semibold hover:from-primary-400 hover:to-secondary-500 transition-all duration-200 shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30"
         >
           <Plus className="w-4 h-4" />
-          Add Teacher
+          {t.addTeacher}
         </Link>
       </div>
 
@@ -137,7 +140,7 @@ export default function AdminTeachersPage() {
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
         <input
           type="text"
-          placeholder="Search teachers by name, email, specialization..."
+          placeholder={t.searchPlaceholder}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-11 pr-4 py-3 bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
@@ -181,12 +184,12 @@ export default function AdminTeachersPage() {
             <UserX className="w-8 h-8 text-gray-500" />
           </div>
           <h3 className="text-lg font-semibold text-white mb-2">
-            No teachers found
+            {t.noTeachers}
           </h3>
           <p className="text-gray-400 text-sm mb-6 max-w-sm mx-auto">
             {search
-              ? `No teachers match "${search}". Try adjusting your search.`
-              : 'Get started by adding your first teacher to the academy.'}
+              ? `"${search}" ${t.noMatch}`
+              : t.getStarted}
           </p>
           {!search && (
             <Link
@@ -194,7 +197,7 @@ export default function AdminTeachersPage() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-500 to-secondary-600 text-white text-sm font-semibold hover:from-primary-400 hover:to-secondary-500 transition-all duration-200"
             >
               <Plus className="w-4 h-4" />
-              Add First Teacher
+              {t.addFirstTeacher}
             </Link>
           )}
         </div>
@@ -221,7 +224,7 @@ export default function AdminTeachersPage() {
                       teacher.isActive ? 'bg-emerald-400' : 'bg-red-400'
                     )}
                   />
-                  {teacher.isActive ? 'Active' : 'Inactive'}
+                  {teacher.isActive ? t.active : t.inactive}
                 </span>
               </div>
 
@@ -261,8 +264,7 @@ export default function AdminTeachersPage() {
                 <div className="flex items-center gap-2 text-xs text-gray-400">
                   <BookOpen className="w-3.5 h-3.5 text-gray-500 shrink-0" />
                   <span>
-                    {getCoursesCount(teacher)} course
-                    {getCoursesCount(teacher) !== 1 ? 's' : ''} assigned
+                    {getCoursesCount(teacher)} {getCoursesCount(teacher) !== 1 ? t.coursesAssigned : t.courseAssigned}
                   </span>
                 </div>
                 {(teacher.linkedin || teacher.github) && (
@@ -300,14 +302,14 @@ export default function AdminTeachersPage() {
                   className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-gray-800/50 text-gray-300 text-xs font-medium hover:bg-gray-700/50 hover:text-white transition-all"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
-                  Edit
+                  {tCommon.edit}
                 </Link>
                 <button
                   onClick={() => setDeleteId(teacher.id)}
                   className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-red-500/5 text-red-400/80 text-xs font-medium hover:bg-red-500/10 hover:text-red-400 transition-all"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
-                  Delete
+                  {tCommon.delete}
                 </button>
               </div>
 
@@ -332,16 +334,15 @@ export default function AdminTeachersPage() {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white">
-                  Delete Teacher
+                  {t.deleteTitle}
                 </h3>
                 <p className="text-sm text-gray-400">
-                  This action cannot be undone.
+                  {t.cannotUndo}
                 </p>
               </div>
             </div>
             <p className="text-sm text-gray-300 mb-6">
-              Are you sure you want to delete this teacher? All associated data
-              including course assignments will be removed.
+              {t.confirmDelete}
             </p>
             <div className="flex items-center gap-3">
               <button
@@ -349,14 +350,14 @@ export default function AdminTeachersPage() {
                 disabled={deleting}
                 className="flex-1 px-4 py-2.5 rounded-xl bg-gray-800/50 text-gray-300 text-sm font-medium hover:bg-gray-700/50 transition-colors disabled:opacity-50"
               >
-                Cancel
+                {tCommon.cancel}
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
                 className="flex-1 px-4 py-2.5 rounded-xl bg-red-500/10 text-red-400 text-sm font-semibold hover:bg-red-500/20 transition-colors disabled:opacity-50"
               >
-                {deleting ? 'Deleting...' : 'Yes, Delete'}
+                {deleting ? tCommon.deleting : t.yesDelete}
               </button>
             </div>
           </div>

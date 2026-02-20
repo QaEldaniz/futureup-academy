@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
+import { getAdminT } from '@/lib/admin-translations';
 import { cn } from '@/lib/utils';
 import {
   Search,
@@ -36,22 +37,12 @@ interface Application {
 
 const STATUS_OPTIONS = ['NEW', 'CONTACTED', 'ENROLLED', 'REJECTED'] as const;
 
-const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
-  NEW: { label: 'New', className: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
-  CONTACTED: { label: 'Contacted', className: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
-  ENROLLED: { label: 'Enrolled', className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
-  REJECTED: { label: 'Rejected', className: 'bg-red-500/10 text-red-400 border-red-500/20' },
+const STATUS_STYLES: Record<string, string> = {
+  NEW: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  CONTACTED: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  ENROLLED: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  REJECTED: 'bg-red-500/10 text-red-400 border-red-500/20',
 };
-
-const SOURCE_OPTIONS = [
-  { value: 'ALL', label: 'All Sources' },
-  { value: 'instagram', label: 'Instagram' },
-  { value: 'facebook', label: 'Facebook' },
-  { value: 'tiktok', label: 'TikTok' },
-  { value: 'google', label: 'Google' },
-  { value: 'linkedin', label: 'LinkedIn' },
-  { value: 'youtube', label: 'YouTube' },
-];
 
 function extractHearAbout(message?: string): string | null {
   if (!message) return null;
@@ -66,7 +57,26 @@ function getSourceDisplay(app: Application): string {
 }
 
 export default function AdminApplicationsPage() {
-  const { token } = useAuthStore();
+  const { token, adminLocale } = useAuthStore();
+  const t = getAdminT('applications', adminLocale);
+  const tCommon = getAdminT('common', adminLocale);
+
+  const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
+    NEW: { label: t.new, className: STATUS_STYLES.NEW },
+    CONTACTED: { label: t.contacted, className: STATUS_STYLES.CONTACTED },
+    ENROLLED: { label: t.enrolled, className: STATUS_STYLES.ENROLLED },
+    REJECTED: { label: t.rejected, className: STATUS_STYLES.REJECTED },
+  };
+
+  const SOURCE_OPTIONS = [
+    { value: 'ALL', label: t.allSources },
+    { value: 'instagram', label: 'Instagram' },
+    { value: 'facebook', label: 'Facebook' },
+    { value: 'tiktok', label: 'TikTok' },
+    { value: 'google', label: 'Google' },
+    { value: 'linkedin', label: 'LinkedIn' },
+    { value: 'youtube', label: 'YouTube' },
+  ];
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -162,9 +172,9 @@ export default function AdminApplicationsPage() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Applications</h1>
+          <h1 className="text-2xl font-bold text-white">{t.title}</h1>
           <p className="text-gray-400 mt-1">
-            Manage course applications and track their status.
+            {t.description}
           </p>
         </div>
         <button
@@ -172,7 +182,7 @@ export default function AdminApplicationsPage() {
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-gray-300 hover:text-white hover:border-gray-700/50 transition-all"
         >
           <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
-          Refresh
+          {tCommon.refresh}
         </button>
       </div>
 
@@ -184,7 +194,7 @@ export default function AdminApplicationsPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by name or email..."
+            placeholder={t.searchPlaceholder}
             className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
           />
         </div>
@@ -195,7 +205,7 @@ export default function AdminApplicationsPage() {
             onChange={(e) => setFilterStatus(e.target.value)}
             className="pl-11 pr-10 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer"
           >
-            <option value="ALL">All Statuses</option>
+            <option value="ALL">{t.allStatuses}</option>
             {STATUS_OPTIONS.map((status) => (
               <option key={status} value={status}>
                 {STATUS_CONFIG[status].label}
@@ -261,24 +271,24 @@ export default function AdminApplicationsPage() {
         ) : filteredApplications.length === 0 ? (
           <div className="py-16 text-center">
             <Inbox className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-            <p className="text-gray-400 font-medium">No applications found</p>
+            <p className="text-gray-400 font-medium">{t.noApplications}</p>
             <p className="text-gray-500 text-sm mt-1">
               {searchQuery || filterStatus !== 'ALL' || filterSource !== 'ALL'
-                ? 'Try adjusting your filters'
-                : 'Applications will appear here'}
+                ? t.tryAdjustingFilters
+                : t.willAppearHere}
             </p>
           </div>
         ) : (
           <>
             {/* Desktop table header */}
             <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3 border-b border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <div className="col-span-3">Applicant</div>
-              <div className="col-span-2">Contact</div>
-              <div className="col-span-2">Course</div>
-              <div className="col-span-1">Source</div>
-              <div className="col-span-2">Status</div>
-              <div className="col-span-1">Date</div>
-              <div className="col-span-1">Actions</div>
+              <div className="col-span-3">{t.applicant}</div>
+              <div className="col-span-2">{t.contact}</div>
+              <div className="col-span-2">{t.course}</div>
+              <div className="col-span-1">{t.source}</div>
+              <div className="col-span-2">{tCommon.status}</div>
+              <div className="col-span-1">{t.date}</div>
+              <div className="col-span-1">{tCommon.actions}</div>
             </div>
 
             <div className="divide-y divide-gray-800/30">
@@ -313,7 +323,7 @@ export default function AdminApplicationsPage() {
                     {/* Course */}
                     <div className="col-span-2">
                       <span className="text-sm text-gray-300">
-                        {app.courseName || 'N/A'}
+                        {app.courseName || t.na}
                       </span>
                     </div>
 
@@ -392,17 +402,17 @@ export default function AdminApplicationsPage() {
                           <div className="mb-3 flex flex-wrap gap-2">
                             {app.utmSource && (
                               <span className="px-2 py-1 rounded-md bg-purple-500/10 text-purple-400 text-xs">
-                                source: {app.utmSource}
+                                {t.sourceLabel} {app.utmSource}
                               </span>
                             )}
                             {app.utmMedium && (
                               <span className="px-2 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs">
-                                medium: {app.utmMedium}
+                                {t.mediumLabel} {app.utmMedium}
                               </span>
                             )}
                             {app.utmCampaign && (
                               <span className="px-2 py-1 rounded-md bg-amber-500/10 text-amber-400 text-xs">
-                                campaign: {app.utmCampaign}
+                                {t.campaignLabel} {app.utmCampaign}
                               </span>
                             )}
                           </div>
@@ -415,7 +425,7 @@ export default function AdminApplicationsPage() {
                               onChange={(e) =>
                                 setEditingNotes({ ...editingNotes, notes: e.target.value })
                               }
-                              placeholder="Add notes about this application..."
+                              placeholder={t.addNotesPlaceholder}
                               rows={3}
                               className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
                             />
@@ -426,13 +436,13 @@ export default function AdminApplicationsPage() {
                                 }
                                 className="px-4 py-1.5 rounded-lg bg-primary-500/20 text-primary-400 text-xs font-medium hover:bg-primary-500/30 transition-colors"
                               >
-                                Save
+                                {tCommon.save}
                               </button>
                               <button
                                 onClick={() => setEditingNotes(null)}
                                 className="px-4 py-1.5 rounded-lg bg-gray-800/50 text-gray-400 text-xs font-medium hover:bg-gray-800/70 transition-colors"
                               >
-                                Cancel
+                                {tCommon.cancel}
                               </button>
                             </div>
                           </div>
@@ -445,7 +455,7 @@ export default function AdminApplicationsPage() {
                           >
                             {app.notes || (
                               <span className="text-gray-600 italic">
-                                Click to add notes...
+                                {t.clickToAddNotes}
                               </span>
                             )}
                           </div>

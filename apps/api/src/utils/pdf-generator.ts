@@ -53,10 +53,12 @@ export async function generateCertificatePDF(
     await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 });
 
     const pdfBuffer = await page.pdf({
-      format: 'A4',
+      width: '297mm',
+      height: '210mm',
       landscape: true,
       printBackground: true,
       margin: { top: '0', right: '0', bottom: '0', left: '0' },
+      pageRanges: '1',
     });
 
     return Buffer.from(pdfBuffer);
