@@ -21,6 +21,8 @@ import {
   X,
   AlertTriangle,
   ImageIcon,
+  Baby,
+  Users,
 } from 'lucide-react';
 
 interface Course {
@@ -33,6 +35,7 @@ interface Course {
   duration?: string;
   price?: number;
   level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+  audience?: 'KIDS' | 'ADULTS';
   isActive: boolean;
   category?: {
     id: string;
@@ -52,6 +55,7 @@ interface CoursesResponse {
 }
 
 const LEVELS = ['ALL', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'] as const;
+const AUDIENCES = ['ALL', 'KIDS', 'ADULTS'] as const;
 
 export default function AdminCoursesPage() {
   const router = useRouter();
@@ -69,6 +73,7 @@ export default function AdminCoursesPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [levelFilter, setLevelFilter] = useState<string>('ALL');
+  const [audienceFilter, setAudienceFilter] = useState<string>('ALL');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
@@ -90,6 +95,7 @@ export default function AdminCoursesPage() {
       });
       if (search) params.set('search', search);
       if (levelFilter !== 'ALL') params.set('level', levelFilter);
+      if (audienceFilter !== 'ALL') params.set('audience', audienceFilter);
 
       const res = await api.get<CoursesResponse>(`/admin/courses?${params.toString()}`, {
         token: token || undefined,
@@ -106,7 +112,7 @@ export default function AdminCoursesPage() {
     } finally {
       setLoading(false);
     }
-  }, [token, page, search, levelFilter]);
+  }, [token, page, search, levelFilter, audienceFilter]);
 
   useEffect(() => {
     fetchCourses();
@@ -115,7 +121,7 @@ export default function AdminCoursesPage() {
   // Debounce search
   useEffect(() => {
     setPage(1);
-  }, [search, levelFilter]);
+  }, [search, levelFilter, audienceFilter]);
 
   const handleToggleActive = async (course: Course) => {
     try {
@@ -212,7 +218,7 @@ export default function AdminCoursesPage() {
 
         {/* Expanded Filters */}
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-800/50">
+          <div className="mt-4 pt-4 border-t border-gray-800/50 space-y-3">
             <div className="flex flex-wrap gap-2">
               <span className="text-xs text-gray-500 uppercase tracking-wider self-center mr-2">{t.level}</span>
               {LEVELS.map((level) => (
@@ -227,6 +233,27 @@ export default function AdminCoursesPage() {
                   )}
                 >
                   {level === 'ALL' ? t.allLevels : levelConfig[level]?.label || level}
+                </button>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <span className="text-xs text-gray-500 uppercase tracking-wider self-center mr-2">{t.audience}:</span>
+              {AUDIENCES.map((aud) => (
+                <button
+                  key={aud}
+                  onClick={() => setAudienceFilter(aud)}
+                  className={cn(
+                    'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-all',
+                    audienceFilter === aud
+                      ? aud === 'KIDS'
+                        ? 'bg-orange-500/10 border-orange-500/30 text-orange-400'
+                        : 'bg-primary-500/10 border-primary-500/30 text-primary-400'
+                      : 'bg-gray-900/30 border-gray-700/40 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                  )}
+                >
+                  {aud === 'KIDS' && <Baby className="w-3 h-3" />}
+                  {aud === 'ADULTS' && <Users className="w-3 h-3" />}
+                  {aud === 'ALL' ? t.allAudiences : aud === 'KIDS' ? t.itKids : t.adults}
                 </button>
               ))}
             </div>
@@ -333,8 +360,8 @@ export default function AdminCoursesPage() {
                   </span>
                 </div>
 
-                {/* Level Badge */}
-                <div>
+                {/* Level + Audience Badges */}
+                <div className="flex flex-wrap gap-1">
                   <span
                     className={cn(
                       'inline-flex px-2.5 py-1 rounded-full text-[11px] font-medium border',
@@ -343,6 +370,12 @@ export default function AdminCoursesPage() {
                   >
                     {levelConfig[course.level]?.label || course.level}
                   </span>
+                  {course.audience === 'KIDS' && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium border bg-orange-500/10 text-orange-400 border-orange-500/20">
+                      <Baby className="w-3 h-3" />
+                      Kids
+                    </span>
+                  )}
                 </div>
 
                 {/* Price */}

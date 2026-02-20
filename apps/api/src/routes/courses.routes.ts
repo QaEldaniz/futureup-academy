@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import { Level } from '@prisma/client';
+import { Level, Audience } from '@prisma/client';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function courseRoutes(server: FastifyInstance) {
@@ -22,6 +22,7 @@ export async function courseRoutes(server: FastifyInstance) {
       level,
       search,
       featured,
+      audience,
     } = request.query as {
       page?: string;
       limit?: string;
@@ -29,6 +30,7 @@ export async function courseRoutes(server: FastifyInstance) {
       level?: string;
       search?: string;
       featured?: string;
+      audience?: string;
     };
 
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
@@ -47,6 +49,10 @@ export async function courseRoutes(server: FastifyInstance) {
 
     if (featured === 'true') {
       where.isFeatured = true;
+    }
+
+    if (audience && (audience === 'KIDS' || audience === 'ADULTS')) {
+      where.audience = audience;
     }
 
     if (search) {
@@ -147,6 +153,7 @@ export async function courseRoutes(server: FastifyInstance) {
       duration: string;
       price?: number;
       level?: string;
+      audience?: string;
       categoryId: string;
       isActive?: boolean;
       isFeatured?: boolean;
@@ -162,6 +169,7 @@ export async function courseRoutes(server: FastifyInstance) {
       data: {
         ...courseData,
         level: courseData.level ? (courseData.level as Level) : undefined,
+        audience: courseData.audience ? (courseData.audience as Audience) : undefined,
         price: courseData.price != null ? courseData.price : undefined,
         teachers: teacherIds?.length
           ? {
@@ -200,6 +208,7 @@ export async function courseRoutes(server: FastifyInstance) {
       duration?: string;
       price?: number;
       level?: string;
+      audience?: string;
       categoryId?: string;
       isActive?: boolean;
       isFeatured?: boolean;
@@ -231,6 +240,7 @@ export async function courseRoutes(server: FastifyInstance) {
       data: {
         ...courseData,
         level: courseData.level ? (courseData.level as Level) : undefined,
+        audience: courseData.audience ? (courseData.audience as Audience) : undefined,
       },
       include: {
         category: true,

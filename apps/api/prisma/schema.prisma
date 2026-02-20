@@ -51,6 +51,7 @@ model Course {
   duration    String // e.g., "3 ay", "6 months"
   price       Decimal? @db.Decimal(10, 2)
   level       Level    @default(BEGINNER)
+  audience    Audience @default(ADULTS)
   categoryId  String
   isActive    Boolean  @default(true)
   isFeatured  Boolean  @default(false)
@@ -76,6 +77,11 @@ enum Level {
   BEGINNER
   INTERMEDIATE
   ADVANCED
+}
+
+enum Audience {
+  KIDS
+  ADULTS
 }
 
 model Category {

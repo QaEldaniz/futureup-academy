@@ -111,6 +111,10 @@ const translations = {
     cannotUndo: { az: 'Bu əməliyyatı geri qaytarmaq mümkün deyil.', ru: 'Это действие нельзя отменить.', en: 'This action cannot be undone.' },
     confirmDelete: { az: 'Bu kursu silmək istədiyinizə əminsiniz?', ru: 'Вы уверены, что хотите удалить', en: 'Are you sure you want to delete' },
     allDataRemoved: { az: 'Bütün əlaqəli məlumatlar həmişəlik silinəcək.', ru: 'Все связанные данные будут удалены безвозвратно.', en: 'All associated data will be permanently removed.' },
+    audience: { az: 'Auditoriya', ru: 'Аудитория', en: 'Audience' },
+    itKids: { az: 'IT Kids', ru: 'IT Kids', en: 'IT Kids' },
+    adults: { az: 'Böyüklər', ru: 'Взрослые', en: 'Adults' },
+    allAudiences: { az: 'Bütün auditoriyalar', ru: 'Все аудитории', en: 'All Audiences' },
   },
 
   // ═══════════════════════════════════════════

@@ -18,6 +18,8 @@ import {
   FolderOpen,
   ToggleLeft,
   ToggleRight,
+  Users,
+  Baby,
 } from 'lucide-react';
 
 interface Category {
@@ -52,6 +54,7 @@ interface CourseFormData {
   duration: string;
   price: string;
   level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+  audience: 'KIDS' | 'ADULTS';
   categoryId: string;
   isActive: boolean;
 }
@@ -68,6 +71,7 @@ const initialFormData: CourseFormData = {
   duration: '',
   price: '',
   level: 'BEGINNER',
+  audience: 'ADULTS',
   categoryId: '',
   isActive: true,
 };
@@ -342,6 +346,39 @@ export default function AdminNewCoursePage() {
                   <option value="INTERMEDIATE">Intermediate</option>
                   <option value="ADVANCED">Advanced</option>
                 </select>
+              </div>
+            </div>
+
+            {/* Audience */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Audience</label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => updateField('audience', 'ADULTS')}
+                  className={cn(
+                    'flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium border transition-all',
+                    form.audience === 'ADULTS'
+                      ? 'bg-blue-500/15 border-blue-500/40 text-blue-400'
+                      : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                  )}
+                >
+                  <Users className="w-4 h-4" />
+                  Adults
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateField('audience', 'KIDS')}
+                  className={cn(
+                    'flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium border transition-all',
+                    form.audience === 'KIDS'
+                      ? 'bg-orange-500/15 border-orange-500/40 text-orange-400'
+                      : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                  )}
+                >
+                  <Baby className="w-4 h-4" />
+                  IT Kids
+                </button>
               </div>
             </div>
 

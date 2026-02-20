@@ -47,7 +47,17 @@
       "cyber": "Cybersecurity",
       "cyberDesc": "Learn network security, penetration testing and security fundamentals.",
       "marketing": "Digital Marketing",
-      "marketingDesc": "Learn SMM, SEO, content marketing and digital advertising strategies."
+      "marketingDesc": "Learn SMM, SEO, content marketing and digital advertising strategies.",
+      "kidsTitle": "IT Kids Courses",
+      "kidsSubtitle": "Fun coding for young minds",
+      "adultsLabel": "Adults",
+      "kidsLabel": "IT Kids",
+      "scratch": "Scratch Programming",
+      "scratchDesc": "Visual programming for beginners aged 7-10. Create games and animations.",
+      "pythonKids": "Python for Kids",
+      "pythonKidsDesc": "Learn real programming with Python. Build games and fun projects.",
+      "webKids": "Web Development for Teens",
+      "webKidsDesc": "Create your own websites with HTML, CSS and JavaScript."
     },
     "why": {
       "title": "Why FutureUp?",
@@ -126,7 +136,13 @@
     "noResults": "No results found",
     "viewAll": "View All Courses",
     "search": "Search courses...",
-    "months": "months"
+    "months": "months",
+    "adults": "Adults",
+    "itKids": "IT Kids",
+    "kidsTitle": "IT Courses for Kids",
+    "kidsSubtitle": "Fun and engaging programming for young learners aged 7-16",
+    "adultsTitle": "Courses",
+    "adultsSubtitle": "All our professional courses"
   },
   "courseDetail": {
     "breadcrumbHome": "Home",

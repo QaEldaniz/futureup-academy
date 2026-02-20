@@ -47,7 +47,17 @@
       "cyber": "Kibertəhlükəsizlik",
       "cyberDesc": "Şəbəkə təhlükəsizliyi, penetrasiya testi və təhlükəsizlik əsaslarını öyrənin.",
       "marketing": "Rəqəmsal Marketinq",
-      "marketingDesc": "SMM, SEO, kontent marketinq və rəqəmsal reklam strategiyalarını öyrənin."
+      "marketingDesc": "SMM, SEO, kontent marketinq və rəqəmsal reklam strategiyalarını öyrənin.",
+      "kidsTitle": "IT Kids Kursları",
+      "kidsSubtitle": "Gənc beyinlər üçün əyləncəli proqramlaşdırma",
+      "adultsLabel": "Yetkinlər",
+      "kidsLabel": "IT Kids",
+      "scratch": "Scratch Proqramlaşdırma",
+      "scratchDesc": "7-10 yaş üçün vizual proqramlaşdırma. Oyunlar və animasiyalar yaradın.",
+      "pythonKids": "Uşaqlar Üçün Python",
+      "pythonKidsDesc": "Python ilə əsl proqramlaşdırma öyrənin. Oyunlar və maraqlı layihələr qurun.",
+      "webKids": "Yeniyetmələr Üçün Web",
+      "webKidsDesc": "HTML, CSS və JavaScript ilə öz veb saytlarınızı yaradın."
     },
     "why": {
       "title": "Niyə FutureUp?",
@@ -126,7 +136,13 @@
     "noResults": "Nəticə tapılmadı",
     "viewAll": "Bütün Kurslar",
     "search": "Kurs axtar...",
-    "months": "ay"
+    "months": "ay",
+    "adults": "Yetkinlər",
+    "itKids": "IT Kids",
+    "kidsTitle": "Uşaqlar Üçün IT Kursları",
+    "kidsSubtitle": "7-16 yaşlı uşaqlar üçün maraqlı və əyləncəli proqramlaşdırma",
+    "adultsTitle": "Kurslar",
+    "adultsSubtitle": "Bütün peşəkar kurslarımız"
   },
   "courseDetail": {
     "breadcrumbHome": "Ana Səhifə",
