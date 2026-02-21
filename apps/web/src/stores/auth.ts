@@ -61,6 +61,11 @@ export const useAuthStore = create<AuthState>()(
         isAuthenticated: state.isAuthenticated,
         adminLocale: state.adminLocale,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.isLoading = false;
+        }
+      },
     }
   )
 );
