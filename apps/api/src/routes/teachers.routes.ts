@@ -13,10 +13,9 @@ export async function teacherRoutes(server: FastifyInstance) {
     return reply.send({ success: true, data });
   });
 
-  // GET / - List active teachers (public)
+  // GET / - List all teachers (used by both admin panel and public pages)
   server.get('/', async (request, reply) => {
     const teachers = await server.prisma.teacher.findMany({
-      where: { isActive: true },
       select: {
         id: true,
         nameAz: true,
@@ -27,9 +26,11 @@ export async function teacherRoutes(server: FastifyInstance) {
         bioEn: true,
         photo: true,
         specialization: true,
+        email: true,
         linkedin: true,
         github: true,
         website: true,
+        isActive: true,
         courses: {
           include: {
             course: {
@@ -43,6 +44,9 @@ export async function teacherRoutes(server: FastifyInstance) {
               },
             },
           },
+        },
+        _count: {
+          select: { courses: true },
         },
       },
       orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],

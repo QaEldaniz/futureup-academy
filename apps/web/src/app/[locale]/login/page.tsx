@@ -59,17 +59,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 relative">
-      {/* Back to home */}
-      <Link
-        href="/"
-        className="absolute top-4 left-4 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        {t('backToHome')}
-      </Link>
-
+    <div className="min-h-screen flex items-center justify-center px-4 py-20">
       <div className="w-full max-w-md">
+        {/* Back to home */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors mb-6"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          {t('backToHome')}
+        </Link>
         {/* Card */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-gray-100 dark:border-gray-800 p-8">
           {/* Logo */}

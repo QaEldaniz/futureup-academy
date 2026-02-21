@@ -28,7 +28,9 @@ interface Student {
   phone?: string;
   photo?: string | null;
   enrolledCourses?: number;
-  status: 'ACTIVE' | 'COMPLETED' | 'DROPPED';
+  isActive?: boolean;
+  courses?: { courseId: string }[];
+  _count?: { certificates?: number; reviewsReceived?: number };
   createdAt: string;
 }
 
@@ -43,15 +45,13 @@ interface StudentsResponse {
 
 const STATUS_OPTIONS = [
   { value: '', label: 'All Statuses' },
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'COMPLETED', label: 'Completed' },
-  { value: 'DROPPED', label: 'Dropped' },
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
 ];
 
 const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
-  ACTIVE: { label: 'Active', className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
-  COMPLETED: { label: 'Completed', className: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
-  DROPPED: { label: 'Dropped', className: 'bg-red-500/10 text-red-400 border-red-500/20' },
+  active: { label: 'Active', className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
+  inactive: { label: 'Inactive', className: 'bg-red-500/10 text-red-400 border-red-500/20' },
 };
 
 export default function AdminStudentsPage() {
@@ -294,8 +294,9 @@ export default function AdminStudentsPage() {
                 ))
               ) : students.length > 0 ? (
                 students.map((student) => {
-                  const statusCfg = STATUS_CONFIG[student.status] || {
-                    label: student.status,
+                  const statusKey = student.isActive !== false ? 'active' : 'inactive';
+                  const statusCfg = STATUS_CONFIG[statusKey] || {
+                    label: 'Unknown',
                     className: 'bg-gray-500/10 text-gray-400 border-gray-500/20',
                   };
 
@@ -347,7 +348,7 @@ export default function AdminStudentsPage() {
                       <td className="px-6 py-4 text-center hidden sm:table-cell">
                         <span className="inline-flex items-center gap-1 text-sm text-gray-300">
                           <GraduationCap className="w-3.5 h-3.5 text-gray-500" />
-                          {student.enrolledCourses ?? 0}
+                          {student.courses?.length ?? student.enrolledCourses ?? 0}
                         </span>
                       </td>
 
