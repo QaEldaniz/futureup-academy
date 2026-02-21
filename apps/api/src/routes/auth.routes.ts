@@ -3,8 +3,11 @@ import bcrypt from 'bcrypt';
 import { adminAuth, teacherAuth, anyAuth } from '../middleware/auth.middleware.js';
 
 export async function authRoutes(server: FastifyInstance) {
+  // Rate limit config for auth endpoints (5 attempts per minute)
+  const authRateLimit = { config: { rateLimit: { max: 5, timeWindow: '1 minute' } } };
+
   // POST /login - Admin login (legacy, still works)
-  server.post('/login', async (request, reply) => {
+  server.post('/login', authRateLimit, async (request, reply) => {
     const { email, password } = request.body as { email: string; password: string };
 
     if (!email || !password) {
@@ -44,7 +47,7 @@ export async function authRoutes(server: FastifyInstance) {
   });
 
   // POST /teacher/login - Teacher login (legacy, still works)
-  server.post('/teacher/login', async (request, reply) => {
+  server.post('/teacher/login', authRateLimit, async (request, reply) => {
     const { email, password } = request.body as { email: string; password: string };
 
     if (!email || !password) {
@@ -87,7 +90,7 @@ export async function authRoutes(server: FastifyInstance) {
   // ==========================================
   // UNIFIED LOGIN — searches all 4 tables
   // ==========================================
-  server.post('/unified-login', async (request, reply) => {
+  server.post('/unified-login', authRateLimit, async (request, reply) => {
     const { email, password } = request.body as { email: string; password: string };
 
     if (!email || !password) {
@@ -187,7 +190,7 @@ export async function authRoutes(server: FastifyInstance) {
   // ==========================================
   // STUDENT REGISTRATION
   // ==========================================
-  server.post('/student/register', async (request, reply) => {
+  server.post('/student/register', authRateLimit, async (request, reply) => {
     const { name, email, password, phone } = request.body as {
       name: string;
       email: string;
@@ -259,7 +262,7 @@ export async function authRoutes(server: FastifyInstance) {
   // ==========================================
   // PARENT REGISTRATION
   // ==========================================
-  server.post('/parent/register', async (request, reply) => {
+  server.post('/parent/register', authRateLimit, async (request, reply) => {
     const { nameAz, nameRu, nameEn, email, password, phone } = request.body as {
       nameAz: string;
       nameRu: string;
