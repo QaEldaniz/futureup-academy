@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
 import { ArrowLeft, BookOpen, MessageSquare, Calendar, TrendingUp, ClipboardCheck, Star } from 'lucide-react';
+import { GradeChart } from '@/components/charts/GradeChart';
+import { AttendanceChart } from '@/components/charts/AttendanceChart';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -14,6 +16,7 @@ export default function ParentChildDetail() {
   const { token } = useAuthStore();
   const [courses, setCourses] = useState<any[]>([]);
   const [comments, setComments] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,6 +31,13 @@ export default function ParentChildDetail() {
       })
       .catch(console.error)
       .finally(() => setLoading(false));
+
+    fetch(`${API_URL}/api/parent/children/${studentId}/stats`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((d) => { if (d.success) setStats(d.data); })
+      .catch(console.error);
   }, [token, studentId]);
 
   if (loading) return <div className="animate-pulse space-y-4"><div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3" /><div className="h-64 bg-gray-200 dark:bg-gray-700 rounded-2xl" /></div>;
@@ -138,6 +148,12 @@ export default function ParentChildDetail() {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Grade & Attendance Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <GradeChart title="Grade Trend" data={stats?.grades || []} />
+        <AttendanceChart title="Attendance" data={stats?.attendance || []} />
       </div>
     </div>
   );

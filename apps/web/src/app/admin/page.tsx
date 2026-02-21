@@ -19,6 +19,15 @@ import { cn } from '@/lib/utils';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
 import Link from 'next/link';
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+} from 'recharts';
 
 interface DashboardStats {
   totalCourses: number;
@@ -54,6 +63,7 @@ const defaultStats: DashboardStats = {
 export default function AdminDashboardPage() {
   const { token } = useAuthStore();
   const [stats, setStats] = useState<DashboardStats>(defaultStats);
+  const [enrollmentData, setEnrollmentData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -89,6 +99,21 @@ export default function AdminDashboardPage() {
       }
     }
     fetchDashboard();
+
+    async function fetchEnrollmentStats() {
+      try {
+        const res = await api.get<{ success: boolean; data: any[] }>(
+          '/admin/dashboard/enrollment-stats',
+          { token: token || undefined }
+        );
+        if (res.success) {
+          setEnrollmentData(res.data);
+        }
+      } catch {
+        console.log('Enrollment stats API not available');
+      }
+    }
+    fetchEnrollmentStats();
   }, [token]);
 
   const statCards = [
@@ -212,6 +237,48 @@ export default function AdminDashboardPage() {
             </Link>
           );
         })}
+      </div>
+
+      {/* Enrollment Trend Chart */}
+      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <TrendingUp className="w-4 h-4 text-gray-400" />
+          <h2 className="text-base font-semibold text-white">Enrollment Trend</h2>
+        </div>
+        {enrollmentData.length === 0 ? (
+          <div className="flex items-center justify-center h-[250px] text-sm text-gray-500">
+            No enrollment data available
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height={250}>
+            <AreaChart data={enrollmentData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+              <defs>
+                <linearGradient id="enrollmentGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.01} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
+              <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} dy={8} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} dx={-4} allowDecimals={false} />
+              <RechartsTooltip
+                contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '0.5rem' }}
+                labelStyle={{ color: '#9ca3af', fontSize: 12 }}
+                itemStyle={{ color: '#c4b5fd', fontSize: 13 }}
+              />
+              <Area
+                type="monotone"
+                dataKey="count"
+                name="Enrollments"
+                stroke="#8b5cf6"
+                strokeWidth={2.5}
+                fill="url(#enrollmentGradient)"
+                dot={{ r: 4, fill: '#8b5cf6', stroke: '#0f172a', strokeWidth: 2 }}
+                activeDot={{ r: 6, fill: '#a78bfa', stroke: '#0f172a', strokeWidth: 2 }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
       </div>
 
       {/* Two column section */}

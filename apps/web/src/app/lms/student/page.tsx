@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
 import { BookOpen, Award, Clock, TrendingUp, ArrowRight, Play } from 'lucide-react';
+import { GradeChart } from '@/components/charts/GradeChart';
+import { AttendanceChart } from '@/components/charts/AttendanceChart';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -25,6 +27,7 @@ export default function StudentDashboard() {
   const router = useRouter();
   const { token, user } = useAuthStore();
   const [courses, setCourses] = useState<CourseEnrollment[]>([]);
+  const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,6 +39,13 @@ export default function StudentDashboard() {
       .then((d) => { if (d.success) setCourses(d.data); })
       .catch(console.error)
       .finally(() => setLoading(false));
+
+    fetch(`${API_URL}/api/student/stats`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((d) => { if (d.success) setStats(d.data); })
+      .catch(console.error);
   }, [token]);
 
   const activeCourses = courses.filter((c) => c.status === 'ACTIVE');
@@ -139,6 +149,12 @@ export default function StudentDashboard() {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Grade & Attendance Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <GradeChart title="Grade Trend" data={stats?.grades || []} />
+        <AttendanceChart title="Attendance" data={stats?.attendance || []} />
       </div>
     </div>
   );

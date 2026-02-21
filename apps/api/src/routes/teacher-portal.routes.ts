@@ -583,6 +583,75 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
     });
   });
 
+  // GET /courses/:courseId/stats - Per-student grades and attendance stats for a course
+  server.get('/courses/:courseId/stats', { preHandler: [teacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId } = request.params as { courseId: string };
+
+    // Verify teacher has access to this course
+    const tc = await server.prisma.teacherCourse.findUnique({
+      where: { teacherId_courseId: { teacherId: id, courseId } },
+    });
+    if (!tc) {
+      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    }
+
+    // Get enrolled students
+    const enrollments = await server.prisma.studentCourse.findMany({
+      where: { courseId },
+      include: {
+        student: { select: { id: true, name: true } },
+      },
+    });
+
+    const studentIds = enrollments.map((e) => e.student.id);
+
+    // Fetch all grades and attendance for this course
+    const [grades, attendanceRecords] = await Promise.all([
+      server.prisma.grade.findMany({
+        where: { courseId, studentId: { in: studentIds } },
+        select: { studentId: true, value: true, maxValue: true },
+      }),
+      server.prisma.attendance.findMany({
+        where: { courseId, studentId: { in: studentIds } },
+        select: { studentId: true, status: true },
+      }),
+    ]);
+
+    // Group grades by student
+    const gradesByStudent = new Map<string, { sum: number; count: number }>();
+    for (const g of grades) {
+      const entry = gradesByStudent.get(g.studentId) || { sum: 0, count: 0 };
+      entry.sum += (g.value / g.maxValue) * 100;
+      entry.count += 1;
+      gradesByStudent.set(g.studentId, entry);
+    }
+
+    // Group attendance by student
+    const attendanceByStudent = new Map<string, { present: number; total: number }>();
+    for (const a of attendanceRecords) {
+      const entry = attendanceByStudent.get(a.studentId) || { present: 0, total: 0 };
+      entry.total += 1;
+      if (a.status === 'PRESENT' || a.status === 'LATE') entry.present += 1;
+      attendanceByStudent.set(a.studentId, entry);
+    }
+
+    const students = enrollments.map((e) => {
+      const gradeData = gradesByStudent.get(e.student.id);
+      const attData = attendanceByStudent.get(e.student.id);
+      return {
+        studentId: e.student.id,
+        name: e.student.name,
+        avgGrade: gradeData ? Math.round(gradeData.sum / gradeData.count) : null,
+        gradeCount: gradeData?.count || 0,
+        attendanceRate: attData && attData.total > 0 ? Math.round((attData.present / attData.total) * 100) : null,
+        attendanceTotal: attData?.total || 0,
+      };
+    });
+
+    return reply.send({ success: true, data: { students } });
+  });
+
   // POST /reviews - Write review about student (teacher auth) - goes to PENDING
   server.post('/reviews', { preHandler: [teacherAuth] }, async (request, reply) => {
     const { id } = request.user;

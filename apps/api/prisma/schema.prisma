@@ -72,6 +72,7 @@ model Course {
   teacherComments TeacherComment[]
   attendance      Attendance[]
   grades          Grade[]
+  schedules       Schedule[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -142,6 +143,7 @@ model Teacher {
   teacherComments   TeacherComment[]
   grades            Grade[]
   attendanceMarked  Attendance[]
+  schedules         Schedule[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -767,6 +769,29 @@ enum GradeType {
   EXAM
   PROJECT
   PARTICIPATION
+}
+
+// ==========================================
+// SCHEDULE (расписание)
+// ==========================================
+
+model Schedule {
+  id        String   @id @default(cuid())
+  courseId   String
+  teacherId  String?
+  dayOfWeek  Int      // 1=Monday, 2=Tuesday, ..., 6=Saturday, 0=Sunday
+  startTime  String   // "09:00"
+  endTime    String   // "10:30"
+  room       String?  // "Room 301"
+  isActive   Boolean  @default(true)
+
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacher Teacher? @relation(fields: [teacherId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("schedules")
 }
 
 // ==========================================

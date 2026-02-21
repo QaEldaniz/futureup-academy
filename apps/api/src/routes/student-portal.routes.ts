@@ -356,4 +356,69 @@ export async function studentPortalRoutes(server: FastifyInstance) {
 
     return reply.send({ success: true, data: comments });
   });
+
+  // GET /stats — student's grades and attendance grouped by month (last 6 months)
+  server.get('/stats', async (request, reply) => {
+    const { id } = request.user;
+
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    sixMonthsAgo.setDate(1);
+    sixMonthsAgo.setHours(0, 0, 0, 0);
+
+    const [gradesRaw, attendanceRaw] = await Promise.all([
+      server.prisma.grade.findMany({
+        where: { studentId: id, createdAt: { gte: sixMonthsAgo } },
+        select: { value: true, maxValue: true, createdAt: true },
+        orderBy: { createdAt: 'asc' },
+      }),
+      server.prisma.attendance.findMany({
+        where: { studentId: id, date: { gte: sixMonthsAgo } },
+        select: { status: true, date: true },
+        orderBy: { date: 'asc' },
+      }),
+    ]);
+
+    // Group grades by month
+    const gradesByMonth = new Map<string, { sum: number; count: number }>();
+    for (const g of gradesRaw) {
+      const month = `${g.createdAt.getFullYear()}-${String(g.createdAt.getMonth() + 1).padStart(2, '0')}`;
+      const entry = gradesByMonth.get(month) || { sum: 0, count: 0 };
+      entry.sum += (g.value / g.maxValue) * 100;
+      entry.count += 1;
+      gradesByMonth.set(month, entry);
+    }
+
+    const grades = Array.from(gradesByMonth.entries()).map(([month, { sum, count }]) => ({
+      month,
+      avg: Math.round(sum / count),
+      count,
+    }));
+
+    // Group attendance by month
+    const attendanceByMonth = new Map<string, { present: number; absent: number; late: number; excused: number }>();
+    for (const a of attendanceRaw) {
+      const month = `${a.date.getFullYear()}-${String(a.date.getMonth() + 1).padStart(2, '0')}`;
+      const entry = attendanceByMonth.get(month) || { present: 0, absent: 0, late: 0, excused: 0 };
+      if (a.status === 'PRESENT') entry.present += 1;
+      else if (a.status === 'ABSENT') entry.absent += 1;
+      else if (a.status === 'LATE') entry.late += 1;
+      else if (a.status === 'EXCUSED') entry.excused += 1;
+      attendanceByMonth.set(month, entry);
+    }
+
+    const attendance = Array.from(attendanceByMonth.entries()).map(([month, stats]) => {
+      const total = stats.present + stats.absent + stats.late + stats.excused;
+      return {
+        month,
+        present: stats.present,
+        absent: stats.absent,
+        late: stats.late,
+        total,
+        rate: total > 0 ? Math.round(((stats.present + stats.late) / total) * 100) : 0,
+      };
+    });
+
+    return reply.send({ success: true, data: { grades, attendance } });
+  });
 }

@@ -81,6 +81,12 @@ export default function TeacherDashboard() {
           </div>
         )}
       </div>
+
+      {/* Stats overview */}
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 text-center">
+        <TrendingUp className="w-8 h-8 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+        <p className="text-sm text-gray-500 dark:text-gray-400">Select a course to view student statistics</p>
+      </div>
     </div>
   );
 }

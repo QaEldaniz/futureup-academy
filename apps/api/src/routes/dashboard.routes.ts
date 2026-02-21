@@ -95,4 +95,33 @@ export async function dashboardRoutes(server: FastifyInstance) {
       },
     });
   });
+
+  // GET /enrollment-stats - New student enrollments per month (last 6 months) (admin auth)
+  server.get('/enrollment-stats', { preHandler: [adminAuth] }, async (request, reply) => {
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    sixMonthsAgo.setDate(1);
+    sixMonthsAgo.setHours(0, 0, 0, 0);
+
+    const enrollments = await server.prisma.studentCourse.findMany({
+      where: { startDate: { gte: sixMonthsAgo } },
+      select: { startDate: true },
+      orderBy: { startDate: 'asc' },
+    });
+
+    // Group by month
+    const byMonth = new Map<string, number>();
+    for (const e of enrollments) {
+      if (!e.startDate) continue;
+      const month = `${e.startDate.getFullYear()}-${String(e.startDate.getMonth() + 1).padStart(2, '0')}`;
+      byMonth.set(month, (byMonth.get(month) || 0) + 1);
+    }
+
+    const data = Array.from(byMonth.entries()).map(([month, count]) => ({
+      month,
+      count,
+    }));
+
+    return reply.send({ success: true, data });
+  });
 }

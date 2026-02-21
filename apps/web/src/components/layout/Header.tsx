@@ -6,7 +6,7 @@ import { Link } from '@/i18n/routing';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 import { ThemeToggle } from '@/components/shared/ThemeToggle';
 import { Button } from '@/components/ui/Button';
-import { Menu, X, GraduationCap } from 'lucide-react';
+import { Menu, X, GraduationCap, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function Header() {
@@ -72,6 +72,13 @@ export function Header() {
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <ThemeToggle />
+            <a
+              href="/login"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50"
+            >
+              <LogIn className="w-4 h-4" />
+              {t('login')}
+            </a>
             <Link href="/contact" className="hidden sm:block">
               <Button size="sm">{t('apply')}</Button>
             </Link>
@@ -99,6 +106,14 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
+              <a
+                href="/login"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2 px-4 py-3 text-base font-medium text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-xl transition-colors"
+              >
+                <LogIn className="w-5 h-5" />
+                {t('login')}
+              </a>
               <Link href="/contact" onClick={() => setIsOpen(false)} className="mt-2 px-4">
                 <Button size="lg" className="w-full">
                   {t('apply')}

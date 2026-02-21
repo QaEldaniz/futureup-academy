@@ -28,6 +28,7 @@ import { lessonRoutes } from './routes/lessons.routes.js';
 import { studentPortalRoutes } from './routes/student-portal.routes.js';
 import { parentPortalRoutes } from './routes/parent-portal.routes.js';
 import { parentRoutes } from './routes/parents.routes.js';
+import { scheduleAdminRoutes, schedulePublicRoutes } from './routes/schedule.routes.js';
 
 // Extend Fastify types
 declare module 'fastify' {
@@ -110,6 +111,7 @@ export async function buildApp() {
   await app.register(corporateInquiryRoutes, { prefix: '/api/corporate-inquiries' });
   await app.register(chatRoutes, { prefix: '/api/chat' });
   await app.register(lessonRoutes, { prefix: '/api/lessons' });
+  await app.register(schedulePublicRoutes, { prefix: '/api/schedule' });
   await app.register(dashboardRoutes, { prefix: '/api/admin/dashboard' });
   await app.register(teacherPortalRoutes, { prefix: '/api/teacher' });
   await app.register(studentPortalRoutes, { prefix: '/api/student' });
@@ -133,6 +135,7 @@ export async function buildApp() {
   await app.register(corporateInquiryRoutes, { prefix: '/api/admin/corporate-inquiries' });
   await app.register(lessonRoutes, { prefix: '/api/admin/lessons' });
   await app.register(parentRoutes, { prefix: '/api/admin/parents' });
+  await app.register(scheduleAdminRoutes, { prefix: '/api/admin/schedules' });
 
   // Error handler
   app.setErrorHandler((error: any, _request, reply) => {
