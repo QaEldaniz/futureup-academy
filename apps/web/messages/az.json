@@ -386,5 +386,28 @@
     "noAccount": "Hesabiniz yoxdur?",
     "register": "Telebeq kimi qeydiyyatdan kec",
     "roleHint": "Telebeler, muelliimler ve valideyinler email ile daxil ola biler"
+  },
+  "register": {
+    "title": "Hesab yarat",
+    "subtitle": "FutureUp Academy-de telebe kimi qeydiyyatdan kec",
+    "name": "Ad Soyad",
+    "namePlaceholder": "Ad ve soyadinizi daxil edin",
+    "email": "E-poct",
+    "emailPlaceholder": "sizin@email.com",
+    "password": "Shifre",
+    "passwordPlaceholder": "Minimum 6 simvol",
+    "phone": "Telefon (istege bagli)",
+    "phonePlaceholder": "+994 XX XXX XX XX",
+    "registerButton": "Hesab yarat",
+    "registering": "Hesab yaradilir...",
+    "hasAccount": "Artiq hesabiniz var?",
+    "login": "Daxil ol",
+    "backToHome": "Ana sehifeye qayit",
+    "orText": "ve ya",
+    "networkError": "Shebekhe xetasi. Yeniden cehd edin.",
+    "successMessage": "Qeydiyyat ugurlu oldu! Yonlendirilir...",
+    "emailExists": "Bu email artiq qeydiyyatdan kecib",
+    "passwordTooShort": "Shifre minimum 6 simvol olmalidir",
+    "nameRequired": "Ad melumat telebdir"
   }
 }

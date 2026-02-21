@@ -5,53 +5,69 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
 import { Link } from '@/i18n/routing';
-import { Eye, EyeOff, LogIn, GraduationCap, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, UserPlus, GraduationCap, ArrowLeft } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
-export default function LoginPage() {
-  const t = useTranslations('login');
+export default function RegisterPage() {
+  const t = useTranslations('register');
   const router = useRouter();
   const login = useAuthStore((s) => s.login);
 
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setIsLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/api/auth/unified-login`, {
+      const res = await fetch(`${API_URL}/api/auth/student/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          ...(phone ? { phone } : {}),
+        }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || t('invalidCredentials'));
+        if (res.status === 409) {
+          setError(t('emailExists'));
+        } else if (data.message?.includes('6 characters')) {
+          setError(t('passwordTooShort'));
+        } else {
+          setError(data.message || t('networkError'));
+        }
         return;
       }
 
       const { token, type, redirect, user } = data.data;
+      setSuccess(t('successMessage'));
 
-      // Normalize user object for auth store
       login(token, {
         ...user,
         type,
-        name: user.name || user.nameAz || user.nameEn || '',
+        name: user.name || '',
         role: user.role || type,
       });
 
-      // Redirect based on role
-      router.push(redirect);
-    } catch (err) {
+      setTimeout(() => {
+        router.push(redirect);
+      }, 1000);
+    } catch {
       setError(t('networkError'));
     } finally {
       setIsLoading(false);
@@ -87,6 +103,22 @@ export default function LoginPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name */}
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                {t('name')}
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                placeholder={t('namePlaceholder')}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+              />
+            </div>
+
             {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
@@ -115,7 +147,8 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  placeholder="••••••••"
+                  minLength={6}
+                  placeholder={t('passwordPlaceholder')}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all pr-12"
                 />
                 <button
@@ -127,6 +160,28 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
+
+            {/* Phone (optional) */}
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                {t('phone')}
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder={t('phonePlaceholder')}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+              />
+            </div>
+
+            {/* Success */}
+            {success && (
+              <div className="bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm px-4 py-3 rounded-xl border border-green-100 dark:border-green-800/30">
+                {success}
+              </div>
+            )}
 
             {/* Error */}
             {error && (
@@ -147,9 +202,9 @@ export default function LoginPage() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
               ) : (
-                <LogIn className="w-5 h-5" />
+                <UserPlus className="w-5 h-5" />
               )}
-              {isLoading ? t('loggingIn') : t('loginButton')}
+              {isLoading ? t('registering') : t('registerButton')}
             </button>
           </form>
 
@@ -159,26 +214,21 @@ export default function LoginPage() {
               <div className="w-full border-t border-gray-200 dark:border-gray-700" />
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-white dark:bg-gray-900 px-3 text-sm text-gray-400">{t('or')}</span>
+              <span className="bg-white dark:bg-gray-900 px-3 text-sm text-gray-400">
+                {t('orText')}
+              </span>
             </div>
           </div>
 
-          {/* Register link */}
+          {/* Login link */}
           <div className="text-center">
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              {t('noAccount')}{' '}
-              <Link href="/register" className="font-semibold text-primary-600 dark:text-primary-400 hover:underline">
-                {t('register')}
+              {t('hasAccount')}{' '}
+              <Link href="/login" className="font-semibold text-primary-600 dark:text-primary-400 hover:underline">
+                {t('login')}
               </Link>
             </p>
           </div>
-        </div>
-
-        {/* Role hints */}
-        <div className="mt-6 text-center">
-          <p className="text-xs text-gray-400 dark:text-gray-500">
-            {t('roleHint')}
-          </p>
         </div>
       </div>
     </div>

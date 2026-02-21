@@ -390,5 +390,28 @@
     "noAccount": "Don't have an account?",
     "register": "Register as student",
     "roleHint": "Students, teachers, and parents can sign in with their email"
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Register as a student at FutureUp Academy",
+    "name": "Full Name",
+    "namePlaceholder": "Enter your full name",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "Minimum 6 characters",
+    "phone": "Phone (optional)",
+    "phonePlaceholder": "+994 XX XXX XX XX",
+    "registerButton": "Create Account",
+    "registering": "Creating account...",
+    "hasAccount": "Already have an account?",
+    "login": "Sign in",
+    "backToHome": "Back to home",
+    "orText": "or",
+    "networkError": "Network error. Please try again.",
+    "successMessage": "Registration successful! Redirecting...",
+    "emailExists": "This email is already registered",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "nameRequired": "Name is required"
   }
 }

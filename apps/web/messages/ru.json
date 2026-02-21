@@ -386,5 +386,28 @@
     "noAccount": "Нет аккаунта?",
     "register": "Регистрация студента",
     "roleHint": "Студенты, преподаватели и родители могут войти по email"
+  },
+  "register": {
+    "title": "Создать аккаунт",
+    "subtitle": "Зарегистрируйтесь как студент FutureUp Academy",
+    "name": "Имя и фамилия",
+    "namePlaceholder": "Введите ваше имя и фамилию",
+    "email": "Email",
+    "emailPlaceholder": "ваш@email.com",
+    "password": "Пароль",
+    "passwordPlaceholder": "Минимум 6 символов",
+    "phone": "Телефон (необязательно)",
+    "phonePlaceholder": "+994 XX XXX XX XX",
+    "registerButton": "Создать аккаунт",
+    "registering": "Создание аккаунта...",
+    "hasAccount": "Уже есть аккаунт?",
+    "login": "Войти",
+    "backToHome": "На главную",
+    "orText": "или",
+    "networkError": "Ошибка сети. Попробуйте снова.",
+    "successMessage": "Регистрация успешна! Перенаправление...",
+    "emailExists": "Этот email уже зарегистрирован",
+    "passwordTooShort": "Пароль должен содержать минимум 6 символов",
+    "nameRequired": "Имя обязательно"
   }
 }

@@ -7,12 +7,16 @@ async function main() {
   console.log('🌱 Seeding database...');
 
   // Clean existing data in correct order
+  await prisma.grade.deleteMany();
+  await prisma.attendance.deleteMany();
+  await prisma.studentParent.deleteMany();
   await prisma.review.deleteMany();
   await prisma.certificate.deleteMany();
   await prisma.studentCourse.deleteMany();
   await prisma.teacherCourse.deleteMany();
   await prisma.application.deleteMany();
   await prisma.group.deleteMany();
+  await prisma.parent.deleteMany();
   await prisma.student.deleteMany();
   await prisma.testimonial.deleteMany();
   await prisma.course.deleteMany();
@@ -917,12 +921,49 @@ async function main() {
     { name: 'Təranə Rzayeva', email: 'tarana.rzayeva@gmail.com', phone: '+994540001122' },
   ];
 
+  const studentPassword = await bcrypt.hash('student123', 10);
   const students = await Promise.all(
     studentNames.map((s) =>
-      prisma.student.create({ data: s })
+      prisma.student.create({ data: { ...s, password: studentPassword } })
     )
   );
-  console.log('✅ 40 students created');
+  console.log('✅ 40 students created (password: student123)');
+
+  // ==========================================
+  // PARENTS (5 parents linked to students)
+  // ==========================================
+  const parentPassword = await bcrypt.hash('parent123', 10);
+  const parentData = [
+    { nameAz: 'Əhmədov Rəşid', nameRu: 'Ахмедов Рашид', nameEn: 'Ahmadov Rashid', email: 'parent1@futureup.az', phone: '+994551001010' },
+    { nameAz: 'Hüseynova Sevil', nameRu: 'Гусейнова Севиль', nameEn: 'Huseynova Sevil', email: 'parent2@futureup.az', phone: '+994551002020' },
+    { nameAz: 'Quliyev Elşən', nameRu: 'Кулиев Эльшан', nameEn: 'Guliyev Elshan', email: 'parent3@futureup.az', phone: '+994551003030' },
+    { nameAz: 'Əlizadə Nigar', nameRu: 'Ализаде Нигяр', nameEn: 'Alizade Nigar', email: 'parent4@futureup.az', phone: '+994551004040' },
+    { nameAz: 'Həsənov Ramiz', nameRu: 'Гасанов Рамиз', nameEn: 'Hasanov Ramiz', email: 'parent5@futureup.az', phone: '+994551005050' },
+  ];
+
+  const parents = await Promise.all(
+    parentData.map((p) =>
+      prisma.parent.create({ data: { ...p, password: parentPassword } })
+    )
+  );
+
+  // Link parents to students (each parent gets 2 children)
+  await prisma.studentParent.createMany({
+    data: [
+      { parentId: parents[0].id, studentId: students[0].id, relation: 'FATHER' },
+      { parentId: parents[0].id, studentId: students[1].id, relation: 'FATHER' },
+      { parentId: parents[1].id, studentId: students[2].id, relation: 'MOTHER' },
+      { parentId: parents[1].id, studentId: students[3].id, relation: 'MOTHER' },
+      { parentId: parents[2].id, studentId: students[4].id, relation: 'FATHER' },
+      { parentId: parents[2].id, studentId: students[5].id, relation: 'FATHER' },
+      { parentId: parents[3].id, studentId: students[6].id, relation: 'MOTHER' },
+      { parentId: parents[3].id, studentId: students[7].id, relation: 'MOTHER' },
+      { parentId: parents[4].id, studentId: students[8].id, relation: 'FATHER' },
+      { parentId: parents[4].id, studentId: students[9].id, relation: 'FATHER' },
+    ],
+    skipDuplicates: true,
+  });
+  console.log('✅ 5 parents created with 10 student links (password: parent123)');
 
   // Enroll students into courses (2 students per course)
   const enrollments = [];
