@@ -7,7 +7,7 @@ export async function scholarshipRoutes(server: FastifyInstance) {
   // PUBLIC ROUTES
   // ==========================================
 
-  // GET / - List active scholarships (public, with pagination)
+  // GET / - List scholarships (public: active only; admin with auth: all)
   server.get('/', async (request, reply) => {
     const {
       page = '1',
@@ -21,7 +21,9 @@ export async function scholarshipRoutes(server: FastifyInstance) {
     const limitNum = Math.min(50, Math.max(1, parseInt(limit, 10) || 10));
     const skip = (pageNum - 1) * limitNum;
 
-    const where: any = { isActive: true };
+    // If admin (has Bearer token), show all; otherwise only active
+    const isAdmin = !!(request.headers.authorization?.startsWith('Bearer '));
+    const where: any = isAdmin ? {} : { isActive: true };
 
     const [data, total] = await Promise.all([
       server.prisma.scholarship.findMany({

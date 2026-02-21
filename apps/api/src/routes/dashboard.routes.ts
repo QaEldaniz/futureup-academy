@@ -32,16 +32,18 @@ export async function dashboardRoutes(server: FastifyInstance) {
       pendingApplications,
       pendingReviews,
       totalCertificates,
+      totalNews,
       recentApplications,
       recentReviews,
     ] = await Promise.all([
-      server.prisma.course.count({ where: { isActive: true } }),
+      server.prisma.course.count(),
       server.prisma.student.count(),
-      server.prisma.teacher.count({ where: { isActive: true } }),
+      server.prisma.teacher.count(),
       server.prisma.application.count(),
       server.prisma.application.count({ where: { status: 'NEW' } }),
       server.prisma.review.count({ where: { status: 'PENDING' } }),
       server.prisma.certificate.count(),
+      server.prisma.news.count(),
       server.prisma.application.findMany({
         orderBy: { createdAt: 'desc' },
         take: 5,
@@ -69,6 +71,12 @@ export async function dashboardRoutes(server: FastifyInstance) {
       }),
     ]);
 
+    // Map recentApplications to include courseName for frontend
+    const mappedApplications = recentApplications.map((app: any) => ({
+      ...app,
+      courseName: app.course?.titleEn || app.course?.titleAz || null,
+    }));
+
     return reply.send({
       success: true,
       data: {
@@ -80,8 +88,9 @@ export async function dashboardRoutes(server: FastifyInstance) {
           pendingApplications,
           pendingReviews,
           totalCertificates,
+          totalNews,
         },
-        recentApplications,
+        recentApplications: mappedApplications,
         recentReviews,
       },
     });

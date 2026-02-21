@@ -2,30 +2,28 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function newsRoutes(server: FastifyInstance) {
-  // GET / - List published news (public, with pagination)
+  // GET / - List news (public: published only; admin with auth: all)
   server.get('/', async (request, reply) => {
     const {
       page = '1',
       limit = '10',
-      all,
     } = request.query as {
       page?: string;
       limit?: string;
-      all?: string;
     };
 
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
     const limitNum = Math.min(50, Math.max(1, parseInt(limit, 10) || 10));
     const skip = (pageNum - 1) * limitNum;
 
-    // By default, only show published. Admin can request all via ?all=true
-    // but this is a public route, so we always filter to published
-    const where: any = { isPublished: true };
+    // If admin (has Bearer token), show all articles; otherwise only published
+    const isAdmin = !!(request.headers.authorization?.startsWith('Bearer '));
+    const where: any = isAdmin ? {} : { isPublished: true };
 
     const [data, total] = await Promise.all([
       server.prisma.news.findMany({
         where,
-        orderBy: { publishedAt: 'desc' },
+        orderBy: { createdAt: 'desc' },
         skip,
         take: limitNum,
       }),
@@ -42,13 +40,21 @@ export async function newsRoutes(server: FastifyInstance) {
     });
   });
 
-  // GET /:slug - Get news article by slug (public)
-  server.get('/:slug', async (request, reply) => {
-    const { slug } = request.params as { slug: string };
+  // GET /:slugOrId - Get news article by slug or ID (for admin edit + public)
+  server.get('/:slugOrId', async (request, reply) => {
+    const { slugOrId } = request.params as { slugOrId: string };
 
-    const article = await server.prisma.news.findUnique({
-      where: { slug },
+    // Try by slug first
+    let article = await server.prisma.news.findUnique({
+      where: { slug: slugOrId },
     });
+
+    // Fallback: try by ID (for admin edit pages)
+    if (!article) {
+      article = await server.prisma.news.findUnique({
+        where: { id: slugOrId },
+      });
+    }
 
     if (!article) {
       return reply.status(404).send({ success: false, message: 'Article not found' });

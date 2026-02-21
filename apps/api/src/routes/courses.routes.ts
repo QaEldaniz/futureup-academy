@@ -13,7 +13,7 @@ export async function courseRoutes(server: FastifyInstance) {
     return reply.send({ success: true, data });
   });
 
-  // GET / - List active courses (public, with filters and pagination)
+  // GET / - List courses (public: active only; admin with auth: all)
   server.get('/', async (request, reply) => {
     const {
       page = '1',
@@ -39,7 +39,9 @@ export async function courseRoutes(server: FastifyInstance) {
     const limitNum = Math.min(50, Math.max(1, parseInt(limit, 10) || 10));
     const skip = (pageNum - 1) * limitNum;
 
-    const where: any = { isActive: true };
+    // If admin (has Bearer token), show all courses; otherwise only active
+    const isAdmin = !!(request.headers.authorization?.startsWith('Bearer '));
+    const where: any = isAdmin ? {} : { isActive: true };
 
     if (categoryId) {
       where.categoryId = categoryId;
@@ -109,8 +111,9 @@ export async function courseRoutes(server: FastifyInstance) {
   // GET /:slugOrId - Get course by slug OR by id (for admin edit page)
   server.get('/:slugOrId', async (request, reply) => {
     const { slugOrId } = request.params as { slugOrId: string };
+    const isAdmin = !!(request.headers.authorization?.startsWith('Bearer '));
 
-    const courseInclude = {
+    const courseInclude: any = {
       category: true,
       teachers: {
         include: {
@@ -130,7 +133,11 @@ export async function courseRoutes(server: FastifyInstance) {
           },
         },
       },
-      students: {
+    };
+
+    // Only include students data for admin requests (security)
+    if (isAdmin) {
+      courseInclude.students = {
         include: {
           student: {
             select: {
@@ -140,8 +147,8 @@ export async function courseRoutes(server: FastifyInstance) {
             },
           },
         },
-      },
-    };
+      };
+    }
 
     // Try by slug first, then by id
     let course = await server.prisma.course.findUnique({

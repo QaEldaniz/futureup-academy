@@ -2,14 +2,27 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import { adminAuth } from '../middleware/auth.middleware.js';
 
 export async function testimonialRoutes(server: FastifyInstance) {
-  // GET / - List active testimonials (public)
+  // GET / - List testimonials (public: active only; admin: all)
   server.get('/', async (request, reply) => {
+    const isAdmin = !!(request.headers.authorization?.startsWith('Bearer '));
+    const where: any = isAdmin ? {} : { isActive: true };
+
     const testimonials = await server.prisma.testimonial.findMany({
-      where: { isActive: true },
+      where,
       orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
     });
 
     return reply.send({ success: true, data: testimonials });
+  });
+
+  // GET /:id - Get testimonial by ID (for admin edit page)
+  server.get('/:id', async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const testimonial = await server.prisma.testimonial.findUnique({ where: { id } });
+    if (!testimonial) {
+      return reply.status(404).send({ success: false, message: 'Testimonial not found' });
+    }
+    return reply.send({ success: true, data: testimonial });
   });
 
   // POST / - Create testimonial (admin auth)

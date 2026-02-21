@@ -77,7 +77,7 @@ export default function AdminDashboardPage() {
         if (res.success) {
           setStats({
             ...res.data.stats,
-            totalNews: 0,
+            totalNews: (res.data.stats as any).totalNews || 0,
             recentApplications: res.data.recentApplications || [],
           });
         }

@@ -63,6 +63,7 @@ export async function teacherRoutes(server: FastifyInstance) {
       where: { id },
       select: {
         id: true,
+        email: true,
         nameAz: true,
         nameRu: true,
         nameEn: true,
@@ -74,6 +75,8 @@ export async function teacherRoutes(server: FastifyInstance) {
         linkedin: true,
         github: true,
         website: true,
+        isActive: true,
+        order: true,
         courses: {
           include: {
             course: {
