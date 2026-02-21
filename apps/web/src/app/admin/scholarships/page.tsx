@@ -59,6 +59,7 @@ interface ScholarshipApp {
 }
 
 interface ScholarshipForm {
+  slug: string;
   titleAz: string;
   titleRu: string;
   titleEn: string;
@@ -81,6 +82,7 @@ const APP_STATUS_CONFIG: Record<string, { label: string; className: string }> = 
 };
 
 const emptyForm: ScholarshipForm = {
+  slug: '',
   titleAz: '',
   titleRu: '',
   titleEn: '',
@@ -90,6 +92,10 @@ const emptyForm: ScholarshipForm = {
   isActive: true,
   order: 0,
 };
+
+function generateSlug(text: string) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
@@ -178,6 +184,7 @@ export default function AdminScholarshipsPage() {
       mode: 'edit',
       id: scholarship.id,
       form: {
+        slug: scholarship.slug,
         titleAz: scholarship.titleAz,
         titleRu: scholarship.titleRu,
         titleEn: scholarship.titleEn,
@@ -195,6 +202,10 @@ export default function AdminScholarshipsPage() {
     if (!modal) return;
     if (!modal.form.titleAz.trim()) {
       setFormError('Title (AZ) is required');
+      return;
+    }
+    if (!modal.form.slug.trim()) {
+      setFormError('Slug is required');
       return;
     }
 
@@ -768,12 +779,33 @@ export default function AdminScholarshipsPage() {
                 <input
                   type="text"
                   value={modal.form.titleAz}
-                  onChange={(e) =>
-                    setModal({ ...modal, form: { ...modal.form, titleAz: e.target.value } })
-                  }
+                  onChange={(e) => {
+                    const newTitle = e.target.value;
+                    const newSlug = modal.mode === 'add' && !modal.form.slug
+                      ? generateSlug(newTitle)
+                      : modal.form.slug;
+                    setModal({ ...modal, form: { ...modal.form, titleAz: newTitle, slug: newSlug } });
+                  }}
                   placeholder="Scholarship title in Azerbaijani"
                   className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
+              </div>
+
+              {/* Slug */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  URL Slug <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={modal.form.slug}
+                  onChange={(e) =>
+                    setModal({ ...modal, form: { ...modal.form, slug: generateSlug(e.target.value) } })
+                  }
+                  placeholder="auto-generated-from-title"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all font-mono text-sm"
+                />
+                <p className="mt-1 text-xs text-gray-500">Auto-generated from title. Edit to customize.</p>
               </div>
 
               {/* Title RU */}

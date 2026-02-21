@@ -295,7 +295,7 @@ export async function parentPortalRoutes(server: FastifyInstance) {
       success: true,
       data: {
         records: attendance,
-        summary: { total, present, absent, late, excused, rate: total > 0 ? Math.round((present / total) * 100) : 0 },
+        summary: { total, present, absent, late, excused, rate: total > 0 ? Math.round(((present + late) / total) * 100) : 0 },
       },
     });
   });

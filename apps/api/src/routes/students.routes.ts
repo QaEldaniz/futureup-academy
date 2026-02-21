@@ -181,6 +181,7 @@ export async function studentRoutes(server: FastifyInstance) {
       email?: string;
       phone?: string;
       photo?: string;
+      isActive?: boolean;
       groupId?: string;
       courseIds?: string[];
       password?: string;

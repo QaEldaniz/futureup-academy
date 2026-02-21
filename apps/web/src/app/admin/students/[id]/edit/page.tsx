@@ -24,7 +24,7 @@ interface Student {
   email: string;
   phone?: string;
   photo?: string | null;
-  status: 'ACTIVE' | 'COMPLETED' | 'DROPPED';
+  isActive: boolean;
 }
 
 interface FormData {
@@ -32,7 +32,7 @@ interface FormData {
   email: string;
   phone: string;
   photo: string;
-  status: string;
+  isActive: boolean;
   password: string;
 }
 
@@ -42,12 +42,6 @@ interface FormErrors {
   phone?: string;
   photo?: string;
 }
-
-const STATUS_OPTIONS = [
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'COMPLETED', label: 'Completed' },
-  { value: 'DROPPED', label: 'Dropped' },
-];
 
 export default function AdminEditStudentPage() {
   const router = useRouter();
@@ -60,7 +54,7 @@ export default function AdminEditStudentPage() {
     email: '',
     phone: '',
     photo: '',
-    status: 'ACTIVE',
+    isActive: true,
     password: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
@@ -83,7 +77,7 @@ export default function AdminEditStudentPage() {
             email: res.data.email || '',
             phone: res.data.phone || '',
             photo: res.data.photo || '',
-            status: res.data.status || 'ACTIVE',
+            isActive: res.data.isActive !== false,
             password: '',
           });
         }
@@ -125,7 +119,7 @@ export default function AdminEditStudentPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (field: keyof FormData, value: string) => {
+  const handleChange = (field: keyof FormData, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
@@ -141,10 +135,10 @@ export default function AdminEditStudentPage() {
     setApiError('');
 
     try {
-      const payload: Record<string, string> = {
+      const payload: Record<string, string | boolean> = {
         name: formData.name.trim(),
         email: formData.email.trim(),
-        status: formData.status,
+        isActive: formData.isActive,
       };
       if (formData.phone.trim()) payload.phone = formData.phone.trim();
       else payload.phone = '';
@@ -355,32 +349,23 @@ export default function AdminEditStudentPage() {
             )}
           </div>
 
-          {/* Status */}
+          {/* Active Status */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Status
             </label>
-            <div className="flex flex-wrap gap-2">
-              {STATUS_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => handleChange('status', opt.value)}
-                  className={cn(
-                    'px-4 py-2.5 rounded-xl text-sm font-medium border transition-all',
-                    formData.status === opt.value
-                      ? opt.value === 'ACTIVE'
-                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                        : opt.value === 'COMPLETED'
-                        ? 'bg-blue-500/10 border-blue-500/30 text-blue-400'
-                        : 'bg-red-500/10 border-red-500/30 text-red-400'
-                      : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
-                  )}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
+            <button
+              type="button"
+              onClick={() => handleChange('isActive', !formData.isActive)}
+              className={cn(
+                'w-full px-4 py-3 rounded-xl border text-sm font-medium transition-all text-left',
+                formData.isActive
+                  ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                  : 'bg-red-500/10 border-red-500/20 text-red-400'
+              )}
+            >
+              {formData.isActive ? 'Active' : 'Inactive'}
+            </button>
           </div>
 
           {/* New Password (optional) */}

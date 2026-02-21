@@ -14,6 +14,7 @@ import {
   Eye,
   EyeOff,
   Loader2,
+  Link2,
 } from 'lucide-react';
 
 const TABS = [
@@ -32,6 +33,7 @@ export default function AdminNewsNewPage() {
   const [error, setError] = useState('');
 
   const [form, setForm] = useState({
+    slug: '',
     titleAz: '',
     titleRu: '',
     titleEn: '',
@@ -41,9 +43,20 @@ export default function AdminNewsNewPage() {
     image: '',
     isPublished: false,
   });
+  const [slugManual, setSlugManual] = useState(false);
+
+  const generateSlug = (text: string) =>
+    text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
   const updateField = (field: string, value: string | boolean) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    setForm((prev) => {
+      const next = { ...prev, [field]: value };
+      // Auto-generate slug from English title unless manually edited
+      if (field === 'titleEn' && !slugManual && typeof value === 'string') {
+        next.slug = generateSlug(value);
+      }
+      return next;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,6 +64,10 @@ export default function AdminNewsNewPage() {
     if (!form.titleAz.trim()) {
       setError('Title (AZ) is required');
       setActiveTab('az');
+      return;
+    }
+    if (!form.slug.trim()) {
+      setError('Slug is required. Enter an English title to auto-generate it.');
       return;
     }
 
@@ -161,6 +178,27 @@ export default function AdminNewsNewPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Slug */}
+        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            <div className="flex items-center gap-2 mb-2">
+              <Link2 className="w-4 h-4 text-gray-400" />
+              URL Slug <span className="text-red-400">*</span>
+            </div>
+          </label>
+          <input
+            type="text"
+            value={form.slug}
+            onChange={(e) => {
+              setSlugManual(true);
+              updateField('slug', generateSlug(e.target.value));
+            }}
+            placeholder="auto-generated-from-title"
+            className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all font-mono text-sm"
+          />
+          <p className="mt-1.5 text-xs text-gray-500">Auto-generated from English title. Edit to customize.</p>
         </div>
 
         {/* Image & Settings */}

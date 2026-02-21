@@ -87,7 +87,7 @@ export default function AdminReviewsPage() {
       setLoading(true);
       const params = activeTab !== 'ALL' ? `?status=${activeTab}` : '';
       const res = await api.get<{ success: boolean; data: Review[]; total?: number }>(
-        `/admin/reviews${params}&limit=50`,
+        `/admin/reviews${params ? params + '&' : '?'}limit=50`,
         { token: token || undefined }
       );
       if (res.success) {
