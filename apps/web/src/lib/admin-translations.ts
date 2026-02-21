@@ -46,6 +46,8 @@ const translations = {
     scholarships: { az: 'Təqaüdlər', ru: 'Стипендии', en: 'Scholarships' },
     corporate: { az: 'Korporativ', ru: 'Корпоративное', en: 'Corporate' },
     parents: { az: 'Valideynlər', ru: 'Родители', en: 'Parents' },
+    schedule: { az: 'Cədvəl', ru: 'Расписание', en: 'Schedule' },
+    lms: { az: 'LMS İdarəetmə', ru: 'Управление LMS', en: 'LMS Management' },
     partners: { az: 'Tərəfdaşlar', ru: 'Партнёры', en: 'Partners' },
     settings: { az: 'Parametrlər', ru: 'Настройки', en: 'Settings' },
     adminSettings: { az: 'Admin parametrləri', ru: 'Настройки админа', en: 'Admin Settings' },

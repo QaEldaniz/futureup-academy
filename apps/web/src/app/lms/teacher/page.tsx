@@ -13,18 +13,37 @@ export default function TeacherDashboard() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  const isAdmin = user?.type === 'admin';
+
   useEffect(() => {
     if (!token) return;
-    fetch(`${API_URL}/api/teacher/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => r.json())
-      .then((d) => { if (d.success) setData(d.data); })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [token]);
+    if (isAdmin) {
+      // Admin: fetch all courses directly
+      fetch(`${API_URL}/api/teacher/courses`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.success) {
+            // Format like teacher /me response for compatibility
+            const courses = (d.data || []).map((c: any) => ({ course: c }));
+            setData({ courses });
+          }
+        })
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    } else {
+      fetch(`${API_URL}/api/teacher/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((r) => r.json())
+        .then((d) => { if (d.success) setData(d.data); })
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    }
+  }, [token, isAdmin]);
 
-  const displayName = user?.nameEn || user?.nameAz || user?.name || 'Teacher';
+  const displayName = user?.nameEn || user?.nameAz || user?.name || (isAdmin ? 'Admin' : 'Teacher');
 
   return (
     <div className="space-y-8">
@@ -32,7 +51,7 @@ export default function TeacherDashboard() {
         <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
           Welcome, {displayName}!
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">Manage your courses and students</p>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">{isAdmin ? 'Manage all courses, grades, and attendance' : 'Manage your courses and students'}</p>
       </div>
 
       {/* Stats */}

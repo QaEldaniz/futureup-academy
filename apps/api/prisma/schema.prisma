@@ -682,15 +682,15 @@ model CourseProgress {
 
 model TeacherComment {
   id        String      @id @default(cuid())
-  teacherId String
+  teacherId String?
   studentId String
   courseId   String
   lessonId  String?
   comment   String      @db.Text
   type      CommentType @default(PROGRESS)
 
-  teacher Teacher @relation(fields: [teacherId], references: [id])
-  student Student @relation(fields: [studentId], references: [id])
+  teacher Teacher? @relation(fields: [teacherId], references: [id])
+  student Student  @relation(fields: [studentId], references: [id])
   course  Course  @relation(fields: [courseId], references: [id])
   lesson  Lesson? @relation(fields: [lessonId], references: [id])
 
@@ -746,7 +746,7 @@ model Grade {
   studentId String
   courseId   String
   lessonId  String?
-  teacherId String
+  teacherId String?
   value     Float     // numeric grade (0-100)
   maxValue  Float     @default(100)
   type      GradeType @default(ASSIGNMENT)
@@ -755,7 +755,7 @@ model Grade {
   student Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lesson  Lesson?  @relation(fields: [lessonId], references: [id])
-  teacher Teacher  @relation(fields: [teacherId], references: [id])
+  teacher Teacher? @relation(fields: [teacherId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

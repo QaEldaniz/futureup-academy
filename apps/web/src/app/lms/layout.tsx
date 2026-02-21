@@ -41,6 +41,12 @@ const navByRole: Record<UserType, NavItem[]> = {
     { label: 'Profile', href: '/lms/parent/profile', icon: User },
   ],
   admin: [
+    { label: 'Dashboard', href: '/lms/teacher', icon: LayoutDashboard },
+    { label: 'All Courses', href: '/lms/teacher/courses', icon: BookOpen },
+    { label: 'Schedule', href: '/lms/teacher/schedule', icon: CalendarDays },
+    { label: 'All Students', href: '/lms/teacher/students', icon: Users },
+    { label: 'Attendance', href: '/lms/teacher/attendance', icon: ClipboardCheck },
+    { label: 'Grades', href: '/lms/teacher/grades', icon: Star },
     { label: 'Admin Panel', href: '/admin', icon: LayoutDashboard },
   ],
 };
@@ -66,12 +72,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
     }
   }, [mounted, isLoading, isAuthenticated, router]);
 
-  // Redirect admin to admin panel
-  useEffect(() => {
-    if (mounted && user?.type === 'admin' && pathname.startsWith('/lms')) {
-      router.push('/admin');
-    }
-  }, [mounted, user, pathname, router]);
+  // Admin can now access LMS as super-teacher (no redirect)
 
   if (!mounted || isLoading) {
     return (
@@ -127,19 +128,23 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
               ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
               : user.type === 'teacher'
               ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+              : user.type === 'admin'
+              ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
               : 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
           }`}>
             {user.type === 'student' ? <BookOpen className="w-3 h-3" /> :
              user.type === 'teacher' ? <Users className="w-3 h-3" /> :
+             user.type === 'admin' ? <GraduationCap className="w-3 h-3" /> :
              <Baby className="w-3 h-3" />}
-            {user.type.charAt(0).toUpperCase() + user.type.slice(1)}
+            {user.type === 'admin' ? 'Admin (Super)' : user.type.charAt(0).toUpperCase() + user.type.slice(1)}
           </span>
         </div>
 
         {/* Navigation */}
         <nav className="px-3 py-2 space-y-1">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href !== `/lms/${user.type}` && pathname.startsWith(item.href));
+            const basePath = user.type === 'admin' ? '/lms/teacher' : `/lms/${user.type}`;
+            const isActive = pathname === item.href || (item.href !== basePath && item.href !== '/admin' && pathname.startsWith(item.href));
             const Icon = item.icon;
             return (
               <a

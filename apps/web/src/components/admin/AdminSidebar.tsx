@@ -23,6 +23,7 @@ import {
   Wallet,
   Building2,
   Baby,
+  CalendarDays,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -30,7 +31,7 @@ interface AdminSidebarProps {
   onClose: () => void;
 }
 
-type SidebarKey = 'dashboard' | 'courses' | 'teachers' | 'students' | 'parents' | 'applications' | 'certificates' | 'news' | 'testimonials' | 'reviews' | 'scholarships' | 'corporate' | 'partners' | 'settings';
+type SidebarKey = 'dashboard' | 'courses' | 'teachers' | 'students' | 'parents' | 'schedule' | 'applications' | 'certificates' | 'news' | 'testimonials' | 'reviews' | 'scholarships' | 'corporate' | 'partners' | 'lms' | 'settings';
 
 const menuItems: { key: SidebarKey; href: string; icon: typeof LayoutDashboard }[] = [
   { key: 'dashboard', href: '/admin', icon: LayoutDashboard },
@@ -38,6 +39,8 @@ const menuItems: { key: SidebarKey; href: string; icon: typeof LayoutDashboard }
   { key: 'teachers', href: '/admin/teachers', icon: Users },
   { key: 'students', href: '/admin/students', icon: GraduationCap },
   { key: 'parents', href: '/admin/parents', icon: Baby },
+  { key: 'schedule', href: '/admin/schedule', icon: CalendarDays },
+  { key: 'lms', href: '/lms/teacher', icon: GraduationCap },
   { key: 'applications', href: '/admin/applications', icon: FileText },
   { key: 'certificates', href: '/admin/certificates', icon: Award },
   { key: 'news', href: '/admin/news', icon: Newspaper },

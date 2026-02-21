@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import { teacherAuth } from '../middleware/auth.middleware.js';
+import { MaterialType } from '@prisma/client';
+import { teacherAuth, adminOrTeacherAuth } from '../middleware/auth.middleware.js';
 
 export async function teacherPortalRoutes(server: FastifyInstance) {
   // GET /me - Get teacher profile (teacher auth)
@@ -48,9 +49,10 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
     return reply.send({ success: true, data: teacher });
   });
 
-  // GET /students - Get teacher's students (from their courses) (teacher auth)
-  server.get('/students', { preHandler: [teacherAuth] }, async (request, reply) => {
+  // GET /students - Get teacher's students (from their courses) or all students for admin
+  server.get('/students', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
+    const isAdmin = request.user.type === 'admin';
     const {
       page = '1',
       limit = '10',
@@ -67,34 +69,44 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
     const limitNum = Math.min(50, Math.max(1, parseInt(limit, 10) || 10));
     const skip = (pageNum - 1) * limitNum;
 
-    // Get courses this teacher teaches
-    const teacherCourses = await server.prisma.teacherCourse.findMany({
-      where: { teacherId: id },
-      select: { courseId: true },
-    });
+    let teacherCourseIds: string[] = [];
 
-    const teacherCourseIds = teacherCourses.map((tc) => tc.courseId);
-
-    if (teacherCourseIds.length === 0) {
-      return reply.send({
-        success: true,
-        data: [],
-        total: 0,
-        page: pageNum,
-        limit: limitNum,
-        totalPages: 0,
+    if (!isAdmin) {
+      // Get courses this teacher teaches
+      const teacherCourses = await server.prisma.teacherCourse.findMany({
+        where: { teacherId: id },
+        select: { courseId: true },
       });
+
+      teacherCourseIds = teacherCourses.map((tc) => tc.courseId);
+
+      if (teacherCourseIds.length === 0) {
+        return reply.send({
+          success: true,
+          data: [],
+          total: 0,
+          page: pageNum,
+          limit: limitNum,
+          totalPages: 0,
+        });
+      }
     }
 
-    const where: any = {
-      courses: {
+    const where: any = {};
+
+    if (!isAdmin) {
+      where.courses = {
         some: {
           courseId: courseId
             ? { in: teacherCourseIds.includes(courseId) ? [courseId] : [] }
             : { in: teacherCourseIds },
         },
-      },
-    };
+      };
+    } else if (courseId) {
+      where.courses = {
+        some: { courseId },
+      };
+    }
 
     if (search) {
       where.AND = [
@@ -112,7 +124,7 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
         where,
         include: {
           courses: {
-            where: { courseId: { in: teacherCourseIds } },
+            ...(isAdmin ? {} : { where: { courseId: { in: teacherCourseIds } } }),
             include: {
               course: {
                 select: {
@@ -143,9 +155,26 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
     });
   });
 
-  // GET /courses - Get teacher's courses (teacher auth)
-  server.get('/courses', { preHandler: [teacherAuth] }, async (request, reply) => {
+  // GET /courses - Get teacher's courses or all courses for admin
+  server.get('/courses', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
+    const isAdmin = request.user.type === 'admin';
+
+    if (isAdmin) {
+      const courses = await server.prisma.course.findMany({
+        include: {
+          category: true,
+          _count: {
+            select: {
+              students: true,
+              certificates: true,
+            },
+          },
+        },
+      });
+
+      return reply.send({ success: true, data: courses });
+    }
 
     const teacherCourses = await server.prisma.teacherCourse.findMany({
       where: { teacherId: id },
@@ -170,16 +199,18 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
   });
 
   // GET /courses/:courseId - Course detail with students and progress
-  server.get('/courses/:courseId', { preHandler: [teacherAuth] }, async (request, reply) => {
+  server.get('/courses/:courseId', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
     const { courseId } = request.params as { courseId: string };
 
-    // Verify teacher has access to this course
-    const tc = await server.prisma.teacherCourse.findUnique({
-      where: { teacherId_courseId: { teacherId: id, courseId } },
-    });
-    if (!tc) {
-      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    // Verify teacher has access to this course (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
     }
 
     const course = await server.prisma.course.findUnique({
@@ -219,16 +250,18 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
   });
 
   // GET /courses/:courseId/students/:studentId - Student detail in course
-  server.get('/courses/:courseId/students/:studentId', { preHandler: [teacherAuth] }, async (request, reply) => {
+  server.get('/courses/:courseId/students/:studentId', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
     const { courseId, studentId } = request.params as { courseId: string; studentId: string };
 
-    // Verify teacher access
-    const tc = await server.prisma.teacherCourse.findUnique({
-      where: { teacherId_courseId: { teacherId: id, courseId } },
-    });
-    if (!tc) {
-      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    // Verify teacher access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
     }
 
     const student = await server.prisma.student.findUnique({
@@ -281,8 +314,9 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
   });
 
   // POST /courses/:courseId/students/:studentId/comments - Add teacher comment
-  server.post('/courses/:courseId/students/:studentId/comments', { preHandler: [teacherAuth] }, async (request, reply) => {
+  server.post('/courses/:courseId/students/:studentId/comments', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
+    const isAdmin = request.user.type === 'admin';
     const { courseId, studentId } = request.params as { courseId: string; studentId: string };
     const { comment, type, lessonId } = request.body as { comment: string; type?: string; lessonId?: string };
 
@@ -290,17 +324,19 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
       return reply.status(400).send({ success: false, message: 'Comment is required' });
     }
 
-    // Verify teacher access
-    const tc = await server.prisma.teacherCourse.findUnique({
-      where: { teacherId_courseId: { teacherId: id, courseId } },
-    });
-    if (!tc) {
-      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    // Verify teacher access (admin skips check)
+    if (!isAdmin) {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
     }
 
     const newComment = await server.prisma.teacherComment.create({
       data: {
-        teacherId: id,
+        teacherId: isAdmin ? null : id,
         studentId,
         courseId,
         lessonId: lessonId || null,
@@ -317,8 +353,9 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
   // ==========================================
 
   // POST /courses/:courseId/attendance - Bulk upsert attendance for a date
-  server.post('/courses/:courseId/attendance', { preHandler: [teacherAuth] }, async (request, reply) => {
+  server.post('/courses/:courseId/attendance', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
+    const isAdmin = request.user.type === 'admin';
     const { courseId } = request.params as { courseId: string };
     const { date, records } = request.body as {
       date: string;
@@ -329,16 +366,20 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
       return reply.status(400).send({ success: false, message: 'date and records[] are required' });
     }
 
-    // Verify teacher access
-    const tc = await server.prisma.teacherCourse.findUnique({
-      where: { teacherId_courseId: { teacherId: id, courseId } },
-    });
-    if (!tc) {
-      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    // Verify teacher access (admin skips check)
+    if (!isAdmin) {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
     }
 
     const attendanceDate = new Date(date);
     attendanceDate.setHours(0, 0, 0, 0);
+
+    const teacherIdValue = isAdmin ? null : id;
 
     const results = await Promise.all(
       records.map((r) =>
@@ -353,12 +394,12 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
           update: {
             status: r.status as any,
             note: r.note || null,
-            teacherId: id,
+            teacherId: teacherIdValue,
           },
           create: {
             studentId: r.studentId,
             courseId,
-            teacherId: id,
+            teacherId: teacherIdValue,
             date: attendanceDate,
             status: r.status as any,
             note: r.note || null,
@@ -371,17 +412,19 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
   });
 
   // GET /courses/:courseId/attendance - Get attendance records
-  server.get('/courses/:courseId/attendance', { preHandler: [teacherAuth] }, async (request, reply) => {
+  server.get('/courses/:courseId/attendance', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
     const { courseId } = request.params as { courseId: string };
     const { date, studentId } = request.query as { date?: string; studentId?: string };
 
-    // Verify teacher access
-    const tc = await server.prisma.teacherCourse.findUnique({
-      where: { teacherId_courseId: { teacherId: id, courseId } },
-    });
-    if (!tc) {
-      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    // Verify teacher access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
     }
 
     const where: any = { courseId };
@@ -412,8 +455,9 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
   // ==========================================
 
   // POST /courses/:courseId/grades - Create a grade
-  server.post('/courses/:courseId/grades', { preHandler: [teacherAuth] }, async (request, reply) => {
+  server.post('/courses/:courseId/grades', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
+    const isAdmin = request.user.type === 'admin';
     const { courseId } = request.params as { courseId: string };
     const body = request.body as {
       studentId: string;
@@ -428,19 +472,21 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
       return reply.status(400).send({ success: false, message: 'studentId and value are required' });
     }
 
-    // Verify teacher access
-    const tc = await server.prisma.teacherCourse.findUnique({
-      where: { teacherId_courseId: { teacherId: id, courseId } },
-    });
-    if (!tc) {
-      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    // Verify teacher access (admin skips check)
+    if (!isAdmin) {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
     }
 
     const grade = await server.prisma.grade.create({
       data: {
         studentId: body.studentId,
         courseId,
-        teacherId: id,
+        teacherId: isAdmin ? null : id,
         value: body.value,
         maxValue: body.maxValue || 100,
         type: (body.type as any) || 'ASSIGNMENT',
@@ -457,17 +503,19 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
   });
 
   // GET /courses/:courseId/grades - Get all grades for a course
-  server.get('/courses/:courseId/grades', { preHandler: [teacherAuth] }, async (request, reply) => {
+  server.get('/courses/:courseId/grades', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
     const { courseId } = request.params as { courseId: string };
     const { studentId, type } = request.query as { studentId?: string; type?: string };
 
-    // Verify teacher access
-    const tc = await server.prisma.teacherCourse.findUnique({
-      where: { teacherId_courseId: { teacherId: id, courseId } },
-    });
-    if (!tc) {
-      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    // Verify teacher access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
     }
 
     const where: any = { courseId };
@@ -487,8 +535,9 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
   });
 
   // PUT /courses/:courseId/grades/:gradeId - Update a grade
-  server.put('/courses/:courseId/grades/:gradeId', { preHandler: [teacherAuth] }, async (request, reply) => {
+  server.put('/courses/:courseId/grades/:gradeId', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
+    const isAdmin = request.user.type === 'admin';
     const { courseId, gradeId } = request.params as { courseId: string; gradeId: string };
     const body = request.body as {
       value?: number;
@@ -497,20 +546,23 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
       comment?: string;
     };
 
-    // Verify teacher access
-    const tc = await server.prisma.teacherCourse.findUnique({
-      where: { teacherId_courseId: { teacherId: id, courseId } },
-    });
-    if (!tc) {
-      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    // Verify teacher access (admin skips check)
+    if (!isAdmin) {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
     }
 
-    // Verify grade exists and belongs to this teacher
+    // Verify grade exists and belongs to this course
     const existing = await server.prisma.grade.findUnique({ where: { id: gradeId } });
     if (!existing || existing.courseId !== courseId) {
       return reply.status(404).send({ success: false, message: 'Grade not found' });
     }
-    if (existing.teacherId !== id) {
+    // Admin can edit any grade; teachers can only edit their own
+    if (!isAdmin && existing.teacherId !== id) {
       return reply.status(403).send({ success: false, message: 'You can only update your own grades' });
     }
 
@@ -584,16 +636,18 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
   });
 
   // GET /courses/:courseId/stats - Per-student grades and attendance stats for a course
-  server.get('/courses/:courseId/stats', { preHandler: [teacherAuth] }, async (request, reply) => {
+  server.get('/courses/:courseId/stats', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
     const { courseId } = request.params as { courseId: string };
 
-    // Verify teacher has access to this course
-    const tc = await server.prisma.teacherCourse.findUnique({
-      where: { teacherId_courseId: { teacherId: id, courseId } },
-    });
-    if (!tc) {
-      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    // Verify teacher has access to this course (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
     }
 
     // Get enrolled students
@@ -715,5 +769,304 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
     });
 
     return reply.status(201).send({ success: true, data: review });
+  });
+
+  // ==========================================
+  // LESSON MANAGEMENT ENDPOINTS
+  // ==========================================
+
+  // GET /courses/:courseId/lessons - Get all lessons for a course (teacher/admin can see all, including unpublished)
+  server.get('/courses/:courseId/lessons', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId } = request.params as { courseId: string };
+
+    // Verify teacher access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
+    }
+
+    const lessons = await server.prisma.lesson.findMany({
+      where: { courseId },
+      include: {
+        materials: {
+          orderBy: { order: 'asc' },
+        },
+      },
+      orderBy: { order: 'asc' },
+    });
+
+    return reply.send({ success: true, data: lessons });
+  });
+
+  // POST /courses/:courseId/lessons - Create a lesson
+  server.post('/courses/:courseId/lessons', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId } = request.params as { courseId: string };
+    const body = request.body as {
+      titleAz: string;
+      titleRu: string;
+      titleEn: string;
+      descAz?: string;
+      descRu?: string;
+      descEn?: string;
+      order?: number;
+      isPublished?: boolean;
+    };
+
+    if (!body.titleAz || !body.titleRu || !body.titleEn) {
+      return reply.status(400).send({ success: false, message: 'titleAz, titleRu, and titleEn are required' });
+    }
+
+    // Verify teacher access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
+    }
+
+    // Auto-set order to max+1 if not provided
+    let order = body.order;
+    if (order === undefined) {
+      const maxOrder = await server.prisma.lesson.findFirst({
+        where: { courseId },
+        orderBy: { order: 'desc' },
+        select: { order: true },
+      });
+      order = (maxOrder?.order ?? -1) + 1;
+    }
+
+    const lesson = await server.prisma.lesson.create({
+      data: {
+        courseId,
+        titleAz: body.titleAz,
+        titleRu: body.titleRu,
+        titleEn: body.titleEn,
+        descAz: body.descAz,
+        descRu: body.descRu,
+        descEn: body.descEn,
+        order,
+        isPublished: body.isPublished ?? false,
+      },
+      include: {
+        materials: true,
+      },
+    });
+
+    return reply.status(201).send({ success: true, data: lesson });
+  });
+
+  // PUT /courses/:courseId/lessons/:lessonId - Update a lesson
+  server.put('/courses/:courseId/lessons/:lessonId', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId, lessonId } = request.params as { courseId: string; lessonId: string };
+    const body = request.body as {
+      titleAz?: string;
+      titleRu?: string;
+      titleEn?: string;
+      descAz?: string;
+      descRu?: string;
+      descEn?: string;
+      order?: number;
+      isPublished?: boolean;
+    };
+
+    // Verify teacher access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
+    }
+
+    // Verify lesson exists and belongs to this course
+    const existing = await server.prisma.lesson.findUnique({ where: { id: lessonId } });
+    if (!existing || existing.courseId !== courseId) {
+      return reply.status(404).send({ success: false, message: 'Lesson not found in this course' });
+    }
+
+    const lesson = await server.prisma.lesson.update({
+      where: { id: lessonId },
+      data: body,
+      include: {
+        materials: {
+          orderBy: { order: 'asc' },
+        },
+      },
+    });
+
+    return reply.send({ success: true, data: lesson });
+  });
+
+  // DELETE /courses/:courseId/lessons/:lessonId - Delete a lesson
+  server.delete('/courses/:courseId/lessons/:lessonId', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId, lessonId } = request.params as { courseId: string; lessonId: string };
+
+    // Verify teacher access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
+    }
+
+    // Verify lesson exists and belongs to this course
+    const existing = await server.prisma.lesson.findUnique({ where: { id: lessonId } });
+    if (!existing || existing.courseId !== courseId) {
+      return reply.status(404).send({ success: false, message: 'Lesson not found in this course' });
+    }
+
+    await server.prisma.lesson.delete({ where: { id: lessonId } });
+    return reply.send({ success: true, message: 'Lesson deleted' });
+  });
+
+  // POST /courses/:courseId/lessons/:lessonId/materials - Add material to a lesson
+  server.post('/courses/:courseId/lessons/:lessonId/materials', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId, lessonId } = request.params as { courseId: string; lessonId: string };
+    const body = request.body as {
+      title: string;
+      type: string;
+      url: string;
+      order?: number;
+    };
+
+    if (!body.title || !body.type || !body.url) {
+      return reply.status(400).send({ success: false, message: 'title, type, and url are required' });
+    }
+
+    // Validate type
+    const validTypes = ['SLIDES', 'DOCUMENT', 'VIDEO', 'SPREADSHEET', 'LINK', 'FILE'];
+    if (!validTypes.includes(body.type)) {
+      return reply.status(400).send({ success: false, message: `Invalid type. Must be one of: ${validTypes.join(', ')}` });
+    }
+
+    // Verify teacher access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
+    }
+
+    // Verify lesson exists and belongs to this course
+    const lesson = await server.prisma.lesson.findUnique({ where: { id: lessonId } });
+    if (!lesson || lesson.courseId !== courseId) {
+      return reply.status(404).send({ success: false, message: 'Lesson not found in this course' });
+    }
+
+    // Auto-set order to max+1 if not provided
+    let order = body.order;
+    if (order === undefined) {
+      const maxOrder = await server.prisma.lessonMaterial.findFirst({
+        where: { lessonId },
+        orderBy: { order: 'desc' },
+        select: { order: true },
+      });
+      order = (maxOrder?.order ?? -1) + 1;
+    }
+
+    const material = await server.prisma.lessonMaterial.create({
+      data: {
+        lessonId,
+        title: body.title,
+        type: body.type as MaterialType,
+        url: body.url,
+        order,
+      },
+    });
+
+    return reply.status(201).send({ success: true, data: material });
+  });
+
+  // PUT /courses/:courseId/materials/:materialId - Update a material
+  server.put('/courses/:courseId/materials/:materialId', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId, materialId } = request.params as { courseId: string; materialId: string };
+    const body = request.body as {
+      title?: string;
+      type?: string;
+      url?: string;
+      order?: number;
+    };
+
+    // Verify teacher access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
+    }
+
+    // Find material and verify its lesson belongs to this course
+    const existing = await server.prisma.lessonMaterial.findUnique({
+      where: { id: materialId },
+      include: { lesson: { select: { courseId: true } } },
+    });
+    if (!existing || existing.lesson.courseId !== courseId) {
+      return reply.status(404).send({ success: false, message: 'Material not found in this course' });
+    }
+
+    // Validate type if provided
+    const validTypes = ['SLIDES', 'DOCUMENT', 'VIDEO', 'SPREADSHEET', 'LINK', 'FILE'];
+    if (body.type && !validTypes.includes(body.type)) {
+      return reply.status(400).send({ success: false, message: `Invalid type. Must be one of: ${validTypes.join(', ')}` });
+    }
+
+    const material = await server.prisma.lessonMaterial.update({
+      where: { id: materialId },
+      data: {
+        title: body.title,
+        type: body.type ? (body.type as MaterialType) : undefined,
+        url: body.url,
+        order: body.order,
+      },
+    });
+
+    return reply.send({ success: true, data: material });
+  });
+
+  // DELETE /courses/:courseId/materials/:materialId - Delete a material
+  server.delete('/courses/:courseId/materials/:materialId', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId, materialId } = request.params as { courseId: string; materialId: string };
+
+    // Verify teacher access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
+    }
+
+    // Find material and verify its lesson belongs to this course
+    const existing = await server.prisma.lessonMaterial.findUnique({
+      where: { id: materialId },
+      include: { lesson: { select: { courseId: true } } },
+    });
+    if (!existing || existing.lesson.courseId !== courseId) {
+      return reply.status(404).send({ success: false, message: 'Material not found in this course' });
+    }
+
+    await server.prisma.lessonMaterial.delete({ where: { id: materialId } });
+    return reply.send({ success: true, message: 'Material deleted' });
   });
 }
