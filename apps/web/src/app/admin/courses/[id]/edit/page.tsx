@@ -20,6 +20,7 @@ import {
   ToggleRight,
   Users,
   Baby,
+  GraduationCap,
 } from 'lucide-react';
 
 interface Category {
@@ -66,6 +67,17 @@ const langTabs: { key: LangTab; label: string; flag: string }[] = [
   { key: 'en', label: 'English', flag: 'EN' },
 ];
 
+interface TeacherOption {
+  id: string;
+  name: string;
+}
+
+interface StudentOption {
+  id: string;
+  name: string;
+  email: string;
+}
+
 interface CourseFormData {
   titleAz: string;
   titleRu: string;
@@ -85,6 +97,8 @@ interface CourseFormData {
   ageGroup: string;
   categoryId: string;
   isActive: boolean;
+  teacherIds: string[];
+  studentIds: string[];
 }
 
 const AGE_GROUPS = [
@@ -118,9 +132,13 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
     ageGroup: '',
     categoryId: '',
     isActive: true,
+    teacherIds: [],
+    studentIds: [],
   });
   const [activeTab, setActiveTab] = useState<LangTab>('az');
   const [categories, setCategories] = useState<Category[]>([]);
+  const [allTeachers, setAllTeachers] = useState<TeacherOption[]>([]);
+  const [allStudents, setAllStudents] = useState<StudentOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -134,7 +152,9 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
           token: token || undefined,
         });
         if (res.success) {
-          const c = res.data;
+          const c = res.data as any;
+          const tIds = (c.teachers || []).map((t: any) => t.teacher?.id || t.teacherId);
+          const sIds = (c.students || []).map((s: any) => s.student?.id || s.studentId);
           setForm({
             titleAz: c.titleAz || '',
             titleRu: c.titleRu || '',
@@ -142,9 +162,9 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
             descAz: c.descAz || '',
             descRu: c.descRu || '',
             descEn: c.descEn || '',
-            shortDescAz: (c as any).shortDescAz || '',
-            shortDescRu: (c as any).shortDescRu || '',
-            shortDescEn: (c as any).shortDescEn || '',
+            shortDescAz: c.shortDescAz || '',
+            shortDescRu: c.shortDescRu || '',
+            shortDescEn: c.shortDescEn || '',
             slug: c.slug || '',
             image: c.image || '',
             duration: c.duration || '',
@@ -154,6 +174,8 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
             ageGroup: c.ageGroup || '',
             categoryId: c.categoryId || '',
             isActive: c.isActive ?? true,
+            teacherIds: tIds,
+            studentIds: sIds,
           });
         }
       } catch (err) {
@@ -166,21 +188,31 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
     fetchCourse();
   }, [id, token]);
 
-  // Fetch categories
+  // Fetch categories, teachers, students
   useEffect(() => {
-    async function fetchCategories() {
+    async function fetchOptions() {
       try {
-        const res = await api.get<CategoriesResponse>('/admin/categories', {
-          token: token || undefined,
-        });
-        if (res.success) {
-          setCategories(res.data);
+        const [catRes, teacherRes, studentRes] = await Promise.all([
+          api.get<CategoriesResponse>('/admin/categories', { token: token || undefined }).catch(() => ({ success: false, data: [] })),
+          api.get<{ success: boolean; data: any[] }>('/admin/teachers', { token: token || undefined }).catch(() => ({ success: false, data: [] })),
+          api.get<{ success: boolean; data: any }>('/admin/students?limit=50', { token: token || undefined }).catch(() => ({ success: false, data: [] })),
+        ]);
+        if (catRes.success) setCategories(catRes.data as Category[]);
+        if (teacherRes.success) {
+          const raw = teacherRes.data;
+          const teachers = Array.isArray(raw) ? raw : (raw as any).teachers || [];
+          setAllTeachers(teachers.map((t: any) => ({ id: t.id, name: t.nameEn || t.nameAz || t.nameRu || '' })));
+        }
+        if (studentRes.success) {
+          const raw = studentRes.data;
+          const students = Array.isArray(raw) ? raw : (raw as any).data || [];
+          setAllStudents(students.map((s: any) => ({ id: s.id, name: s.name || s.email, email: s.email })));
         }
       } catch {
-        console.log('Categories API not available');
+        console.log('Failed to fetch options');
       }
     }
-    fetchCategories();
+    fetchOptions();
   }, [token]);
 
   // Auto-generate slug from English title (only when explicitly toggled)
@@ -190,7 +222,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
     }
   }, [form.titleEn, autoSlug]);
 
-  const updateField = (field: keyof CourseFormData, value: string | boolean) => {
+  const updateField = (field: keyof CourseFormData, value: string | boolean | string[]) => {
     setForm((prev) => ({ ...prev, [field]: value }));
     if (field === 'slug') setAutoSlug(false);
   };
@@ -577,6 +609,95 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                   ))}
                 </select>
               </div>
+            </div>
+          </div>
+
+          {/* Assign Teachers */}
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              <Users className="inline w-4 h-4 mr-1.5 text-gray-500" />
+              Assigned Teachers
+            </label>
+            <div className="space-y-2">
+              {allTeachers.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {allTeachers.map((teacher) => {
+                    const selected = form.teacherIds.includes(teacher.id);
+                    return (
+                      <button
+                        key={teacher.id}
+                        type="button"
+                        onClick={() => {
+                          setForm((prev) => ({
+                            ...prev,
+                            teacherIds: selected
+                              ? prev.teacherIds.filter((tid) => tid !== teacher.id)
+                              : [...prev.teacherIds, teacher.id],
+                          }));
+                        }}
+                        className={cn(
+                          'flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium border transition-all text-left',
+                          selected
+                            ? 'bg-primary-500/15 border-primary-500/40 text-primary-400'
+                            : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                        )}
+                      >
+                        <span className={cn('w-2 h-2 rounded-full', selected ? 'bg-primary-400' : 'bg-gray-600')} />
+                        {teacher.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-xs text-gray-500">No teachers available</p>
+              )}
+              <p className="text-xs text-gray-500">{form.teacherIds.length} teacher(s) assigned</p>
+            </div>
+          </div>
+
+          {/* Enroll Students */}
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              <GraduationCap className="inline w-4 h-4 mr-1.5 text-gray-500" />
+              Enrolled Students
+            </label>
+            <div className="space-y-2">
+              {allStudents.length > 0 ? (
+                <div className="max-h-48 overflow-y-auto space-y-1 pr-1">
+                  {allStudents.map((student) => {
+                    const selected = form.studentIds.includes(student.id);
+                    return (
+                      <button
+                        key={student.id}
+                        type="button"
+                        onClick={() => {
+                          setForm((prev) => ({
+                            ...prev,
+                            studentIds: selected
+                              ? prev.studentIds.filter((sid) => sid !== student.id)
+                              : [...prev.studentIds, student.id],
+                          }));
+                        }}
+                        className={cn(
+                          'flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm border transition-all',
+                          selected
+                            ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                            : 'bg-gray-900/30 border-gray-800/50 text-gray-400 hover:text-gray-300 hover:border-gray-700/50'
+                        )}
+                      >
+                        <span className="flex items-center gap-2">
+                          <span className={cn('w-2 h-2 rounded-full', selected ? 'bg-emerald-400' : 'bg-gray-600')} />
+                          {student.name}
+                        </span>
+                        <span className="text-xs text-gray-500">{student.email}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-xs text-gray-500">No students available</p>
+              )}
+              <p className="text-xs text-gray-500">{form.studentIds.length} student(s) enrolled</p>
             </div>
           </div>
 

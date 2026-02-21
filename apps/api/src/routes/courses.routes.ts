@@ -110,57 +110,50 @@ export async function courseRoutes(server: FastifyInstance) {
   server.get('/:slugOrId', async (request, reply) => {
     const { slugOrId } = request.params as { slugOrId: string };
 
-    // Try by slug first, then by id
-    let course = await server.prisma.course.findUnique({
-      where: { slug: slugOrId },
-      include: {
-        category: true,
-        teachers: {
-          include: {
-            teacher: {
-              select: {
-                id: true,
-                nameAz: true,
-                nameRu: true,
-                nameEn: true,
-                photo: true,
-                specialization: true,
-                bioAz: true,
-                bioRu: true,
-                bioEn: true,
-                linkedin: true,
-              },
+    const courseInclude = {
+      category: true,
+      teachers: {
+        include: {
+          teacher: {
+            select: {
+              id: true,
+              nameAz: true,
+              nameRu: true,
+              nameEn: true,
+              photo: true,
+              specialization: true,
+              bioAz: true,
+              bioRu: true,
+              bioEn: true,
+              linkedin: true,
             },
           },
         },
       },
+      students: {
+        include: {
+          student: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+    };
+
+    // Try by slug first, then by id
+    let course = await server.prisma.course.findUnique({
+      where: { slug: slugOrId },
+      include: courseInclude,
     });
 
     if (!course) {
       // Fallback: try by id (for admin edit pages that use course.id)
       course = await server.prisma.course.findUnique({
         where: { id: slugOrId },
-        include: {
-          category: true,
-          teachers: {
-            include: {
-              teacher: {
-                select: {
-                  id: true,
-                  nameAz: true,
-                  nameRu: true,
-                  nameEn: true,
-                  photo: true,
-                  specialization: true,
-                  bioAz: true,
-                  bioRu: true,
-                  bioEn: true,
-                  linkedin: true,
-                },
-              },
-            },
-          },
-        },
+        include: courseInclude,
       });
     }
 
@@ -254,6 +247,7 @@ export async function courseRoutes(server: FastifyInstance) {
       syllabus?: any;
       features?: any;
       teacherIds?: string[];
+      studentIds?: string[];
     };
 
     const existing = await server.prisma.course.findUnique({ where: { id } });
@@ -261,7 +255,7 @@ export async function courseRoutes(server: FastifyInstance) {
       return reply.status(404).send({ success: false, message: 'Course not found' });
     }
 
-    const { teacherIds, ...courseData } = body;
+    const { teacherIds, studentIds, ...courseData } = body;
 
     // If teacherIds are provided, replace the teacher associations
     if (teacherIds !== undefined) {
@@ -269,6 +263,16 @@ export async function courseRoutes(server: FastifyInstance) {
       if (teacherIds.length > 0) {
         await server.prisma.teacherCourse.createMany({
           data: teacherIds.map((teacherId) => ({ teacherId, courseId: id })),
+        });
+      }
+    }
+
+    // If studentIds are provided, replace the student enrollments
+    if (studentIds !== undefined) {
+      await server.prisma.studentCourse.deleteMany({ where: { courseId: id } });
+      if (studentIds.length > 0) {
+        await server.prisma.studentCourse.createMany({
+          data: studentIds.map((studentId) => ({ studentId, courseId: id, status: 'ACTIVE' as const })),
         });
       }
     }
@@ -286,6 +290,13 @@ export async function courseRoutes(server: FastifyInstance) {
         teachers: {
           include: {
             teacher: true,
+          },
+        },
+        students: {
+          include: {
+            student: {
+              select: { id: true, name: true, email: true },
+            },
           },
         },
       },
