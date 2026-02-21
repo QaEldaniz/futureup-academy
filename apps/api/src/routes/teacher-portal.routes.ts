@@ -312,6 +312,226 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
     return reply.status(201).send({ success: true, data: newComment });
   });
 
+  // ==========================================
+  // ATTENDANCE ENDPOINTS
+  // ==========================================
+
+  // POST /courses/:courseId/attendance - Bulk upsert attendance for a date
+  server.post('/courses/:courseId/attendance', { preHandler: [teacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId } = request.params as { courseId: string };
+    const { date, records } = request.body as {
+      date: string;
+      records: { studentId: string; status: string; note?: string }[];
+    };
+
+    if (!date || !records || !Array.isArray(records)) {
+      return reply.status(400).send({ success: false, message: 'date and records[] are required' });
+    }
+
+    // Verify teacher access
+    const tc = await server.prisma.teacherCourse.findUnique({
+      where: { teacherId_courseId: { teacherId: id, courseId } },
+    });
+    if (!tc) {
+      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    }
+
+    const attendanceDate = new Date(date);
+    attendanceDate.setHours(0, 0, 0, 0);
+
+    const results = await Promise.all(
+      records.map((r) =>
+        server.prisma.attendance.upsert({
+          where: {
+            studentId_courseId_date: {
+              studentId: r.studentId,
+              courseId,
+              date: attendanceDate,
+            },
+          },
+          update: {
+            status: r.status as any,
+            note: r.note || null,
+            teacherId: id,
+          },
+          create: {
+            studentId: r.studentId,
+            courseId,
+            teacherId: id,
+            date: attendanceDate,
+            status: r.status as any,
+            note: r.note || null,
+          },
+        })
+      )
+    );
+
+    return reply.send({ success: true, data: results, count: results.length });
+  });
+
+  // GET /courses/:courseId/attendance - Get attendance records
+  server.get('/courses/:courseId/attendance', { preHandler: [teacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId } = request.params as { courseId: string };
+    const { date, studentId } = request.query as { date?: string; studentId?: string };
+
+    // Verify teacher access
+    const tc = await server.prisma.teacherCourse.findUnique({
+      where: { teacherId_courseId: { teacherId: id, courseId } },
+    });
+    if (!tc) {
+      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    }
+
+    const where: any = { courseId };
+    if (date) {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      const nextDay = new Date(d);
+      nextDay.setDate(nextDay.getDate() + 1);
+      where.date = { gte: d, lt: nextDay };
+    }
+    if (studentId) {
+      where.studentId = studentId;
+    }
+
+    const data = await server.prisma.attendance.findMany({
+      where,
+      include: {
+        student: { select: { id: true, name: true, email: true, photo: true } },
+      },
+      orderBy: [{ date: 'desc' }, { student: { name: 'asc' } }],
+    });
+
+    return reply.send({ success: true, data });
+  });
+
+  // ==========================================
+  // GRADES ENDPOINTS
+  // ==========================================
+
+  // POST /courses/:courseId/grades - Create a grade
+  server.post('/courses/:courseId/grades', { preHandler: [teacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId } = request.params as { courseId: string };
+    const body = request.body as {
+      studentId: string;
+      value: number;
+      maxValue?: number;
+      type?: string;
+      lessonId?: string;
+      comment?: string;
+    };
+
+    if (!body.studentId || body.value === undefined) {
+      return reply.status(400).send({ success: false, message: 'studentId and value are required' });
+    }
+
+    // Verify teacher access
+    const tc = await server.prisma.teacherCourse.findUnique({
+      where: { teacherId_courseId: { teacherId: id, courseId } },
+    });
+    if (!tc) {
+      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    }
+
+    const grade = await server.prisma.grade.create({
+      data: {
+        studentId: body.studentId,
+        courseId,
+        teacherId: id,
+        value: body.value,
+        maxValue: body.maxValue || 100,
+        type: (body.type as any) || 'ASSIGNMENT',
+        lessonId: body.lessonId || null,
+        comment: body.comment || null,
+      },
+      include: {
+        student: { select: { id: true, name: true, email: true } },
+        lesson: { select: { id: true, titleAz: true, titleRu: true, titleEn: true } },
+      },
+    });
+
+    return reply.status(201).send({ success: true, data: grade });
+  });
+
+  // GET /courses/:courseId/grades - Get all grades for a course
+  server.get('/courses/:courseId/grades', { preHandler: [teacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId } = request.params as { courseId: string };
+    const { studentId, type } = request.query as { studentId?: string; type?: string };
+
+    // Verify teacher access
+    const tc = await server.prisma.teacherCourse.findUnique({
+      where: { teacherId_courseId: { teacherId: id, courseId } },
+    });
+    if (!tc) {
+      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    }
+
+    const where: any = { courseId };
+    if (studentId) where.studentId = studentId;
+    if (type) where.type = type;
+
+    const data = await server.prisma.grade.findMany({
+      where,
+      include: {
+        student: { select: { id: true, name: true, email: true, photo: true } },
+        lesson: { select: { id: true, titleAz: true, titleRu: true, titleEn: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return reply.send({ success: true, data });
+  });
+
+  // PUT /courses/:courseId/grades/:gradeId - Update a grade
+  server.put('/courses/:courseId/grades/:gradeId', { preHandler: [teacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId, gradeId } = request.params as { courseId: string; gradeId: string };
+    const body = request.body as {
+      value?: number;
+      maxValue?: number;
+      type?: string;
+      comment?: string;
+    };
+
+    // Verify teacher access
+    const tc = await server.prisma.teacherCourse.findUnique({
+      where: { teacherId_courseId: { teacherId: id, courseId } },
+    });
+    if (!tc) {
+      return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+    }
+
+    // Verify grade exists and belongs to this teacher
+    const existing = await server.prisma.grade.findUnique({ where: { id: gradeId } });
+    if (!existing || existing.courseId !== courseId) {
+      return reply.status(404).send({ success: false, message: 'Grade not found' });
+    }
+    if (existing.teacherId !== id) {
+      return reply.status(403).send({ success: false, message: 'You can only update your own grades' });
+    }
+
+    const updateData: any = {};
+    if (body.value !== undefined) updateData.value = body.value;
+    if (body.maxValue !== undefined) updateData.maxValue = body.maxValue;
+    if (body.type) updateData.type = body.type;
+    if (body.comment !== undefined) updateData.comment = body.comment;
+
+    const grade = await server.prisma.grade.update({
+      where: { id: gradeId },
+      data: updateData,
+      include: {
+        student: { select: { id: true, name: true, email: true } },
+        lesson: { select: { id: true, titleAz: true, titleRu: true, titleEn: true } },
+      },
+    });
+
+    return reply.send({ success: true, data: grade });
+  });
+
   // GET /reviews - Get teacher's reviews about students (teacher auth)
   server.get('/reviews', { preHandler: [teacherAuth] }, async (request, reply) => {
     const { id } = request.user;

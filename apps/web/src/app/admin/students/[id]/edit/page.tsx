@@ -15,6 +15,7 @@ import {
   Save,
   Loader2,
   AlertCircle,
+  Lock,
 } from 'lucide-react';
 
 interface Student {
@@ -32,6 +33,7 @@ interface FormData {
   phone: string;
   photo: string;
   status: string;
+  password: string;
 }
 
 interface FormErrors {
@@ -59,6 +61,7 @@ export default function AdminEditStudentPage() {
     phone: '',
     photo: '',
     status: 'ACTIVE',
+    password: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(true);
@@ -81,6 +84,7 @@ export default function AdminEditStudentPage() {
             phone: res.data.phone || '',
             photo: res.data.photo || '',
             status: res.data.status || 'ACTIVE',
+            password: '',
           });
         }
       } catch (err) {
@@ -146,6 +150,7 @@ export default function AdminEditStudentPage() {
       else payload.phone = '';
       if (formData.photo.trim()) payload.photo = formData.photo.trim();
       else payload.photo = '';
+      if (formData.password.trim()) payload.password = formData.password.trim();
 
       await api.put(`/admin/students/${studentId}`, payload, {
         token: token || undefined,
@@ -375,6 +380,24 @@ export default function AdminEditStudentPage() {
                   {opt.label}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* New Password (optional) */}
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              New LMS Password <span className="text-gray-500 text-xs">(leave empty to keep current)</span>
+            </label>
+            <div className="relative">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <input
+                type="password"
+                value={formData.password}
+                onChange={(e) => handleChange('password', e.target.value)}
+                placeholder="Min 6 characters"
+                minLength={6}
+                className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all text-sm"
+              />
             </div>
           </div>
 

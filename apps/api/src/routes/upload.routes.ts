@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import { adminAuth } from '../middleware/auth.middleware.js';
+import { adminAuth, adminOrTeacherAuth } from '../middleware/auth.middleware.js';
 import { v2 as cloudinary } from 'cloudinary';
 
 // Configure Cloudinary from env vars
@@ -90,6 +90,68 @@ export async function uploadRoutes(server: FastifyInstance) {
       return reply.status(500).send({
         success: false,
         message: error.message || 'Failed to process upload',
+      });
+    }
+  });
+
+  // POST /file - Upload any file (admin or teacher auth)
+  server.post('/file', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
+    try {
+      const data = await request.file();
+
+      if (!data) {
+        return reply.status(400).send({ success: false, message: 'No file uploaded' });
+      }
+
+      const buffer = await data.toBuffer();
+
+      if (isCloudinaryConfigured()) {
+        const result = await new Promise<any>((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              folder: 'futureup/files',
+              resource_type: 'auto',
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
+          uploadStream.end(buffer);
+        });
+
+        return reply.send({
+          success: true,
+          data: {
+            url: result.secure_url,
+            publicId: result.public_id,
+            format: result.format,
+            bytes: result.bytes,
+            filename: data.filename,
+            mimetype: data.mimetype,
+          },
+        });
+      }
+
+      // Fallback: Cloudinary not configured
+      const timestamp = Date.now();
+      const filename = data.filename || 'file';
+      const placeholderUrl = `/uploads/${timestamp}-${filename}`;
+
+      return reply.send({
+        success: true,
+        data: {
+          url: placeholderUrl,
+          filename: data.filename,
+          mimetype: data.mimetype,
+          message: 'Cloudinary not configured.',
+        },
+      });
+    } catch (error: any) {
+      server.log.error({ err: error }, 'File upload failed');
+      return reply.status(500).send({
+        success: false,
+        message: error.message || 'Failed to process file upload',
       });
     }
   });

@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { adminAuth } from '../middleware/auth.middleware.js';
+import bcrypt from 'bcrypt';
 
 export async function studentRoutes(server: FastifyInstance) {
   // GET /list - Simple list for dropdowns (admin auth)
@@ -144,13 +145,15 @@ export async function studentRoutes(server: FastifyInstance) {
       photo?: string;
       groupId?: string;
       courseIds?: string[];
+      password?: string;
     };
 
-    const { courseIds, ...studentData } = body;
+    const { courseIds, password, ...studentData } = body;
 
     const student = await server.prisma.student.create({
       data: {
         ...studentData,
+        ...(password ? { password: await bcrypt.hash(password, 10) } : {}),
         courses: courseIds?.length
           ? {
               create: courseIds.map((courseId) => ({ courseId })),
@@ -180,6 +183,7 @@ export async function studentRoutes(server: FastifyInstance) {
       photo?: string;
       groupId?: string;
       courseIds?: string[];
+      password?: string;
     };
 
     const existing = await server.prisma.student.findUnique({ where: { id } });
@@ -187,7 +191,10 @@ export async function studentRoutes(server: FastifyInstance) {
       return reply.status(404).send({ success: false, message: 'Student not found' });
     }
 
-    const { courseIds, ...studentData } = body;
+    const { courseIds, password, ...studentData } = body;
+    if (password) {
+      (studentData as any).password = await bcrypt.hash(password, 10);
+    }
 
     // If courseIds are provided, replace course associations
     if (courseIds !== undefined) {

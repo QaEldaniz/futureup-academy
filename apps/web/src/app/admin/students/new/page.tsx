@@ -14,6 +14,7 @@ import {
   ImageIcon,
   Save,
   Loader2,
+  Lock,
 } from 'lucide-react';
 
 interface FormData {
@@ -21,6 +22,7 @@ interface FormData {
   email: string;
   phone: string;
   photo: string;
+  password: string;
 }
 
 interface FormErrors {
@@ -28,6 +30,7 @@ interface FormErrors {
   email?: string;
   phone?: string;
   photo?: string;
+  password?: string;
 }
 
 export default function AdminNewStudentPage() {
@@ -39,6 +42,7 @@ export default function AdminNewStudentPage() {
     email: '',
     phone: '',
     photo: '',
+    password: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -91,6 +95,7 @@ export default function AdminNewStudentPage() {
       };
       if (formData.phone.trim()) payload.phone = formData.phone.trim();
       if (formData.photo.trim()) payload.photo = formData.photo.trim();
+      if (formData.password.trim()) payload.password = formData.password.trim();
 
       await api.post('/admin/students', payload, {
         token: token || undefined,
@@ -248,6 +253,24 @@ export default function AdminNewStudentPage() {
                 <span className="text-xs text-gray-500">Photo preview</span>
               </div>
             )}
+          </div>
+
+          {/* Password (optional) */}
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              LMS Password <span className="text-gray-500 text-xs">(optional, for student portal login)</span>
+            </label>
+            <div className="relative">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <input
+                type="password"
+                value={formData.password}
+                onChange={(e) => handleChange('password', e.target.value)}
+                placeholder="Min 6 characters"
+                minLength={6}
+                className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all text-sm"
+              />
+            </div>
           </div>
 
           {/* Actions */}

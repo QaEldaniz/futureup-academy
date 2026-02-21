@@ -6,6 +6,7 @@ import { useAuthStore, UserType } from '@/stores/auth';
 import {
   LayoutDashboard, BookOpen, Award, Bell, User, LogOut, Menu, X,
   Users, MessageSquare, Calendar, ChevronRight, GraduationCap, Baby,
+  ClipboardCheck, Star,
 } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -20,6 +21,8 @@ const navByRole: Record<UserType, NavItem[]> = {
   student: [
     { label: 'Dashboard', href: '/lms/student', icon: LayoutDashboard },
     { label: 'My Courses', href: '/lms/student/courses', icon: BookOpen },
+    { label: 'Attendance', href: '/lms/student/attendance', icon: ClipboardCheck },
+    { label: 'Grades', href: '/lms/student/grades', icon: Star },
     { label: 'Certificates', href: '/lms/student/certificates', icon: Award },
     { label: 'Profile', href: '/lms/student/profile', icon: User },
   ],
@@ -27,6 +30,8 @@ const navByRole: Record<UserType, NavItem[]> = {
     { label: 'Dashboard', href: '/lms/teacher', icon: LayoutDashboard },
     { label: 'My Courses', href: '/lms/teacher/courses', icon: BookOpen },
     { label: 'Students', href: '/lms/teacher/students', icon: Users },
+    { label: 'Attendance', href: '/lms/teacher/attendance', icon: ClipboardCheck },
+    { label: 'Grades', href: '/lms/teacher/grades', icon: Star },
   ],
   parent: [
     { label: 'Dashboard', href: '/lms/parent', icon: LayoutDashboard },

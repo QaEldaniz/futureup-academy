@@ -277,6 +277,64 @@ export async function studentPortalRoutes(server: FastifyInstance) {
     return reply.send({ success: true, data: certificates });
   });
 
+  // GET /attendance — my attendance records
+  server.get('/attendance', async (request, reply) => {
+    const { id } = request.user;
+    const { courseId } = request.query as { courseId?: string };
+
+    const where: any = { studentId: id };
+    if (courseId) where.courseId = courseId;
+
+    const data = await server.prisma.attendance.findMany({
+      where,
+      include: {
+        course: { select: { id: true, titleAz: true, titleRu: true, titleEn: true } },
+      },
+      orderBy: { date: 'desc' },
+    });
+
+    // Calculate summary
+    const total = data.length;
+    const present = data.filter((a) => a.status === 'PRESENT').length;
+    const absent = data.filter((a) => a.status === 'ABSENT').length;
+    const late = data.filter((a) => a.status === 'LATE').length;
+    const excused = data.filter((a) => a.status === 'EXCUSED').length;
+    const rate = total > 0 ? Math.round(((present + late) / total) * 100) : 0;
+
+    return reply.send({
+      success: true,
+      data,
+      summary: { total, present, absent, late, excused, rate },
+    });
+  });
+
+  // GET /grades — my grades
+  server.get('/grades', async (request, reply) => {
+    const { id } = request.user;
+    const { courseId, type } = request.query as { courseId?: string; type?: string };
+
+    const where: any = { studentId: id };
+    if (courseId) where.courseId = courseId;
+    if (type) where.type = type;
+
+    const data = await server.prisma.grade.findMany({
+      where,
+      include: {
+        course: { select: { id: true, titleAz: true, titleRu: true, titleEn: true } },
+        lesson: { select: { id: true, titleAz: true, titleRu: true, titleEn: true } },
+        teacher: { select: { id: true, nameAz: true, nameRu: true, nameEn: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    // Calculate average
+    const avg = data.length > 0
+      ? Math.round((data.reduce((sum, g) => sum + (g.value / g.maxValue) * 100, 0) / data.length) * 10) / 10
+      : 0;
+
+    return reply.send({ success: true, data, average: avg });
+  });
+
   // GET /notifications — placeholder for future notifications
   server.get('/notifications', async (request, reply) => {
     // For now return teacher comments as "notifications"

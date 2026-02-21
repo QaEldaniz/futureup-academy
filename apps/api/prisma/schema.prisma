@@ -71,6 +71,7 @@ model Course {
   courseProgress  CourseProgress[]
   teacherComments TeacherComment[]
   attendance      Attendance[]
+  grades          Grade[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -134,11 +135,13 @@ model Teacher {
   isActive       Boolean @default(true)
   order          Int     @default(0)
 
-  courses         TeacherCourse[]
-  certificates    Certificate[]
-  reviewsGiven    Review[]        @relation("TeacherReviews")
-  reviewsReceived Review[]        @relation("ReviewsAboutTeacher")
-  teacherComments TeacherComment[]
+  courses           TeacherCourse[]
+  certificates      Certificate[]
+  reviewsGiven      Review[]        @relation("TeacherReviews")
+  reviewsReceived   Review[]        @relation("ReviewsAboutTeacher")
+  teacherComments   TeacherComment[]
+  grades            Grade[]
+  attendanceMarked  Attendance[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -181,6 +184,7 @@ model Student {
   courseProgress   CourseProgress[]
   teacherComments TeacherComment[]
   attendance      Attendance[]
+  grades          Grade[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -552,6 +556,7 @@ model Lesson {
   materials  LessonMaterial[]
   lessonProgress  LessonProgress[]
   teacherComments TeacherComment[]
+  grades          Grade[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -707,13 +712,15 @@ model Attendance {
   id        String           @id @default(cuid())
   studentId String
   courseId   String
+  teacherId String?
   groupId   String?
   date      DateTime
   status    AttendanceStatus @default(PRESENT)
   note      String?
 
-  student Student @relation(fields: [studentId], references: [id])
-  course  Course  @relation(fields: [courseId], references: [id])
+  student Student  @relation(fields: [studentId], references: [id])
+  course  Course   @relation(fields: [courseId], references: [id])
+  teacher Teacher? @relation(fields: [teacherId], references: [id])
 
   createdAt DateTime @default(now())
 
@@ -726,6 +733,40 @@ enum AttendanceStatus {
   ABSENT
   LATE
   EXCUSED
+}
+
+// ==========================================
+// GRADES (LMS)
+// ==========================================
+
+model Grade {
+  id        String    @id @default(cuid())
+  studentId String
+  courseId   String
+  lessonId  String?
+  teacherId String
+  value     Float     // numeric grade (0-100)
+  maxValue  Float     @default(100)
+  type      GradeType @default(ASSIGNMENT)
+  comment   String?
+
+  student Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson  Lesson?  @relation(fields: [lessonId], references: [id])
+  teacher Teacher  @relation(fields: [teacherId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("grades")
+}
+
+enum GradeType {
+  ASSIGNMENT
+  QUIZ
+  EXAM
+  PROJECT
+  PARTICIPATION
 }
 
 // ==========================================

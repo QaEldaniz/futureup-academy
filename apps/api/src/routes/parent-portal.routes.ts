@@ -218,6 +218,41 @@ export async function parentPortalRoutes(server: FastifyInstance) {
     return reply.send({ success: true, data: comments });
   });
 
+  // GET /children/:studentId/grades — child's grades
+  server.get('/children/:studentId/grades', async (request, reply) => {
+    const { id } = request.user;
+    const { studentId } = request.params as { studentId: string };
+
+    // Verify parent-child relationship
+    const link = await server.prisma.studentParent.findUnique({
+      where: { studentId_parentId: { studentId, parentId: id } },
+    });
+    if (!link) {
+      return reply.status(403).send({ success: false, message: 'Access denied' });
+    }
+
+    const { courseId } = request.query as { courseId?: string };
+    const where: any = { studentId };
+    if (courseId) where.courseId = courseId;
+
+    const data = await server.prisma.grade.findMany({
+      where,
+      include: {
+        course: { select: { id: true, titleAz: true, titleRu: true, titleEn: true } },
+        lesson: { select: { id: true, titleAz: true, titleRu: true, titleEn: true } },
+        teacher: { select: { id: true, nameAz: true, nameRu: true, nameEn: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    // Calculate average
+    const avg = data.length > 0
+      ? Math.round((data.reduce((sum, g) => sum + (g.value / g.maxValue) * 100, 0) / data.length) * 10) / 10
+      : 0;
+
+    return reply.send({ success: true, data, average: avg });
+  });
+
   // GET /children/:studentId/attendance — attendance records
   server.get('/children/:studentId/attendance', async (request, reply) => {
     const { id } = request.user;
