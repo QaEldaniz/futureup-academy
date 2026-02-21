@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
-import { ArrowLeft, Users, TrendingUp, BookOpen, FileText } from 'lucide-react';
+import { ArrowLeft, Users, TrendingUp, BookOpen, FileText, ClipboardList, FileQuestion } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -47,13 +47,29 @@ export default function TeacherCourseDetail() {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{course?.titleEn || 'Course'}</h1>
             <p className="text-gray-500 dark:text-gray-400 mt-1">{course?.level} &bull; {students.length} students</p>
           </div>
-          <button
-            onClick={() => router.push(`/lms/teacher/courses/${courseId}/lessons`)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-lg shadow-primary-600/25"
-          >
-            <FileText className="w-4 h-4" />
-            Manage Lessons
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => router.push(`/lms/teacher/courses/${courseId}/quizzes`)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-semibold transition-colors"
+            >
+              <FileQuestion className="w-4 h-4" />
+              Quizzes
+            </button>
+            <button
+              onClick={() => router.push(`/lms/teacher/courses/${courseId}/assignments`)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-secondary-600 hover:bg-secondary-700 text-white rounded-xl text-sm font-semibold transition-colors"
+            >
+              <ClipboardList className="w-4 h-4" />
+              Assignments
+            </button>
+            <button
+              onClick={() => router.push(`/lms/teacher/courses/${courseId}/lessons`)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-lg shadow-primary-600/25"
+            >
+              <FileText className="w-4 h-4" />
+              Manage Lessons
+            </button>
+          </div>
         </div>
       </div>
 

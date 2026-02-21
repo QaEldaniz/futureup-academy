@@ -29,6 +29,9 @@ import { studentPortalRoutes } from './routes/student-portal.routes.js';
 import { parentPortalRoutes } from './routes/parent-portal.routes.js';
 import { parentRoutes } from './routes/parents.routes.js';
 import { scheduleAdminRoutes, schedulePublicRoutes } from './routes/schedule.routes.js';
+import { assignmentRoutes } from './routes/assignment.routes.js';
+import { notificationRoutes } from './routes/notification.routes.js';
+import { quizRoutes } from './routes/quiz.routes.js';
 
 // Extend Fastify types
 declare module 'fastify' {
@@ -112,6 +115,9 @@ export async function buildApp() {
   await app.register(chatRoutes, { prefix: '/api/chat' });
   await app.register(lessonRoutes, { prefix: '/api/lessons' });
   await app.register(schedulePublicRoutes, { prefix: '/api/schedule' });
+  await app.register(assignmentRoutes, { prefix: '/api/assignments' });
+  await app.register(notificationRoutes, { prefix: '/api/notifications' });
+  await app.register(quizRoutes, { prefix: '/api/quizzes' });
   await app.register(dashboardRoutes, { prefix: '/api/admin/dashboard' });
   await app.register(teacherPortalRoutes, { prefix: '/api/teacher' });
   await app.register(studentPortalRoutes, { prefix: '/api/student' });

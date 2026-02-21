@@ -6,8 +6,9 @@ import { useAuthStore, UserType } from '@/stores/auth';
 import {
   LayoutDashboard, BookOpen, Award, Bell, User, LogOut, Menu, X,
   Users, MessageSquare, Calendar, ChevronRight, GraduationCap, Baby,
-  ClipboardCheck, Star, CalendarDays,
+  ClipboardCheck, Star, CalendarDays, FileText, FileQuestion,
 } from 'lucide-react';
+import NotificationBell from '@/components/lms/NotificationBell';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -21,6 +22,8 @@ const navByRole: Record<UserType, NavItem[]> = {
   student: [
     { label: 'Dashboard', href: '/lms/student', icon: LayoutDashboard },
     { label: 'My Courses', href: '/lms/student/courses', icon: BookOpen },
+    { label: 'Assignments', href: '/lms/student/assignments', icon: FileText },
+    { label: 'Quizzes', href: '/lms/student/quizzes', icon: FileQuestion },
     { label: 'Schedule', href: '/lms/student/schedule', icon: CalendarDays },
     { label: 'Attendance', href: '/lms/student/attendance', icon: ClipboardCheck },
     { label: 'Grades', href: '/lms/student/grades', icon: Star },
@@ -198,9 +201,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-3">
-            <button className="relative p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-400 transition-colors">
-              <Bell className="w-5 h-5" />
-            </button>
+            <NotificationBell />
             <div className="hidden sm:flex items-center gap-2 text-sm">
               <span className="text-gray-500 dark:text-gray-400">Hello,</span>
               <span className="font-semibold text-gray-900 dark:text-white">{displayName}</span>

@@ -73,6 +73,8 @@ model Course {
   attendance      Attendance[]
   grades          Grade[]
   schedules       Schedule[]
+  assignments     Assignment[]
+  quizzes         Quiz[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -144,6 +146,8 @@ model Teacher {
   grades            Grade[]
   attendanceMarked  Attendance[]
   schedules         Schedule[]
+  assignments       Assignment[]
+  quizzes           Quiz[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -187,6 +191,8 @@ model Student {
   teacherComments TeacherComment[]
   attendance      Attendance[]
   grades          Grade[]
+  submissions     AssignmentSubmission[]
+  quizAttempts    QuizAttempt[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -792,6 +798,198 @@ model Schedule {
   updatedAt DateTime @updatedAt
 
   @@map("schedules")
+}
+
+// ==========================================
+// ASSIGNMENTS (Домашние задания)
+// ==========================================
+
+model Assignment {
+  id          String   @id @default(cuid())
+  courseId     String
+  teacherId   String?
+  title       String
+  description String?  @db.Text
+  dueDate     DateTime?
+  maxScore    Float    @default(100)
+  isActive    Boolean  @default(true)
+
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacher     Teacher? @relation(fields: [teacherId], references: [id])
+  submissions AssignmentSubmission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("assignments")
+}
+
+model AssignmentSubmission {
+  id           String           @id @default(cuid())
+  assignmentId String
+  studentId    String
+  fileUrl      String?          // Uploaded file URL
+  linkUrl      String?          // External link (GitHub, etc.)
+  text         String?          @db.Text // Text answer
+  grade        Float?           // Teacher's grade
+  feedback     String?          @db.Text // Teacher's feedback
+  status       SubmissionStatus @default(NOT_SUBMITTED)
+
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student    Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  submittedAt DateTime?
+  gradedAt    DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([assignmentId, studentId])
+  @@map("assignment_submissions")
+}
+
+enum SubmissionStatus {
+  NOT_SUBMITTED
+  SUBMITTED
+  LATE
+  GRADED
+  RETURNED // Teacher returned for revision
+}
+
+// ==========================================
+// NOTIFICATIONS (Уведомления)
+// ==========================================
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String           // Can be student, teacher, parent, admin
+  userType  String           // "student" | "teacher" | "parent" | "admin"
+  type      NotificationType
+  title     String
+  message   String           @db.Text
+  link      String?          // URL to navigate to
+  isRead    Boolean          @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, userType])
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  NEW_GRADE
+  NEW_ASSIGNMENT
+  ASSIGNMENT_GRADED
+  ASSIGNMENT_DUE
+  NEW_COMMENT
+  ATTENDANCE_MARKED
+  COURSE_UPDATE
+  NEW_QUIZ
+  QUIZ_GRADED
+  SYSTEM
+}
+
+// ==========================================
+// QUIZZES (Онлайн тесты)
+// ==========================================
+
+model Quiz {
+  id          String    @id @default(cuid())
+  courseId     String
+  teacherId   String?
+  title       String
+  description String?   @db.Text
+  timeLimit   Int?      // Time limit in minutes (null = no limit)
+  maxAttempts Int       @default(1) // How many times student can attempt
+  passingScore Float?   // Minimum score to pass (percentage)
+  isActive    Boolean   @default(true)
+  isPublished Boolean   @default(false)
+  showResults Boolean   @default(true) // Show results after completion
+  shuffleQuestions Boolean @default(false)
+
+  course    Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacher   Teacher?       @relation(fields: [teacherId], references: [id])
+  questions QuizQuestion[]
+  attempts  QuizAttempt[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("quizzes")
+}
+
+model QuizQuestion {
+  id           String       @id @default(cuid())
+  quizId       String
+  type         QuestionType
+  question     String       @db.Text // Supports markdown
+  options      Json?        // For MC/TF: [{id: string, text: string}]
+  correctAnswer Json        // For MC: ["optionId"], TF: ["true"/"false"], OPEN: ["expected answer"]
+  points       Float        @default(1)
+  explanation  String?      @db.Text // Shown after answering
+  order        Int          @default(0)
+
+  quiz    Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  answers QuizAnswer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("quiz_questions")
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE   // Single correct answer
+  MULTIPLE_SELECT   // Multiple correct answers
+  TRUE_FALSE
+  OPEN_ENDED        // Text answer (manual grading)
+  CODE              // Code answer (manual grading)
+}
+
+model QuizAttempt {
+  id          String        @id @default(cuid())
+  quizId      String
+  studentId   String
+  score       Float?        // Calculated score (percentage)
+  totalPoints Float?        // Total points earned
+  maxPoints   Float?        // Maximum possible points
+  status      AttemptStatus @default(IN_PROGRESS)
+  startedAt   DateTime      @default(now())
+  completedAt DateTime?
+  timeSpentSec Int?         // Time spent in seconds
+
+  quiz    Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  student Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  answers QuizAnswer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("quiz_attempts")
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  COMPLETED
+  TIMED_OUT
+  GRADED
+}
+
+model QuizAnswer {
+  id          String   @id @default(cuid())
+  attemptId   String
+  questionId  String
+  answer      Json     // Student's answer: ["selectedOptionId"] or ["text answer"]
+  isCorrect   Boolean? // null for open-ended/code (needs manual grading)
+  pointsEarned Float?  // Points earned for this answer
+
+  attempt  QuizAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([attemptId, questionId])
+  @@map("quiz_answers")
 }
 
 // ==========================================

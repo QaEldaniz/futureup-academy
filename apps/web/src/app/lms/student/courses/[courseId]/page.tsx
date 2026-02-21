@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
 import {
   ArrowLeft, BookOpen, CheckCircle2, Circle, PlayCircle, Clock,
-  FileText, Users as UsersIcon, Signal
+  FileText, Users as UsersIcon, Signal, ClipboardList, FileQuestion,
 } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -92,6 +92,40 @@ export default function StudentCourseDetail() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Assignments & Quizzes links */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button
+          onClick={() => router.push(`/lms/student/courses/${courseId}/assignments`)}
+          className="flex items-center justify-between bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 hover:shadow-md hover:border-primary-200 dark:hover:border-primary-800 transition-all text-left"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+              <ClipboardList className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Assignments</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">View and submit assignments</p>
+            </div>
+          </div>
+          <ArrowLeft className="w-5 h-5 text-gray-400 rotate-180" />
+        </button>
+        <button
+          onClick={() => router.push(`/lms/student/courses/${courseId}/quizzes`)}
+          className="flex items-center justify-between bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 hover:shadow-md hover:border-purple-200 dark:hover:border-purple-800 transition-all text-left"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+              <FileQuestion className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Quizzes</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Take quizzes and tests</p>
+            </div>
+          </div>
+          <ArrowLeft className="w-5 h-5 text-gray-400 rotate-180" />
+        </button>
       </div>
 
       {/* Lessons */}
