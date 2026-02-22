@@ -97,7 +97,7 @@ export default function StudentMessagesPage() {
   const getConvName = (c: Conversation) => {
     if (c.isGroup && c.title) return c.title;
     const other = c.participants?.find(p => p.userId !== user?.id);
-    return other?.userName || c.title || 'Chat';
+    return other?.name || other?.userName || c.title || 'Chat';
   };
 
   const formatTime = (d: string) => {

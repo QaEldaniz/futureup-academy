@@ -481,7 +481,7 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
   server.get('/courses/:courseId/attendance', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
     const { courseId } = request.params as { courseId: string };
-    const { date, studentId } = request.query as { date?: string; studentId?: string };
+    const { date, studentId, from, to } = request.query as { date?: string; studentId?: string; from?: string; to?: string };
 
     // Verify teacher access (admin skips check)
     if (request.user.type !== 'admin') {
@@ -494,7 +494,13 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
     }
 
     const where: any = { courseId };
-    if (date) {
+    if (from && to) {
+      const fromDate = new Date(from);
+      fromDate.setHours(0, 0, 0, 0);
+      const toDate = new Date(to);
+      toDate.setHours(23, 59, 59, 999);
+      where.date = { gte: fromDate, lte: toDate };
+    } else if (date) {
       const d = new Date(date);
       d.setHours(0, 0, 0, 0);
       const nextDay = new Date(d);
