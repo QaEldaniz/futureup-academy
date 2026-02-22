@@ -121,7 +121,7 @@ export default function ScholarshipApplyPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4"
+            className="text-4xl sm:text-5xl font-bold font-serif-heading tracking-tight text-gray-900 dark:text-white mb-4"
           >
             {getText(locale, 'Təqaüd Müraciəti', 'Заявка на Стипендию', 'Scholarship Application')}
           </motion.h1>
@@ -159,7 +159,7 @@ export default function ScholarshipApplyPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="p-8 sm:p-10 rounded-2xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-xl"
+            className="p-8 sm:p-10 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-xl"
           >
             {submitted ? (
               <motion.div

@@ -71,9 +71,9 @@ function TeacherCard({ teacher, index, locale }: { teacher: Teacher; index: numb
 
   return (
     <motion.div variants={cardVariants} className={cn(
-      'group relative overflow-hidden rounded-2xl',
+      'group relative overflow-hidden rounded-lg',
       'bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800',
-      'hover:shadow-2xl hover:shadow-primary-500/10 hover:-translate-y-2',
+      'hover:shadow-xl hover:-translate-y-2',
       'transition-all duration-500'
     )}>
       <div className="relative h-56 flex items-center justify-center bg-gray-50 dark:bg-gray-900/50 overflow-hidden">
@@ -181,7 +181,7 @@ export default function TeachersPage() {
             <Sparkles className="w-4 h-4 text-primary-500" />
             <span className="text-sm font-medium text-primary-700 dark:text-primary-300">FutureUp Academy</span>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white mb-6">
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif-heading text-gray-900 dark:text-white mb-6">
             {t('title')}
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400">

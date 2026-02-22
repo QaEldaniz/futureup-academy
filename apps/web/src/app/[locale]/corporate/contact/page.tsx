@@ -97,10 +97,10 @@ export default function CorporateContactPage() {
           animate={{ opacity: 1, scale: 1 }}
           className="relative z-10 text-center max-w-lg mx-auto px-4"
         >
-          <div className="w-20 h-20 rounded-3xl flex items-center justify-center bg-gradient-to-br from-secondary-500 to-accent-500 shadow-2xl mx-auto mb-6">
+          <div className="w-20 h-20 rounded-lg flex items-center justify-center bg-gradient-to-br from-secondary-500 to-accent-500 shadow-lg mx-auto mb-6">
             <CheckCircle2 className="w-10 h-10 text-white" />
           </div>
-          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
             {getText(locale, 'Müraciətiniz göndərildi!', 'Ваша заявка отправлена!', 'Your inquiry has been sent!')}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
@@ -150,7 +150,7 @@ export default function CorporateContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4"
+            className="text-4xl sm:text-5xl font-bold font-serif-heading tracking-tight text-gray-900 dark:text-white mb-4"
           >
             {getText(locale, 'Bizimlə Əlaqə', 'Связаться с нами', 'Contact Us')}
           </motion.h1>
@@ -178,7 +178,7 @@ export default function CorporateContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             onSubmit={handleSubmit}
-            className="bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 rounded-2xl p-8 sm:p-10 shadow-xl"
+            className="bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 rounded-lg p-8 sm:p-10 shadow-xl"
           >
             {error && (
               <div className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-red-600 dark:text-red-400 text-sm">

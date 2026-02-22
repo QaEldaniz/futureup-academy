@@ -267,7 +267,7 @@ export default function CorporatePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4"
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif-heading tracking-tight text-gray-900 dark:text-white mb-4"
           >
             {getText(locale, 'Korporativ Həllər', 'Корпоративные Решения', 'Corporate Solutions')}
           </motion.h1>
@@ -315,12 +315,12 @@ export default function CorporatePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="text-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800"
+                  className="text-center p-6 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800"
                 >
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br from-primary-500 to-secondary-500 shadow-lg mx-auto mb-3">
                     <StatIcon className="w-6 h-6 text-white" />
                   </div>
-                  <p className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent mb-1">
+                  <p className="text-3xl sm:text-4xl font-bold font-serif-heading text-primary-500 dark:text-primary-400 mb-1">
                     {stat.value}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
@@ -342,7 +342,7 @@ export default function CorporatePage() {
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
               {getText(locale, 'Xidmətlərimiz', 'Наши Услуги', 'Our Services')}
             </h2>
             <p className="max-w-2xl mx-auto text-gray-600 dark:text-gray-400">
@@ -397,9 +397,9 @@ export default function CorporatePage() {
                 <motion.div key={service.id} variants={cardVariants}>
                   <div
                     className={cn(
-                      'group relative flex flex-col rounded-2xl overflow-hidden h-full',
+                      'group relative flex flex-col rounded-lg overflow-hidden h-full',
                       'bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800',
-                      'hover:shadow-2xl hover:shadow-primary-500/10 hover:-translate-y-1',
+                      'hover:shadow-xl hover:-translate-y-1',
                       'transition-all duration-300'
                     )}
                   >
@@ -407,7 +407,7 @@ export default function CorporatePage() {
                     <div className="flex flex-col flex-1 p-7">
                       <div
                         className={cn(
-                          'w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br shadow-lg mb-5',
+                          'w-14 h-14 rounded-lg flex items-center justify-center bg-gradient-to-br shadow-lg mb-5',
                           service.gradient
                         )}
                       >
@@ -534,7 +534,7 @@ export default function CorporatePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="p-6 rounded-2xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  className="p-6 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                 >
                   <div
                     className={cn(
@@ -591,7 +591,7 @@ export default function CorporatePage() {
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <Sparkles className="w-10 h-10 text-white/80 mx-auto mb-6" />
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold font-serif-heading text-white mb-4">
               {getText(
                 locale,
                 'Şirkətinizi gələcəyə hazırlayın!',

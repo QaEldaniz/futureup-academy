@@ -92,7 +92,7 @@ function ApplyPageContent() {
             <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-6">
               <CheckCircle2 className="w-10 h-10 text-green-500" />
             </div>
-            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-4">{t('successTitle')}</h1>
+            <h1 className="text-3xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">{t('successTitle')}</h1>
             <p className="text-lg text-gray-500 dark:text-gray-400">{t('successDesc')}</p>
           </motion.div>
         </div>
@@ -113,7 +113,7 @@ function ApplyPageContent() {
             <GraduationCap className="w-4 h-4 text-primary-500" />
             <span className="text-sm font-medium text-primary-700 dark:text-primary-300">FutureUp Academy</span>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">{t('title')}</motion.h1>
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-6">{t('title')}</motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-lg text-gray-600 dark:text-gray-400">{t('subtitle')}</motion.p>
         </div>
       </section>
@@ -121,7 +121,7 @@ function ApplyPageContent() {
       <section className="py-16 bg-bg-light dark:bg-bg-dark">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <div className="p-8 rounded-2xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-xl">
+            <div className="p-8 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-xl">
               <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
                   <div className="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-sm">{error}</div>

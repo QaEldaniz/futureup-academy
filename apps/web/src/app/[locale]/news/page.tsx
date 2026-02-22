@@ -111,7 +111,7 @@ export default function NewsPage() {
             <Sparkles className="w-4 h-4 text-primary-500" />
             <span className="text-sm font-medium text-primary-700 dark:text-primary-300">{t('allNews')}</span>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white mb-6">
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif-heading text-gray-900 dark:text-white mb-6">
             {t('title')}
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400">
@@ -146,7 +146,7 @@ export default function NewsPage() {
                 {articles.map((article, idx) => (
                   <motion.div key={article.id} variants={itemVariants} className="group">
                     <Link href={`/news/${article.slug}`}>
-                      <div className="bg-white dark:bg-gray-800/50 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                      <div className="bg-white dark:bg-gray-800/50 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                         {article.image ? (
                           <div className="h-48 overflow-hidden">
                             <img

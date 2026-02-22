@@ -82,7 +82,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-gray-900 dark:bg-gray-950 text-gray-300">
+    <footer className="bg-primary-800 dark:bg-gray-950 text-gray-300 border-t-4 border-secondary-500">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -91,7 +91,7 @@ export function Footer() {
             <div className="flex items-center gap-2.5 mb-4">
               <Image src="/images/logo.png" alt="FutureUp Academy" width={64} height={64} unoptimized />
               <div>
-                <span className="text-xl font-extrabold text-white">FutureUp</span>
+                <span className="text-xl font-bold font-serif-heading text-white">FutureUp</span>
                 <span className="text-xs block text-gray-400 -mt-0.5 tracking-wider uppercase">
                   Academy
                 </span>
@@ -108,7 +108,7 @@ export function Footer() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-primary-500 flex items-center justify-center transition-colors group"
+                  className="w-9 h-9 rounded-md bg-primary-700 hover:bg-secondary-500 flex items-center justify-center transition-colors group"
                 >
                   <Icon className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors" />
                 </a>
@@ -118,7 +118,7 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">
+            <h3 className="text-secondary-400 font-serif-heading font-semibold text-sm uppercase tracking-wider mb-4">
               {t('quickLinks')}
             </h3>
             <ul className="space-y-2.5">
@@ -137,7 +137,7 @@ export function Footer() {
 
           {/* Programs */}
           <div>
-            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">
+            <h3 className="text-secondary-400 font-serif-heading font-semibold text-sm uppercase tracking-wider mb-4">
               {t('programs')}
             </h3>
             <ul className="space-y-2.5">
@@ -158,7 +158,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">
+            <h3 className="text-secondary-400 font-serif-heading font-semibold text-sm uppercase tracking-wider mb-4">
               {t('contact')}
             </h3>
             <ul className="space-y-3">
@@ -199,7 +199,7 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-gray-800">
+      <div className="border-t border-secondary-700/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-sm">
             © {new Date().getFullYear()} {SITE_NAME}. {t('rights')}

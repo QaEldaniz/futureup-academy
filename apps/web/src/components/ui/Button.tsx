@@ -14,22 +14,22 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    'bg-gradient-to-r from-primary-500 to-secondary-600 text-white hover:from-primary-600 hover:to-secondary-700 shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
+    'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg border border-primary-600',
   secondary:
-    'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700',
+    'bg-secondary-100 dark:bg-gray-800 text-primary-700 dark:text-gray-100 hover:bg-secondary-200 dark:hover:bg-gray-700 border border-secondary-200 dark:border-gray-700',
   outline:
     'border-2 border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20',
   ghost:
     'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100',
   accent:
-    'bg-accent-500 text-white hover:bg-accent-600 shadow-lg shadow-accent-500/25',
+    'bg-secondary-500 text-white hover:bg-secondary-600 shadow-md border border-secondary-600',
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: 'px-4 py-2 text-sm rounded-lg',
-  md: 'px-6 py-2.5 text-sm rounded-xl',
-  lg: 'px-8 py-3 text-base rounded-xl',
-  xl: 'px-10 py-4 text-lg rounded-2xl',
+  sm: 'px-4 py-2 text-sm rounded-md',
+  md: 'px-6 py-2.5 text-sm rounded-lg',
+  lg: 'px-8 py-3 text-base rounded-lg',
+  xl: 'px-10 py-4 text-lg rounded-lg',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

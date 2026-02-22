@@ -35,7 +35,7 @@ export function Header() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         scrolled
-          ? 'bg-white/80 dark:bg-bg-dark/80 backdrop-blur-xl shadow-lg shadow-black/5'
+          ? 'bg-surface-light/95 dark:bg-bg-dark/95 backdrop-blur-sm shadow-sm border-b border-secondary-200/30 dark:border-secondary-800/30'
           : 'bg-transparent'
       )}
     >
@@ -45,10 +45,10 @@ export function Header() {
           <Link href="/" className="flex items-center gap-2.5 group">
             <Image src="/images/logo.png" alt="FutureUp Academy" width={64} height={64} unoptimized className="group-hover:scale-105 transition-transform" />
             <div className="flex flex-col">
-              <span className="text-xl font-extrabold bg-gradient-to-r from-primary-500 to-secondary-600 bg-clip-text text-transparent">
+              <span className="text-xl font-bold font-serif-heading text-primary-500 dark:text-white">
                 FutureUp
               </span>
-              <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 -mt-1 tracking-wider uppercase">
+              <span className="text-[10px] font-medium text-secondary-500 dark:text-secondary-400 -mt-1 tracking-[0.2em] uppercase">
                 Academy
               </span>
             </div>
@@ -60,7 +60,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors border-b-2 border-transparent hover:border-secondary-500"
               >
                 {link.label}
               </Link>

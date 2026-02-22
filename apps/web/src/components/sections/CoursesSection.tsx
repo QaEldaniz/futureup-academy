@@ -158,8 +158,8 @@ function CourseCardComponent({ course, isKids }: { course: CourseCard; isKids: b
         'hover:-translate-y-1',
         'transition-all duration-300',
         isKids
-          ? 'rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-orange-950/40 dark:to-amber-950/30 border-2 border-orange-200/60 dark:border-orange-800/30 hover:shadow-2xl hover:shadow-orange-500/15'
-          : 'rounded-2xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-2xl hover:shadow-primary-500/10'
+          ? 'rounded-lg bg-gradient-to-br from-amber-50 to-orange-50 dark:from-orange-950/40 dark:to-amber-950/30 border-2 border-orange-200/60 dark:border-orange-800/30 hover:shadow-lg'
+          : 'rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-lg'
       )}
     >
       {/* Top gradient border */}
@@ -173,7 +173,7 @@ function CourseCardComponent({ course, isKids }: { course: CourseCard; isKids: b
             'bg-gradient-to-br',
             course.gradient,
             'shadow-lg',
-            isKids ? 'w-14 h-14 rounded-2xl' : 'w-12 h-12 rounded-xl',
+            isKids ? 'w-14 h-14 rounded-lg' : 'w-12 h-12 rounded-lg',
           )}
         >
           <Icon className={cn('text-white', isKids ? 'w-7 h-7' : 'w-6 h-6')} />
@@ -181,7 +181,7 @@ function CourseCardComponent({ course, isKids }: { course: CourseCard; isKids: b
 
         {/* Title */}
         <h3 className={cn(
-          'font-bold mb-2 transition-colors',
+          'font-bold font-serif-heading mb-2 transition-colors',
           isKids
             ? 'text-xl text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400'
             : 'text-lg text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400'
@@ -255,7 +255,7 @@ export function CoursesSection() {
         {/* Section header with image */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-14">
           <div className="relative hidden lg:block">
-            <div className="rounded-2xl overflow-hidden shadow-2xl shadow-secondary-500/10">
+            <div className="rounded-lg overflow-hidden shadow-lg">
               <img
                 src="/images/coding-workspace.jpg"
                 alt="Modern coding workspace"
@@ -263,14 +263,14 @@ export function CoursesSection() {
               />
             </div>
             <div className={cn(
-              'absolute -top-3 -right-3 w-20 h-20 rounded-2xl opacity-15 blur-xl',
+              'absolute -top-3 -right-3 w-20 h-20 rounded-lg opacity-15 blur-xl',
               isKids
                 ? 'bg-gradient-to-br from-orange-500 to-amber-500'
                 : 'bg-gradient-to-br from-primary-500 to-accent-500'
             )} />
           </div>
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
               {isKids ? t('courses.kidsTitle') : t('courses.title')}
             </h2>
             <p className="max-w-2xl mx-auto lg:mx-0 text-lg text-gray-500 dark:text-gray-400 mb-6">
@@ -282,7 +282,7 @@ export function CoursesSection() {
               <button
                 onClick={() => setActiveTab('adults')}
                 className={cn(
-                  'inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300',
+                  'inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300',
                   activeTab === 'adults'
                     ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
                     : 'bg-white dark:bg-surface-dark text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-primary-300'
@@ -294,9 +294,9 @@ export function CoursesSection() {
               <button
                 onClick={() => setActiveTab('kids')}
                 className={cn(
-                  'inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300',
+                  'inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300',
                   activeTab === 'kids'
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
+                    ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30'
                     : 'bg-white dark:bg-surface-dark text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-orange-300'
                 )}
               >

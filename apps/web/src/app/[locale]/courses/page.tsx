@@ -99,11 +99,11 @@ function CourseCard({ course, locale, isKids }: { course: Course; locale: string
     <motion.div variants={cardVariants}>
       <Link href={`/courses/${course.slug}`}>
         <div className={cn(
-          'group relative flex flex-col rounded-2xl overflow-hidden h-full',
+          'group relative flex flex-col rounded-lg overflow-hidden h-full',
           'hover:-translate-y-1 transition-all duration-300 cursor-pointer',
           isKids
-            ? 'bg-gradient-to-br from-amber-50 to-orange-50 dark:from-orange-950/40 dark:to-amber-950/30 border-2 border-orange-200/60 dark:border-orange-800/30 hover:shadow-2xl hover:shadow-orange-500/15 rounded-3xl'
-            : 'bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-2xl hover:shadow-primary-500/10'
+            ? 'bg-gradient-to-br from-amber-50 to-orange-50 dark:from-orange-950/40 dark:to-amber-950/30 border-2 border-orange-200/60 dark:border-orange-800/30 hover:shadow-xl rounded-xl'
+            : 'bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-xl'
         )}>
           <div className={cn(
             'w-full bg-gradient-to-r',
@@ -130,7 +130,7 @@ function CourseCard({ course, locale, isKids }: { course: Course; locale: string
             <div className={cn(
               'flex items-center justify-center mb-4 bg-gradient-to-br shadow-lg',
               gradient,
-              isKids ? 'w-14 h-14 rounded-2xl' : 'w-12 h-12 rounded-xl'
+              isKids ? 'w-14 h-14 rounded-lg' : 'w-12 h-12 rounded-xl'
             )}>
               <IconComp className={cn('text-white', isKids ? 'w-7 h-7' : 'w-6 h-6')} />
             </div>
@@ -286,7 +286,7 @@ export default function CoursesPage() {
               isKids ? 'text-orange-700 dark:text-orange-300' : 'text-primary-700 dark:text-primary-300'
             )}>FutureUp Academy</span>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4">
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif-heading tracking-tight text-gray-900 dark:text-white mb-4">
             {isKids ? t('kidsTitle') : t('adultsTitle')}
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400">
@@ -298,7 +298,7 @@ export default function CoursesPage() {
             <button
               onClick={() => { setSelectedAudience('ADULTS'); setSelectedCategory('all'); setSelectedAgeGroup('all'); }}
               className={cn(
-                'inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300',
+                'inline-flex items-center gap-2.5 px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300',
                 selectedAudience === 'ADULTS'
                   ? 'bg-primary-500 text-white shadow-xl shadow-primary-500/30 scale-105'
                   : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-primary-300 hover:text-primary-600'
@@ -310,7 +310,7 @@ export default function CoursesPage() {
             <button
               onClick={() => { setSelectedAudience('KIDS'); setSelectedCategory('all'); setSelectedAgeGroup('all'); }}
               className={cn(
-                'inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300',
+                'inline-flex items-center gap-2.5 px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300',
                 selectedAudience === 'KIDS'
                   ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-500/30 scale-105'
                   : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-orange-300 hover:text-orange-600'
@@ -439,7 +439,7 @@ export default function CoursesPage() {
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <Sparkles className={cn('w-10 h-10 mx-auto mb-6', isKids ? 'text-orange-500' : 'text-primary-500')} />
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">{t('apply')}</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">{t('apply')}</h2>
             <Link href="/apply">
               <Button size="xl" rightIcon={<ArrowRight className="w-5 h-5" />}>{t('apply')}</Button>
             </Link>

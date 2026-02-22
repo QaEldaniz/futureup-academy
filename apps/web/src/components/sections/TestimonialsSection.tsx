@@ -86,16 +86,16 @@ function StaticTestimonialCard({
   return (
     <div
       className={cn(
-        'group relative flex flex-col p-6 sm:p-8 rounded-2xl',
+        'group relative flex flex-col p-6 sm:p-8 rounded-lg',
         'bg-white dark:bg-surface-dark',
-        'border border-gray-100 dark:border-gray-800',
-        'hover:shadow-xl hover:shadow-primary-500/5',
+        'border border-gray-100 dark:border-gray-800 border-l-4 border-l-secondary-500',
+        'hover:shadow-lg',
         'hover:-translate-y-0.5',
         'transition-all duration-300'
       )}
     >
       <div className="absolute top-5 right-6 pointer-events-none">
-        <Quote className="w-10 h-10 text-primary-100 dark:text-primary-900/30 fill-primary-100 dark:fill-primary-900/30" />
+        <Quote className="w-10 h-10 text-secondary-200 dark:text-secondary-800/30 fill-secondary-200 dark:fill-secondary-800/30" />
       </div>
       <div className="flex items-center gap-0.5 mb-5">
         {Array.from({ length: testimonial.rating }).map((_, i) => (
@@ -109,8 +109,7 @@ function StaticTestimonialCard({
         <div
           className={cn(
             'w-10 h-10 rounded-full flex items-center justify-center shrink-0',
-            'bg-gradient-to-br',
-            testimonial.gradient
+            'bg-primary-500'
           )}
         >
           <span className="text-xs font-bold text-white">{testimonial.initials}</span>
@@ -151,17 +150,17 @@ function DynamicTestimonialCard({
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
       className={cn(
-        'group relative flex flex-col p-6 sm:p-8 rounded-2xl',
+        'group relative flex flex-col p-6 sm:p-8 rounded-lg',
         'bg-white dark:bg-surface-dark',
-        'border border-gray-100 dark:border-gray-800',
-        'hover:shadow-xl hover:shadow-primary-500/5',
+        'border border-gray-100 dark:border-gray-800 border-l-4 border-l-secondary-500',
+        'hover:shadow-lg',
         'hover:-translate-y-0.5',
         'transition-all duration-300'
       )}
     >
       {/* Decorative quote */}
       <div className="absolute top-5 right-6 pointer-events-none">
-        <Quote className="w-10 h-10 text-primary-100 dark:text-primary-900/30 fill-primary-100 dark:fill-primary-900/30" />
+        <Quote className="w-10 h-10 text-secondary-200 dark:text-secondary-800/30 fill-secondary-200 dark:fill-secondary-800/30" />
       </div>
 
       {/* Star rating */}
@@ -191,8 +190,7 @@ function DynamicTestimonialCard({
           <div
             className={cn(
               'w-10 h-10 rounded-full flex items-center justify-center shrink-0',
-              'bg-gradient-to-br',
-              gradients[index % gradients.length]
+              'bg-primary-500'
             )}
           >
             <span className="text-xs font-bold text-white">{getInitials(testimonial.name)}</span>
@@ -240,7 +238,7 @@ export function TestimonialsSection() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200/50 dark:border-yellow-800/30 mb-4"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200/50 dark:border-yellow-800/30 mb-4"
           >
             <Trophy className="w-3.5 h-3.5 text-yellow-500" />
             <span className="text-xs font-semibold text-yellow-600 dark:text-yellow-400 uppercase tracking-wider">
@@ -251,7 +249,7 @@ export function TestimonialsSection() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white"
           >
             {t('testimonials.title')}
           </motion.h2>

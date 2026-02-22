@@ -135,7 +135,7 @@ export default function ContactPage() {
             <Sparkles className="w-4 h-4 text-primary-500" />
             <span className="text-sm font-medium text-primary-700 dark:text-primary-300">FutureUp Academy</span>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">{t('title')}</motion.h1>
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-6">{t('title')}</motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400">{t('subtitle')}</motion.p>
         </div>
       </section>
@@ -160,11 +160,11 @@ export default function ContactPage() {
                   <Wrapper
                     {...wrapperProps as any}
                     className={cn(
-                      'block text-center p-8 rounded-2xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300',
+                      'block text-center p-8 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300',
                       card.href && 'cursor-pointer'
                     )}
                   >
-                    <div className={cn('w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br shadow-lg mx-auto mb-4', card.gradient)}>
+                    <div className={cn('w-14 h-14 rounded-lg flex items-center justify-center bg-gradient-to-br shadow-lg mx-auto mb-4', card.gradient)}>
                       <Icon className="w-7 h-7 text-white" />
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{card.title}</h3>
@@ -183,7 +183,7 @@ export default function ContactPage() {
             {/* Map + Working hours */}
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               {/* Google Maps Embed */}
-              <div className="h-72 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 mb-6">
+              <div className="h-72 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 mb-6">
                 {mapsEmbed ? (
                   <iframe
                     src={mapsEmbed}
@@ -203,7 +203,7 @@ export default function ContactPage() {
               </div>
 
               {/* Working hours */}
-              <div className="p-6 rounded-2xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800">
+              <div className="p-6 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-3">
                   <Clock className="w-5 h-5 text-primary-500" />
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t('workingHours')}</h3>
@@ -214,7 +214,7 @@ export default function ContactPage() {
 
             {/* Form */}
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <div className="p-8 rounded-2xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-lg">
+              <div className="p-8 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-lg">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t('formTitle')}</h3>
                 {submitted ? (
                   <div className="text-center py-12">

@@ -67,7 +67,7 @@ export default function FAQPage() {
             <Sparkles className="w-4 h-4 text-primary-500" />
             <span className="text-sm font-medium text-primary-700 dark:text-primary-300">FutureUp Academy</span>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">{t('title')}</motion.h1>
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl sm:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-6">{t('title')}</motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400 mb-8">{t('subtitle')}</motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="max-w-md mx-auto relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -105,7 +105,7 @@ export default function FAQPage() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:64px_64px]" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
           <MessageCircle className="w-12 h-12 text-primary-200 mx-auto mb-6" />
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">{t('ctaTitle')}</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold font-serif-heading text-white mb-4">{t('ctaTitle')}</h2>
           <p className="text-lg text-primary-100 mb-8">{t('ctaSubtitle')}</p>
           <Link href="/contact">
             <Button variant="secondary" size="xl" rightIcon={<ArrowRight className="w-5 h-5" />}>{t('ctaButton')}</Button>

@@ -59,11 +59,11 @@ function StatCard({ item, isVisible, index }: { item: StatItem; isVisible: boole
   return (
     <div
       className={cn(
-        'relative group flex flex-col items-center text-center p-8 rounded-2xl',
+        'relative group flex flex-col items-center text-center p-8 rounded-lg',
         'bg-white dark:bg-surface-dark',
         'border border-gray-100 dark:border-gray-800',
         'hover:border-primary-200 dark:hover:border-primary-700/50',
-        'shadow-sm hover:shadow-xl hover:shadow-primary-500/5',
+        'shadow-sm hover:shadow-lg',
         'transition-all duration-500',
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       )}
@@ -71,7 +71,7 @@ function StatCard({ item, isVisible, index }: { item: StatItem; isVisible: boole
     >
       {/* Icon */}
       <div className={cn(
-        'w-14 h-14 rounded-2xl flex items-center justify-center mb-5',
+        'w-14 h-14 rounded-lg flex items-center justify-center mb-5',
         'bg-gradient-to-br from-primary-100 to-secondary-100 dark:from-primary-900/30 dark:to-secondary-900/30',
         'group-hover:from-primary-200 group-hover:to-secondary-200 dark:group-hover:from-primary-800/40 dark:group-hover:to-secondary-800/40',
         'transition-colors duration-300'
@@ -80,7 +80,7 @@ function StatCard({ item, isVisible, index }: { item: StatItem; isVisible: boole
       </div>
 
       {/* Number */}
-      <div className="text-4xl sm:text-5xl font-extrabold mb-2 bg-gradient-to-r from-primary-500 to-secondary-600 bg-clip-text text-transparent">
+      <div className="text-4xl sm:text-5xl font-bold font-serif-heading mb-2 text-primary-500 dark:text-primary-400">
         {count}{item.suffix}
       </div>
 
@@ -90,7 +90,7 @@ function StatCard({ item, isVisible, index }: { item: StatItem; isVisible: boole
       </p>
 
       {/* Decorative corner accent */}
-      <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden rounded-tr-2xl pointer-events-none">
+      <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden rounded-tr-lg pointer-events-none">
         <div className="absolute top-0 right-0 w-24 h-24 -translate-y-12 translate-x-12 bg-gradient-to-br from-primary-500/5 to-accent-500/5 rounded-full group-hover:from-primary-500/10 group-hover:to-accent-500/10 transition-colors" />
       </div>
     </div>

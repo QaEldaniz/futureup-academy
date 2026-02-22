@@ -202,7 +202,7 @@ export default function CourseDetailPage() {
               </div>
               <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{categoryName}</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">{title}</h1>
+            <h1 className="text-4xl sm:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">{title}</h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mb-6">{description}</p>
             <div className="flex flex-wrap items-center gap-4">
               <span className={cn(
@@ -276,7 +276,7 @@ export default function CourseDetailPage() {
                       const teacherName = getLocalized(teacher as unknown as Record<string, unknown>, 'name', locale);
                       const teacherBio = getLocalized(teacher as unknown as Record<string, unknown>, 'bio', locale);
                       return (
-                        <div key={teacher.id} className="flex items-start gap-4 p-5 rounded-2xl bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800">
+                        <div key={teacher.id} className="flex items-start gap-4 p-5 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800">
                           <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white font-bold text-lg shrink-0">
                             {teacherName.charAt(0)}
                           </div>
@@ -295,11 +295,11 @@ export default function CourseDetailPage() {
 
             {/* Sidebar CTA */}
             <div className="lg:col-span-1">
-              <div className="sticky top-28 rounded-2xl bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 p-6 shadow-lg">
+              <div className="sticky top-28 rounded-lg bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 p-6 shadow-lg">
                 <div className={cn('w-full h-32 rounded-xl bg-gradient-to-br mb-6 flex items-center justify-center', gradient)}>
                   <IconComp className="w-12 h-12 text-white" />
                 </div>
-                <div className="text-3xl font-extrabold text-gray-900 dark:text-white mb-1">{course.price} ₼</div>
+                <div className="text-3xl font-bold font-serif-heading text-gray-900 dark:text-white mb-1">{course.price} ₼</div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{formatDuration(course.duration, locale, t)}</p>
 
                 <div className="space-y-3 mb-6">

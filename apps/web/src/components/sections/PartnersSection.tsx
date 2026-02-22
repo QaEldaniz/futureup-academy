@@ -170,11 +170,11 @@ function PartnerLogo({ partner }: { partner: Partner }) {
       className={cn(
         'flex items-center justify-center px-8 py-4',
         'min-w-[180px] h-[72px]',
-        'bg-white/70 dark:bg-white/[0.03] rounded-2xl',
+        'bg-white/70 dark:bg-white/[0.03] rounded-lg',
         'border border-gray-100 dark:border-gray-800/50',
         'hover:border-primary-200/70 dark:hover:border-primary-800/40',
         'hover:bg-white dark:hover:bg-white/[0.06]',
-        'hover:shadow-lg hover:shadow-primary-500/5',
+        'hover:shadow-lg',
         'transition-all duration-300',
         'group'
       )}
@@ -223,13 +223,13 @@ export function PartnersSection() {
     <section className="py-16 bg-bg-light dark:bg-bg-dark overflow-hidden border-y border-gray-100 dark:border-gray-800/50">
       {/* Section header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800/30 mb-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800/30 mb-4">
           <Handshake className="w-3.5 h-3.5 text-primary-500" />
           <span className="text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wider">
             {t('partnersLabel')}
           </span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">
+        <h2 className="text-2xl sm:text-3xl font-bold font-serif-heading text-gray-900 dark:text-white">
           {t('partnersTitle')}
         </h2>
       </div>

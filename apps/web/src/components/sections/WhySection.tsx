@@ -64,22 +64,19 @@ function FeatureCard({ feature }: { feature: Feature }) {
   return (
     <div
       className={cn(
-        'group relative p-6 sm:p-8 rounded-2xl',
+        'group relative p-6 sm:p-8 rounded-lg',
         'bg-white dark:bg-surface-dark',
         'border border-gray-100 dark:border-gray-800',
         'transition-all duration-300',
-        'hover:shadow-xl hover:shadow-primary-500/5',
+        'hover:shadow-lg',
         'hover:-translate-y-0.5',
-        // Gradient border on hover via pseudo-element trick using box shadow
-        'hover:border-transparent',
-        'hover:[box-shadow:0_0_0_1px_var(--color-primary-200),0_20px_60px_-15px_rgba(27,42,74,0.08)]',
-        'dark:hover:[box-shadow:0_0_0_1px_var(--color-primary-700),0_20px_60px_-15px_rgba(27,42,74,0.15)]'
+        'hover:border-secondary-300/50 dark:hover:border-secondary-700/50'
       )}
     >
       {/* Icon */}
       <div
         className={cn(
-          'w-12 h-12 rounded-xl flex items-center justify-center mb-5',
+          'w-12 h-12 rounded-lg flex items-center justify-center mb-5',
           'bg-gradient-to-br',
           feature.iconGradient,
           'shadow-lg'
@@ -89,7 +86,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
       </div>
 
       {/* Title */}
-      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+      <h3 className="text-lg font-bold font-serif-heading text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
         {t(`why.${feature.titleKey}`)}
       </h3>
 
@@ -98,10 +95,6 @@ function FeatureCard({ feature }: { feature: Feature }) {
         {t(`why.${feature.descKey}`)}
       </p>
 
-      {/* Decorative gradient corner */}
-      <div className="absolute top-0 right-0 w-24 h-24 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden rounded-tr-2xl">
-        <div className={cn('absolute -top-12 -right-12 w-24 h-24 rounded-full bg-gradient-to-br', feature.iconGradient, 'opacity-10')} />
-      </div>
     </div>
   );
 }
@@ -115,7 +108,7 @@ export function WhySection() {
         {/* Section header with image */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-14">
           <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
               {t('why.title')}
             </h2>
             <p className="text-lg text-gray-500 dark:text-gray-400">
@@ -123,14 +116,14 @@ export function WhySection() {
             </p>
           </div>
           <div className="relative hidden lg:block">
-            <div className="rounded-2xl overflow-hidden shadow-2xl shadow-primary-500/10">
+            <div className="rounded-lg overflow-hidden shadow-lg">
               <img
                 src="/images/team-discussion.jpg"
                 alt="Team collaboration"
                 className="w-full h-[280px] object-cover"
               />
             </div>
-            <div className="absolute -bottom-3 -left-3 w-20 h-20 rounded-2xl bg-gradient-to-br from-accent-500 to-primary-500 opacity-15 blur-xl" />
+            <div className="absolute -bottom-3 -left-3 w-20 h-20 rounded-lg bg-gradient-to-br from-accent-500 to-primary-500 opacity-15 blur-xl" />
           </div>
         </div>
 

@@ -66,8 +66,8 @@ function TeacherCard({ teacher }: { teacher: Teacher }) {
         'group flex-shrink-0 w-[280px] sm:w-[300px]',
         'bg-white dark:bg-surface-dark',
         'border border-gray-100 dark:border-gray-800',
-        'rounded-2xl overflow-hidden',
-        'hover:shadow-xl hover:shadow-primary-500/10',
+        'rounded-lg overflow-hidden gold-top-border',
+        'hover:shadow-lg',
         'hover:-translate-y-1',
         'transition-all duration-300'
       )}
@@ -80,8 +80,7 @@ function TeacherCard({ teacher }: { teacher: Teacher }) {
         <div
           className={cn(
             'relative w-24 h-24 rounded-full flex items-center justify-center',
-            'bg-gradient-to-br',
-            teacher.gradient,
+            'bg-primary-500 border-3 border-secondary-400',
             'shadow-xl',
             'group-hover:scale-110 transition-transform duration-300'
           )}
@@ -94,7 +93,7 @@ function TeacherCard({ teacher }: { teacher: Teacher }) {
 
       {/* Content */}
       <div className="p-5">
-        <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">
+        <h3 className="text-base font-bold font-serif-heading text-gray-900 dark:text-white mb-1">
           {t(`teachers.${teacher.nameKey}`)}
         </h3>
         <p className="text-sm text-primary-600 dark:text-primary-400 font-medium mb-4">
@@ -107,7 +106,7 @@ function TeacherCard({ teacher }: { teacher: Teacher }) {
             href={teacher.socialLinkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-md bg-gray-50 dark:bg-gray-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 flex items-center justify-center transition-colors"
           >
             <Linkedin className="w-4 h-4 text-gray-400 hover:text-primary-500 transition-colors" />
           </a>
@@ -115,7 +114,7 @@ function TeacherCard({ teacher }: { teacher: Teacher }) {
             href={teacher.socialGithub}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-md bg-gray-50 dark:bg-gray-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 flex items-center justify-center transition-colors"
           >
             <Github className="w-4 h-4 text-gray-400 hover:text-primary-500 transition-colors" />
           </a>
@@ -144,7 +143,7 @@ export function TeachersSection() {
         {/* Section header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-10">
           <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
               {t('teachers.title')}
             </h2>
             <p className="max-w-lg text-lg text-gray-500 dark:text-gray-400">
@@ -157,7 +156,7 @@ export function TeachersSection() {
             <button
               onClick={() => scroll('left')}
               className={cn(
-                'w-10 h-10 rounded-xl flex items-center justify-center',
+                'w-10 h-10 rounded-md flex items-center justify-center',
                 'border border-gray-200 dark:border-gray-700',
                 'hover:bg-gray-50 dark:hover:bg-gray-800',
                 'text-gray-500 hover:text-primary-500',
@@ -170,7 +169,7 @@ export function TeachersSection() {
             <button
               onClick={() => scroll('right')}
               className={cn(
-                'w-10 h-10 rounded-xl flex items-center justify-center',
+                'w-10 h-10 rounded-md flex items-center justify-center',
                 'border border-gray-200 dark:border-gray-700',
                 'hover:bg-gray-50 dark:hover:bg-gray-800',
                 'text-gray-500 hover:text-primary-500',

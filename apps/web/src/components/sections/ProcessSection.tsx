@@ -26,7 +26,7 @@ export function ProcessSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
             {t('process.title')}
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-gray-500 dark:text-gray-400">
@@ -57,7 +57,7 @@ export function ProcessSection() {
                           'bg-white dark:bg-surface-dark',
                           'border-2 border-gray-100 dark:border-gray-800',
                           'group-hover:border-primary-300 dark:group-hover:border-primary-700',
-                          'shadow-lg group-hover:shadow-xl group-hover:shadow-primary-500/10',
+                          'shadow-lg group-hover:shadow-lg',
                           'transition-all duration-300'
                         )}
                       >
