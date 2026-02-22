@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 interface QuizData {
   id: string;

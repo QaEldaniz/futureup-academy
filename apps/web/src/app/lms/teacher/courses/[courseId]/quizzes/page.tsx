@@ -12,7 +12,7 @@ import { useAuthStore } from '@/stores/auth';
 import MarkdownEditor from '@/components/shared/MarkdownEditor';
 import MarkdownRenderer from '@/components/shared/MarkdownRenderer';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 interface QuizQuestion {
   id: string;

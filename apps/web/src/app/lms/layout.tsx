@@ -82,6 +82,19 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
     }
   }, [mounted, isLoading, isAuthenticated, router]);
 
+  // Verify token is still valid on mount
+  useEffect(() => {
+    if (!mounted || !token) return;
+    fetch(`${API_URL}/api/health`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => {
+        if (r.status === 401) {
+          logout();
+          router.push('/login');
+        }
+      })
+      .catch(() => {});
+  }, [mounted, token, logout, router]);
+
   // Admin can now access LMS as super-teacher (no redirect)
 
   if (!mounted || isLoading) {

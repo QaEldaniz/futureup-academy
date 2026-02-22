@@ -387,6 +387,13 @@ export async function messageRoutes(server: FastifyInstance) {
       });
     }
 
+    if (text.length > 10000) {
+      return reply.status(400).send({
+        success: false,
+        message: 'Message text must be under 10000 characters',
+      });
+    }
+
     // Verify user is a participant
     const participant = await server.prisma.conversationParticipant.findFirst({
       where: { conversationId, userId: id, userType: type },

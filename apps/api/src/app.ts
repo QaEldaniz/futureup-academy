@@ -76,7 +76,7 @@ export async function buildApp() {
 
   // JWT
   await app.register(jwt, {
-    secret: process.env.JWT_SECRET || 'futureup-super-secret-key-change-in-production',
+    secret: process.env.JWT_SECRET || (() => { console.warn('WARNING: JWT_SECRET not set, using random secret. Set JWT_SECRET in .env for production!'); return require('crypto').randomBytes(32).toString('hex'); })(),
     sign: { expiresIn: '7d' },
   });
 

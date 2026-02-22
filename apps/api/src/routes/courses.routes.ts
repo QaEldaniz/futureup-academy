@@ -39,8 +39,14 @@ export async function courseRoutes(server: FastifyInstance) {
     const limitNum = Math.min(50, Math.max(1, parseInt(limit, 10) || 10));
     const skip = (pageNum - 1) * limitNum;
 
-    // If admin (has Bearer token), show all courses; otherwise only active
-    const isAdmin = !!(request.headers.authorization?.startsWith('Bearer '));
+    // If authenticated admin, show all courses; otherwise only active
+    let isAdmin = false;
+    try {
+      if (request.headers.authorization?.startsWith('Bearer ')) {
+        await request.jwtVerify();
+        isAdmin = request.user?.role === 'ADMIN' || request.user?.type === 'admin';
+      }
+    } catch { /* not authenticated or invalid token — show only active */ }
     const where: any = isAdmin ? {} : { isActive: true };
 
     if (categoryId) {

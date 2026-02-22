@@ -544,6 +544,20 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
       return reply.status(400).send({ success: false, message: 'studentId and value are required' });
     }
 
+    const maxVal = body.maxValue || 100;
+    if (body.value < 0 || body.value > maxVal) {
+      return reply.status(400).send({ success: false, message: `Value must be between 0 and ${maxVal}` });
+    }
+    if (maxVal <= 0) {
+      return reply.status(400).send({ success: false, message: 'maxValue must be greater than 0' });
+    }
+
+    // Validate type
+    const validTypes = ['ASSIGNMENT', 'QUIZ', 'EXAM', 'MIDTERM', 'FINAL', 'PROGRESS', 'OTHER'];
+    if (body.type && !validTypes.includes(body.type)) {
+      return reply.status(400).send({ success: false, message: `Invalid grade type. Must be one of: ${validTypes.join(', ')}` });
+    }
+
     // Verify teacher access (admin skips check)
     if (!isAdmin) {
       const tc = await server.prisma.teacherCourse.findUnique({
