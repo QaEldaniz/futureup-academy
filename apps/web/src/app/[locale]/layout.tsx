@@ -49,7 +49,11 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <ThemeProvider>
-        {children}
+        <Header />
+        <main>{children}</main>
+        <Footer />
+        <WhatsAppButton />
+        <CourseAdvisor />
       </ThemeProvider>
     </NextIntlClientProvider>
   );
