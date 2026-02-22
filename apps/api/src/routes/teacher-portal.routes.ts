@@ -267,7 +267,7 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
     }
 
     const enrollments = await server.prisma.studentCourse.findMany({
-      where: { courseId, status: 'ACTIVE' },
+      where: { courseId },
       include: {
         student: { select: { id: true, name: true, email: true, photo: true } },
       },
