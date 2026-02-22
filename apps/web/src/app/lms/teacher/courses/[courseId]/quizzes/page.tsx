@@ -446,7 +446,7 @@ export default function TeacherQuizzesPage() {
                       <Clock className="w-3 h-3" /> {selectedQuiz.timeLimit} min
                     </span>
                   )}
-                  <span className="flex items-center gap-1 px-2 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 rounded-lg">
+                  <span className="flex items-center gap-1 px-2 py-1 bg-secondary-50 dark:bg-secondary-900/20 text-secondary-700 dark:text-secondary-400 rounded-lg">
                     <Target className="w-3 h-3" /> {selectedQuiz.maxAttempts} attempt{selectedQuiz.maxAttempts > 1 ? 's' : ''}
                   </span>
                   {selectedQuiz.passingScore && (

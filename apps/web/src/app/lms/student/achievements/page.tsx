@@ -14,8 +14,8 @@ interface LeaderboardEntry { rank: number; studentId: string; studentName: strin
 const LEVELS = [
   { name: 'Beginner', min: 0, max: 99, color: 'from-gray-400 to-gray-500' },
   { name: 'Explorer', min: 100, max: 299, color: 'from-green-400 to-emerald-500' },
-  { name: 'Achiever', min: 300, max: 599, color: 'from-blue-400 to-cyan-500' },
-  { name: 'Master', min: 600, max: 999, color: 'from-purple-400 to-violet-500' },
+  { name: 'Achiever', min: 300, max: 599, color: 'from-primary-400 to-primary-600' },
+  { name: 'Master', min: 600, max: 999, color: 'from-secondary-400 to-secondary-600' },
   { name: 'Legend', min: 1000, max: 99999, color: 'from-yellow-400 to-orange-500' },
 ];
 
@@ -84,7 +84,7 @@ export default function AchievementsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -114,7 +114,7 @@ export default function AchievementsPage() {
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center"><Trophy className="w-5 h-5 text-purple-600" /></div>
+            <div className="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center"><Trophy className="w-5 h-5 text-primary-600" /></div>
             <span className="text-sm text-gray-500 dark:text-gray-400">Badges</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">{earnedBadges.length}<span className="text-lg text-gray-400">/{allBadges.length}</span></p>
@@ -144,7 +144,7 @@ export default function AchievementsPage() {
         <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
           {CATEGORIES.map(cat => (
             <button key={cat} onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors ${activeCategory === cat ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+              className={`px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors ${activeCategory === cat ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
               {cat.charAt(0).toUpperCase() + cat.slice(1)}
             </button>
           ))}
@@ -154,12 +154,12 @@ export default function AchievementsPage() {
             const earned = earnedIds.has(badge.id);
             const eb = earnedBadges.find(e => e.badgeId === badge.id);
             return (
-              <div key={badge.id} className={`relative rounded-2xl border p-5 text-center transition-all ${earned ? 'border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/10' : 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 opacity-50 grayscale'}`}>
+              <div key={badge.id} className={`relative rounded-2xl border p-5 text-center transition-all ${earned ? 'border-primary-200 dark:border-primary-800 bg-primary-50 dark:bg-primary-900/10' : 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 opacity-50 grayscale'}`}>
                 <div className="text-4xl mb-3">{badge.icon}</div>
                 <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">{badge.name}</h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{badge.description}</p>
                 {earned && eb ? (
-                  <span className="text-[10px] text-purple-600 dark:text-purple-400 font-medium">Earned {new Date(eb.awardedAt).toLocaleDateString()}</span>
+                  <span className="text-[10px] text-primary-600 dark:text-primary-400 font-medium">Earned {new Date(eb.awardedAt).toLocaleDateString()}</span>
                 ) : (
                   <span className="text-[10px] text-gray-400">+{badge.xpReward} XP</span>
                 )}
@@ -176,7 +176,7 @@ export default function AchievementsPage() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white">Leaderboard</h2>
             <select value={selectedCourse} onChange={e => setSelectedCourse(e.target.value)}
-              className="px-3 py-1.5 text-sm rounded-lg bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+              className="px-3 py-1.5 text-sm rounded-lg bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
               <option value="global">Global</option>
               {courses.map((c: any) => {
                 const course = c.course || c;
@@ -189,11 +189,11 @@ export default function AchievementsPage() {
               leaderboard.map((entry, i) => {
                 const isMe = entry.studentId === user?.id;
                 return (
-                  <div key={entry.studentId} className={`flex items-center gap-3 px-4 py-3 rounded-xl ${isMe ? 'bg-purple-50 dark:bg-purple-900/20 ring-1 ring-purple-200 dark:ring-purple-800' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}>
+                  <div key={entry.studentId} className={`flex items-center gap-3 px-4 py-3 rounded-xl ${isMe ? 'bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-200 dark:ring-primary-800' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}>
                     <span className="w-8 text-center text-sm font-bold text-gray-400">{i < 3 ? medalIcons[i + 1] : `#${entry.rank}`}</span>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white text-xs font-bold">{entry.studentName?.charAt(0) || '?'}</div>
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-secondary-500 flex items-center justify-center text-white text-xs font-bold">{entry.studentName?.charAt(0) || '?'}</div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-semibold truncate ${isMe ? 'text-purple-700 dark:text-purple-300' : 'text-gray-900 dark:text-white'}`}>{entry.studentName}{isMe && ' (You)'}</p>
+                      <p className={`text-sm font-semibold truncate ${isMe ? 'text-primary-700 dark:text-primary-300' : 'text-gray-900 dark:text-white'}`}>{entry.studentName}{isMe && ' (You)'}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-bold text-gray-900 dark:text-white">{entry.xpTotal} XP</p>

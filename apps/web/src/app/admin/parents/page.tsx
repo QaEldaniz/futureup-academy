@@ -88,7 +88,7 @@ export default function AdminParentsPage() {
         <div className="space-y-2">
           {parents.map((parent) => (
             <div key={parent.id} className="bg-surface-dark rounded-xl p-4 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white font-bold text-sm">
                 {parent.nameEn?.charAt(0).toUpperCase() || 'P'}
               </div>
               <div className="flex-1 min-w-0">
@@ -99,7 +99,7 @@ export default function AdminParentsPage() {
                 </div>
               </div>
               <div className="flex items-center gap-2 text-xs">
-                <span className="px-2 py-1 rounded-full bg-purple-900/30 text-purple-400 font-medium">
+                <span className="px-2 py-1 rounded-full bg-primary-900/30 text-primary-400 font-medium">
                   {parent._count?.children || 0} children
                 </span>
                 <span className={`px-2 py-1 rounded-full font-medium ${parent.isActive ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'}`}>

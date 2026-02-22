@@ -39,7 +39,7 @@ function CustomTooltip({
       <p className="text-xs font-medium text-gray-300 mb-1">{label}</p>
       <p className="text-sm font-semibold text-white">
         Avg Grade:{' '}
-        <span className="text-purple-400">{point.avg.toFixed(1)}</span>
+        <span className="text-primary-400">{point.avg.toFixed(1)}</span>
       </p>
       <p className="text-xs text-gray-400">
         {point.count} {point.count === 1 ? 'grade' : 'grades'}
@@ -69,12 +69,12 @@ export function GradeChart({ data, title }: GradeChartProps) {
           >
             <defs>
               <linearGradient id="gradeLineGradient" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#6366f1" />
-                <stop offset="100%" stopColor="#8b5cf6" />
+                <stop offset="0%" stopColor="#4A66A8" />
+                <stop offset="100%" stopColor="#7189BF" />
               </linearGradient>
               <linearGradient id="gradeAreaGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.15} />
-                <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.01} />
+                <stop offset="0%" stopColor="#7189BF" stopOpacity={0.15} />
+                <stop offset="100%" stopColor="#7189BF" stopOpacity={0.01} />
               </linearGradient>
             </defs>
 
@@ -103,7 +103,7 @@ export function GradeChart({ data, title }: GradeChartProps) {
             <Tooltip
               content={<CustomTooltip />}
               cursor={{
-                stroke: '#6366f1',
+                stroke: '#4A66A8',
                 strokeWidth: 1,
                 strokeDasharray: '4 4',
               }}
@@ -117,13 +117,13 @@ export function GradeChart({ data, title }: GradeChartProps) {
               fill="url(#gradeAreaGradient)"
               dot={{
                 r: 4,
-                fill: '#6366f1',
+                fill: '#4A66A8',
                 stroke: '#1f2937',
                 strokeWidth: 2,
               }}
               activeDot={{
                 r: 6,
-                fill: '#8b5cf6',
+                fill: '#7189BF',
                 stroke: '#1f2937',
                 strokeWidth: 2,
               }}

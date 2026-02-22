@@ -41,7 +41,7 @@ interface Certificate {
 const GRADE_CONFIG: Record<string, { label: string; className: string }> = {
   Excellent: { label: 'Excellent', className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
   'Very Good': { label: 'Very Good', className: 'bg-teal-500/10 text-teal-400 border-teal-500/20' },
-  Good: { label: 'Good', className: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
+  Good: { label: 'Good', className: 'bg-primary-500/10 text-primary-400 border-primary-500/20' },
   Satisfactory: { label: 'Satisfactory', className: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
 };
 

@@ -69,10 +69,10 @@ interface Course {
 // ─── Material type config ──────────────────────────────
 const MATERIAL_TYPES = [
   { value: 'SLIDES', icon: Presentation, color: 'text-amber-400 bg-amber-500/10 border-amber-500/20' },
-  { value: 'DOCUMENT', icon: FileText, color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
+  { value: 'DOCUMENT', icon: FileText, color: 'text-primary-400 bg-primary-500/10 border-primary-500/20' },
   { value: 'VIDEO', icon: Video, color: 'text-red-400 bg-red-500/10 border-red-500/20' },
   { value: 'SPREADSHEET', icon: Table2, color: 'text-green-400 bg-green-500/10 border-green-500/20' },
-  { value: 'LINK', icon: Link2, color: 'text-purple-400 bg-purple-500/10 border-purple-500/20' },
+  { value: 'LINK', icon: Link2, color: 'text-secondary-400 bg-secondary-500/10 border-secondary-500/20' },
   { value: 'FILE', icon: File, color: 'text-gray-400 bg-gray-500/10 border-gray-500/20' },
 ] as const;
 

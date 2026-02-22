@@ -9,7 +9,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 const TYPE_COLORS: Record<string, string> = {
   ASSIGNMENT: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-  QUIZ: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+  QUIZ: 'bg-secondary-100 text-secondary-700 dark:bg-secondary-900/30 dark:text-secondary-400',
   EXAM: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
   PROJECT: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
   PARTICIPATION: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',

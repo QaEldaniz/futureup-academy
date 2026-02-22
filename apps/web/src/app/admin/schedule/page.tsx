@@ -79,13 +79,13 @@ const TIME_SLOTS = Array.from({ length: 13 }, (_, i) => {
 });
 
 const SLOT_COLORS = [
-  'bg-blue-500/20 border-blue-500/30 text-blue-300',
+  'bg-primary-500/20 border-primary-500/30 text-primary-300',
   'bg-emerald-500/20 border-emerald-500/30 text-emerald-300',
-  'bg-purple-500/20 border-purple-500/30 text-purple-300',
+  'bg-secondary-500/20 border-secondary-500/30 text-secondary-300',
   'bg-amber-500/20 border-amber-500/30 text-amber-300',
   'bg-rose-500/20 border-rose-500/30 text-rose-300',
   'bg-cyan-500/20 border-cyan-500/30 text-cyan-300',
-  'bg-indigo-500/20 border-indigo-500/30 text-indigo-300',
+  'bg-accent-500/20 border-accent-500/30 text-accent-300',
   'bg-orange-500/20 border-orange-500/30 text-orange-300',
 ];
 

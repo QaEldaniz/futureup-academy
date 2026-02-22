@@ -9,7 +9,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 const GRADE_TYPES = ['ASSIGNMENT', 'QUIZ', 'EXAM', 'PROJECT', 'PARTICIPATION'];
 const TYPE_COLORS: Record<string, string> = {
   ASSIGNMENT: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-  QUIZ: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+  QUIZ: 'bg-secondary-100 text-secondary-700 dark:bg-secondary-900/30 dark:text-secondary-400',
   EXAM: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
   PROJECT: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
   PARTICIPATION: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
@@ -151,7 +151,7 @@ export default function TeacherGradesPage() {
             const count = info?.grades.length || 0;
             return (
               <div key={s.student.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-sm font-bold">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-sm font-bold">
                   {s.student.name?.charAt(0) || 'S'}
                 </div>
                 <div className="flex-1 min-w-0">

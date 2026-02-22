@@ -122,12 +122,12 @@ export default function StudentCalendarPage() {
                 return (
                   <button key={i} onClick={() => setSelectedDay(isSelected ? null : cd.date)}
                     className={`min-h-[80px] p-1.5 rounded-xl text-left transition-all border ${
-                      isSelected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' :
-                      isToday ? 'border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/10' :
+                      isSelected ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' :
+                      isToday ? 'border-primary-200 dark:border-primary-800 bg-primary-50/50 dark:bg-primary-900/10' :
                       cd.isCurrentMonth ? 'border-transparent hover:bg-gray-50 dark:hover:bg-gray-800/50' :
                       'border-transparent opacity-40'
                     }`}>
-                    <span className={`text-xs font-medium ${isToday ? 'bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center' : cd.isCurrentMonth ? 'text-gray-900 dark:text-white' : 'text-gray-400'}`}>
+                    <span className={`text-xs font-medium ${isToday ? 'bg-primary-500 text-white w-6 h-6 rounded-full flex items-center justify-center' : cd.isCurrentMonth ? 'text-gray-900 dark:text-white' : 'text-gray-400'}`}>
                       {cd.day}
                     </span>
                     <div className="mt-1 space-y-0.5">

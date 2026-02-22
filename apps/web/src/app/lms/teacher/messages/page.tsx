@@ -173,9 +173,9 @@ export default function TeacherMessagesPage() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                className="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500" />
             </div>
-            <button onClick={() => setShowNewChat(true)} className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-xl bg-blue-600 hover:bg-blue-700 text-white transition-colors">
+            <button onClick={() => setShowNewChat(true)} className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-xl bg-primary-500 hover:bg-primary-600 text-white transition-colors">
               <Plus className="w-4 h-4" /> New Chat
             </button>
           </div>
@@ -188,8 +188,8 @@ export default function TeacherMessagesPage() {
                 </div>
               ) : filtered.map(conv => (
                 <button key={conv.id} onClick={() => { setActiveConvId(conv.id); setMobileShowChat(true); }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${conv.id === activeConvId ? 'bg-blue-50 dark:bg-blue-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 ${conv.isGroup ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-cyan-500'}`}>
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${conv.id === activeConvId ? 'bg-primary-50 dark:bg-primary-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 ${conv.isGroup ? 'bg-gradient-to-br from-primary-500 to-secondary-500' : 'bg-gradient-to-br from-primary-400 to-primary-600'}`}>
                     {conv.isGroup ? <Users className="w-5 h-5" /> : getConvName(conv).charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -199,7 +199,7 @@ export default function TeacherMessagesPage() {
                     </div>
                     <div className="flex items-center justify-between mt-0.5">
                       <p className="text-xs text-gray-500 truncate">{conv.lastMessage?.text || 'No messages'}</p>
-                      {(conv.unreadCount || 0) > 0 && <span className="ml-2 w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">{conv.unreadCount}</span>}
+                      {(conv.unreadCount || 0) > 0 && <span className="ml-2 w-5 h-5 rounded-full bg-primary-500 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">{conv.unreadCount}</span>}
                     </div>
                   </div>
                 </button>
@@ -219,7 +219,7 @@ export default function TeacherMessagesPage() {
             <>
               <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                 <button onClick={() => setMobileShowChat(false)} className="md:hidden p-1 text-gray-500"><ArrowLeft className="w-5 h-5" /></button>
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${activeConv.isGroup ? 'bg-gradient-to-br from-purple-500 to-pink-500' : 'bg-gradient-to-br from-blue-500 to-cyan-500'}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${activeConv.isGroup ? 'bg-gradient-to-br from-primary-500 to-secondary-500' : 'bg-gradient-to-br from-primary-400 to-primary-600'}`}>
                   {activeConv.isGroup ? <Users className="w-5 h-5" /> : getConvName(activeConv).charAt(0).toUpperCase()}
                 </div>
                 <div><h3 className="text-sm font-semibold text-gray-900 dark:text-white">{getConvName(activeConv)}</h3>
@@ -228,7 +228,7 @@ export default function TeacherMessagesPage() {
               </div>
 
               <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-gray-50 dark:bg-gray-950">
-                {loadingMsgs ? <div className="flex justify-center py-8"><div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div> :
+                {loadingMsgs ? <div className="flex justify-center py-8"><div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" /></div> :
                   messages.length === 0 ? <div className="text-center py-8 text-sm text-gray-400">No messages yet</div> :
                     messages.map(msg => {
                       const isMine = msg.senderId === user?.id;
@@ -236,7 +236,7 @@ export default function TeacherMessagesPage() {
                         <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
                           <div className={`max-w-[75%]`}>
                             {!isMine && activeConv.isGroup && <p className="text-[10px] text-gray-400 ml-3 mb-0.5">{msg.senderName}</p>}
-                            <div className={`px-3.5 py-2 rounded-2xl text-sm break-words ${isMine ? 'bg-blue-600 text-white rounded-br-md' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-md shadow-sm border border-gray-100 dark:border-gray-700'}`}>
+                            <div className={`px-3.5 py-2 rounded-2xl text-sm break-words ${isMine ? 'bg-primary-500 text-white rounded-br-md' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-md shadow-sm border border-gray-100 dark:border-gray-700'}`}>
                               {msg.text}
                             </div>
                             <p className="text-[10px] text-gray-400 mt-0.5 px-1">{new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
@@ -251,9 +251,9 @@ export default function TeacherMessagesPage() {
                 <div className="flex items-center gap-2">
                   <input type="text" placeholder="Type a message..." value={messageText} onChange={e => setMessageText(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-                    className="flex-1 px-4 py-2.5 text-sm rounded-xl bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    className="flex-1 px-4 py-2.5 text-sm rounded-xl bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500" />
                   <button onClick={handleSend} disabled={!messageText.trim() || sending}
-                    className="p-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white transition-colors">
+                    className="p-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white transition-colors">
                     <Send className="w-4 h-4" />
                   </button>
                 </div>
@@ -272,8 +272,8 @@ export default function TeacherMessagesPage() {
               <button onClick={() => { setShowNewChat(false); setSelectedCourseId(null); }} className="p-1 text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
             </div>
             <div className="px-5 pt-4 flex gap-2">
-              <button onClick={() => setChatType('direct')} className={`flex-1 py-2 text-sm font-medium rounded-lg ${chatType === 'direct' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>Direct Message</button>
-              <button onClick={() => setChatType('group')} className={`flex-1 py-2 text-sm font-medium rounded-lg ${chatType === 'group' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>Group Chat</button>
+              <button onClick={() => setChatType('direct')} className={`flex-1 py-2 text-sm font-medium rounded-lg ${chatType === 'direct' ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>Direct Message</button>
+              <button onClick={() => setChatType('group')} className={`flex-1 py-2 text-sm font-medium rounded-lg ${chatType === 'group' ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>Group Chat</button>
             </div>
             <div className="flex-1 overflow-y-auto px-5 py-4">
               {chatType === 'group' ? (
@@ -281,7 +281,7 @@ export default function TeacherMessagesPage() {
                   <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Select a course:</p>
                   {courses.map(c => (
                     <button key={c.id} onClick={() => createGroupChat(c.id)} className="w-full flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-left">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white"><Users className="w-5 h-5" /></div>
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white"><Users className="w-5 h-5" /></div>
                       <div><p className="text-sm font-semibold text-gray-900 dark:text-white">{c.titleEn || c.titleAz}</p></div>
                     </button>
                   ))}
@@ -291,7 +291,7 @@ export default function TeacherMessagesPage() {
                   <div>
                     <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select course:</p>
                     <select value={selectedCourseId || ''} onChange={e => setSelectedCourseId(e.target.value || null)}
-                      className="w-full px-3 py-2.5 text-sm rounded-xl bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      className="w-full px-3 py-2.5 text-sm rounded-xl bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
                       <option value="">Choose...</option>
                       {courses.map(c => <option key={c.id} value={c.id}>{c.titleEn || c.titleAz}</option>)}
                     </select>
@@ -306,7 +306,7 @@ export default function TeacherMessagesPage() {
                           const sid = st.id || s.studentId;
                           return (
                             <button key={sid} onClick={() => startDirectChat(sid, 'student')} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 text-left">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold">{name.charAt(0)}</div>
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-xs font-bold">{name.charAt(0)}</div>
                               <span className="text-sm font-medium text-gray-900 dark:text-white">{name}</span>
                             </button>
                           );

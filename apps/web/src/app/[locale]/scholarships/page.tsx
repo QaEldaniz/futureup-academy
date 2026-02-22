@@ -57,12 +57,12 @@ const cardVariants = {
 const gradients = [
   'from-primary-500 to-secondary-500',
   'from-accent-500 to-primary-500',
-  'from-green-500 to-emerald-500',
-  'from-blue-500 to-cyan-500',
+  'from-secondary-500 to-secondary-600',
+  'from-primary-400 to-primary-600',
   'from-pink-500 to-rose-500',
   'from-amber-500 to-orange-500',
-  'from-purple-500 to-violet-500',
-  'from-red-500 to-pink-500',
+  'from-primary-500 to-secondary-500',
+  'from-red-500 to-rose-500',
 ];
 
 const cardIcons = [Award, Star, GraduationCap, BookOpen, TrendingUp, Sparkles];
@@ -124,7 +124,7 @@ export default function ScholarshipsPage() {
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary-500/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent-500/10 rounded-full blur-3xl" />
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(108,60,225,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(108,60,225,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(27,42,74,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(27,42,74,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}

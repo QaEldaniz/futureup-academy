@@ -69,7 +69,7 @@ const services: Service[] = [
       { az: 'Praktiki layihələr', ru: 'Практические проекты', en: 'Hands-on projects' },
       { az: 'Mentorluq dəstəyi', ru: 'Поддержка менторов', en: 'Mentorship support' },
     ],
-    gradient: 'from-blue-500 to-cyan-500',
+    gradient: 'from-primary-400 to-primary-600',
   },
   {
     id: 'corporate-design',
@@ -121,7 +121,7 @@ const services: Service[] = [
       { az: 'Power BI / Tableau', ru: 'Power BI / Tableau', en: 'Power BI / Tableau' },
       { az: 'Biznes analitikası', ru: 'Бизнес-аналитика', en: 'Business analytics' },
     ],
-    gradient: 'from-purple-500 to-violet-500',
+    gradient: 'from-primary-500 to-secondary-500',
   },
   {
     id: 'upskill-cyber',
@@ -155,7 +155,7 @@ const services: Service[] = [
       { az: 'Komanda idarəetməsi', ru: 'Управление командой', en: 'Team management' },
       { az: 'Strateji planlaşdırma', ru: 'Стратегическое планирование', en: 'Strategic planning' },
     ],
-    gradient: 'from-green-500 to-emerald-500',
+    gradient: 'from-secondary-500 to-secondary-600',
   },
   // IT Solutions
   {
@@ -173,7 +173,7 @@ const services: Service[] = [
       { az: 'Node.js / NestJS', ru: 'Node.js / NestJS', en: 'Node.js / NestJS' },
       { az: 'Cloud infrastruktur', ru: 'Облачная инфраструктура', en: 'Cloud infrastructure' },
     ],
-    gradient: 'from-indigo-500 to-blue-500',
+    gradient: 'from-primary-400 to-primary-500',
   },
   {
     id: 'it-infra',
@@ -253,7 +253,7 @@ export default function CorporatePage() {
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary-500/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/3 w-[400px] h-[400px] bg-accent-500/10 rounded-full blur-3xl" />
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(108,60,225,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(108,60,225,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(27,42,74,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(27,42,74,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -493,7 +493,7 @@ export default function CorporatePage() {
                 descAz: 'Hər şirkətin ehtiyacına uyğun xüsusi proqramlar.',
                 descRu: 'Специальные программы, адаптированные к потребностям каждой компании.',
                 descEn: 'Custom programs adapted to each company\'s needs.',
-                gradient: 'from-green-500 to-emerald-500',
+                gradient: 'from-secondary-500 to-secondary-600',
               },
               {
                 icon: BarChart3,
@@ -503,7 +503,7 @@ export default function CorporatePage() {
                 descAz: 'KPI əsaslı nəticə ölçmə və hesabat sistemi.',
                 descRu: 'Система измерения результатов и отчётности на основе KPI.',
                 descEn: 'KPI-based result measurement and reporting system.',
-                gradient: 'from-purple-500 to-violet-500',
+                gradient: 'from-primary-500 to-secondary-500',
               },
               {
                 icon: Zap,
@@ -513,7 +513,7 @@ export default function CorporatePage() {
                 descAz: 'Təlimlərin iş prosesinə minimum təsirlə keçirilməsi.',
                 descRu: 'Проведение тренингов с минимальным влиянием на рабочий процесс.',
                 descEn: 'Training delivered with minimal impact on workflow.',
-                gradient: 'from-blue-500 to-cyan-500',
+                gradient: 'from-primary-400 to-primary-600',
               },
               {
                 icon: Award,

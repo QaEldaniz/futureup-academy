@@ -50,7 +50,7 @@ export default function TeacherCourseDetail() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => router.push(`/lms/teacher/courses/${courseId}/quizzes`)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-semibold transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-secondary-600 hover:bg-secondary-700 text-white rounded-xl text-sm font-semibold transition-colors"
             >
               <FileQuestion className="w-4 h-4" />
               Quizzes
@@ -89,7 +89,7 @@ export default function TeacherCourseDetail() {
                 onClick={() => router.push(`/lms/teacher/courses/${courseId}/students/${s.student?.id || s.id}`)}
                 className="w-full flex items-center gap-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 hover:shadow-md transition-all text-left"
               >
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                   {(s.student?.name || 'S').charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">

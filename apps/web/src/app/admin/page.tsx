@@ -404,7 +404,7 @@ export default function AdminDashboardPage() {
 
 function StatusBadge({ status }: { status: string }) {
   const config = {
-    NEW: { label: 'New', className: 'bg-blue-500/10 text-blue-400' },
+    NEW: { label: 'New', className: 'bg-primary-500/10 text-primary-400' },
     CONTACTED: { label: 'Contacted', className: 'bg-amber-500/10 text-amber-400' },
     ENROLLED: { label: 'Enrolled', className: 'bg-emerald-500/10 text-emerald-400' },
     REJECTED: { label: 'Rejected', className: 'bg-red-500/10 text-red-400' },

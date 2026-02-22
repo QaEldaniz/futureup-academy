@@ -55,10 +55,10 @@ interface Lesson {
 // ---- Material type config ----
 const MATERIAL_TYPES = [
   { value: 'SLIDES', label: 'Slides', icon: Presentation, color: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20' },
-  { value: 'DOCUMENT', label: 'Document', icon: FileText, color: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20' },
+  { value: 'DOCUMENT', label: 'Document', icon: FileText, color: 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-500/10 border-primary-200 dark:border-primary-500/20' },
   { value: 'VIDEO', label: 'Video', icon: Video, color: 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20' },
   { value: 'SPREADSHEET', label: 'Spreadsheet', icon: Table2, color: 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 border-green-200 dark:border-green-500/20' },
-  { value: 'LINK', label: 'Link', icon: Link2, color: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 border-purple-200 dark:border-purple-500/20' },
+  { value: 'LINK', label: 'Link', icon: Link2, color: 'text-secondary-600 dark:text-secondary-400 bg-secondary-50 dark:bg-secondary-500/10 border-secondary-200 dark:border-secondary-500/20' },
   { value: 'FILE', label: 'File', icon: File, color: 'text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-500/10 border-gray-200 dark:border-gray-500/20' },
 ] as const;
 

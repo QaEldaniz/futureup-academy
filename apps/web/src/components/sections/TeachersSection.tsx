@@ -75,7 +75,7 @@ function TeacherCard({ teacher }: { teacher: Teacher }) {
       {/* Photo placeholder */}
       <div className="relative h-48 flex items-center justify-center bg-gray-50 dark:bg-gray-900/50 overflow-hidden">
         {/* Background pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(108,60,225,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(108,60,225,0.03)_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(27,42,74,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(27,42,74,0.03)_1px,transparent_1px)] bg-[size:24px_24px]" />
         {/* Avatar circle */}
         <div
           className={cn(

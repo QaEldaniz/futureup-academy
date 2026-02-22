@@ -55,7 +55,7 @@ const gradients = [
   'from-pink-500 to-secondary-500',
   'from-amber-500 to-orange-500',
   'from-emerald-500 to-teal-500',
-  'from-violet-500 to-fuchsia-500',
+  'from-secondary-500 to-accent-500',
 ];
 
 function getInitials(name: string): string {

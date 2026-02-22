@@ -299,7 +299,7 @@ export default function TeacherAttendancePage() {
                         <tr key={s.student.id} className="border-b border-gray-100 dark:border-gray-800/50 last:border-0">
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-bold">
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-xs font-bold">
                                 {s.student.name?.charAt(0) || 'S'}
                               </div>
                               <div>
@@ -444,7 +444,7 @@ export default function TeacherAttendancePage() {
                           <tr key={student.id} className="border-b border-gray-100 dark:border-gray-800/50 last:border-0">
                             <td className="px-4 py-2 sticky left-0 bg-white dark:bg-gray-900 z-10">
                               <div className="flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
                                   {student.name?.charAt(0) || 'S'}
                                 </div>
                                 <div className="min-w-0">

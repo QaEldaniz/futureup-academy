@@ -113,11 +113,11 @@ export default function StudentCourseDetail() {
         </button>
         <button
           onClick={() => router.push(`/lms/student/courses/${courseId}/quizzes`)}
-          className="flex items-center justify-between bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 hover:shadow-md hover:border-purple-200 dark:hover:border-purple-800 transition-all text-left"
+          className="flex items-center justify-between bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 hover:shadow-md hover:border-secondary-200 dark:hover:border-secondary-800 transition-all text-left"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-              <FileQuestion className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            <div className="w-10 h-10 rounded-xl bg-secondary-100 dark:bg-secondary-900/30 flex items-center justify-center">
+              <FileQuestion className="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
             </div>
             <div>
               <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Quizzes</h3>

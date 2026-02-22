@@ -4,49 +4,49 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Primary */
-  --color-primary-50: #f3f0ff;
-  --color-primary-100: #e9e3ff;
-  --color-primary-200: #d5cbff;
-  --color-primary-300: #b5a3ff;
-  --color-primary-400: #9370ff;
-  --color-primary-500: #6c3ce1;
-  --color-primary-600: #5c2dd6;
-  --color-primary-700: #4d1fb8;
-  --color-primary-800: #411a96;
-  --color-primary-900: #36177b;
+  /* Primary (Navy Blue) */
+  --color-primary-50: #E8EDF5;
+  --color-primary-100: #C5D0E6;
+  --color-primary-200: #9BADD3;
+  --color-primary-300: #7189BF;
+  --color-primary-400: #4A66A8;
+  --color-primary-500: #1B2A4A;
+  --color-primary-600: #172442;
+  --color-primary-700: #131E38;
+  --color-primary-800: #0F182E;
+  --color-primary-900: #0B1224;
 
-  /* Secondary (Deep Blue) */
-  --color-secondary-50: #eff3ff;
-  --color-secondary-100: #dbe3fe;
-  --color-secondary-200: #bfcdfe;
-  --color-secondary-300: #93aafc;
-  --color-secondary-400: #607df8;
-  --color-secondary-500: #3b5bf4;
-  --color-secondary-600: #1e40af;
-  --color-secondary-700: #1a369a;
-  --color-secondary-800: #1b307d;
-  --color-secondary-900: #1c2d68;
+  /* Secondary (Gold) */
+  --color-secondary-50: #FBF6E8;
+  --color-secondary-100: #F5E9C4;
+  --color-secondary-200: #EDD99C;
+  --color-secondary-300: #E4C874;
+  --color-secondary-400: #D4B35E;
+  --color-secondary-500: #C5A55A;
+  --color-secondary-600: #B0914A;
+  --color-secondary-700: #947A3D;
+  --color-secondary-800: #786330;
+  --color-secondary-900: #5C4C25;
 
-  /* Accent (Cyan) */
-  --color-accent-50: #ecfeff;
-  --color-accent-100: #cffafe;
-  --color-accent-200: #a5f3fc;
-  --color-accent-300: #67e8f9;
-  --color-accent-400: #22d3ee;
-  --color-accent-500: #06b6d4;
-  --color-accent-600: #0891b2;
-  --color-accent-700: #0e7490;
-  --color-accent-800: #155e75;
-  --color-accent-900: #164e63;
+  /* Accent (Warm Gold) */
+  --color-accent-50: #FFFDF5;
+  --color-accent-100: #FFF9E5;
+  --color-accent-200: #FFF0C2;
+  --color-accent-300: #FFE49E;
+  --color-accent-400: #FFD77A;
+  --color-accent-500: #F5C542;
+  --color-accent-600: #D4A520;
+  --color-accent-700: #B08618;
+  --color-accent-800: #8C6A12;
+  --color-accent-900: #6B500E;
 
   /* Surface */
   --color-surface-light: #ffffff;
-  --color-surface-dark: #141927;
+  --color-surface-dark: #0D1526;
 
   /* Background */
-  --color-bg-light: #fafbff;
-  --color-bg-dark: #0b0f1a;
+  --color-bg-light: #F8F9FC;
+  --color-bg-dark: #080D18;
 
   /* Fonts */
   --font-heading: 'Inter', sans-serif;

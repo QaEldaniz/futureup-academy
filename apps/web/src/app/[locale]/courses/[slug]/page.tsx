@@ -19,12 +19,12 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const gradientMap: Record<string, string> = {
-  'traditional-it': 'from-sky-500 to-blue-600',
-  'business-it': 'from-indigo-500 to-purple-600',
+  'traditional-it': 'from-primary-400 to-primary-600',
+  'business-it': 'from-primary-500 to-secondary-500',
   'marketing-bd': 'from-amber-500 to-orange-500',
-  'data-science': 'from-purple-500 to-violet-600',
-  'sw-engineering': 'from-blue-500 to-cyan-500',
-  'dev-team': 'from-green-500 to-emerald-500',
+  'data-science': 'from-secondary-500 to-accent-500',
+  'sw-engineering': 'from-primary-400 to-primary-500',
+  'dev-team': 'from-secondary-600 to-secondary-500',
   'cyber-security': 'from-red-500 to-rose-600',
 };
 

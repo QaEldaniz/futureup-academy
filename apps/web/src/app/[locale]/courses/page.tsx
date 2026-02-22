@@ -20,16 +20,16 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const gradientMap: Record<string, string> = {
-  'traditional-it': 'from-sky-500 to-blue-600',
-  'business-it': 'from-indigo-500 to-purple-600',
+  'traditional-it': 'from-primary-400 to-primary-600',
+  'business-it': 'from-primary-500 to-secondary-500',
   'marketing-bd': 'from-amber-500 to-orange-500',
-  'data-science': 'from-purple-500 to-violet-600',
-  'sw-engineering': 'from-blue-500 to-cyan-500',
-  'dev-team': 'from-green-500 to-emerald-500',
+  'data-science': 'from-secondary-500 to-accent-500',
+  'sw-engineering': 'from-primary-400 to-primary-500',
+  'dev-team': 'from-secondary-600 to-secondary-500',
   'cyber-security': 'from-red-500 to-rose-600',
-  'kids-coding': 'from-sky-500 to-indigo-500',
+  'kids-coding': 'from-sky-500 to-primary-400',
   'kids-cybersecurity': 'from-red-500 to-orange-500',
-  'kids-ai': 'from-violet-500 to-purple-600',
+  'kids-ai': 'from-accent-500 to-secondary-500',
 };
 
 interface Category {
@@ -271,7 +271,7 @@ export default function CoursesPage() {
           'absolute inset-0',
           isKids
             ? 'bg-[linear-gradient(rgba(249,115,22,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(249,115,22,0.03)_1px,transparent_1px)] bg-[size:64px_64px]'
-            : 'bg-[linear-gradient(rgba(108,60,225,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(108,60,225,0.03)_1px,transparent_1px)] bg-[size:64px_64px]'
+            : 'bg-[linear-gradient(rgba(27,42,74,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(27,42,74,0.03)_1px,transparent_1px)] bg-[size:64px_64px]'
         )} />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className={cn(

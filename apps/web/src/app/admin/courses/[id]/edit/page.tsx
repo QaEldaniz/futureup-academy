@@ -543,7 +543,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                   className={cn(
                     'flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium border transition-all',
                     form.audience === 'ADULTS'
-                      ? 'bg-blue-500/15 border-blue-500/40 text-blue-400'
+                      ? 'bg-primary-500/15 border-primary-500/40 text-primary-400'
                       : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
                   )}
                 >

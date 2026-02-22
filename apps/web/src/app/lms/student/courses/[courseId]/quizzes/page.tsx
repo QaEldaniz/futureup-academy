@@ -594,7 +594,7 @@ export default function StudentQuizzesPage() {
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
           <p className="text-xs text-gray-500 dark:text-gray-400">Avg Score</p>
-          <p className="text-2xl font-bold text-purple-600">{completedQuizzes > 0 ? Math.round(avgScore) : '—'}%</p>
+          <p className="text-2xl font-bold text-secondary-600">{completedQuizzes > 0 ? Math.round(avgScore) : '—'}%</p>
         </div>
       </div>
 
@@ -634,7 +634,7 @@ export default function StudentQuizzesPage() {
                       <Clock className="w-3 h-3" /> {quiz.timeLimit} min
                     </span>
                   )}
-                  <span className="flex items-center gap-1 px-2 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 rounded-lg">
+                  <span className="flex items-center gap-1 px-2 py-1 bg-secondary-50 dark:bg-secondary-900/20 text-secondary-700 dark:text-secondary-400 rounded-lg">
                     <Target className="w-3 h-3" /> {quiz.attemptsUsed}/{quiz.maxAttempts} attempts
                   </span>
                   {quiz.passingScore && (

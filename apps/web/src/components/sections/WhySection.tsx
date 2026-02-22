@@ -72,8 +72,8 @@ function FeatureCard({ feature }: { feature: Feature }) {
         'hover:-translate-y-0.5',
         // Gradient border on hover via pseudo-element trick using box shadow
         'hover:border-transparent',
-        'hover:[box-shadow:0_0_0_1px_var(--color-primary-200),0_20px_60px_-15px_rgba(108,60,225,0.08)]',
-        'dark:hover:[box-shadow:0_0_0_1px_var(--color-primary-700),0_20px_60px_-15px_rgba(108,60,225,0.15)]'
+        'hover:[box-shadow:0_0_0_1px_var(--color-primary-200),0_20px_60px_-15px_rgba(27,42,74,0.08)]',
+        'dark:hover:[box-shadow:0_0_0_1px_var(--color-primary-700),0_20px_60px_-15px_rgba(27,42,74,0.15)]'
       )}
     >
       {/* Icon */}

@@ -57,7 +57,7 @@ export default function TeacherStudentsPage() {
         <div className="space-y-2">
           {filtered.map((s: any) => (
             <div key={s.id} className="flex items-center gap-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-bold text-sm">
                 {(s.name || 'S').charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">

@@ -153,7 +153,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
               ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
               : user.type === 'admin'
               ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-              : 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+              : 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
           }`}>
             {user.type === 'student' ? <BookOpen className="w-3 h-3" /> :
              user.type === 'teacher' ? <Users className="w-3 h-3" /> :

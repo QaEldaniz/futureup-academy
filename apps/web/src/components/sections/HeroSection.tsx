@@ -26,8 +26,8 @@ export function HeroSection() {
           <div className="bg-gray-900/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg px-4 py-3 border border-gray-700/30 shadow-xl shadow-primary-500/5 font-mono text-[11px] leading-relaxed">
             <div className="text-gray-500 mb-1">{'// Build your future'}</div>
             <div>
-              <span className="text-purple-400">const</span>{' '}
-              <span className="text-blue-300">skills</span>{' '}
+              <span className="text-secondary-400">const</span>{' '}
+              <span className="text-primary-300">skills</span>{' '}
               <span className="text-gray-400">=</span>{' '}
               <span className="text-amber-300">[</span>
             </div>
@@ -61,9 +61,9 @@ export function HeroSection() {
         <div className="absolute bottom-[22%] left-[8%] animate-[float_7s_ease-in-out_infinite_2s] hidden sm:block">
           <div className="bg-gray-900/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg px-4 py-2.5 border border-gray-700/30 shadow-xl shadow-secondary-500/5 font-mono text-[11px]">
             <span className="text-gray-500">{'<'}</span>
-            <span className="text-blue-400">FutureUp</span>
+            <span className="text-primary-400">FutureUp</span>
             <span className="text-gray-500">{' '}</span>
-            <span className="text-purple-300">career</span>
+            <span className="text-secondary-300">career</span>
             <span className="text-gray-400">{'='}</span>
             <span className="text-emerald-400">{'"dream"'}</span>
             <span className="text-gray-500">{' />'}</span>
@@ -73,13 +73,13 @@ export function HeroSection() {
         {/* Database query - bottom right */}
         <div className="absolute bottom-[16%] right-[8%] animate-[float_9s_ease-in-out_infinite_3s] hidden md:block">
           <div className="bg-gray-900/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg px-4 py-2.5 border border-gray-700/30 shadow-xl shadow-primary-500/5 font-mono text-[11px]">
-            <span className="text-purple-400">SELECT</span>{' '}
-            <span className="text-blue-300">*</span>{' '}
-            <span className="text-purple-400">FROM</span>{' '}
+            <span className="text-secondary-400">SELECT</span>{' '}
+            <span className="text-primary-300">*</span>{' '}
+            <span className="text-secondary-400">FROM</span>{' '}
             <span className="text-amber-300">students</span>
             <br />
-            <span className="text-purple-400">WHERE</span>{' '}
-            <span className="text-blue-300">success</span>{' '}
+            <span className="text-secondary-400">WHERE</span>{' '}
+            <span className="text-primary-300">success</span>{' '}
             <span className="text-gray-400">=</span>{' '}
             <span className="text-emerald-400">true</span>
             <span className="text-gray-400">;</span>
@@ -95,7 +95,7 @@ export function HeroSection() {
       </div>
 
       {/* Grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(108,60,225,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(108,60,225,0.03)_1px,transparent_1px)] bg-[size:64px_64px] dark:bg-[linear-gradient(rgba(108,60,225,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(108,60,225,0.05)_1px,transparent_1px)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(27,42,74,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(27,42,74,0.03)_1px,transparent_1px)] bg-[size:64px_64px] dark:bg-[linear-gradient(rgba(27,42,74,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(27,42,74,0.05)_1px,transparent_1px)]" />
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">

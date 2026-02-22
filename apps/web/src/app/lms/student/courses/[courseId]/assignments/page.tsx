@@ -46,7 +46,7 @@ function StatusBadge({ status, isOverdue }: { status: string; isOverdue?: boolea
     SUBMITTED: { label: 'Submitted', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', icon: Send },
     LATE: { label: 'Late', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', icon: AlertCircle },
     GRADED: { label: 'Graded', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', icon: CheckCircle2 },
-    RETURNED: { label: 'Returned', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400', icon: MessageSquare },
+    RETURNED: { label: 'Returned', color: 'bg-secondary-100 text-secondary-700 dark:bg-secondary-900/30 dark:text-secondary-400', icon: MessageSquare },
   };
   const c = config[status] || config.NOT_SUBMITTED;
   const Icon = c.icon;

@@ -274,7 +274,7 @@ export default function AdminTeachersPage() {
                         href={teacher.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-500 hover:text-blue-400 transition-colors"
+                        className="text-gray-500 hover:text-primary-400 transition-colors"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <Linkedin className="w-3.5 h-3.5" />

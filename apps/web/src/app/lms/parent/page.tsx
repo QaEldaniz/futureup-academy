@@ -38,8 +38,8 @@ export default function ParentDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-purple-100 dark:bg-purple-900/20">
-            <Baby className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-primary-100 dark:bg-primary-900/20">
+            <Baby className="w-5 h-5 text-primary-600 dark:text-primary-400" />
           </div>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">{children.length}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400">Children</p>
@@ -86,7 +86,7 @@ export default function ParentDashboard() {
                 className="w-full bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 text-left hover:shadow-lg hover:border-primary-200 dark:hover:border-primary-800 transition-all"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white text-lg font-bold">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-400 to-secondary-500 flex items-center justify-center text-white text-lg font-bold">
                     {child.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1">

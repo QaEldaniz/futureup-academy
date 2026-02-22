@@ -167,7 +167,7 @@ export default function EditParentPage() {
           <div className="space-y-2">
             {parent.children.map((link: any) => (
               <div key={link.id} className="flex items-center gap-3 bg-bg-dark rounded-lg p-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-bold">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-xs font-bold">
                   {link.student?.name?.charAt(0) || 'S'}
                 </div>
                 <div className="flex-1 min-w-0">

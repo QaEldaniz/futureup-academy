@@ -97,7 +97,7 @@ export default function CorporateContactPage() {
           animate={{ opacity: 1, scale: 1 }}
           className="relative z-10 text-center max-w-lg mx-auto px-4"
         >
-          <div className="w-20 h-20 rounded-3xl flex items-center justify-center bg-gradient-to-br from-green-500 to-emerald-500 shadow-2xl mx-auto mb-6">
+          <div className="w-20 h-20 rounded-3xl flex items-center justify-center bg-gradient-to-br from-secondary-500 to-accent-500 shadow-2xl mx-auto mb-6">
             <CheckCircle2 className="w-10 h-10 text-white" />
           </div>
           <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-4">
@@ -136,7 +136,7 @@ export default function CorporateContactPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-primary-900/20 dark:via-bg-dark dark:to-secondary-900/20" />
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary-500/10 rounded-full blur-3xl" />
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(108,60,225,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(108,60,225,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(27,42,74,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(27,42,74,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}

@@ -81,17 +81,17 @@ interface ServiceForm {
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const SERVICE_TYPES = [
-  { value: 'TRAINING', label: 'Training', icon: GraduationCap, color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
-  { value: 'UPSKILLING', label: 'Upskilling', icon: TrendingUp, color: 'text-purple-400 bg-purple-500/10 border-purple-500/20' },
+  { value: 'TRAINING', label: 'Training', icon: GraduationCap, color: 'text-primary-400 bg-primary-500/10 border-primary-500/20' },
+  { value: 'UPSKILLING', label: 'Upskilling', icon: TrendingUp, color: 'text-secondary-400 bg-secondary-500/10 border-secondary-500/20' },
   { value: 'IT_SOLUTION', label: 'IT Solution', icon: Wrench, color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
 ] as const;
 
 const INQ_STATUS_OPTIONS = ['NEW', 'CONTACTED', 'PROPOSAL_SENT', 'NEGOTIATION', 'CLOSED_WON', 'CLOSED_LOST'] as const;
 
 const INQ_STATUS_CONFIG: Record<string, { label: string; className: string }> = {
-  NEW: { label: 'New', className: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
+  NEW: { label: 'New', className: 'bg-primary-500/10 text-primary-400 border-primary-500/20' },
   CONTACTED: { label: 'Contacted', className: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
-  PROPOSAL_SENT: { label: 'Proposal Sent', className: 'bg-purple-500/10 text-purple-400 border-purple-500/20' },
+  PROPOSAL_SENT: { label: 'Proposal Sent', className: 'bg-secondary-500/10 text-secondary-400 border-secondary-500/20' },
   NEGOTIATION: { label: 'Negotiation', className: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20' },
   CLOSED_WON: { label: 'Won', className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
   CLOSED_LOST: { label: 'Lost', className: 'bg-red-500/10 text-red-400 border-red-500/20' },

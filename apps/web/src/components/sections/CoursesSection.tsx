@@ -40,8 +40,8 @@ const adultCourses: CourseCard[] = [
     descriptionKey: 'frontendDesc',
     level: 'Beginner',
     duration: '6 months',
-    gradient: 'from-blue-500 to-cyan-500',
-    borderGradient: 'from-blue-500/50 to-cyan-500/50',
+    gradient: 'from-primary-400 to-primary-600',
+    borderGradient: 'from-primary-400/50 to-primary-600/50',
   },
   {
     icon: Server,
@@ -49,8 +49,8 @@ const adultCourses: CourseCard[] = [
     descriptionKey: 'backendDesc',
     level: 'Intermediate',
     duration: '6 months',
-    gradient: 'from-green-500 to-emerald-500',
-    borderGradient: 'from-green-500/50 to-emerald-500/50',
+    gradient: 'from-secondary-500 to-secondary-600',
+    borderGradient: 'from-secondary-500/50 to-secondary-600/50',
   },
   {
     icon: Palette,
@@ -67,8 +67,8 @@ const adultCourses: CourseCard[] = [
     descriptionKey: 'dataDesc',
     level: 'Intermediate',
     duration: '5 months',
-    gradient: 'from-purple-500 to-violet-500',
-    borderGradient: 'from-purple-500/50 to-violet-500/50',
+    gradient: 'from-primary-500 to-secondary-500',
+    borderGradient: 'from-primary-500/50 to-secondary-500/50',
   },
   {
     icon: Shield,
@@ -124,8 +124,8 @@ const kidsCourses: CourseCard[] = [
     descriptionKey: 'aiKidsDesc',
     level: 'Beginner',
     duration: '2 months',
-    gradient: 'from-violet-500 to-purple-500',
-    borderGradient: 'from-violet-500/50 to-purple-500/50',
+    gradient: 'from-accent-500 to-secondary-500',
+    borderGradient: 'from-accent-500/50 to-secondary-500/50',
   },
   {
     icon: Cpu,
@@ -142,8 +142,8 @@ const kidsCourses: CourseCard[] = [
     descriptionKey: 'webKidsDesc',
     level: 'Intermediate',
     duration: '5 months',
-    gradient: 'from-indigo-500 to-blue-500',
-    borderGradient: 'from-indigo-500/50 to-blue-500/50',
+    gradient: 'from-primary-400 to-primary-500',
+    borderGradient: 'from-primary-400/50 to-primary-500/50',
   },
 ];
 

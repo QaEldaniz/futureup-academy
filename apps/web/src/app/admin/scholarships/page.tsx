@@ -76,7 +76,7 @@ const APP_STATUS_OPTIONS = ['PENDING', 'UNDER_REVIEW', 'APPROVED', 'REJECTED'] a
 
 const APP_STATUS_CONFIG: Record<string, { label: string; className: string }> = {
   PENDING: { label: 'Pending', className: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
-  UNDER_REVIEW: { label: 'Under Review', className: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
+  UNDER_REVIEW: { label: 'Under Review', className: 'bg-primary-500/10 text-primary-400 border-primary-500/20' },
   APPROVED: { label: 'Approved', className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
   REJECTED: { label: 'Rejected', className: 'bg-red-500/10 text-red-400 border-red-500/20' },
 };

@@ -69,7 +69,7 @@ export default function StudentDashboard() {
         {[
           { label: 'Active Courses', value: activeCourses.length, icon: BookOpen, color: 'blue' },
           { label: 'Completed', value: completedCourses.length, icon: Award, color: 'green' },
-          { label: 'Overall Progress', value: `${overallProgress}%`, icon: TrendingUp, color: 'purple' },
+          { label: 'Overall Progress', value: `${overallProgress}%`, icon: TrendingUp, color: 'secondary' },
           { label: 'Total Enrolled', value: courses.length, icon: Clock, color: 'amber' },
         ].map((stat) => (
           <div key={stat.label} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">

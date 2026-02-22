@@ -380,8 +380,8 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                           }}
                           className="w-full flex items-start gap-3 px-4 py-3 hover:bg-gray-800/50 transition-colors border-b border-gray-800/30"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <Star className="w-4 h-4 text-purple-400" />
+                          <div className="w-8 h-8 rounded-lg bg-secondary-500/10 flex items-center justify-center shrink-0 mt-0.5">
+                            <Star className="w-4 h-4 text-secondary-400" />
                           </div>
                           <div className="text-left flex-1 min-w-0">
                             <p className="text-sm font-medium text-white">
@@ -389,7 +389,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                             </p>
                             <p className="text-xs text-gray-400 mt-0.5">{t.awaitingModeration}</p>
                           </div>
-                          <span className="text-xs text-purple-400 font-medium bg-purple-500/10 px-2 py-0.5 rounded-full shrink-0">
+                          <span className="text-xs text-secondary-400 font-medium bg-secondary-500/10 px-2 py-0.5 rounded-full shrink-0">
                             PENDING
                           </span>
                         </button>

@@ -38,7 +38,7 @@ interface Application {
 const STATUS_OPTIONS = ['NEW', 'CONTACTED', 'ENROLLED', 'REJECTED'] as const;
 
 const STATUS_STYLES: Record<string, string> = {
-  NEW: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  NEW: 'bg-primary-500/10 text-primary-400 border-primary-500/20',
   CONTACTED: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
   ENROLLED: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   REJECTED: 'bg-red-500/10 text-red-400 border-red-500/20',
@@ -332,7 +332,7 @@ export default function AdminApplicationsPage() {
                       <span className={cn(
                         'inline-block px-2 py-0.5 rounded-md text-xs font-medium truncate max-w-full',
                         app.utmSource
-                          ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                          ? 'bg-secondary-500/10 text-secondary-400 border border-secondary-500/20'
                           : extractHearAbout(app.message)
                             ? 'bg-gray-700/50 text-gray-400'
                             : 'text-gray-600'
@@ -401,12 +401,12 @@ export default function AdminApplicationsPage() {
                         {(app.utmSource || app.utmMedium || app.utmCampaign) && (
                           <div className="mb-3 flex flex-wrap gap-2">
                             {app.utmSource && (
-                              <span className="px-2 py-1 rounded-md bg-purple-500/10 text-purple-400 text-xs">
+                              <span className="px-2 py-1 rounded-md bg-secondary-500/10 text-secondary-400 text-xs">
                                 {t.sourceLabel} {app.utmSource}
                               </span>
                             )}
                             {app.utmMedium && (
-                              <span className="px-2 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs">
+                              <span className="px-2 py-1 rounded-md bg-primary-500/10 text-primary-400 text-xs">
                                 {t.mediumLabel} {app.utmMedium}
                               </span>
                             )}
