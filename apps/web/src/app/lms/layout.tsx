@@ -9,6 +9,9 @@ import {
   ClipboardCheck, Star, CalendarDays, FileText, FileQuestion, Trophy,
 } from 'lucide-react';
 import NotificationBell from '@/components/lms/NotificationBell';
+import { ThemeProvider } from '@/components/shared/ThemeProvider';
+import { ThemeToggle } from '@/components/shared/ThemeToggle';
+import { LmsLanguageSwitcher } from '@/components/lms/LmsLanguageSwitcher';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -119,6 +122,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
+    <ThemeProvider>
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
@@ -220,7 +224,9 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
             <Menu className="w-6 h-6" />
           </button>
           <div className="flex-1" />
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <LmsLanguageSwitcher />
+            <ThemeToggle />
             <NotificationBell />
             <div className="hidden sm:flex items-center gap-2 text-sm">
               <span className="text-gray-500 dark:text-gray-400">Hello,</span>
@@ -235,5 +241,6 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
         </main>
       </div>
     </div>
+    </ThemeProvider>
   );
 }

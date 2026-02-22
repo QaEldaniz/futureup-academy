@@ -25,9 +25,9 @@ export const metadata: Metadata = {
   description: "Azerbaijan's #1 IT Academy",
   icons: {
     icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/images/logo.png', type: 'image/png' },
     ],
-    apple: '/favicon.svg',
+    apple: '/images/logo.png',
   },
 };
 
