@@ -6,7 +6,7 @@ import { useAuthStore, UserType } from '@/stores/auth';
 import {
   LayoutDashboard, BookOpen, Award, Bell, User, LogOut, Menu, X,
   Users, MessageSquare, Calendar, ChevronRight, GraduationCap, Baby,
-  ClipboardCheck, Star, CalendarDays, FileText, FileQuestion,
+  ClipboardCheck, Star, CalendarDays, FileText, FileQuestion, Trophy,
 } from 'lucide-react';
 import NotificationBell from '@/components/lms/NotificationBell';
 
@@ -24,6 +24,9 @@ const navByRole: Record<UserType, NavItem[]> = {
     { label: 'My Courses', href: '/lms/student/courses', icon: BookOpen },
     { label: 'Assignments', href: '/lms/student/assignments', icon: FileText },
     { label: 'Quizzes', href: '/lms/student/quizzes', icon: FileQuestion },
+    { label: 'Messages', href: '/lms/student/messages', icon: MessageSquare },
+    { label: 'Calendar', href: '/lms/student/calendar', icon: Calendar },
+    { label: 'Achievements', href: '/lms/student/achievements', icon: Trophy },
     { label: 'Schedule', href: '/lms/student/schedule', icon: CalendarDays },
     { label: 'Attendance', href: '/lms/student/attendance', icon: ClipboardCheck },
     { label: 'Grades', href: '/lms/student/grades', icon: Star },
@@ -33,6 +36,8 @@ const navByRole: Record<UserType, NavItem[]> = {
   teacher: [
     { label: 'Dashboard', href: '/lms/teacher', icon: LayoutDashboard },
     { label: 'My Courses', href: '/lms/teacher/courses', icon: BookOpen },
+    { label: 'Messages', href: '/lms/teacher/messages', icon: MessageSquare },
+    { label: 'Calendar', href: '/lms/teacher/calendar', icon: Calendar },
     { label: 'Schedule', href: '/lms/teacher/schedule', icon: CalendarDays },
     { label: 'Students', href: '/lms/teacher/students', icon: Users },
     { label: 'Attendance', href: '/lms/teacher/attendance', icon: ClipboardCheck },
@@ -46,6 +51,8 @@ const navByRole: Record<UserType, NavItem[]> = {
   admin: [
     { label: 'Dashboard', href: '/lms/teacher', icon: LayoutDashboard },
     { label: 'All Courses', href: '/lms/teacher/courses', icon: BookOpen },
+    { label: 'Messages', href: '/lms/teacher/messages', icon: MessageSquare },
+    { label: 'Calendar', href: '/lms/teacher/calendar', icon: Calendar },
     { label: 'Schedule', href: '/lms/teacher/schedule', icon: CalendarDays },
     { label: 'All Students', href: '/lms/teacher/students', icon: Users },
     { label: 'Attendance', href: '/lms/teacher/attendance', icon: ClipboardCheck },

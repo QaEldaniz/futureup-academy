@@ -1,6 +1,8 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { MaterialType } from '@prisma/client';
 import { teacherAuth, adminOrTeacherAuth } from '../middleware/auth.middleware.js';
+import { awardXP } from '../utils/gamification.js';
+import { sendEmail, emailAbsentNotice } from '../utils/email.js';
 
 export async function teacherPortalRoutes(server: FastifyInstance) {
   // GET /me - Get teacher profile (teacher auth)
@@ -407,6 +409,39 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
         })
       )
     );
+
+    // Award XP for present students + email parents of absent students
+    const course = await server.prisma.course.findUnique({
+      where: { id: courseId },
+      select: { titleEn: true, titleAz: true },
+    });
+    for (const r of records) {
+      if (r.status === 'PRESENT') {
+        awardXP(r.studentId, 5, 'attendance_present', courseId).catch(() => {});
+      } else if (r.status === 'ABSENT') {
+        // Email parent about absence (async)
+        const studentWithParents = await server.prisma.student.findUnique({
+          where: { id: r.studentId },
+          select: {
+            name: true,
+            parents: {
+              select: { parent: { select: { email: true, nameEn: true, nameAz: true, emailNotifications: true } } },
+            },
+          },
+        });
+        if (studentWithParents) {
+          const dateStr = attendanceDate.toLocaleDateString();
+          const courseName = course?.titleEn || course?.titleAz || 'Course';
+          for (const sp of studentWithParents.parents) {
+            if (sp.parent.emailNotifications) {
+              const parentName = sp.parent.nameEn || sp.parent.nameAz;
+              const { subject, html } = emailAbsentNotice(parentName, studentWithParents.name, courseName, dateStr);
+              sendEmail(sp.parent.email, subject, html).catch(() => {});
+            }
+          }
+        }
+      }
+    }
 
     return reply.send({ success: true, data: results, count: results.length });
   });

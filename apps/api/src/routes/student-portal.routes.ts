@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { studentAuth } from '../middleware/auth.middleware.js';
+import { awardXP } from '../utils/gamification.js';
 
 export async function studentPortalRoutes(server: FastifyInstance) {
   // All routes require student authentication
@@ -253,6 +254,11 @@ export async function studentPortalRoutes(server: FastifyInstance) {
       create: { studentId: id, courseId, percentage, lastAccessedAt: now },
       update: { percentage, lastAccessedAt: now },
     });
+
+    // Award XP when lesson is completed
+    if (status === 'COMPLETED') {
+      awardXP(id, 10, 'lesson_completed', lessonId).catch(() => {});
+    }
 
     return reply.send({ success: true, data: { progress, coursePercentage: percentage } });
   });

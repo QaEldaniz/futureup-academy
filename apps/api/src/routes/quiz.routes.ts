@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { adminAuth, teacherAuth, studentAuth, adminOrTeacherAuth, anyAuth } from '../middleware/auth.middleware.js';
+import { awardXP } from '../utils/gamification.js';
 
 export async function quizRoutes(server: FastifyInstance) {
   // ==========================================
@@ -820,6 +821,13 @@ export async function quizRoutes(server: FastifyInstance) {
         },
       },
     });
+
+    // Award XP for completing quiz
+    awardXP(id, 20, 'quiz_completed', attempt.quizId).catch(() => {});
+    // Bonus XP for high score (≥90%)
+    if (!hasManualGrading && score >= 90) {
+      awardXP(id, 30, 'quiz_high_score', attempt.quizId).catch(() => {});
+    }
 
     // Notify teacher if there are open-ended questions to grade
     if (hasManualGrading && attempt.quiz.teacherId) {

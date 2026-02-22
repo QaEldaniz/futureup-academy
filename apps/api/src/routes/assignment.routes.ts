@@ -1,5 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { adminAuth, teacherAuth, studentAuth, adminOrTeacherAuth, anyAuth } from '../middleware/auth.middleware.js';
+import { awardXP } from '../utils/gamification.js';
+import { sendEmail, emailAssignmentGraded, emailNewAssignment } from '../utils/email.js';
 
 export async function assignmentRoutes(server: FastifyInstance) {
   // ==========================================
@@ -109,6 +111,17 @@ export async function assignmentRoutes(server: FastifyInstance) {
           link: `/lms/student/courses/${courseId}/assignments`,
         })),
       });
+
+      // Send email to enrolled students (async, don't block)
+      const students = await server.prisma.student.findMany({
+        where: { id: { in: enrollments.map(e => e.studentId) }, emailNotifications: true },
+        select: { name: true, email: true },
+      });
+      const dueDateStr = body.dueDate ? new Date(body.dueDate).toLocaleDateString() : undefined;
+      for (const s of students) {
+        const { subject, html } = emailNewAssignment(s.name, body.title, course.titleEn || course.titleAz, dueDateStr);
+        sendEmail(s.email, subject, html).catch(() => {});
+      }
     }
 
     return reply.status(201).send({ success: true, data: assignment });
@@ -299,6 +312,28 @@ export async function assignmentRoutes(server: FastifyInstance) {
       },
     });
 
+    // Award XP for high grade (≥80%)
+    const gradePercentage = (body.grade / submission.assignment.maxScore) * 100;
+    if (gradePercentage >= 80) {
+      awardXP(updated.studentId, 25, 'assignment_high_grade', submission.assignment.id).catch(() => {});
+    }
+
+    // Send email to student
+    const studentFull = await server.prisma.student.findUnique({
+      where: { id: updated.studentId },
+      select: { email: true, name: true, emailNotifications: true },
+    });
+    if (studentFull?.emailNotifications) {
+      const { subject, html } = emailAssignmentGraded(
+        studentFull.name,
+        updated.assignment.title,
+        body.grade,
+        submission.assignment.maxScore,
+        body.feedback
+      );
+      sendEmail(studentFull.email, subject, html).catch(() => {});
+    }
+
     // Also notify parent(s) if they exist
     const parentLinks = await server.prisma.studentParent.findMany({
       where: { studentId: updated.studentId },
@@ -469,6 +504,9 @@ export async function assignmentRoutes(server: FastifyInstance) {
         gradedAt: null,
       },
     });
+
+    // Award XP for submitting assignment
+    awardXP(id, 15, 'assignment_submitted', assignmentId).catch(() => {});
 
     // Notify teacher
     if (assignment.teacherId) {
