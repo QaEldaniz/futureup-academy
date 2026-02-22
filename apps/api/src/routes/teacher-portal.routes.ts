@@ -251,6 +251,37 @@ export async function teacherPortalRoutes(server: FastifyInstance) {
     return reply.send({ success: true, data: { course, students } });
   });
 
+  // GET /courses/:courseId/students - Get enrolled students for a course
+  server.get('/courses/:courseId/students', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
+    const { id } = request.user;
+    const { courseId } = request.params as { courseId: string };
+
+    // Verify teacher has access (admin skips check)
+    if (request.user.type !== 'admin') {
+      const tc = await server.prisma.teacherCourse.findUnique({
+        where: { teacherId_courseId: { teacherId: id, courseId } },
+      });
+      if (!tc) {
+        return reply.status(403).send({ success: false, message: 'Not assigned to this course' });
+      }
+    }
+
+    const enrollments = await server.prisma.studentCourse.findMany({
+      where: { courseId, status: 'ACTIVE' },
+      include: {
+        student: { select: { id: true, name: true, email: true, photo: true } },
+      },
+    });
+
+    const data = enrollments.map((e) => ({
+      studentId: e.student.id,
+      student: e.student,
+      status: e.status,
+    }));
+
+    return reply.send({ success: true, data });
+  });
+
   // GET /courses/:courseId/students/:studentId - Student detail in course
   server.get('/courses/:courseId/students/:studentId', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.user;
