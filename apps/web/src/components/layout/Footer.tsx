@@ -4,7 +4,6 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { SITE_NAME, SOCIAL_LINKS } from '@/lib/constants';
 import {
-  GraduationCap,
   Mail,
   Phone,
   MapPin,
@@ -14,6 +13,7 @@ import {
   Youtube,
   Send,
 } from 'lucide-react';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 
@@ -89,9 +89,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-xl flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
+              <Image src="/images/logo.png" alt="FutureUp Academy" width={44} height={44} />
               <div>
                 <span className="text-xl font-extrabold text-white">FutureUp</span>
                 <span className="text-xs block text-gray-400 -mt-0.5 tracking-wider uppercase">

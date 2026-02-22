@@ -6,8 +6,9 @@ import { Link } from '@/i18n/routing';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 import { ThemeToggle } from '@/components/shared/ThemeToggle';
 import { Button } from '@/components/ui/Button';
-import { Menu, X, GraduationCap, LogIn } from 'lucide-react';
+import { Menu, X, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export function Header() {
   const t = useTranslations('nav');
@@ -42,9 +43,7 @@ export function Header() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30 group-hover:shadow-xl transition-shadow">
-              <GraduationCap className="w-6 h-6 text-white" />
-            </div>
+            <Image src="/images/logo.png" alt="FutureUp Academy" width={44} height={44} className="group-hover:scale-105 transition-transform" />
             <div className="flex flex-col">
               <span className="text-xl font-extrabold bg-gradient-to-r from-primary-500 to-secondary-600 bg-clip-text text-transparent">
                 FutureUp
