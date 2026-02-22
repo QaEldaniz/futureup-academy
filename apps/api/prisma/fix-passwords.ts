@@ -17,16 +17,22 @@ async function main() {
   });
   console.log(`Updated ${adminResult.count} admin(s)`);
 
-  // Fix teachers
+  // Fix teachers (ALL teachers with email)
   const teacherResult = await prisma.teacher.updateMany({
     where: { email: { not: null } },
     data: { password: teacherPassword },
   });
   console.log(`Updated ${teacherResult.count} teacher(s) -> password: teacher123`);
 
-  // Fix students
+  // Also set password for teachers without one
+  const teacherNullPw = await prisma.teacher.updateMany({
+    where: { email: { not: null }, password: null },
+    data: { password: teacherPassword },
+  });
+  if (teacherNullPw.count > 0) console.log(`  + Set password for ${teacherNullPw.count} teacher(s) that had null password`);
+
+  // Fix students (ALL students, including those with null password)
   const studentResult = await prisma.student.updateMany({
-    where: { password: { not: null } },
     data: { password: studentPassword },
   });
   console.log(`Updated ${studentResult.count} student(s) -> password: student123`);
