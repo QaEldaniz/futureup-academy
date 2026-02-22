@@ -137,6 +137,120 @@ html {
   background: linear-gradient(90deg, transparent, var(--color-secondary-300), transparent);
 }
 
+/* Elegant letter-spacing for headings */
+.tracking-elegant {
+  letter-spacing: 0.02em;
+}
+
+.tracking-regal {
+  letter-spacing: 0.12em;
+}
+
+/* Ornamental gold line with diamond */
+.ornamental-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+}
+.ornamental-line::before,
+.ornamental-line::after {
+  content: '';
+  flex: 0 0 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-secondary-400));
+}
+.ornamental-line::after {
+  background: linear-gradient(90deg, var(--color-secondary-400), transparent);
+}
+.ornamental-line .diamond {
+  width: 8px;
+  height: 8px;
+  background: var(--color-secondary-500);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  margin: 0 8px;
+}
+
+/* Double gold line */
+.double-line-ornament {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 6px 0;
+}
+.double-line-ornament::before,
+.double-line-ornament::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: var(--color-secondary-400);
+}
+.double-line-ornament::before {
+  top: 0;
+}
+.double-line-ornament::after {
+  bottom: 0;
+}
+
+/* Classical card with subtle inner shadow */
+.classical-card {
+  box-shadow: 0 1px 3px rgba(27, 42, 74, 0.04), inset 0 1px 0 rgba(255, 253, 248, 0.8);
+}
+.classical-card:hover {
+  box-shadow: 0 8px 24px rgba(27, 42, 74, 0.08), inset 0 1px 0 rgba(255, 253, 248, 0.8);
+}
+
+/* Dark mode classical card */
+.dark .classical-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+.dark .classical-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Subtle parchment texture overlay */
+.parchment-bg {
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(197, 165, 90, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(27, 42, 74, 0.02) 0%, transparent 50%);
+}
+
+/* Gold accent underline for headings */
+.gold-underline {
+  position: relative;
+  display: inline-block;
+}
+.gold-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-secondary-500), transparent);
+}
+
+/* Elegant section subtitle styling */
+.section-subtitle {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-secondary-600);
+}
+.dark .section-subtitle {
+  color: var(--color-secondary-400);
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0);

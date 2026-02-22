@@ -59,11 +59,10 @@ function StatCard({ item, isVisible, index }: { item: StatItem; isVisible: boole
   return (
     <div
       className={cn(
-        'relative group flex flex-col items-center text-center p-8 rounded-lg',
+        'relative group flex flex-col items-center text-center p-8 rounded-lg classical-card',
         'bg-white dark:bg-surface-dark',
         'border border-gray-100 dark:border-gray-800',
-        'hover:border-primary-200 dark:hover:border-primary-700/50',
-        'shadow-sm hover:shadow-lg',
+        'hover:border-secondary-300/50 dark:hover:border-secondary-700/50',
         'transition-all duration-500',
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       )}

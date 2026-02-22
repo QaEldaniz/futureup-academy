@@ -26,9 +26,20 @@ export function ProcessSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
+          <span className="section-subtitle mb-3 block">— Your Journey —</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading tracking-elegant text-gray-900 dark:text-white mb-3">
             {t('process.title')}
           </h2>
+          {/* Ornamental underline */}
+          <div className="flex items-center justify-center gap-0 mb-5">
+            <div className="h-px w-10 bg-gradient-to-r from-transparent to-secondary-300 dark:to-secondary-700" />
+            <div className="mx-2 flex items-center gap-1">
+              <div className="w-1 h-1 rotate-45 bg-secondary-400 dark:bg-secondary-600" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-secondary-500" />
+              <div className="w-1 h-1 rotate-45 bg-secondary-400 dark:bg-secondary-600" />
+            </div>
+            <div className="h-px w-10 bg-gradient-to-l from-transparent to-secondary-300 dark:to-secondary-700" />
+          </div>
           <p className="max-w-2xl mx-auto text-lg text-gray-500 dark:text-gray-400">
             {t('process.subtitle')}
           </p>

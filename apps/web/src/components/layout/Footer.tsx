@@ -88,14 +88,20 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2.5 mb-4">
+            <div className="flex items-center gap-2.5 mb-2">
               <Image src="/images/logo.png" alt="FutureUp Academy" width={64} height={64} unoptimized />
               <div>
                 <span className="text-xl font-bold font-serif-heading text-white">FutureUp</span>
-                <span className="text-xs block text-gray-400 -mt-0.5 tracking-wider uppercase">
+                <span className="text-xs block text-gray-400 -mt-0.5 tracking-[0.2em] uppercase">
                   Academy
                 </span>
               </div>
+            </div>
+            {/* Classical established line */}
+            <div className="flex items-center gap-2 mb-4 pl-1">
+              <div className="h-px w-4 bg-secondary-600/50" />
+              <span className="text-[10px] font-serif-heading tracking-[0.15em] text-secondary-500/70 uppercase">Est. 2024</span>
+              <div className="h-px w-4 bg-secondary-600/50" />
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               {t('description')}
@@ -198,10 +204,21 @@ export function Footer() {
         </div>
       </div>
 
+      {/* Ornamental divider */}
+      <div className="flex items-center justify-center py-2">
+        <div className="h-px w-16 sm:w-32 bg-gradient-to-r from-transparent to-secondary-600/40" />
+        <div className="mx-2 flex items-center gap-1">
+          <div className="w-1 h-1 rotate-45 bg-secondary-600/40" />
+          <div className="w-1.5 h-1.5 rotate-45 bg-secondary-500/60" />
+          <div className="w-1 h-1 rotate-45 bg-secondary-600/40" />
+        </div>
+        <div className="h-px w-16 sm:w-32 bg-gradient-to-l from-transparent to-secondary-600/40" />
+      </div>
+
       {/* Bottom bar */}
-      <div className="border-t border-secondary-700/30">
+      <div className="border-t border-secondary-700/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-sm font-serif-heading tracking-wide">
             © {new Date().getFullYear()} {SITE_NAME}. {t('rights')}
           </p>
           <div className="flex items-center gap-6 text-sm">

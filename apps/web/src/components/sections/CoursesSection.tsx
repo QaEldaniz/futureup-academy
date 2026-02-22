@@ -154,12 +154,12 @@ function CourseCardComponent({ course, isKids }: { course: CourseCard; isKids: b
   return (
     <div
       className={cn(
-        'group relative flex flex-col overflow-hidden',
+        'group relative flex flex-col overflow-hidden classical-card',
         'hover:-translate-y-1',
         'transition-all duration-300',
         isKids
-          ? 'rounded-lg bg-gradient-to-br from-amber-50 to-orange-50 dark:from-orange-950/40 dark:to-amber-950/30 border-2 border-orange-200/60 dark:border-orange-800/30 hover:shadow-lg'
-          : 'rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-lg'
+          ? 'rounded-lg bg-gradient-to-br from-amber-50 to-orange-50 dark:from-orange-950/40 dark:to-amber-950/30 border-2 border-orange-200/60 dark:border-orange-800/30'
+          : 'rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800'
       )}
     >
       {/* Top gradient border */}
@@ -270,9 +270,16 @@ export function CoursesSection() {
             )} />
           </div>
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
+            <span className="section-subtitle mb-3 block">{isKids ? '— Junior Programs —' : '— Academic Programs —'}</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading tracking-elegant text-gray-900 dark:text-white mb-3">
               {isKids ? t('courses.kidsTitle') : t('courses.title')}
             </h2>
+            {/* Ornamental underline */}
+            <div className="flex items-center gap-0 mb-5 justify-center lg:justify-start">
+              <div className="h-px w-10 bg-gradient-to-r from-transparent to-secondary-300 dark:to-secondary-700" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-secondary-500 mx-2" />
+              <div className="h-px w-10 bg-gradient-to-l from-transparent to-secondary-300 dark:to-secondary-700" />
+            </div>
             <p className="max-w-2xl mx-auto lg:mx-0 text-lg text-gray-500 dark:text-gray-400 mb-6">
               {isKids ? t('courses.kidsSubtitle') : t('courses.subtitle')}
             </p>

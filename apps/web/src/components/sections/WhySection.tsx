@@ -64,11 +64,10 @@ function FeatureCard({ feature }: { feature: Feature }) {
   return (
     <div
       className={cn(
-        'group relative p-6 sm:p-8 rounded-lg',
+        'group relative p-6 sm:p-8 rounded-lg classical-card',
         'bg-white dark:bg-surface-dark',
         'border border-gray-100 dark:border-gray-800',
         'transition-all duration-300',
-        'hover:shadow-lg',
         'hover:-translate-y-0.5',
         'hover:border-secondary-300/50 dark:hover:border-secondary-700/50'
       )}
@@ -108,9 +107,16 @@ export function WhySection() {
         {/* Section header with image */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-14">
           <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
+            <span className="section-subtitle mb-3 block">— Our Distinction —</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading tracking-elegant text-gray-900 dark:text-white mb-3">
               {t('why.title')}
             </h2>
+            {/* Ornamental underline */}
+            <div className="flex items-center gap-0 mb-5">
+              <div className="h-px w-10 bg-gradient-to-r from-transparent to-secondary-300 dark:to-secondary-700" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-secondary-500 mx-2" />
+              <div className="h-px w-10 bg-gradient-to-l from-transparent to-secondary-300 dark:to-secondary-700" />
+            </div>
             <p className="text-lg text-gray-500 dark:text-gray-400">
               {t('why.subtitle')}
             </p>

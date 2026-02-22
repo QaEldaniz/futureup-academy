@@ -39,6 +39,9 @@ export function Header() {
           : 'bg-transparent'
       )}
     >
+      {/* Classical gold accent bar — inspired by British university tradition */}
+      <div className="h-0.5 bg-gradient-to-r from-transparent via-secondary-500 to-transparent" />
+
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
@@ -60,7 +63,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors border-b-2 border-transparent hover:border-secondary-500"
+                className="px-3 py-2 text-sm font-medium tracking-wide text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors border-b-2 border-transparent hover:border-secondary-500"
               >
                 {link.label}
               </Link>

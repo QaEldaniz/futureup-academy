@@ -238,21 +238,27 @@ export function TestimonialsSection() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200/50 dark:border-yellow-800/30 mb-4"
           >
-            <Trophy className="w-3.5 h-3.5 text-yellow-500" />
-            <span className="text-xs font-semibold text-yellow-600 dark:text-yellow-400 uppercase tracking-wider">
-              {t('testimonials.subtitle')}
-            </span>
+            <span className="section-subtitle mb-3 block">— Testimonials —</span>
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading text-gray-900 dark:text-white"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading tracking-elegant text-gray-900 dark:text-white mb-3"
           >
             {t('testimonials.title')}
           </motion.h2>
+          {/* Ornamental underline */}
+          <div className="flex items-center justify-center gap-0 mb-2">
+            <div className="h-px w-10 bg-gradient-to-r from-transparent to-secondary-300 dark:to-secondary-700" />
+            <div className="mx-2 flex items-center gap-1">
+              <div className="w-1 h-1 rotate-45 bg-secondary-400 dark:bg-secondary-600" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-secondary-500" />
+              <div className="w-1 h-1 rotate-45 bg-secondary-400 dark:bg-secondary-600" />
+            </div>
+            <div className="h-px w-10 bg-gradient-to-l from-transparent to-secondary-300 dark:to-secondary-700" />
+          </div>
         </div>
 
         {/* Grid */}
