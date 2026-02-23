@@ -14,7 +14,8 @@ export async function authRoutes(server: FastifyInstance) {
       return reply.status(400).send({ success: false, message: 'Email and password are required' });
     }
 
-    const user = await server.prisma.user.findUnique({ where: { email } });
+    const emailLower = email.toLowerCase().trim();
+    const user = await server.prisma.user.findUnique({ where: { email: emailLower } });
 
     if (!user || !user.isActive) {
       return reply.status(401).send({ success: false, message: 'Invalid credentials' });
@@ -142,9 +143,16 @@ export async function authRoutes(server: FastifyInstance) {
 
     // 3. Check Student
     const student = await server.prisma.student.findUnique({ where: { email: emailLower } });
-    if (student && student.isActive && student.password) {
+    if (student && student.password) {
       const valid = await bcrypt.compare(password, student.password);
       if (valid) {
+        // Check if account is approved by admin
+        if (!student.isActive) {
+          return reply.status(403).send({
+            success: false,
+            message: 'ACCOUNT_PENDING_APPROVAL',
+          });
+        }
         await server.prisma.student.update({ where: { id: student.id }, data: { lastLoginAt: new Date() } });
         const token = server.jwt.sign({ id: student.id, role: 'student', type: 'student' as const });
         return reply.send({
@@ -243,19 +251,13 @@ export async function authRoutes(server: FastifyInstance) {
 
     const hashed = await bcrypt.hash(password, 10);
     const student = await server.prisma.student.create({
-      data: { name, email: emailLower, password: hashed, phone, lastLoginAt: new Date() },
+      data: { name, email: emailLower, password: hashed, phone, isActive: false },
     });
-
-    const token = server.jwt.sign({ id: student.id, role: 'student', type: 'student' as const });
 
     return reply.status(201).send({
       success: true,
-      data: {
-        token,
-        type: 'student',
-        redirect: '/lms/student',
-        user: { id: student.id, email: student.email, name: student.name, photo: student.photo },
-      },
+      message: 'REGISTRATION_PENDING',
+      data: { name: student.name, email: student.email },
     });
   });
 

@@ -391,7 +391,8 @@
     "or": "or",
     "noAccount": "Don't have an account?",
     "register": "Register as student",
-    "roleHint": "Students, teachers, and parents can sign in with their email"
+    "roleHint": "Students, teachers, and parents can sign in with their email",
+    "pendingApproval": "Your account is pending admin approval. Please wait."
   },
   "register": {
     "title": "Create Account",
@@ -414,6 +415,7 @@
     "successMessage": "Registration successful! Redirecting...",
     "emailExists": "This email is already registered",
     "passwordTooShort": "Password must be at least 6 characters",
-    "nameRequired": "Name is required"
+    "nameRequired": "Name is required",
+    "pendingApproval": "Account created! Awaiting admin approval."
   }
 }

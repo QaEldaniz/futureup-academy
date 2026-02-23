@@ -7,7 +7,8 @@ import { useAuthStore } from '@/stores/auth';
 import { Link } from '@/i18n/routing';
 import { Eye, EyeOff, LogIn, GraduationCap, ArrowLeft } from 'lucide-react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API_URL = typeof window !== 'undefined' && RAW_API_URL.includes('localhost') ? '' : RAW_API_URL;
 
 export default function LoginPage() {
   const t = useTranslations('login');
@@ -18,6 +19,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [pendingApproval, setPendingApproval] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +37,12 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || t('invalidCredentials'));
+        if (data.message === 'ACCOUNT_PENDING_APPROVAL') {
+          setPendingApproval(true);
+          setError('');
+          return;
+        }
+        setError(data.message === 'Invalid credentials' ? t('invalidCredentials') : (data.message || t('invalidCredentials')));
         return;
       }
 
@@ -126,6 +133,13 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
+
+            {/* Pending approval notice */}
+            {pendingApproval && (
+              <div className="bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-sm px-4 py-3 rounded-xl border border-amber-200 dark:border-amber-800/30">
+                {t('pendingApproval')}
+              </div>
+            )}
 
             {/* Error */}
             {error && (

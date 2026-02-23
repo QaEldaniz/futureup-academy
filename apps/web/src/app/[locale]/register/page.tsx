@@ -7,7 +7,8 @@ import { useAuthStore } from '@/stores/auth';
 import { Link } from '@/i18n/routing';
 import { Eye, EyeOff, UserPlus, GraduationCap, ArrowLeft } from 'lucide-react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API_URL = typeof window !== 'undefined' && RAW_API_URL.includes('localhost') ? '' : RAW_API_URL;
 
 export default function RegisterPage() {
   const t = useTranslations('register');
@@ -54,19 +55,28 @@ export default function RegisterPage() {
         return;
       }
 
-      const { token, type, redirect, user } = data.data;
-      setSuccess(t('successMessage'));
+      // Registration pending admin approval
+      if (data.message === 'REGISTRATION_PENDING') {
+        setSuccess(t('pendingApproval'));
+        return;
+      }
 
-      login(token, {
-        ...user,
-        type,
-        name: user.name || '',
-        role: user.role || type,
-      });
+      // Legacy: auto-login if token is returned (admin-created student setting password)
+      if (data.data?.token) {
+        const { token, type, redirect, user } = data.data;
+        login(token, {
+          ...user,
+          type,
+          name: user.name || '',
+          role: user.role || type,
+        });
+        setTimeout(() => {
+          router.push(redirect);
+        }, 1000);
+        return;
+      }
 
-      setTimeout(() => {
-        router.push(redirect);
-      }, 1000);
+      setSuccess(t('pendingApproval'));
     } catch {
       setError(t('networkError'));
     } finally {

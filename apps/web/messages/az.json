@@ -387,7 +387,8 @@
     "or": "ve ya",
     "noAccount": "Hesabiniz yoxdur?",
     "register": "Telebeq kimi qeydiyyatdan kec",
-    "roleHint": "Telebeler, muelliimler ve valideyinler email ile daxil ola biler"
+    "roleHint": "Telebeler, muelliimler ve valideyinler email ile daxil ola biler",
+    "pendingApproval": "Hesabınız admin tərəfindən təsdiq gözləyir. Zəhmət olmasa gözləyin."
   },
   "register": {
     "title": "Hesab yarat",
@@ -410,6 +411,7 @@
     "successMessage": "Qeydiyyat ugurlu oldu! Yonlendirilir...",
     "emailExists": "Bu email artiq qeydiyyatdan kecib",
     "passwordTooShort": "Shifre minimum 6 simvol olmalidir",
-    "nameRequired": "Ad melumat telebdir"
+    "nameRequired": "Ad melumat telebdir",
+    "pendingApproval": "Hesabınız uğurla yaradıldı! Admin təsdiqini gözləyin."
   }
 }

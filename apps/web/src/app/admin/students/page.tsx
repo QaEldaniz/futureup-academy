@@ -19,6 +19,8 @@ import {
   Users,
   X,
   AlertCircle,
+  CheckCircle,
+  Ban,
 } from 'lucide-react';
 
 interface Student {
@@ -46,12 +48,12 @@ interface StudentsResponse {
 const STATUS_OPTIONS = [
   { value: '', label: 'All Statuses' },
   { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
+  { value: 'inactive', label: 'Pending Approval' },
 ];
 
 const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
   active: { label: 'Active', className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
-  inactive: { label: 'Inactive', className: 'bg-red-500/10 text-red-400 border-red-500/20' },
+  inactive: { label: 'Pending', className: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
 };
 
 export default function AdminStudentsPage() {
@@ -68,6 +70,7 @@ export default function AdminStudentsPage() {
   const [total, setTotal] = useState(0);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
   const limit = 20;
@@ -118,6 +121,20 @@ export default function AdminStudentsPage() {
       console.error('Failed to delete student:', err);
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const handleToggleActive = async (id: string, currentlyActive: boolean) => {
+    setTogglingId(id);
+    try {
+      await api.put(`/admin/students/${id}`, {
+        isActive: !currentlyActive,
+      }, { token: token || undefined });
+      fetchStudents();
+    } catch (err) {
+      console.error('Failed to update student status:', err);
+    } finally {
+      setTogglingId(null);
     }
   };
 
@@ -367,6 +384,26 @@ export default function AdminStudentsPage() {
                       {/* Actions */}
                       <td className="px-6 py-4 text-right">
                         <div className="inline-flex items-center gap-1">
+                          {/* Approve / Block toggle */}
+                          {student.isActive === false ? (
+                            <button
+                              onClick={() => handleToggleActive(student.id, false)}
+                              disabled={togglingId === student.id}
+                              className="p-2 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all disabled:opacity-50"
+                              title="Approve student"
+                            >
+                              <CheckCircle className="w-4 h-4" />
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleToggleActive(student.id, true)}
+                              disabled={togglingId === student.id}
+                              className="p-2 rounded-lg text-gray-400 hover:text-amber-400 hover:bg-amber-500/10 transition-all disabled:opacity-50"
+                              title="Deactivate student"
+                            >
+                              <Ban className="w-4 h-4" />
+                            </button>
+                          )}
                           <Link
                             href={`/admin/students/${student.id}/edit`}
                             className="p-2 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all"

@@ -238,9 +238,11 @@ export default function CorporatePage() {
                 {getText(locale, 'Bizimlə Əlaqə', 'Связаться с нами', 'Contact Us')}
               </Button>
             </Link>
-            <Button variant="outline" size="xl" leftIcon={<Zap className="w-5 h-5" />}>
-              {getText(locale, 'Pulsuz Konsultasiya', 'Бесплатная Консультация', 'Free Consultation')}
-            </Button>
+            <Link href="/contact">
+              <Button variant="outline" size="xl" leftIcon={<Zap className="w-5 h-5" />}>
+                {getText(locale, 'Pulsuz Konsultasiya', 'Бесплатная Консультация', 'Free Consultation')}
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>
