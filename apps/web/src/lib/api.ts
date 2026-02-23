@@ -1,9 +1,12 @@
-const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
-// Нормализуем: убираем trailing slash, гарантируем /api в конце
+// В браузере: используем относительный /api (nginx проксирует на backend)
+// На сервере (SSR): используем полный URL из env
 const API_URL = (() => {
-  let url = RAW_API_URL.replace(/\/+$/, '');
-  if (!url.endsWith('/api')) {
-    url = url + '/api';
+  const raw = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+  let url = raw.replace(/\/+$/, '');
+  if (!url.endsWith('/api')) url += '/api';
+
+  if (typeof window !== 'undefined' && url.includes('localhost')) {
+    return '/api';
   }
   return url;
 })();

@@ -96,8 +96,8 @@ export function Header() {
 
         {/* Mobile Nav */}
         {isOpen && (
-          <div className="lg:hidden pb-4 border-t border-gray-200 dark:border-gray-700 mt-2">
-            <div className="flex flex-col gap-1 pt-4">
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-white dark:bg-bg-dark border-b border-gray-200 dark:border-gray-700 shadow-lg pb-4">
+            <div className="flex flex-col gap-1 pt-4 px-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}

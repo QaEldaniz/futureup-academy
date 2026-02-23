@@ -207,8 +207,12 @@ export function CourseAdvisor() {
   /* ---------- streaming chat ---------- */
 
   async function streamChat(allMessages: ChatMessage[]) {
+    // В браузере используем относительный URL (nginx проксирует)
     const rawUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api').replace(/\/+$/, '');
-    const baseUrl = rawUrl.endsWith('/api') ? rawUrl : rawUrl + '/api';
+    let baseUrl = rawUrl.endsWith('/api') ? rawUrl : rawUrl + '/api';
+    if (typeof window !== 'undefined' && baseUrl.includes('localhost')) {
+      baseUrl = '/api';
+    }
 
     const response = await fetch(`${baseUrl}/chat`, {
       method: 'POST',
@@ -229,7 +233,10 @@ export function CourseAdvisor() {
       throw new Error(`HTTP ${response.status}`);
     }
 
-    const reader = response.body!.getReader();
+    if (!response.body) {
+      throw new Error('No response body');
+    }
+    const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let buffer = '';
 
