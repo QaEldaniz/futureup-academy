@@ -561,7 +561,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                   )}
                 >
                   <Baby className="w-4 h-4" />
-                  IT Kids
+                  Kids
                 </button>
               </div>
             </div>

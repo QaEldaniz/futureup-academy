@@ -12,21 +12,17 @@ import {
   ArrowRight,
   Users,
   GraduationCap,
-  Monitor,
   Code2,
   Shield,
   BarChart3,
-  Lightbulb,
   CheckCircle2,
   Zap,
   Globe,
   Award,
   TrendingUp,
   Briefcase,
-  Server,
   Palette,
   Megaphone,
-  Wrench,
   Target,
 } from 'lucide-react';
 
@@ -36,7 +32,7 @@ function getText(locale: string, az: string, ru: string, en: string): string {
   return az;
 }
 
-type ServiceCategory = 'training' | 'upskilling' | 'it-solutions';
+type ServiceCategory = 'training' | 'upskilling';
 
 interface Service {
   id: string;
@@ -157,64 +153,11 @@ const services: Service[] = [
     ],
     gradient: 'from-secondary-500 to-secondary-600',
   },
-  // IT Solutions
-  {
-    id: 'it-web',
-    category: 'it-solutions',
-    icon: Monitor,
-    titleAz: 'Veb Tətbiqlərin İnkişafı',
-    titleRu: 'Разработка веб-приложений',
-    titleEn: 'Web Application Development',
-    descAz: 'Müasir texnologiyalar ilə korporativ veb tətbiqlər hazırlayırıq.',
-    descRu: 'Разрабатываем корпоративные веб-приложения с использованием современных технологий.',
-    descEn: 'We develop corporate web applications using modern technologies.',
-    features: [
-      { az: 'React / Next.js', ru: 'React / Next.js', en: 'React / Next.js' },
-      { az: 'Node.js / NestJS', ru: 'Node.js / NestJS', en: 'Node.js / NestJS' },
-      { az: 'Cloud infrastruktur', ru: 'Облачная инфраструктура', en: 'Cloud infrastructure' },
-    ],
-    gradient: 'from-primary-400 to-primary-500',
-  },
-  {
-    id: 'it-infra',
-    category: 'it-solutions',
-    icon: Server,
-    titleAz: 'IT İnfrastruktur Həlləri',
-    titleRu: 'IT Инфраструктурные решения',
-    titleEn: 'IT Infrastructure Solutions',
-    descAz: 'Şirkətinizin IT infrastrukturunu optimallaşdırın.',
-    descRu: 'Оптимизируйте IT-инфраструктуру вашей компании.',
-    descEn: 'Optimize your company\'s IT infrastructure.',
-    features: [
-      { az: 'AWS / Azure / GCP', ru: 'AWS / Azure / GCP', en: 'AWS / Azure / GCP' },
-      { az: 'DevOps', ru: 'DevOps', en: 'DevOps' },
-      { az: 'Monitoring', ru: 'Мониторинг', en: 'Monitoring' },
-    ],
-    gradient: 'from-teal-500 to-cyan-500',
-  },
-  {
-    id: 'it-consulting',
-    category: 'it-solutions',
-    icon: Lightbulb,
-    titleAz: 'IT Konsaltinq',
-    titleRu: 'IT Консалтинг',
-    titleEn: 'IT Consulting',
-    descAz: 'Rəqəmsal transformasiya və texnoloji strategiya üzrə məsləhət.',
-    descRu: 'Консультации по цифровой трансформации и технологической стратегии.',
-    descEn: 'Consulting on digital transformation and technology strategy.',
-    features: [
-      { az: 'Rəqəmsal transformasiya', ru: 'Цифровая трансформация', en: 'Digital transformation' },
-      { az: 'Texnoloji audit', ru: 'Технологический аудит', en: 'Technology audit' },
-      { az: 'Strategiya', ru: 'Стратегия', en: 'Strategy' },
-    ],
-    gradient: 'from-orange-500 to-amber-500',
-  },
 ];
 
 const categoryTabs: { key: ServiceCategory; icon: React.ElementType; labelAz: string; labelRu: string; labelEn: string }[] = [
   { key: 'training', icon: GraduationCap, labelAz: 'Təlimlər', labelRu: 'Тренинги', labelEn: 'Training' },
   { key: 'upskilling', icon: TrendingUp, labelAz: 'İxtisasartırma', labelRu: 'Повышение квалификации', labelEn: 'Upskilling' },
-  { key: 'it-solutions', icon: Wrench, labelAz: 'IT Həllər', labelRu: 'IT Решения', labelEn: 'IT Solutions' },
 ];
 
 const corporateStats = [

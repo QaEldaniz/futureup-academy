@@ -49,10 +49,10 @@
       "cyberDesc": "Şəbəkə təhlükəsizliyi, penetrasiya testi və təhlükəsizlik əsaslarını öyrənin.",
       "marketing": "Rəqəmsal Marketinq",
       "marketingDesc": "SMM, SEO, kontent marketinq və rəqəmsal reklam strategiyalarını öyrənin.",
-      "kidsTitle": "IT Kids Kursları",
+      "kidsTitle": "Uşaqlar Üçün Kurslar",
       "kidsSubtitle": "Gənc beyinlər üçün əyləncəli proqramlaşdırma",
       "adultsLabel": "Yetkinlər",
-      "kidsLabel": "IT Kids",
+      "kidsLabel": "Kids",
       "scratch": "Scratch Proqramlaşdırma",
       "scratchDesc": "7-10 yaş üçün vizual proqramlaşdırma. Oyunlar və animasiyalar yaradın.",
       "pythonKids": "Uşaqlar Üçün Python",
@@ -64,7 +64,8 @@
       "aiKids": "Süni İntellekt Kəşfiyyatçısı",
       "aiKidsDesc": "AI dünyasını kəşf edin, AI alətləri ilə yaradıcı layihələr qurun.",
       "roblox": "Roblox Oyun Yaratma",
-      "robloxDesc": "Roblox Studio-da Lua proqramlaşdırma dili ilə 3D oyunlar yaradın."
+      "robloxDesc": "Roblox Studio-da Lua proqramlaşdırma dili ilə 3D oyunlar yaradın.",
+      "ageYears": "yaş"
     },
     "why": {
       "title": "Niyə FutureUp?",
@@ -145,8 +146,8 @@
     "search": "Kurs axtar...",
     "months": "ay",
     "adults": "Yetkinlər",
-    "itKids": "IT Kids",
-    "kidsTitle": "Uşaqlar Üçün IT Kursları",
+    "itKids": "Kids",
+    "kidsTitle": "Uşaqlar Üçün Kurslar",
     "kidsSubtitle": "7-16 yaşlı uşaqlar üçün maraqlı və əyləncəli proqramlaşdırma",
     "adultsTitle": "Kurslar",
     "adultsSubtitle": "Bütün peşəkar kurslarımız",

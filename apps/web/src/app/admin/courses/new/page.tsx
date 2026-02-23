@@ -413,7 +413,7 @@ export default function AdminNewCoursePage() {
                   )}
                 >
                   <Baby className="w-4 h-4" />
-                  IT Kids
+                  Kids
                 </button>
               </div>
             </div>

@@ -23,6 +23,8 @@ import {
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
+type AgeGroup = '8-11' | '12-15';
+
 interface CourseCard {
   icon: React.ElementType;
   titleKey: string;
@@ -31,6 +33,7 @@ interface CourseCard {
   duration: string;
   gradient: string;
   borderGradient: string;
+  ageGroup?: AgeGroup;
 }
 
 const adultCourses: CourseCard[] = [
@@ -91,6 +94,7 @@ const adultCourses: CourseCard[] = [
 ];
 
 const kidsCourses: CourseCard[] = [
+  // 8-11 yaş
   {
     icon: Blocks,
     titleKey: 'scratch',
@@ -99,33 +103,7 @@ const kidsCourses: CourseCard[] = [
     duration: '3 months',
     gradient: 'from-orange-500 to-amber-500',
     borderGradient: 'from-orange-500/50 to-amber-500/50',
-  },
-  {
-    icon: Gamepad2,
-    titleKey: 'pythonKids',
-    descriptionKey: 'pythonKidsDesc',
-    level: 'Beginner',
-    duration: '4 months',
-    gradient: 'from-green-500 to-teal-500',
-    borderGradient: 'from-green-500/50 to-teal-500/50',
-  },
-  {
-    icon: Shield,
-    titleKey: 'cyberKids',
-    descriptionKey: 'cyberKidsDesc',
-    level: 'Beginner',
-    duration: '2 months',
-    gradient: 'from-red-500 to-orange-500',
-    borderGradient: 'from-red-500/50 to-orange-500/50',
-  },
-  {
-    icon: Brain,
-    titleKey: 'aiKids',
-    descriptionKey: 'aiKidsDesc',
-    level: 'Beginner',
-    duration: '2 months',
-    gradient: 'from-accent-500 to-secondary-500',
-    borderGradient: 'from-accent-500/50 to-secondary-500/50',
+    ageGroup: '8-11',
   },
   {
     icon: Cpu,
@@ -135,6 +113,38 @@ const kidsCourses: CourseCard[] = [
     duration: '3 months',
     gradient: 'from-sky-500 to-blue-500',
     borderGradient: 'from-sky-500/50 to-blue-500/50',
+    ageGroup: '8-11',
+  },
+  {
+    icon: Shield,
+    titleKey: 'cyberKids',
+    descriptionKey: 'cyberKidsDesc',
+    level: 'Beginner',
+    duration: '2 months',
+    gradient: 'from-red-500 to-orange-500',
+    borderGradient: 'from-red-500/50 to-orange-500/50',
+    ageGroup: '8-11',
+  },
+  // 12-15 yaş
+  {
+    icon: Gamepad2,
+    titleKey: 'pythonKids',
+    descriptionKey: 'pythonKidsDesc',
+    level: 'Beginner',
+    duration: '4 months',
+    gradient: 'from-green-500 to-teal-500',
+    borderGradient: 'from-green-500/50 to-teal-500/50',
+    ageGroup: '12-15',
+  },
+  {
+    icon: Brain,
+    titleKey: 'aiKids',
+    descriptionKey: 'aiKidsDesc',
+    level: 'Beginner',
+    duration: '2 months',
+    gradient: 'from-accent-500 to-secondary-500',
+    borderGradient: 'from-accent-500/50 to-secondary-500/50',
+    ageGroup: '12-15',
   },
   {
     icon: Code2,
@@ -144,6 +154,7 @@ const kidsCourses: CourseCard[] = [
     duration: '5 months',
     gradient: 'from-primary-400 to-primary-500',
     borderGradient: 'from-primary-400/50 to-primary-500/50',
+    ageGroup: '12-15',
   },
 ];
 
@@ -241,8 +252,11 @@ function CourseCardComponent({ course, isKids }: { course: CourseCard; isKids: b
 export function CoursesSection() {
   const t = useTranslations('home');
   const [activeTab, setActiveTab] = useState<'adults' | 'kids'>('adults');
+  const [kidsAgeGroup, setKidsAgeGroup] = useState<AgeGroup>('8-11');
   const isKids = activeTab === 'kids';
-  const currentCourses = isKids ? kidsCourses : adultCourses;
+  const currentCourses = isKids
+    ? kidsCourses.filter((c) => c.ageGroup === kidsAgeGroup)
+    : adultCourses;
 
   return (
     <section className={cn(
@@ -313,6 +327,26 @@ export function CoursesSection() {
             </div>
           </div>
         </div>
+
+        {/* Kids age sub-tabs */}
+        {isKids && (
+          <div className="flex items-center justify-center gap-3 mb-10">
+            {(['8-11', '12-15'] as AgeGroup[]).map((age) => (
+              <button
+                key={age}
+                onClick={() => setKidsAgeGroup(age)}
+                className={cn(
+                  'px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border',
+                  kidsAgeGroup === age
+                    ? 'bg-orange-500 text-white border-orange-500 shadow-md shadow-orange-500/20'
+                    : 'bg-white dark:bg-surface-dark text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-orange-300'
+                )}
+              >
+                {age} {t('courses.ageYears')}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Grid */}
         <div className={cn(

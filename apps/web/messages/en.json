@@ -49,10 +49,10 @@
       "cyberDesc": "Learn network security, penetration testing and security fundamentals.",
       "marketing": "Digital Marketing",
       "marketingDesc": "Learn SMM, SEO, content marketing and digital advertising strategies.",
-      "kidsTitle": "IT Kids Courses",
+      "kidsTitle": "Courses for Kids",
       "kidsSubtitle": "Fun coding for young minds",
       "adultsLabel": "Adults",
-      "kidsLabel": "IT Kids",
+      "kidsLabel": "Kids",
       "scratch": "Scratch Programming",
       "scratchDesc": "Visual programming for beginners aged 7-10. Create games and animations.",
       "pythonKids": "Python for Kids",
@@ -64,7 +64,8 @@
       "aiKids": "AI Explorer",
       "aiKidsDesc": "Discover AI, build creative projects with AI tools and learn how machines think.",
       "roblox": "Roblox Game Dev",
-      "robloxDesc": "Create 3D games in Roblox Studio using Lua programming language."
+      "robloxDesc": "Create 3D games in Roblox Studio using Lua programming language.",
+      "ageYears": "years"
     },
     "why": {
       "title": "Why FutureUp?",
@@ -145,8 +146,8 @@
     "search": "Search courses...",
     "months": "months",
     "adults": "Adults",
-    "itKids": "IT Kids",
-    "kidsTitle": "IT Courses for Kids",
+    "itKids": "Kids",
+    "kidsTitle": "Courses for Kids",
     "kidsSubtitle": "Fun and engaging programming for young learners aged 7-16",
     "adultsTitle": "Courses",
     "adultsSubtitle": "All our professional courses",
