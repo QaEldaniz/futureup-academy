@@ -215,13 +215,13 @@ export default function AdminPartnersPage() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Partners</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Partners</h1>
           <p className="text-gray-400 mt-1">Manage partner logos and ordering.</p>
         </div>
         <button
           onClick={openAddModal}
           className={cn(
-            'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+            'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
             'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
             'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
             'active:scale-[0.98]'
@@ -238,12 +238,12 @@ export default function AdminPartnersPage() {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="bg-[#141927]/60 border border-gray-800/50 rounded-2xl p-5 h-40 animate-pulse"
+              className="bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 rounded-2xl p-5 h-40 animate-pulse"
             />
           ))}
         </div>
       ) : partners.length === 0 ? (
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl py-16 text-center">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl py-16 text-center">
           <Inbox className="w-12 h-12 text-gray-600 mx-auto mb-3" />
           <p className="text-gray-400 font-medium">No partners yet</p>
           <p className="text-gray-500 text-sm mt-1">Add your first partner to get started.</p>
@@ -253,10 +253,10 @@ export default function AdminPartnersPage() {
           {partners.map((partner, idx) => (
             <div
               key={partner.id}
-              className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-5 hover:border-gray-700/50 transition-all group"
+              className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-5 hover:border-gray-200 dark:border-gray-700/50 transition-all group"
             >
               {/* Logo */}
-              <div className="w-full h-20 rounded-xl bg-gray-800/30 border border-gray-700/20 flex items-center justify-center mb-4 overflow-hidden">
+              <div className="w-full h-20 rounded-xl bg-gray-100 dark:bg-gray-800/30 border border-gray-700/20 flex items-center justify-center mb-4 overflow-hidden">
                 {partner.logoUrl ? (
                   <img
                     src={partner.logoUrl}
@@ -271,7 +271,7 @@ export default function AdminPartnersPage() {
               {/* Info */}
               <div className="flex items-start justify-between">
                 <div className="min-w-0">
-                  <h3 className="text-sm font-semibold text-white truncate">{partner.name}</h3>
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate">{partner.name}</h3>
                   {partner.website && (
                     <a
                       href={partner.website}
@@ -290,12 +290,12 @@ export default function AdminPartnersPage() {
               </div>
 
               {/* Actions */}
-              <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-800/30">
+              <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-800/30">
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => handleReorder(partner.id, 'up')}
                     disabled={idx === 0}
-                    className="p-1.5 rounded-lg text-gray-500 hover:text-gray-300 hover:bg-gray-800/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="p-1.5 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                     title="Move up"
                   >
                     <ArrowUp className="w-3.5 h-3.5" />
@@ -303,7 +303,7 @@ export default function AdminPartnersPage() {
                   <button
                     onClick={() => handleReorder(partner.id, 'down')}
                     disabled={idx === partners.length - 1}
-                    className="p-1.5 rounded-lg text-gray-500 hover:text-gray-300 hover:bg-gray-800/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="p-1.5 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                     title="Move down"
                   >
                     <ArrowDown className="w-3.5 h-3.5" />
@@ -335,15 +335,15 @@ export default function AdminPartnersPage() {
       {/* Add/Edit Modal */}
       {modal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#141927] border border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-md">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800/50">
-              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+          <div className="bg-white dark:bg-[#141927] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-md">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800/50">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <Handshake className="w-5 h-5 text-primary-400" />
                 {modal.mode === 'add' ? 'Add Partner' : 'Edit Partner'}
               </h3>
               <button
                 onClick={() => setModal(null)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -366,7 +366,7 @@ export default function AdminPartnersPage() {
                     setModal({ ...modal, form: { ...modal.form, name: e.target.value } })
                   }
                   placeholder="Partner name"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
 
@@ -398,7 +398,7 @@ export default function AdminPartnersPage() {
                       'w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-dashed transition-all text-sm font-medium',
                       uploading
                         ? 'border-primary-500/30 bg-primary-500/5 text-primary-400 cursor-wait'
-                        : 'border-gray-700/50 hover:border-primary-500/50 hover:bg-primary-500/5 text-gray-400 hover:text-primary-400'
+                        : 'border-gray-200 dark:border-gray-700/50 hover:border-primary-500/50 hover:bg-primary-500/5 text-gray-400 hover:text-primary-400'
                     )}
                   >
                     {uploading ? (
@@ -425,11 +425,11 @@ export default function AdminPartnersPage() {
                       setModal({ ...modal, form: { ...modal.form, logoUrl: e.target.value } })
                     }
                     placeholder="https://example.com/logo.png"
-                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                 </div>
                 {modal.form.logoUrl && (
-                  <div className="mt-3 h-20 rounded-xl bg-gray-800/30 border border-gray-700/20 flex items-center justify-center overflow-hidden">
+                  <div className="mt-3 h-20 rounded-xl bg-gray-100 dark:bg-gray-800/30 border border-gray-700/20 flex items-center justify-center overflow-hidden">
                     <img
                       src={modal.form.logoUrl}
                       alt="Preview"
@@ -456,7 +456,7 @@ export default function AdminPartnersPage() {
                     setModal({ ...modal, form: { ...modal.form, website: e.target.value } })
                   }
                   placeholder="https://partner-website.com"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
 
@@ -474,14 +474,14 @@ export default function AdminPartnersPage() {
                     })
                   }
                   min={0}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
             </div>
-            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-800/50">
+            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-800/50">
               <button
                 onClick={() => setModal(null)}
-                className="px-4 py-2 rounded-xl border border-gray-700/50 text-gray-300 hover:text-white text-sm font-medium transition-all"
+                className="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-white text-sm font-medium transition-all"
               >
                 Cancel
               </button>
@@ -489,7 +489,7 @@ export default function AdminPartnersPage() {
                 onClick={handleSave}
                 disabled={saving}
                 className={cn(
-                  'flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+                  'flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
                   'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
                   'shadow-lg shadow-primary-500/25',
                   'disabled:opacity-50 disabled:cursor-not-allowed'

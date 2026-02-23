@@ -118,13 +118,13 @@ export default function AdminTestimonialEditPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-gray-700/50 animate-pulse" />
+          <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
           <div className="space-y-2">
-            <div className="w-40 h-6 bg-gray-700/50 rounded animate-pulse" />
-            <div className="w-56 h-4 bg-gray-700/50 rounded animate-pulse" />
+            <div className="w-40 h-6 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+            <div className="w-56 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
           </div>
         </div>
-        <div className="h-80 bg-[#141927]/60 rounded-2xl border border-gray-800/50 animate-pulse" />
+        <div className="h-80 bg-white dark:bg-[#141927]/60 rounded-2xl border border-gray-200 dark:border-gray-800/50 animate-pulse" />
       </div>
     );
   }
@@ -135,12 +135,12 @@ export default function AdminTestimonialEditPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/testimonials"
-          className="p-2 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-gray-400 hover:text-white hover:border-gray-700/50 transition-all"
+          className="p-2 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-200 dark:border-gray-700/50 transition-all"
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-white">Edit Testimonial</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit Testimonial</h1>
           <p className="text-gray-400 mt-0.5">Update testimonial details.</p>
         </div>
       </div>
@@ -153,7 +153,7 @@ export default function AdminTestimonialEditPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic info */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
           <h3 className="text-sm font-medium text-gray-300 mb-5 flex items-center gap-2">
             <User className="w-4 h-4 text-gray-400" />
             Basic Information
@@ -168,7 +168,7 @@ export default function AdminTestimonialEditPage() {
                 value={form.name}
                 onChange={(e) => updateField('name', e.target.value)}
                 placeholder="Student name"
-                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               />
             </div>
             <div>
@@ -183,7 +183,7 @@ export default function AdminTestimonialEditPage() {
                 value={form.photo}
                 onChange={(e) => updateField('photo', e.target.value)}
                 placeholder="https://example.com/photo.jpg"
-                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               />
             </div>
           </div>
@@ -222,7 +222,7 @@ export default function AdminTestimonialEditPage() {
                 'flex items-center gap-3 px-4 py-3 rounded-xl border transition-all',
                 form.isActive
                   ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                  : 'bg-gray-900/50 border-gray-700/50 text-gray-400'
+                  : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400'
               )}
             >
               {form.isActive ? (
@@ -238,8 +238,8 @@ export default function AdminTestimonialEditPage() {
         </div>
 
         {/* Language tabs */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
-          <div className="flex border-b border-gray-800/50">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
+          <div className="flex border-b border-gray-200 dark:border-gray-800/50">
             {TABS.map((tab) => (
               <button
                 key={tab.key}
@@ -249,7 +249,7 @@ export default function AdminTestimonialEditPage() {
                   'flex items-center gap-2 px-6 py-3.5 text-sm font-medium transition-all border-b-2 -mb-px',
                   activeTab === tab.key
                     ? 'text-primary-400 border-primary-500'
-                    : 'text-gray-400 border-transparent hover:text-gray-300 hover:border-gray-700'
+                    : 'text-gray-400 border-transparent hover:text-gray-700 dark:text-gray-300 hover:border-gray-700'
                 )}
               >
                 <Globe className="w-3.5 h-3.5" />
@@ -276,7 +276,7 @@ export default function AdminTestimonialEditPage() {
                       onChange={(e) => updateField(`text${suffix}`, e.target.value)}
                       placeholder={`Testimonial text in ${tab.full}...`}
                       rows={5}
-                      className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-y transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-y transition-all"
                     />
                   </div>
                   <div>
@@ -288,7 +288,7 @@ export default function AdminTestimonialEditPage() {
                       value={form[`course${suffix}` as keyof typeof form] as string}
                       onChange={(e) => updateField(`course${suffix}`, e.target.value)}
                       placeholder={`Course name in ${tab.full}...`}
-                      className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                     />
                   </div>
                 </div>
@@ -301,7 +301,7 @@ export default function AdminTestimonialEditPage() {
         <div className="flex items-center justify-end gap-3">
           <Link
             href="/admin/testimonials"
-            className="px-6 py-2.5 rounded-xl border border-gray-700/50 text-gray-300 hover:text-white hover:border-gray-600/50 text-sm font-medium transition-all"
+            className="px-6 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-600/50 text-sm font-medium transition-all"
           >
             Cancel
           </Link>
@@ -309,7 +309,7 @@ export default function AdminTestimonialEditPage() {
             type="submit"
             disabled={saving}
             className={cn(
-              'flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+              'flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
               'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
               'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
               'active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed'

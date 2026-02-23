@@ -189,7 +189,7 @@ export default function AdminDashboardPage() {
     <div className="space-y-8">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
         <p className="text-gray-400 mt-1">Welcome back! Here&apos;s what&apos;s happening at FutureUp Academy.</p>
       </div>
 
@@ -201,7 +201,7 @@ export default function AdminDashboardPage() {
             <Link
               key={card.label}
               href={card.href}
-              className="group relative bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-5 hover:border-gray-700/50 transition-all duration-200 hover:shadow-lg hover:shadow-black/10"
+              className="group relative bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-5 hover:border-gray-200 dark:border-gray-700/50 transition-all duration-200 hover:shadow-lg hover:shadow-black/10"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className={cn('p-2.5 rounded-xl', card.bgColor)}>
@@ -224,9 +224,9 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
               <div>
-                <p className="text-3xl font-bold text-white mb-1">
+                <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
                   {loading ? (
-                    <span className="inline-block w-12 h-8 bg-gray-700/50 rounded animate-pulse" />
+                    <span className="inline-block w-12 h-8 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                   ) : (
                     card.value
                   )}
@@ -240,10 +240,10 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Enrollment Trend Chart */}
-      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+      <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-4">
           <TrendingUp className="w-4 h-4 text-gray-400" />
-          <h2 className="text-base font-semibold text-white">Enrollment Trend</h2>
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white">Enrollment Trend</h2>
         </div>
         {enrollmentData.length === 0 ? (
           <div className="flex items-center justify-center h-[250px] text-sm text-gray-500">
@@ -284,11 +284,11 @@ export default function AdminDashboardPage() {
       {/* Two column section */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Recent Applications */}
-        <div className="lg:col-span-3 bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800/50">
+        <div className="lg:col-span-3 bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800/50">
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-gray-400" />
-              <h2 className="text-base font-semibold text-white">Recent Applications</h2>
+              <h2 className="text-base font-semibold text-gray-900 dark:text-white">Recent Applications</h2>
             </div>
             <Link
               href="/admin/applications"
@@ -301,21 +301,21 @@ export default function AdminDashboardPage() {
             {loading ? (
               Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="px-6 py-4 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-gray-700/50 animate-pulse" />
+                  <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
                   <div className="flex-1">
-                    <div className="w-32 h-4 bg-gray-700/50 rounded animate-pulse mb-2" />
-                    <div className="w-48 h-3 bg-gray-700/50 rounded animate-pulse" />
+                    <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse mb-2" />
+                    <div className="w-48 h-3 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                   </div>
                 </div>
               ))
             ) : stats.recentApplications.length > 0 ? (
               stats.recentApplications.slice(0, 5).map((app) => (
-                <div key={app.id} className="px-6 py-4 flex items-center gap-4 hover:bg-gray-800/20 transition-colors">
+                <div key={app.id} className="px-6 py-4 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500/20 to-secondary-500/20 flex items-center justify-center text-primary-400 font-bold text-sm">
                     {app.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{app.name}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{app.name}</p>
                     <p className="text-xs text-gray-500 truncate">
                       {app.email} {app.courseName ? `· ${app.courseName}` : ''}
                     </p>
@@ -335,19 +335,19 @@ export default function AdminDashboardPage() {
         {/* Quick Actions & Info */}
         <div className="lg:col-span-2 space-y-6">
           {/* Pending Reviews */}
-          <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+          <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-4">
               <MessageSquare className="w-4 h-4 text-gray-400" />
-              <h2 className="text-base font-semibold text-white">Pending Reviews</h2>
+              <h2 className="text-base font-semibold text-gray-900 dark:text-white">Pending Reviews</h2>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center">
                 <Star className="w-6 h-6 text-amber-400" />
               </div>
               <div>
-                <p className="text-3xl font-bold text-white">
+                <p className="text-3xl font-bold text-gray-900 dark:text-white">
                   {loading ? (
-                    <span className="inline-block w-8 h-8 bg-gray-700/50 rounded animate-pulse" />
+                    <span className="inline-block w-8 h-8 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                   ) : (
                     stats.pendingReviews
                   )}
@@ -367,10 +367,10 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+          <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="w-4 h-4 text-gray-400" />
-              <h2 className="text-base font-semibold text-white">Quick Actions</h2>
+              <h2 className="text-base font-semibold text-gray-900 dark:text-white">Quick Actions</h2>
             </div>
             <div className="space-y-2">
               {[
@@ -384,10 +384,10 @@ export default function AdminDashboardPage() {
                   <Link
                     key={action.label}
                     href={action.href}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800/50 transition-colors group"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors group"
                   >
                     <ActionIcon className={cn('w-4 h-4', action.color)} />
-                    <span className="text-sm text-gray-300 group-hover:text-white transition-colors">
+                    <span className="text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:hover:text-white transition-colors">
                       {action.label}
                     </span>
                     <ArrowUpRight className="w-3 h-3 text-gray-600 group-hover:text-gray-400 ml-auto transition-colors" />

@@ -116,12 +116,12 @@ export default function AdminNewTeacherPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/teachers"
-          className="p-2 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-gray-400 hover:text-white hover:border-gray-700/50 transition-all"
+          className="p-2 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-200 dark:border-gray-700/50 transition-all"
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
             <div className="p-2 rounded-xl bg-secondary-500/10">
               <Users className="w-5 h-5 text-secondary-400" />
             </div>
@@ -142,15 +142,15 @@ export default function AdminNewTeacherPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Language Tabs + Localized Fields */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
           <div className="px-6 pt-5 pb-0">
-            <h2 className="text-sm font-semibold text-white flex items-center gap-2 mb-4">
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
               <Globe className="w-4 h-4 text-gray-400" />
               Localized Information
             </h2>
 
             {/* Tabs */}
-            <div className="flex gap-1 bg-[#0b0f1a]/60 p-1 rounded-xl w-fit">
+            <div className="flex gap-1 bg-gray-50/60 dark:bg-[#0b0f1a]/60 p-1 rounded-xl w-fit">
               {langTabs.map((tab) => (
                 <button
                   key={tab.key}
@@ -159,7 +159,7 @@ export default function AdminNewTeacherPage() {
                   className={cn(
                     'px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200',
                     activeLang === tab.key
-                      ? 'bg-gradient-to-r from-primary-500/20 to-secondary-600/20 text-white shadow-sm border border-gray-700/30'
+                      ? 'bg-gradient-to-r from-primary-500/20 to-secondary-600/20 text-white shadow-sm border border-gray-200 dark:border-gray-700/30'
                       : 'text-gray-400 hover:text-gray-300'
                   )}
                 >
@@ -190,7 +190,7 @@ export default function AdminNewTeacherPage() {
                     )
                   }
                   placeholder={`Teacher's full name in ${langTabs.find((t) => t.key === activeLang)?.label}`}
-                  className="w-full pl-11 pr-4 py-2.5 bg-[#0b0f1a]/60 border border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
+                  className="w-full pl-11 pr-4 py-2.5 bg-gray-50/60 dark:bg-[#0b0f1a]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
                 />
               </div>
             </div>
@@ -212,7 +212,7 @@ export default function AdminNewTeacherPage() {
                   }
                   placeholder={`Teacher's biography in ${langTabs.find((t) => t.key === activeLang)?.label}`}
                   rows={4}
-                  className="w-full pl-11 pr-4 py-2.5 bg-[#0b0f1a]/60 border border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all resize-none"
+                  className="w-full pl-11 pr-4 py-2.5 bg-gray-50/60 dark:bg-[#0b0f1a]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all resize-none"
                 />
               </div>
             </div>
@@ -241,8 +241,8 @@ export default function AdminNewTeacherPage() {
         </div>
 
         {/* General Information */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-white flex items-center gap-2 mb-2">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-2">
             <Briefcase className="w-4 h-4 text-gray-400" />
             General Information
           </h2>
@@ -258,7 +258,7 @@ export default function AdminNewTeacherPage() {
                 value={form.specialization}
                 onChange={(e) => updateField('specialization', e.target.value)}
                 placeholder="e.g. Frontend Development"
-                className="w-full px-4 py-2.5 bg-[#0b0f1a]/60 border border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
+                className="w-full px-4 py-2.5 bg-gray-50/60 dark:bg-[#0b0f1a]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
               />
             </div>
 
@@ -274,7 +274,7 @@ export default function AdminNewTeacherPage() {
                   value={form.photo}
                   onChange={(e) => updateField('photo', e.target.value)}
                   placeholder="https://example.com/photo.jpg"
-                  className="w-full pl-11 pr-4 py-2.5 bg-[#0b0f1a]/60 border border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
+                  className="w-full pl-11 pr-4 py-2.5 bg-gray-50/60 dark:bg-[#0b0f1a]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
                 />
               </div>
             </div>
@@ -293,7 +293,7 @@ export default function AdminNewTeacherPage() {
                   value={form.linkedin}
                   onChange={(e) => updateField('linkedin', e.target.value)}
                   placeholder="https://linkedin.com/in/username"
-                  className="w-full pl-11 pr-4 py-2.5 bg-[#0b0f1a]/60 border border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
+                  className="w-full pl-11 pr-4 py-2.5 bg-gray-50/60 dark:bg-[#0b0f1a]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
                 />
               </div>
             </div>
@@ -310,7 +310,7 @@ export default function AdminNewTeacherPage() {
                   value={form.github}
                   onChange={(e) => updateField('github', e.target.value)}
                   placeholder="https://github.com/username"
-                  className="w-full pl-11 pr-4 py-2.5 bg-[#0b0f1a]/60 border border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
+                  className="w-full pl-11 pr-4 py-2.5 bg-gray-50/60 dark:bg-[#0b0f1a]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
                 />
               </div>
             </div>
@@ -319,7 +319,7 @@ export default function AdminNewTeacherPage() {
           {/* Active Toggle */}
           <div className="flex items-center justify-between pt-2">
             <div>
-              <p className="text-sm font-medium text-white">Active Status</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">Active Status</p>
               <p className="text-xs text-gray-500 mt-0.5">
                 Inactive teachers won&apos;t appear on the public website
               </p>
@@ -339,8 +339,8 @@ export default function AdminNewTeacherPage() {
         </div>
 
         {/* Portal Credentials */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-white flex items-center gap-2 mb-2">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-2">
             <Lock className="w-4 h-4 text-gray-400" />
             Teacher Portal Credentials
           </h2>
@@ -361,7 +361,7 @@ export default function AdminNewTeacherPage() {
                   value={form.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   placeholder="teacher@futureup.az"
-                  className="w-full pl-11 pr-4 py-2.5 bg-[#0b0f1a]/60 border border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
+                  className="w-full pl-11 pr-4 py-2.5 bg-gray-50/60 dark:bg-[#0b0f1a]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
                 />
               </div>
             </div>
@@ -378,7 +378,7 @@ export default function AdminNewTeacherPage() {
                   value={form.password}
                   onChange={(e) => updateField('password', e.target.value)}
                   placeholder="Minimum 6 characters"
-                  className="w-full pl-11 pr-4 py-2.5 bg-[#0b0f1a]/60 border border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
+                  className="w-full pl-11 pr-4 py-2.5 bg-gray-50/60 dark:bg-[#0b0f1a]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
                 />
               </div>
             </div>
@@ -389,7 +389,7 @@ export default function AdminNewTeacherPage() {
         <div className="flex items-center justify-end gap-3 pt-2">
           <Link
             href="/admin/teachers"
-            className="px-5 py-2.5 rounded-xl bg-gray-800/50 text-gray-300 text-sm font-medium hover:bg-gray-700/50 hover:text-white transition-all"
+            className="px-5 py-2.5 rounded-xl bg-gray-800/50 text-gray-300 text-sm font-medium hover:bg-gray-200 dark:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white transition-all"
           >
             Cancel
           </Link>

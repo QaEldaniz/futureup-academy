@@ -23,14 +23,16 @@ export default function AdminRootLayout({
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { AdminHeader } from '@/components/admin/AdminHeader';
 import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
+import { ThemeProvider } from '@/components/shared/ThemeProvider';
 import { useState } from 'react';
 
 function AdminPanelLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
+    <ThemeProvider>
     <AdminAuthGuard>
-      <div className="min-h-screen bg-[#0b0f1a] text-gray-100">
+      <div className="min-h-screen bg-gray-50 dark:bg-[#0b0f1a] text-gray-900 dark:text-gray-100">
         {/* Mobile sidebar overlay */}
         {sidebarOpen && (
           <div
@@ -51,5 +53,6 @@ function AdminPanelLayout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
     </AdminAuthGuard>
+    </ThemeProvider>
   );
 }

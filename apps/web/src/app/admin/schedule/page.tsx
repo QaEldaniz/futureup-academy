@@ -332,7 +332,7 @@ export default function AdminSchedulePage() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Schedule</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Schedule</h1>
           <p className="text-gray-400 mt-1">
             Manage weekly class timetable and schedule entries.
           </p>
@@ -340,7 +340,7 @@ export default function AdminSchedulePage() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => { fetchSchedules(); fetchCourses(); fetchTeachers(); }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-gray-300 hover:text-white hover:border-gray-700/50 transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-200 dark:border-gray-700/50 transition-all"
           >
             <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
             Refresh
@@ -348,7 +348,7 @@ export default function AdminSchedulePage() {
           <button
             onClick={openAddModal}
             className={cn(
-              'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+              'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
               'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
               'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
               'active:scale-[0.98]'
@@ -363,9 +363,9 @@ export default function AdminSchedulePage() {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* WEEKLY TIMETABLE GRID                                              */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-800/50">
-          <h2 className="text-base font-semibold text-white flex items-center gap-2">
+      <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800/50">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
             <Calendar className="w-5 h-5 text-primary-400" />
             Weekly Timetable
           </h2>
@@ -373,7 +373,7 @@ export default function AdminSchedulePage() {
 
         {loading ? (
           <div className="p-6">
-            <div className="h-96 bg-gray-800/30 rounded-xl animate-pulse" />
+            <div className="h-96 bg-gray-100 dark:bg-gray-800/30 rounded-xl animate-pulse" />
           </div>
         ) : (
           <div className="p-4 overflow-x-auto">
@@ -384,7 +384,7 @@ export default function AdminSchedulePage() {
                 {DAYS_OF_WEEK.map((day) => (
                   <div
                     key={day.value}
-                    className="p-2 text-center text-xs font-semibold text-gray-300 bg-gray-800/30 rounded-lg"
+                    className="p-2 text-center text-xs font-semibold text-gray-300 bg-gray-100 dark:bg-gray-800/30 rounded-lg"
                   >
                     <span className="hidden sm:inline">{day.label}</span>
                     <span className="sm:hidden">{day.short}</span>
@@ -413,7 +413,7 @@ export default function AdminSchedulePage() {
                           key={`${day.value}-${hour}`}
                           className={cn(
                             'min-h-[48px] rounded-lg border border-gray-800/20 relative',
-                            slotSchedules.length === 0 && 'bg-gray-900/20 hover:bg-gray-800/20 transition-colors'
+                            slotSchedules.length === 0 && 'bg-gray-900/20 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors'
                           )}
                         >
                           {startsHere.map((schedule) => {
@@ -468,9 +468,9 @@ export default function AdminSchedulePage() {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {/* SCHEDULE LIST TABLE                                                */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-800/50 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-white flex items-center gap-2">
+      <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800/50 flex items-center justify-between">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-primary-400" />
             All Schedules
           </h2>
@@ -483,12 +483,12 @@ export default function AdminSchedulePage() {
           <div className="divide-y divide-gray-800/30">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="px-6 py-4 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-gray-700/50 animate-pulse" />
+                <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
                 <div className="flex-1 space-y-2">
-                  <div className="w-32 h-4 bg-gray-700/50 rounded animate-pulse" />
-                  <div className="w-48 h-3 bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-48 h-3 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                 </div>
-                <div className="w-24 h-8 bg-gray-700/50 rounded animate-pulse" />
+                <div className="w-24 h-8 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
               </div>
             ))}
           </div>
@@ -503,7 +503,7 @@ export default function AdminSchedulePage() {
         ) : (
           <>
             {/* Desktop table header */}
-            <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3 border-b border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3 border-b border-gray-200 dark:border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
               <div className="col-span-1">Day</div>
               <div className="col-span-2">Time</div>
               <div className="col-span-3">Course</div>
@@ -524,11 +524,11 @@ export default function AdminSchedulePage() {
                   return (
                     <div
                       key={schedule.id}
-                      className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-800/20 transition-colors"
+                      className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors"
                     >
                       {/* Day */}
                       <div className="col-span-1">
-                        <span className="text-sm font-medium text-white">
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
                           {dayInfo?.short || `Day ${schedule.dayOfWeek}`}
                         </span>
                       </div>
@@ -610,15 +610,15 @@ export default function AdminSchedulePage() {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {modal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#141927] border border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800/50 sticky top-0 bg-[#141927] z-10">
-              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+          <div className="bg-white dark:bg-[#141927] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800/50 sticky top-0 bg-white dark:bg-[#141927] z-10">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-primary-400" />
                 {modal.mode === 'add' ? 'Add Schedule' : 'Edit Schedule'}
               </h3>
               <button
                 onClick={() => setModal(null)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -640,13 +640,13 @@ export default function AdminSchedulePage() {
                   onChange={(e) =>
                     setModal({ ...modal, form: { ...modal.form, courseId: e.target.value } })
                   }
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all appearance-none cursor-pointer"
                 >
-                  <option value="" className="bg-[#141927] text-gray-400">
+                  <option value="" className="bg-white dark:bg-[#141927] text-gray-500 dark:text-gray-400">
                     Select a course
                   </option>
                   {courses.map((course) => (
-                    <option key={course.id} value={course.id} className="bg-[#141927] text-white">
+                    <option key={course.id} value={course.id} className="bg-white dark:bg-[#141927] text-gray-900 dark:text-white">
                       {getCourseName(course)}
                     </option>
                   ))}
@@ -663,13 +663,13 @@ export default function AdminSchedulePage() {
                   onChange={(e) =>
                     setModal({ ...modal, form: { ...modal.form, teacherId: e.target.value } })
                   }
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all appearance-none cursor-pointer"
                 >
-                  <option value="" className="bg-[#141927] text-gray-400">
+                  <option value="" className="bg-white dark:bg-[#141927] text-gray-500 dark:text-gray-400">
                     Select a teacher
                   </option>
                   {teachers.map((teacher) => (
-                    <option key={teacher.id} value={teacher.id} className="bg-[#141927] text-white">
+                    <option key={teacher.id} value={teacher.id} className="bg-white dark:bg-[#141927] text-gray-900 dark:text-white">
                       {getTeacherName(teacher)}
                     </option>
                   ))}
@@ -689,10 +689,10 @@ export default function AdminSchedulePage() {
                       form: { ...modal.form, dayOfWeek: parseInt(e.target.value) },
                     })
                   }
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all appearance-none cursor-pointer"
                 >
                   {DAYS_OF_WEEK.map((day) => (
-                    <option key={day.value} value={day.value} className="bg-[#141927] text-white">
+                    <option key={day.value} value={day.value} className="bg-white dark:bg-[#141927] text-gray-900 dark:text-white">
                       {day.label}
                     </option>
                   ))}
@@ -711,7 +711,7 @@ export default function AdminSchedulePage() {
                     onChange={(e) =>
                       setModal({ ...modal, form: { ...modal.form, startTime: e.target.value } })
                     }
-                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                 </div>
                 <div>
@@ -724,7 +724,7 @@ export default function AdminSchedulePage() {
                     onChange={(e) =>
                       setModal({ ...modal, form: { ...modal.form, endTime: e.target.value } })
                     }
-                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                 </div>
               </div>
@@ -742,7 +742,7 @@ export default function AdminSchedulePage() {
                       setModal({ ...modal, form: { ...modal.form, room: e.target.value } })
                     }
                     placeholder="e.g. A-101"
-                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                 </div>
                 <div>
@@ -761,7 +761,7 @@ export default function AdminSchedulePage() {
                       'w-full px-4 py-3 rounded-xl border text-sm font-medium transition-all text-left',
                       modal.form.isActive
                         ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                        : 'bg-gray-900/50 border-gray-700/50 text-gray-400'
+                        : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400'
                     )}
                   >
                     {modal.form.isActive ? 'Active' : 'Inactive'}
@@ -769,10 +769,10 @@ export default function AdminSchedulePage() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-800/50 sticky bottom-0 bg-[#141927]">
+            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-800/50 sticky bottom-0 bg-white dark:bg-[#141927]">
               <button
                 onClick={() => setModal(null)}
-                className="px-4 py-2 rounded-xl border border-gray-700/50 text-gray-300 hover:text-white text-sm font-medium transition-all"
+                className="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-white text-sm font-medium transition-all"
               >
                 Cancel
               </button>
@@ -780,7 +780,7 @@ export default function AdminSchedulePage() {
                 onClick={handleSave}
                 disabled={saving}
                 className={cn(
-                  'flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+                  'flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
                   'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
                   'shadow-lg shadow-primary-500/25',
                   'disabled:opacity-50 disabled:cursor-not-allowed'
@@ -803,13 +803,13 @@ export default function AdminSchedulePage() {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#141927] border border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-sm">
+          <div className="bg-white dark:bg-[#141927] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-sm">
             <div className="p-6 text-center space-y-4">
               <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto">
                 <Trash2 className="w-6 h-6 text-red-400" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-white">Delete Schedule</h3>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Delete Schedule</h3>
                 <p className="text-sm text-gray-400 mt-1">
                   Are you sure you want to delete this schedule entry? This action cannot be undone.
                 </p>
@@ -817,7 +817,7 @@ export default function AdminSchedulePage() {
               <div className="flex items-center justify-center gap-3 pt-2">
                 <button
                   onClick={() => setDeleteConfirm(null)}
-                  className="px-4 py-2 rounded-xl border border-gray-700/50 text-gray-300 hover:text-white text-sm font-medium transition-all"
+                  className="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-white text-sm font-medium transition-all"
                 >
                   Cancel
                 </button>
@@ -825,7 +825,7 @@ export default function AdminSchedulePage() {
                   onClick={() => handleDelete(deleteConfirm)}
                   disabled={deletingId === deleteConfirm}
                   className={cn(
-                    'flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+                    'flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
                     'bg-red-600 hover:bg-red-700',
                     'shadow-lg shadow-red-500/25',
                     'disabled:opacity-50 disabled:cursor-not-allowed'

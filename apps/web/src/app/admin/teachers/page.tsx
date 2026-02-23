@@ -116,7 +116,7 @@ export default function AdminTeachersPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
             <div className="p-2 rounded-xl bg-secondary-500/10">
               <Users className="w-6 h-6 text-secondary-400" />
             </div>
@@ -143,7 +143,7 @@ export default function AdminTeachersPage() {
           placeholder={t.searchPlaceholder}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-11 pr-4 py-3 bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
+          className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all"
         />
         {search && (
           <button
@@ -161,29 +161,29 @@ export default function AdminTeachersPage() {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6 animate-pulse"
+              className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 animate-pulse"
             >
               <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-gray-700/50" />
+                <div className="w-14 h-14 rounded-2xl bg-gray-200 dark:bg-gray-700/50" />
                 <div className="flex-1 space-y-2">
-                  <div className="w-32 h-4 bg-gray-700/50 rounded" />
-                  <div className="w-24 h-3 bg-gray-700/50 rounded" />
+                  <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700/50 rounded" />
+                  <div className="w-24 h-3 bg-gray-200 dark:bg-gray-700/50 rounded" />
                 </div>
               </div>
               <div className="mt-4 space-y-2">
-                <div className="w-full h-3 bg-gray-700/50 rounded" />
-                <div className="w-2/3 h-3 bg-gray-700/50 rounded" />
+                <div className="w-full h-3 bg-gray-200 dark:bg-gray-700/50 rounded" />
+                <div className="w-2/3 h-3 bg-gray-200 dark:bg-gray-700/50 rounded" />
               </div>
             </div>
           ))}
         </div>
       ) : teachers.length === 0 ? (
         /* Empty State */
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-16 text-center">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-16 text-center">
           <div className="inline-flex p-4 rounded-2xl bg-gray-800/50 mb-4">
             <UserX className="w-8 h-8 text-gray-500" />
           </div>
-          <h3 className="text-lg font-semibold text-white mb-2">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             {t.noTeachers}
           </h3>
           <p className="text-gray-400 text-sm mb-6 max-w-sm mx-auto">
@@ -206,7 +206,7 @@ export default function AdminTeachersPage() {
           {teachers.map((teacher) => (
             <div
               key={teacher.id}
-              className="group relative bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6 hover:border-gray-700/50 transition-all duration-200 hover:shadow-lg hover:shadow-black/10"
+              className="group relative bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 hover:border-gray-200 dark:border-gray-700/50 transition-all duration-200 hover:shadow-lg hover:shadow-black/10"
             >
               {/* Status indicator */}
               <div className="absolute top-4 right-4">
@@ -234,15 +234,15 @@ export default function AdminTeachersPage() {
                   <img
                     src={teacher.photo}
                     alt={getLocalized(teacher, 'name', adminLocale)}
-                    className="w-14 h-14 rounded-2xl object-cover border border-gray-700/50"
+                    className="w-14 h-14 rounded-2xl object-cover border border-gray-200 dark:border-gray-700/50"
                   />
                 ) : (
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500/20 to-secondary-600/20 flex items-center justify-center text-primary-400 font-bold text-lg border border-gray-700/50">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500/20 to-secondary-600/20 flex items-center justify-center text-primary-400 font-bold text-lg border border-gray-200 dark:border-gray-700/50">
                     {getLocalized(teacher, 'name', adminLocale)?.charAt(0)?.toUpperCase() || 'T'}
                   </div>
                 )}
                 <div className="flex-1 min-w-0 pr-16">
-                  <h3 className="text-base font-semibold text-white truncate">
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
                     {getLocalized(teacher, 'name', adminLocale)}
                   </h3>
                   {teacher.specialization && (
@@ -296,10 +296,10 @@ export default function AdminTeachersPage() {
               </div>
 
               {/* Actions */}
-              <div className="flex items-center gap-2 pt-4 border-t border-gray-800/50">
+              <div className="flex items-center gap-2 pt-4 border-t border-gray-200 dark:border-gray-800/50">
                 <Link
                   href={`/admin/teachers/${teacher.id}/edit`}
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-gray-800/50 text-gray-300 text-xs font-medium hover:bg-gray-700/50 hover:text-white transition-all"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-gray-800/50 text-gray-300 text-xs font-medium hover:bg-gray-200 dark:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white transition-all"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   {tCommon.edit}
@@ -327,13 +327,13 @@ export default function AdminTeachersPage() {
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => !deleting && setDeleteId(null)}
           />
-          <div className="relative bg-[#1a2035] border border-gray-800/50 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+          <div className="relative bg-white dark:bg-[#1a2035] border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 w-full max-w-md shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2.5 rounded-xl bg-red-500/10">
                 <AlertTriangle className="w-5 h-5 text-red-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {t.deleteTitle}
                 </h3>
                 <p className="text-sm text-gray-400">
@@ -348,7 +348,7 @@ export default function AdminTeachersPage() {
               <button
                 onClick={() => setDeleteId(null)}
                 disabled={deleting}
-                className="flex-1 px-4 py-2.5 rounded-xl bg-gray-800/50 text-gray-300 text-sm font-medium hover:bg-gray-700/50 transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2.5 rounded-xl bg-gray-800/50 text-gray-300 text-sm font-medium hover:bg-gray-200 dark:bg-gray-700/50 transition-colors disabled:opacity-50"
               >
                 {tCommon.cancel}
               </button>

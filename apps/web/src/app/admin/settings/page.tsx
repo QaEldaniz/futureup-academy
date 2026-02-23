@@ -225,11 +225,11 @@ export default function AdminSettingsPage() {
     return (
       <div className="space-y-6">
         <div className="space-y-2">
-          <div className="w-40 h-8 bg-gray-700/50 rounded animate-pulse" />
-          <div className="w-64 h-4 bg-gray-700/50 rounded animate-pulse" />
+          <div className="w-40 h-8 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+          <div className="w-64 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
         </div>
-        <div className="h-64 bg-[#141927]/60 rounded-2xl border border-gray-800/50 animate-pulse" />
-        <div className="h-48 bg-[#141927]/60 rounded-2xl border border-gray-800/50 animate-pulse" />
+        <div className="h-64 bg-white dark:bg-[#141927]/60 rounded-2xl border border-gray-200 dark:border-gray-800/50 animate-pulse" />
+        <div className="h-48 bg-white dark:bg-[#141927]/60 rounded-2xl border border-gray-200 dark:border-gray-800/50 animate-pulse" />
       </div>
     );
   }
@@ -238,7 +238,7 @@ export default function AdminSettingsPage() {
     <div className="space-y-6">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">Settings</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h1>
         <p className="text-gray-400 mt-1">Manage site-wide configuration and contact details.</p>
       </div>
 
@@ -257,8 +257,8 @@ export default function AdminSettingsPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Contact Information */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
-          <h3 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
             <Phone className="w-4 h-4 text-primary-400" />
             Contact Information
           </h3>
@@ -282,7 +282,7 @@ export default function AdminSettingsPage() {
                     value={settings[field.key]}
                     onChange={(e) => updateField(field.key, e.target.value)}
                     placeholder={field.placeholder}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                   {'hint' in field && field.hint && (
                     <p className="text-[11px] text-gray-500 mt-1.5 ml-1">{field.hint}</p>
@@ -294,8 +294,8 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* Address (multilingual) */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
-          <h3 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
             <MapPin className="w-4 h-4 text-accent-400" />
             Address (Multilingual)
           </h3>
@@ -314,7 +314,7 @@ export default function AdminSettingsPage() {
                   value={settings[field.key]}
                   onChange={(e) => updateField(field.key, e.target.value)}
                   placeholder={field.placeholder}
-                  className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
             ))}
@@ -322,8 +322,8 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* Working Hours (multilingual) */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
-          <h3 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
             <Clock className="w-4 h-4 text-orange-400" />
             Working Hours (Multilingual)
           </h3>
@@ -342,7 +342,7 @@ export default function AdminSettingsPage() {
                   value={settings[field.key]}
                   onChange={(e) => updateField(field.key, e.target.value)}
                   placeholder={field.placeholder}
-                  className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
             ))}
@@ -350,8 +350,8 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* Google Maps */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
-          <h3 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
             <Map className="w-4 h-4 text-green-400" />
             Google Maps
           </h3>
@@ -369,7 +369,7 @@ export default function AdminSettingsPage() {
                 value={settings.googleMapsEmbed}
                 onChange={(e) => updateField('googleMapsEmbed', e.target.value)}
                 placeholder="https://www.google.com/maps/embed?pb=..."
-                className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               />
               <p className="text-[11px] text-gray-500 mt-1.5 ml-1">
                 Go to Google Maps &rarr; Find your location &rarr; Share &rarr; Embed a map &rarr; Copy the src URL from iframe code
@@ -385,7 +385,7 @@ export default function AdminSettingsPage() {
                 value={settings.googleMapsLink}
                 onChange={(e) => updateField('googleMapsLink', e.target.value)}
                 placeholder="https://maps.google.com/?q=..."
-                className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               />
               <p className="text-[11px] text-gray-500 mt-1.5 ml-1">
                 Direct link to open in Google Maps app (for the address card click)
@@ -398,7 +398,7 @@ export default function AdminSettingsPage() {
                 <label className="block text-xs font-medium text-gray-400 mb-2">
                   Preview
                 </label>
-                <div className="rounded-xl overflow-hidden border border-gray-700/50 h-48">
+                <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700/50 h-48">
                   <iframe
                     src={settings.googleMapsEmbed}
                     width="100%"
@@ -415,8 +415,8 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* Social Media */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
-          <h3 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
             <Globe className="w-4 h-4 text-secondary-400" />
             Social Media
           </h3>
@@ -446,7 +446,7 @@ export default function AdminSettingsPage() {
                     value={settings[field.key]}
                     onChange={(e) => updateField(field.key, e.target.value)}
                     placeholder={field.placeholder}
-                    className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                 </div>
               </div>
@@ -460,7 +460,7 @@ export default function AdminSettingsPage() {
             type="submit"
             disabled={saving}
             className={cn(
-              'flex items-center gap-2 px-8 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+              'flex items-center gap-2 px-8 py-3 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
               'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
               'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
               'active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed'

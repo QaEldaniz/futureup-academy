@@ -65,25 +65,25 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed top-0 left-0 z-50 h-full w-72 bg-[#111827]/95 backdrop-blur-xl border-r border-gray-800/50 transition-transform duration-300 ease-in-out',
+        'fixed top-0 left-0 z-50 h-full w-72 bg-white/95 dark:bg-[#111827]/95 backdrop-blur-xl border-r border-gray-200 dark:border-gray-800/50 transition-transform duration-300 ease-in-out',
         'lg:translate-x-0',
         isOpen ? 'translate-x-0' : '-translate-x-full'
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between h-16 px-6 border-b border-gray-800/50">
+      <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-800/50">
         <Link href="/admin" className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-600 flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <div>
-            <span className="text-base font-bold text-white">FutureUp</span>
-            <span className="text-[10px] ml-1 px-1.5 py-0.5 bg-primary-500/20 text-primary-400 rounded font-medium">ADMIN</span>
+            <span className="text-base font-bold text-gray-900 dark:text-white">FutureUp</span>
+            <span className="text-[10px] ml-1 px-1.5 py-0.5 bg-primary-500/20 text-primary-600 dark:text-primary-400 rounded font-medium">ADMIN</span>
           </div>
         </Link>
         <button
           onClick={onClose}
-          className="lg:hidden p-1.5 rounded-lg hover:bg-gray-800/50 text-gray-400 hover:text-white transition-colors"
+          className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
@@ -102,14 +102,14 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
               className={cn(
                 'flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                 active
-                  ? 'bg-primary-500/15 text-primary-400 shadow-sm'
-                  : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                  ? 'bg-primary-500/15 text-primary-600 dark:text-primary-400 shadow-sm'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
               )}
             >
-              <Icon className={cn('w-[18px] h-[18px]', active && 'text-primary-400')} />
+              <Icon className={cn('w-[18px] h-[18px]', active && 'text-primary-600 dark:text-primary-400')} />
               {t[item.key]}
               {active && (
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-400" />
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-500 dark:bg-primary-400" />
               )}
             </Link>
           );
@@ -117,10 +117,10 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
       </nav>
 
       {/* User section */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800/50">
+      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-800/50">
         <Link
           href="/admin/settings"
-          className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all"
+          className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all"
         >
           <UserCog className="w-[18px] h-[18px]" />
           {t.adminSettings}

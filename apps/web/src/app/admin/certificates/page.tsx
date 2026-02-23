@@ -109,7 +109,7 @@ export default function AdminCertificatesPage() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Certificates</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Certificates</h1>
           <p className="text-gray-400 mt-1">
             {total} certificate{total !== 1 ? 's' : ''} generated
           </p>
@@ -117,7 +117,7 @@ export default function AdminCertificatesPage() {
         <Link
           href="/admin/certificates/new"
           className={cn(
-            'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+            'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
             'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
             'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
             'active:scale-[0.98]'
@@ -136,20 +136,20 @@ export default function AdminCertificatesPage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search by student, course, or code..."
-          className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+          className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
         />
       </div>
 
       {/* Certificates list */}
-      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
+      <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
         {loading ? (
           <div className="divide-y divide-gray-800/30">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="px-6 py-4 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-gray-700/50 animate-pulse" />
+                <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
                 <div className="flex-1 space-y-2">
-                  <div className="w-40 h-4 bg-gray-700/50 rounded animate-pulse" />
-                  <div className="w-56 h-3 bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-40 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-56 h-3 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                 </div>
               </div>
             ))}
@@ -170,7 +170,7 @@ export default function AdminCertificatesPage() {
             <div className="hidden xl:block">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <tr className="border-b border-gray-200 dark:border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
                     <th className="text-left px-6 py-3 w-[22%]">Student</th>
                     <th className="text-left px-4 py-3 w-[24%]">Course</th>
                     <th className="text-left px-4 py-3 w-[14%]">Grade</th>
@@ -183,7 +183,7 @@ export default function AdminCertificatesPage() {
                   {filteredCertificates.map((cert) => (
                     <tr
                       key={cert.id}
-                      className="hover:bg-gray-800/20 transition-colors"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors"
                     >
                       {/* Student */}
                       <td className="px-6 py-4">
@@ -255,7 +255,7 @@ export default function AdminCertificatesPage() {
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => copyCode(cert.uniqueCode)}
-                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-gray-800/50 text-gray-500 hover:text-amber-400 transition-colors"
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-500 hover:text-amber-400 transition-colors"
                             title={`Copy code: ${cert.uniqueCode}`}
                           >
                             {copiedCode === cert.uniqueCode ? (
@@ -271,7 +271,7 @@ export default function AdminCertificatesPage() {
                             href={`${adminLocale && adminLocale !== 'az' ? `/${adminLocale}` : ''}/certificate/${cert.uniqueCode}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-1.5 rounded-lg hover:bg-gray-800/50 text-gray-500 hover:text-primary-400 transition-colors"
+                            className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-500 hover:text-primary-400 transition-colors"
                             title="View public certificate"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -289,7 +289,7 @@ export default function AdminCertificatesPage() {
               {filteredCertificates.map((cert) => (
                 <div
                   key={cert.id}
-                  className="px-5 py-4 hover:bg-gray-800/20 transition-colors"
+                  className="px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -308,7 +308,7 @@ export default function AdminCertificatesPage() {
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         onClick={() => copyCode(cert.uniqueCode)}
-                        className="p-1.5 rounded-lg hover:bg-gray-800/50 text-gray-500 hover:text-amber-400 transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-500 hover:text-amber-400 transition-colors"
                         title="Copy code"
                       >
                         {copiedCode === cert.uniqueCode ? (
@@ -321,7 +321,7 @@ export default function AdminCertificatesPage() {
                         href={`${adminLocale && adminLocale !== 'az' ? `/${adminLocale}` : ''}/certificate/${cert.uniqueCode}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1.5 rounded-lg hover:bg-gray-800/50 text-gray-500 hover:text-primary-400 transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-500 hover:text-primary-400 transition-colors"
                         title="View"
                       >
                         <ExternalLink className="w-4 h-4" />
@@ -375,7 +375,7 @@ export default function AdminCertificatesPage() {
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page <= 1}
-              className="flex items-center gap-1 px-3 py-2 rounded-xl border border-gray-700/50 text-gray-400 hover:text-white hover:border-gray-600/50 text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center gap-1 px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700/50 text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-600/50 text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="w-4 h-4" />
               Prev
@@ -383,7 +383,7 @@ export default function AdminCertificatesPage() {
             <button
               onClick={() => setPage(Math.min(totalPages, page + 1))}
               disabled={page >= totalPages}
-              className="flex items-center gap-1 px-3 py-2 rounded-xl border border-gray-700/50 text-gray-400 hover:text-white hover:border-gray-600/50 text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center gap-1 px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700/50 text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-600/50 text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             >
               Next
               <ChevronRight className="w-4 h-4" />

@@ -188,7 +188,7 @@ export default function AdminReviewsPage() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Review Moderation</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Review Moderation</h1>
           <p className="text-gray-400 mt-1">
             Approve or reject student and teacher reviews.
             {pendingCount > 0 && (
@@ -200,7 +200,7 @@ export default function AdminReviewsPage() {
         </div>
         <button
           onClick={fetchReviews}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-gray-300 hover:text-white hover:border-gray-700/50 transition-all"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-200 dark:border-gray-700/50 transition-all"
         >
           <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
           Refresh
@@ -208,7 +208,7 @@ export default function AdminReviewsPage() {
       </div>
 
       {/* Tab navigation */}
-      <div className="flex items-center gap-1 bg-[#141927]/60 border border-gray-800/50 rounded-xl p-1">
+      <div className="flex items-center gap-1 bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl p-1">
         {TAB_OPTIONS.map((tab) => {
           const Icon = tab.icon;
           const count =
@@ -249,21 +249,21 @@ export default function AdminReviewsPage() {
           {Array.from({ length: 4 }).map((_, i) => (
             <div
               key={i}
-              className="bg-[#141927]/60 border border-gray-800/50 rounded-2xl p-5"
+              className="bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 rounded-2xl p-5"
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-gray-700/50 animate-pulse" />
+                <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
                 <div className="space-y-2 flex-1">
-                  <div className="w-32 h-4 bg-gray-700/50 rounded animate-pulse" />
-                  <div className="w-20 h-3 bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-20 h-3 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                 </div>
               </div>
-              <div className="w-full h-12 bg-gray-700/50 rounded animate-pulse" />
+              <div className="w-full h-12 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
             </div>
           ))}
         </div>
       ) : filteredReviews.length === 0 ? (
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl py-16 text-center">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl py-16 text-center">
           <Inbox className="w-12 h-12 text-gray-600 mx-auto mb-3" />
           <p className="text-gray-400 font-medium">No reviews found</p>
           <p className="text-gray-500 text-sm mt-1">
@@ -285,10 +285,10 @@ export default function AdminReviewsPage() {
               <div
                 key={review.id}
                 className={cn(
-                  'bg-[#141927]/60 backdrop-blur-sm border rounded-2xl p-5 transition-all',
+                  'bg-white dark:bg-[#141927]/60 backdrop-blur-sm border rounded-2xl p-5 transition-all',
                   review.status === 'PENDING'
                     ? 'border-amber-500/20'
-                    : 'border-gray-800/50'
+                    : 'border-gray-200 dark:border-gray-800/50'
                 )}
               >
                 {/* Header */}
@@ -299,7 +299,7 @@ export default function AdminReviewsPage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-semibold text-white">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">
                           {authorName}
                         </p>
                         <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-800/50 text-gray-400 font-medium">
@@ -383,15 +383,15 @@ export default function AdminReviewsPage() {
       {/* Reject Modal */}
       {rejectModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#141927] border border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-md">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800/50">
-              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+          <div className="bg-white dark:bg-[#141927] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-md">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800/50">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <XCircle className="w-5 h-5 text-red-400" />
                 Reject Review
               </h3>
               <button
                 onClick={() => setRejectModal(null)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -408,13 +408,13 @@ export default function AdminReviewsPage() {
                 placeholder="Explain why this review is being rejected..."
                 rows={4}
                 autoFocus
-                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 resize-none transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 resize-none transition-all"
               />
             </div>
-            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-800/50">
+            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-800/50">
               <button
                 onClick={() => setRejectModal(null)}
-                className="px-4 py-2 rounded-xl border border-gray-700/50 text-gray-300 hover:text-white text-sm font-medium transition-all"
+                className="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-white text-sm font-medium transition-all"
               >
                 Cancel
               </button>

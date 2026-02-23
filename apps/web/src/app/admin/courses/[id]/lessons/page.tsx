@@ -255,7 +255,7 @@ export default function CourseLessonsPage() {
             <ArrowLeft className="w-4 h-4" />
             {t.backToCourses}
           </Link>
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             {course ? getLocalized(course, 'title', adminLocale) : '...'} — {t.title}
           </h1>
           <p className="text-gray-400 mt-1">
@@ -265,7 +265,7 @@ export default function CourseLessonsPage() {
         <button
           onClick={() => setLessonModal({ open: true, lesson: null })}
           className={cn(
-            'inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+            'inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
             'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
             'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
             'active:scale-[0.98]'
@@ -280,12 +280,12 @@ export default function CourseLessonsPage() {
       {loading && (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-[#141927]/60 border border-gray-800/50 rounded-2xl p-6">
+            <div key={i} className="bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
               <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-lg bg-gray-700/50 animate-pulse" />
+                <div className="w-8 h-8 rounded-lg bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
                 <div className="flex-1 space-y-2">
-                  <div className="w-48 h-5 bg-gray-700/50 rounded animate-pulse" />
-                  <div className="w-24 h-3 bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-48 h-5 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-24 h-3 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                 </div>
               </div>
             </div>
@@ -295,7 +295,7 @@ export default function CourseLessonsPage() {
 
       {/* Empty State */}
       {!loading && lessons.length === 0 && (
-        <div className="bg-[#141927]/60 border border-gray-800/50 rounded-2xl py-20 text-center">
+        <div className="bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 rounded-2xl py-20 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gray-800/50 mb-4">
             <BookOpen className="w-7 h-7 text-gray-600" />
           </div>
@@ -303,7 +303,7 @@ export default function CourseLessonsPage() {
           <p className="text-sm text-gray-500 mb-6">{t.noLessonsDesc}</p>
           <button
             onClick={() => setLessonModal({ open: true, lesson: null })}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 transition-all shadow-lg shadow-primary-500/25"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 transition-all shadow-lg shadow-primary-500/25"
           >
             <Plus className="w-4 h-4" />
             {t.addLesson}
@@ -319,11 +319,11 @@ export default function CourseLessonsPage() {
             return (
               <div
                 key={lesson.id}
-                className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden"
+                className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden"
               >
                 {/* Lesson Header */}
                 <div
-                  className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-gray-800/20 transition-colors"
+                  className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors"
                   onClick={() => toggleExpand(lesson.id)}
                 >
                   <div className="text-gray-600 hover:text-gray-400 cursor-grab">
@@ -335,7 +335,7 @@ export default function CourseLessonsPage() {
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-semibold text-white truncate">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
                       {getLocalized(lesson, 'title', adminLocale)}
                     </h3>
                     {getLocalized(lesson, 'desc', adminLocale) !== '—' && (
@@ -397,7 +397,7 @@ export default function CourseLessonsPage() {
 
                 {/* Expanded: Materials */}
                 {isExpanded && (
-                  <div className="border-t border-gray-800/50 bg-gray-900/20">
+                  <div className="border-t border-gray-200 dark:border-gray-800/50 bg-gray-900/20">
                     {/* Materials List */}
                     {lesson.materials.length > 0 ? (
                       <div className="divide-y divide-gray-800/30">
@@ -407,7 +407,7 @@ export default function CourseLessonsPage() {
                           return (
                             <div
                               key={material.id}
-                              className="flex items-center gap-3 px-5 py-3 hover:bg-gray-800/20 transition-colors group"
+                              className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors group"
                             >
                               <div className="pl-8">
                                 <div className={cn('flex items-center justify-center w-8 h-8 rounded-lg border', config.color)}>
@@ -459,7 +459,7 @@ export default function CourseLessonsPage() {
                     )}
 
                     {/* Add Material Button */}
-                    <div className="px-5 py-3 border-t border-gray-800/30">
+                    <div className="px-5 py-3 border-t border-gray-200 dark:border-gray-800/30">
                       <button
                         onClick={() =>
                           setMaterialModal({ open: true, lessonId: lesson.id, material: null })
@@ -508,13 +508,13 @@ export default function CourseLessonsPage() {
       {deleteModal.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !deleting && setDeleteModal({ open: false, type: 'lesson', id: '', name: '' })} />
-          <div className="relative bg-[#1a1f33] border border-gray-800/50 rounded-2xl shadow-2xl max-w-md w-full p-6">
+          <div className="relative bg-white dark:bg-[#1a1f33] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center gap-4 mb-4">
               <div className="p-3 rounded-xl bg-red-500/10">
                 <AlertTriangle className="w-6 h-6 text-red-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {deleteModal.type === 'lesson' ? t.deleteLesson : t.deleteMaterial}
                 </h3>
                 <p className="text-sm text-gray-400">
@@ -523,20 +523,20 @@ export default function CourseLessonsPage() {
               </div>
             </div>
             <p className="text-sm text-gray-300 mb-6">
-              <span className="font-semibold text-white">&quot;{deleteModal.name}&quot;</span>
+              <span className="font-semibold text-gray-900 dark:text-white">&quot;{deleteModal.name}&quot;</span>
             </p>
             <div className="flex items-center justify-end gap-3">
               <button
                 onClick={() => setDeleteModal({ open: false, type: 'lesson', id: '', name: '' })}
                 disabled={deleting}
-                className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-800/30 transition-all disabled:opacity-50"
+                className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-100 dark:bg-gray-800/30 transition-all disabled:opacity-50"
               >
                 {tCommon.cancel}
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-red-500 hover:bg-red-600 transition-all shadow-lg shadow-red-500/25 disabled:opacity-50"
+                className="px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-900 dark:text-white bg-red-500 hover:bg-red-600 transition-all shadow-lg shadow-red-500/25 disabled:opacity-50"
               >
                 {deleting ? (
                   <span className="flex items-center gap-2">
@@ -587,12 +587,12 @@ function LessonFormModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#1a1f33] border border-gray-800/50 rounded-2xl shadow-2xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-white dark:bg-[#1a1f33] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-2xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-white">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
             {lesson ? t.editLesson : t.addLesson}
           </h3>
-          <button onClick={onClose} className="p-2 rounded-lg text-gray-500 hover:text-gray-300 hover:bg-gray-800/30 transition-all">
+          <button onClick={onClose} className="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800/30 transition-all">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -605,7 +605,7 @@ function LessonFormModal({
               type="text"
               value={titleAz}
               onChange={(e) => setTitleAz(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               placeholder="Dərs 1: Giriş"
             />
           </div>
@@ -616,7 +616,7 @@ function LessonFormModal({
               type="text"
               value={titleRu}
               onChange={(e) => setTitleRu(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               placeholder="Урок 1: Введение"
             />
           </div>
@@ -627,7 +627,7 @@ function LessonFormModal({
               type="text"
               value={titleEn}
               onChange={(e) => setTitleEn(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               placeholder="Lesson 1: Introduction"
             />
           </div>
@@ -639,7 +639,7 @@ function LessonFormModal({
               value={descAz}
               onChange={(e) => setDescAz(e.target.value)}
               rows={2}
-              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all resize-none"
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all resize-none"
             />
           </div>
           {/* Description RU */}
@@ -649,7 +649,7 @@ function LessonFormModal({
               value={descRu}
               onChange={(e) => setDescRu(e.target.value)}
               rows={2}
-              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all resize-none"
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all resize-none"
             />
           </div>
           {/* Description EN */}
@@ -659,7 +659,7 @@ function LessonFormModal({
               value={descEn}
               onChange={(e) => setDescEn(e.target.value)}
               rows={2}
-              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all resize-none"
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all resize-none"
             />
           </div>
         </div>
@@ -667,7 +667,7 @@ function LessonFormModal({
         <div className="flex items-center justify-end gap-3 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-800/30 transition-all"
+            className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-100 dark:bg-gray-800/30 transition-all"
           >
             {tCommon.cancel}
           </button>
@@ -683,7 +683,7 @@ function LessonFormModal({
                 descEn: descEn.trim() || undefined,
               })
             }
-            className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 transition-all shadow-lg shadow-primary-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-900 dark:text-white bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 transition-all shadow-lg shadow-primary-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? (
               <span className="flex items-center gap-2">
@@ -751,12 +751,12 @@ function MaterialFormModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#1a1f33] border border-gray-800/50 rounded-2xl shadow-2xl max-w-lg w-full p-6">
+      <div className="relative bg-white dark:bg-[#1a1f33] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-2xl max-w-lg w-full p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-white">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
             {material ? t.editMaterial : t.addMaterial}
           </h3>
-          <button onClick={onClose} className="p-2 rounded-lg text-gray-500 hover:text-gray-300 hover:bg-gray-800/30 transition-all">
+          <button onClick={onClose} className="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800/30 transition-all">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -770,7 +770,7 @@ function MaterialFormModal({
               value={url}
               onChange={(e) => handleUrlChange(e.target.value)}
               onBlur={handleUrlBlur}
-              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               placeholder={t.urlPlaceholder}
             />
           </div>
@@ -791,7 +791,7 @@ function MaterialFormModal({
                       'flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium border transition-all',
                       isActive
                         ? mt.color
-                        : 'bg-gray-900/30 border-gray-700/40 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                        : 'bg-gray-900/30 border-gray-700/40 text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:border-gray-600/50'
                     )}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -809,7 +809,7 @@ function MaterialFormModal({
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               placeholder="e.g. Intro to HTML — Google Slides"
             />
           </div>
@@ -818,7 +818,7 @@ function MaterialFormModal({
         <div className="flex items-center justify-end gap-3 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-800/30 transition-all"
+            className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-100 dark:bg-gray-800/30 transition-all"
           >
             {tCommon.cancel}
           </button>
@@ -831,7 +831,7 @@ function MaterialFormModal({
                 url: url.trim(),
               })
             }
-            className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 transition-all shadow-lg shadow-primary-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-900 dark:text-white bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 transition-all shadow-lg shadow-primary-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? (
               <span className="flex items-center gap-2">

@@ -160,7 +160,7 @@ export default function AdminCoursesPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">{t.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.title}</h1>
           <p className="text-gray-400 mt-1">
             {t.description}{total > 0 && ` (${total} ${t.total})`}
           </p>
@@ -168,7 +168,7 @@ export default function AdminCoursesPage() {
         <Link
           href="/admin/courses/new"
           className={cn(
-            'inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+            'inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
             'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
             'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
             'active:scale-[0.98]'
@@ -180,7 +180,7 @@ export default function AdminCoursesPage() {
       </div>
 
       {/* Search & Filters Bar */}
-      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-4">
+      <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Search Input */}
           <div className="relative flex-1">
@@ -190,7 +190,7 @@ export default function AdminCoursesPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t.searchPlaceholder}
-              className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
             />
             {search && (
               <button
@@ -209,7 +209,7 @@ export default function AdminCoursesPage() {
               'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all',
               showFilters
                 ? 'bg-primary-500/10 border-primary-500/30 text-primary-400'
-                : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:border-gray-600/50'
             )}
           >
             <Filter className="w-4 h-4" />
@@ -219,7 +219,7 @@ export default function AdminCoursesPage() {
 
         {/* Expanded Filters */}
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-800/50 space-y-3">
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800/50 space-y-3">
             <div className="flex flex-wrap gap-2">
               <span className="text-xs text-gray-500 uppercase tracking-wider self-center mr-2">{t.level}</span>
               {LEVELS.map((level) => (
@@ -230,7 +230,7 @@ export default function AdminCoursesPage() {
                     'px-3 py-1.5 rounded-lg text-xs font-medium border transition-all',
                     levelFilter === level
                       ? 'bg-primary-500/10 border-primary-500/30 text-primary-400'
-                      : 'bg-gray-900/30 border-gray-700/40 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                      : 'bg-gray-900/30 border-gray-700/40 text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:border-gray-600/50'
                   )}
                 >
                   {level === 'ALL' ? t.allLevels : levelConfig[level]?.label || level}
@@ -249,7 +249,7 @@ export default function AdminCoursesPage() {
                       ? aud === 'KIDS'
                         ? 'bg-orange-500/10 border-orange-500/30 text-orange-400'
                         : 'bg-primary-500/10 border-primary-500/30 text-primary-400'
-                      : 'bg-gray-900/30 border-gray-700/40 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                      : 'bg-gray-900/30 border-gray-700/40 text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:border-gray-600/50'
                   )}
                 >
                   {aud === 'KIDS' && <Baby className="w-3 h-3" />}
@@ -263,9 +263,9 @@ export default function AdminCoursesPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
+      <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
         {/* Table Header */}
-        <div className="hidden md:grid md:grid-cols-[3.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-3.5 border-b border-gray-800/50 bg-gray-900/30">
+        <div className="hidden md:grid md:grid-cols-[3.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-3.5 border-b border-gray-200 dark:border-gray-800/50 bg-gray-900/30">
           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t.courseCol}</span>
           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t.category}</span>
           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t.level.replace(':', '')}</span>
@@ -283,17 +283,17 @@ export default function AdminCoursesPage() {
                 className="grid grid-cols-1 md:grid-cols-[3.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-4 items-center"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gray-700/50 animate-pulse shrink-0" />
+                  <div className="w-12 h-12 rounded-xl bg-gray-200 dark:bg-gray-700/50 animate-pulse shrink-0" />
                   <div className="space-y-2 flex-1">
-                    <div className="w-40 h-4 bg-gray-700/50 rounded animate-pulse" />
-                    <div className="w-24 h-3 bg-gray-700/50 rounded animate-pulse" />
+                    <div className="w-40 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                    <div className="w-24 h-3 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                   </div>
                 </div>
-                <div className="w-20 h-4 bg-gray-700/50 rounded animate-pulse" />
-                <div className="w-16 h-5 bg-gray-700/50 rounded-full animate-pulse" />
-                <div className="w-14 h-4 bg-gray-700/50 rounded animate-pulse" />
-                <div className="w-10 h-5 bg-gray-700/50 rounded-full animate-pulse" />
-                <div className="w-16 h-4 bg-gray-700/50 rounded animate-pulse ml-auto" />
+                <div className="w-20 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                <div className="w-16 h-5 bg-gray-200 dark:bg-gray-700/50 rounded-full animate-pulse" />
+                <div className="w-14 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                <div className="w-10 h-5 bg-gray-200 dark:bg-gray-700/50 rounded-full animate-pulse" />
+                <div className="w-16 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse ml-auto" />
               </div>
             ))}
           </div>
@@ -314,7 +314,7 @@ export default function AdminCoursesPage() {
             {!search && levelFilter === 'ALL' && (
               <Link
                 href="/admin/courses/new"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 transition-all shadow-lg shadow-primary-500/25"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 transition-all shadow-lg shadow-primary-500/25"
               >
                 <Plus className="w-4 h-4" />
                 {t.createCourse}
@@ -329,11 +329,11 @@ export default function AdminCoursesPage() {
             {courses.map((course) => (
               <div
                 key={course.id}
-                className="grid grid-cols-1 md:grid-cols-[3.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-4 items-center hover:bg-gray-800/20 transition-colors group"
+                className="grid grid-cols-1 md:grid-cols-[3.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-4 items-center hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors group"
               >
                 {/* Course Info */}
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-800/50 shrink-0 border border-gray-700/30">
+                  <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-800/50 shrink-0 border border-gray-200 dark:border-gray-700/30">
                     {course.image ? (
                       <Image
                         src={course.image}
@@ -349,7 +349,7 @@ export default function AdminCoursesPage() {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{getLocalized(course, 'title', adminLocale)}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{getLocalized(course, 'title', adminLocale)}</p>
                     <p className="text-xs text-gray-500 truncate">{course.slug}</p>
                   </div>
                 </div>
@@ -452,8 +452,8 @@ export default function AdminCoursesPage() {
               className={cn(
                 'inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium border transition-all',
                 page <= 1
-                  ? 'border-gray-800/30 text-gray-600 cursor-not-allowed'
-                  : 'border-gray-700/50 text-gray-300 hover:text-white hover:border-gray-600/50 hover:bg-gray-800/30'
+                  ? 'border-gray-200 dark:border-gray-800/30 text-gray-600 cursor-not-allowed'
+                  : 'border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-600/50 hover:bg-gray-100 dark:bg-gray-800/30'
               )}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -481,7 +481,7 @@ export default function AdminCoursesPage() {
                       'w-9 h-9 rounded-lg text-sm font-medium transition-all',
                       page === pageNum
                         ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30'
-                        : 'text-gray-400 hover:text-white hover:bg-gray-800/30'
+                        : 'text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:bg-gray-800/30'
                     )}
                   >
                     {pageNum}
@@ -496,8 +496,8 @@ export default function AdminCoursesPage() {
               className={cn(
                 'inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium border transition-all',
                 page >= totalPages
-                  ? 'border-gray-800/30 text-gray-600 cursor-not-allowed'
-                  : 'border-gray-700/50 text-gray-300 hover:text-white hover:border-gray-600/50 hover:bg-gray-800/30'
+                  ? 'border-gray-200 dark:border-gray-800/30 text-gray-600 cursor-not-allowed'
+                  : 'border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-600/50 hover:bg-gray-100 dark:bg-gray-800/30'
               )}
             >
               {tCommon.next}
@@ -517,20 +517,20 @@ export default function AdminCoursesPage() {
           />
 
           {/* Modal */}
-          <div className="relative bg-[#1a1f33] border border-gray-800/50 rounded-2xl shadow-2xl max-w-md w-full p-6">
+          <div className="relative bg-white dark:bg-[#1a1f33] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center gap-4 mb-4">
               <div className="p-3 rounded-xl bg-red-500/10">
                 <AlertTriangle className="w-6 h-6 text-red-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">{t.deleteTitle}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.deleteTitle}</h3>
                 <p className="text-sm text-gray-400">{t.cannotUndo}</p>
               </div>
             </div>
 
             <p className="text-sm text-gray-300 mb-6">
               {t.confirmDelete}{' '}
-              <span className="font-semibold text-white">&quot;{getLocalized(deleteModal.course, 'title', adminLocale)}&quot;</span>?
+              <span className="font-semibold text-gray-900 dark:text-white">&quot;{getLocalized(deleteModal.course, 'title', adminLocale)}&quot;</span>?
               {t.allDataRemoved}
             </p>
 
@@ -538,14 +538,14 @@ export default function AdminCoursesPage() {
               <button
                 onClick={() => setDeleteModal({ open: false, course: null })}
                 disabled={deleting}
-                className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-800/30 transition-all disabled:opacity-50"
+                className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-100 dark:bg-gray-800/30 transition-all disabled:opacity-50"
               >
                 {tCommon.cancel}
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-red-500 hover:bg-red-600 transition-all shadow-lg shadow-red-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-900 dark:text-white bg-red-500 hover:bg-red-600 transition-all shadow-lg shadow-red-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {deleting ? (
                   <span className="flex items-center gap-2">

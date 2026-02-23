@@ -245,13 +245,13 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-[#111827]/80 backdrop-blur-xl border-b border-gray-800/50">
+    <header className="sticky top-0 z-30 h-16 bg-white/80 dark:bg-[#111827]/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800/50">
       <div className="flex items-center justify-between h-full px-6">
         {/* Left side */}
         <div className="flex items-center gap-4">
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 rounded-lg hover:bg-gray-800/50 text-gray-400 hover:text-white transition-colors"
+            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <Menu className="w-5 h-5" />
           </button>
@@ -259,11 +259,11 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           {/* Search trigger */}
           <button
             onClick={() => { setSearchOpen(true); setSearchQuery(''); setSearchIndex(0); }}
-            className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-800/30 border border-gray-700/30 w-64 lg:w-80 hover:bg-gray-800/50 transition-colors"
+            className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-100 dark:bg-gray-800/30 border border-gray-200 dark:border-gray-700/30 w-64 lg:w-80 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors"
           >
             <Search className="w-4 h-4 text-gray-500" />
             <span className="text-sm text-gray-500 flex-1 text-left">{tCommon.search}</span>
-            <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 rounded bg-gray-700/50 text-[10px] text-gray-400 font-mono">
+            <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-700/50 text-[10px] text-gray-400 font-mono">
               ⌘K
             </kbd>
           </button>
@@ -274,7 +274,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           {/* Theme toggle */}
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="p-2 rounded-lg hover:bg-gray-800/50 text-gray-400 hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             title={theme === 'dark' ? t.lightMode : t.darkMode}
           >
             {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -284,13 +284,13 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           <div className="relative" ref={langRef}>
             <button
               onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg hover:bg-gray-800/50 text-gray-400 hover:text-white transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               <Globe className="w-4 h-4" />
               <span className="text-xs font-medium uppercase">{currentLocale}</span>
             </button>
             {langOpen && (
-              <div className="absolute right-0 top-full mt-1 w-36 rounded-xl bg-[#1a2035] border border-gray-700/50 shadow-2xl shadow-black/30 overflow-hidden z-50">
+              <div className="absolute right-0 top-full mt-1 w-36 rounded-xl bg-white dark:bg-[#1a2035] border border-gray-200 dark:border-gray-700/50 shadow-2xl shadow-gray-200/50 dark:shadow-black/30 overflow-hidden z-50">
                 {languages.map((lang) => (
                   <button
                     key={lang.code}
@@ -299,7 +299,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                       'flex items-center gap-2.5 w-full px-4 py-2.5 text-sm transition-colors',
                       currentLocale === lang.code
                         ? 'bg-primary-500/10 text-primary-400'
-                        : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:text-white'
                     )}
                   >
                     <span className="text-base">{lang.flag}</span>
@@ -317,21 +317,21 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                 setNotifOpen(!notifOpen);
                 if (!notifOpen) fetchNotifications();
               }}
-              className="relative p-2 rounded-lg hover:bg-gray-800/50 text-gray-400 hover:text-white transition-colors"
+              className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               <Bell className="w-5 h-5" />
               {totalPending > 0 && (
-                <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-primary-500 ring-2 ring-[#111827] text-[10px] font-bold text-white">
+                <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-primary-500 ring-2 ring-white dark:ring-[#111827] text-[10px] font-bold text-gray-900 dark:text-white">
                   {totalPending > 99 ? '99+' : totalPending}
                 </span>
               )}
             </button>
 
             {notifOpen && (
-              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-xl bg-[#1a2035] border border-gray-700/50 shadow-2xl shadow-black/30 overflow-hidden z-50">
+              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-xl bg-white dark:bg-[#1a2035] border border-gray-200 dark:border-gray-700/50 shadow-2xl shadow-gray-200/50 dark:shadow-black/30 overflow-hidden z-50">
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700/50">
-                  <h3 className="text-sm font-semibold text-white">{t.notifications}</h3>
+                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700/50">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t.notifications}</h3>
                   {totalPending > 0 && (
                     <span className="text-xs font-medium text-primary-400 bg-primary-500/10 px-2 py-0.5 rounded-full">
                       {totalPending} {t.pending}
@@ -354,13 +354,13 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                             setNotifOpen(false);
                             router.push('/admin/applications');
                           }}
-                          className="w-full flex items-start gap-3 px-4 py-3 hover:bg-gray-800/50 transition-colors border-b border-gray-800/30"
+                          className="w-full flex items-start gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-200 dark:border-gray-800/30"
                         >
                           <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 mt-0.5">
                             <FileText className="w-4 h-4 text-amber-400" />
                           </div>
                           <div className="text-left flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white">
+                            <p className="text-sm font-medium text-gray-900 dark:text-white">
                               {notifData!.pendingApplications} {notifData!.pendingApplications > 1 ? t.newApplications : t.newApplication}
                             </p>
                             <p className="text-xs text-gray-400 mt-0.5">{t.waitingForReview}</p>
@@ -378,13 +378,13 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                             setNotifOpen(false);
                             router.push('/admin/reviews');
                           }}
-                          className="w-full flex items-start gap-3 px-4 py-3 hover:bg-gray-800/50 transition-colors border-b border-gray-800/30"
+                          className="w-full flex items-start gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-200 dark:border-gray-800/30"
                         >
                           <div className="w-8 h-8 rounded-lg bg-secondary-500/10 flex items-center justify-center shrink-0 mt-0.5">
                             <Star className="w-4 h-4 text-secondary-400" />
                           </div>
                           <div className="text-left flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white">
+                            <p className="text-sm font-medium text-gray-900 dark:text-white">
                               {notifData!.pendingReviews} {notifData!.pendingReviews > 1 ? t.pendingReviews : t.pendingReview}
                             </p>
                             <p className="text-xs text-gray-400 mt-0.5">{t.awaitingModeration}</p>
@@ -398,7 +398,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                       {/* Recent Applications List */}
                       {notifData?.recentApplications && notifData.recentApplications.length > 0 && (
                         <>
-                          <div className="px-4 py-2 bg-gray-800/20">
+                          <div className="px-4 py-2 bg-gray-100 dark:bg-gray-800/20">
                             <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{t.recentApplications}</p>
                           </div>
                           {notifData.recentApplications.slice(0, 3).map((app) => (
@@ -408,13 +408,13 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                                 setNotifOpen(false);
                                 router.push('/admin/applications');
                               }}
-                              className="w-full flex items-start gap-3 px-4 py-2.5 hover:bg-gray-800/50 transition-colors"
+                              className="w-full flex items-start gap-3 px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors"
                             >
                               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary-500 to-secondary-600 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
                                 {app.fullName.charAt(0).toUpperCase()}
                               </div>
                               <div className="text-left flex-1 min-w-0">
-                                <p className="text-xs font-medium text-gray-200 truncate">{app.fullName}</p>
+                                <p className="text-xs font-medium text-gray-800 dark:text-gray-200 truncate">{app.fullName}</p>
                                 <p className="text-[11px] text-gray-500 truncate">{app.course?.titleAz || t.course}</p>
                               </div>
                               <span className="text-[10px] text-gray-500 shrink-0">{timeAgo(app.createdAt)}</span>
@@ -436,13 +436,13 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                 </div>
 
                 {/* Footer */}
-                <div className="border-t border-gray-700/50">
+                <div className="border-t border-gray-200 dark:border-gray-700/50">
                   <button
                     onClick={() => {
                       setNotifOpen(false);
                       router.push('/admin');
                     }}
-                    className="w-full px-4 py-2.5 text-xs font-medium text-primary-400 hover:bg-gray-800/50 transition-colors text-center"
+                    className="w-full px-4 py-2.5 text-xs font-medium text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors text-center"
                   >
                     {t.viewDashboard}
                   </button>
@@ -455,13 +455,13 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl hover:bg-gray-800/50 transition-colors"
+              className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors"
             >
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-600 flex items-center justify-center text-white text-xs font-bold">
                 {user?.name?.charAt(0)?.toUpperCase() || 'A'}
               </div>
               <div className="hidden md:block text-left">
-                <p className="text-sm font-medium text-gray-200 leading-tight">
+                <p className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-tight">
                   {user?.name || 'Admin'}
                 </p>
                 <p className="text-[11px] text-gray-500 leading-tight">
@@ -478,9 +478,9 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
 
             {/* Dropdown */}
             {dropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-[#1a2035] border border-gray-700/50 shadow-2xl shadow-black/30 overflow-hidden">
-                <div className="px-4 py-3 border-b border-gray-700/50">
-                  <p className="text-sm font-medium text-white">{user?.name}</p>
+              <div className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-white dark:bg-[#1a2035] border border-gray-200 dark:border-gray-700/50 shadow-2xl shadow-gray-200/50 dark:shadow-black/30 overflow-hidden">
+                <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700/50">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name}</p>
                   <p className="text-xs text-gray-400 truncate">{user?.email}</p>
                 </div>
                 <div className="py-1">
@@ -489,7 +489,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                       setDropdownOpen(false);
                       router.push('/admin/settings');
                     }}
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800/50 hover:text-white transition-colors"
+                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-white transition-colors"
                   >
                     <User className="w-4 h-4" />
                     {t.profileSettings}
@@ -511,9 +511,9 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
       {searchOpen && (
         <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSearchOpen(false)} />
-          <div className="relative w-full max-w-lg mx-4 rounded-2xl bg-[#1a2035] border border-gray-700/50 shadow-2xl shadow-black/50 overflow-hidden">
+          <div className="relative w-full max-w-lg mx-4 rounded-2xl bg-white dark:bg-[#1a2035] border border-gray-200 dark:border-gray-700/50 shadow-2xl shadow-gray-300/50 dark:shadow-black/50 overflow-hidden">
             {/* Search Input */}
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-700/50">
+            <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700/50">
               <Search className="w-5 h-5 text-gray-400 shrink-0" />
               <input
                 ref={searchInputRef}
@@ -524,7 +524,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                 placeholder={tCommon.searchPages}
                 className="bg-transparent text-sm text-white placeholder-gray-500 outline-none w-full"
               />
-              <button onClick={() => setSearchOpen(false)} className="p-1 rounded-lg hover:bg-gray-700/50 text-gray-400">
+              <button onClick={() => setSearchOpen(false)} className="p-1 rounded-lg hover:bg-gray-200 dark:bg-gray-700/50 text-gray-400">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -551,13 +551,13 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                         'flex items-center gap-3 w-full px-4 py-2.5 text-sm transition-colors',
                         i === searchIndex
                           ? 'bg-primary-500/15 text-primary-400'
-                          : 'text-gray-300 hover:bg-gray-800/50'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50'
                       )}
                     >
                       <Icon className="w-4 h-4 shrink-0" />
                       <span className="flex-1 text-left">{item.label}</span>
                       {i === searchIndex && (
-                        <kbd className="text-[10px] text-gray-500 px-1.5 py-0.5 rounded bg-gray-700/50 font-mono">↵</kbd>
+                        <kbd className="text-[10px] text-gray-500 px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-700/50 font-mono">↵</kbd>
                       )}
                     </button>
                   );
@@ -566,10 +566,10 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
             </div>
 
             {/* Footer hint */}
-            <div className="flex items-center gap-4 px-4 py-2 border-t border-gray-700/50 text-[10px] text-gray-500">
-              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-700/50 font-mono">↑↓</kbd> {tCommon.navigate}</span>
-              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-700/50 font-mono">↵</kbd> {tCommon.open}</span>
-              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-700/50 font-mono">Esc</kbd> {tCommon.close}</span>
+            <div className="flex items-center gap-4 px-4 py-2 border-t border-gray-200 dark:border-gray-700/50 text-[10px] text-gray-500">
+              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-200 dark:bg-gray-700/50 font-mono">↑↓</kbd> {tCommon.navigate}</span>
+              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-200 dark:bg-gray-700/50 font-mono">↵</kbd> {tCommon.open}</span>
+              <span className="flex items-center gap-1"><kbd className="px-1 py-0.5 rounded bg-gray-200 dark:bg-gray-700/50 font-mono">Esc</kbd> {tCommon.close}</span>
             </div>
           </div>
         </div>

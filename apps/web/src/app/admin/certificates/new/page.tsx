@@ -121,12 +121,12 @@ export default function AdminCertificateNewPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/certificates"
-          className="p-2 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-gray-400 hover:text-white hover:border-gray-700/50 transition-all"
+          className="p-2 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-200 dark:border-gray-700/50 transition-all"
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-white">Generate Certificate</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Generate Certificate</h1>
           <p className="text-gray-400 mt-0.5">Create a new certificate for a student.</p>
         </div>
       </div>
@@ -139,7 +139,7 @@ export default function AdminCertificateNewPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Student, Course, Teacher */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
           <h3 className="text-sm font-medium text-gray-300 mb-5 flex items-center gap-2">
             <Award className="w-4 h-4 text-amber-400" />
             Certificate Details
@@ -159,13 +159,13 @@ export default function AdminCertificateNewPage() {
                   value={form.studentId}
                   onChange={(e) => updateField('studentId', e.target.value)}
                   disabled={loadingOptions}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer disabled:opacity-50"
                 >
-                  <option value="" className="bg-[#141927]">
+                  <option value="" className="bg-white dark:bg-[#141927]">
                     {loadingOptions ? 'Loading...' : 'Select student'}
                   </option>
                   {students.map((s) => (
-                    <option key={s.id} value={s.id} className="bg-[#141927]">
+                    <option key={s.id} value={s.id} className="bg-white dark:bg-[#141927]">
                       {s.name}
                     </option>
                   ))}
@@ -187,13 +187,13 @@ export default function AdminCertificateNewPage() {
                   value={form.courseId}
                   onChange={(e) => updateField('courseId', e.target.value)}
                   disabled={loadingOptions}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer disabled:opacity-50"
                 >
-                  <option value="" className="bg-[#141927]">
+                  <option value="" className="bg-white dark:bg-[#141927]">
                     {loadingOptions ? 'Loading...' : 'Select course'}
                   </option>
                   {courses.map((c) => (
-                    <option key={c.id} value={c.id} className="bg-[#141927]">
+                    <option key={c.id} value={c.id} className="bg-white dark:bg-[#141927]">
                       {c.name}
                     </option>
                   ))}
@@ -215,13 +215,13 @@ export default function AdminCertificateNewPage() {
                   value={form.teacherId}
                   onChange={(e) => updateField('teacherId', e.target.value)}
                   disabled={loadingOptions}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer disabled:opacity-50"
                 >
-                  <option value="" className="bg-[#141927]">
+                  <option value="" className="bg-white dark:bg-[#141927]">
                     {loadingOptions ? 'Loading...' : 'Select teacher'}
                   </option>
                   {teachers.map((t) => (
-                    <option key={t.id} value={t.id} className="bg-[#141927]">
+                    <option key={t.id} value={t.id} className="bg-white dark:bg-[#141927]">
                       {t.name}
                     </option>
                   ))}
@@ -235,7 +235,7 @@ export default function AdminCertificateNewPage() {
         {/* Grade & Date */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Grade */}
-          <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+          <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
             <h3 className="text-sm font-medium text-gray-300 mb-4 flex items-center gap-2">
               <Star className="w-4 h-4 text-gray-400" />
               Grade
@@ -250,7 +250,7 @@ export default function AdminCertificateNewPage() {
                     'flex items-center gap-3 w-full px-4 py-3 rounded-xl border transition-all text-left',
                     form.grade === grade.value
                       ? 'bg-primary-500/10 border-primary-500/30 text-white'
-                      : 'bg-gray-900/30 border-gray-800/30 text-gray-400 hover:border-gray-700/50'
+                      : 'bg-gray-900/30 border-gray-200 dark:border-gray-800/30 text-gray-400 hover:border-gray-200 dark:border-gray-700/50'
                   )}
                 >
                   <div
@@ -274,7 +274,7 @@ export default function AdminCertificateNewPage() {
           </div>
 
           {/* Date */}
-          <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+          <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
             <h3 className="text-sm font-medium text-gray-300 mb-4 flex items-center gap-2">
               <Calendar className="w-4 h-4 text-gray-400" />
               Issue Date
@@ -283,13 +283,13 @@ export default function AdminCertificateNewPage() {
               type="date"
               value={form.issueDate}
               onChange={(e) => updateField('issueDate', e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all [color-scheme:dark]"
+              className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all [color-scheme:dark]"
             />
           </div>
         </div>
 
         {/* Teacher Review */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6">
           <h3 className="text-sm font-medium text-gray-300 mb-4 flex items-center gap-2">
             <User className="w-4 h-4 text-gray-400" />
             Teacher Review
@@ -299,7 +299,7 @@ export default function AdminCertificateNewPage() {
             onChange={(e) => updateField('teacherReview', e.target.value)}
             placeholder="Teacher's review of the student's performance..."
             rows={4}
-            className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-y transition-all"
+            className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-y transition-all"
           />
         </div>
 
@@ -307,7 +307,7 @@ export default function AdminCertificateNewPage() {
         <div className="flex items-center justify-end gap-3">
           <Link
             href="/admin/certificates"
-            className="px-6 py-2.5 rounded-xl border border-gray-700/50 text-gray-300 hover:text-white hover:border-gray-600/50 text-sm font-medium transition-all"
+            className="px-6 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-600/50 text-sm font-medium transition-all"
           >
             Cancel
           </Link>
@@ -315,7 +315,7 @@ export default function AdminCertificateNewPage() {
             type="submit"
             disabled={saving}
             className={cn(
-              'flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+              'flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
               'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
               'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
               'active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed'

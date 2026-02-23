@@ -116,19 +116,19 @@ export default function AdminNewStudentPage() {
       <div>
         <Link
           href="/admin/students"
-          className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors mb-4"
+          className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors mb-4"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Students
         </Link>
-        <h1 className="text-2xl font-bold text-white">Add New Student</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Add New Student</h1>
         <p className="text-gray-400 mt-1">Fill in the details to register a new student.</p>
       </div>
 
       {/* Form card */}
-      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-800/50">
-          <h2 className="text-base font-semibold text-white">Student Information</h2>
+      <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800/50">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white">Student Information</h2>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
@@ -155,7 +155,7 @@ export default function AdminNewStudentPage() {
                   'w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all text-sm',
                   errors.name
                     ? 'border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50'
-                    : 'border-gray-700/50 focus:ring-primary-500/50 focus:border-primary-500/50'
+                    : 'border-gray-200 dark:border-gray-700/50 focus:ring-primary-500/50 focus:border-primary-500/50'
                 )}
               />
             </div>
@@ -180,7 +180,7 @@ export default function AdminNewStudentPage() {
                   'w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all text-sm',
                   errors.email
                     ? 'border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50'
-                    : 'border-gray-700/50 focus:ring-primary-500/50 focus:border-primary-500/50'
+                    : 'border-gray-200 dark:border-gray-700/50 focus:ring-primary-500/50 focus:border-primary-500/50'
                 )}
               />
             </div>
@@ -205,7 +205,7 @@ export default function AdminNewStudentPage() {
                   'w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all text-sm',
                   errors.phone
                     ? 'border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50'
-                    : 'border-gray-700/50 focus:ring-primary-500/50 focus:border-primary-500/50'
+                    : 'border-gray-200 dark:border-gray-700/50 focus:ring-primary-500/50 focus:border-primary-500/50'
                 )}
               />
             </div>
@@ -230,7 +230,7 @@ export default function AdminNewStudentPage() {
                   'w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all text-sm',
                   errors.photo
                     ? 'border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50'
-                    : 'border-gray-700/50 focus:ring-primary-500/50 focus:border-primary-500/50'
+                    : 'border-gray-200 dark:border-gray-700/50 focus:ring-primary-500/50 focus:border-primary-500/50'
                 )}
               />
             </div>
@@ -239,7 +239,7 @@ export default function AdminNewStudentPage() {
             )}
             {formData.photo && !errors.photo && (
               <div className="mt-3 flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700/50 overflow-hidden">
+                <div className="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-200 dark:border-gray-700/50 overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={formData.photo}
@@ -268,16 +268,16 @@ export default function AdminNewStudentPage() {
                 onChange={(e) => handleChange('password', e.target.value)}
                 placeholder="Min 6 characters"
                 minLength={6}
-                className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all text-sm"
+                className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all text-sm"
               />
             </div>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-3 pt-4 border-t border-gray-800/50">
+          <div className="flex items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-800/50">
             <Link
               href="/admin/students"
-              className="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 transition-all"
+              className="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all"
             >
               Cancel
             </Link>

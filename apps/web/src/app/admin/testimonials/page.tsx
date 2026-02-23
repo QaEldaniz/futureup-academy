@@ -119,13 +119,13 @@ export default function AdminTestimonialsPage() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Testimonials</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Testimonials</h1>
           <p className="text-gray-400 mt-1">Manage student testimonials and reviews.</p>
         </div>
         <Link
           href="/admin/testimonials/new"
           className={cn(
-            'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+            'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
             'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
             'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
             'active:scale-[0.98]'
@@ -144,7 +144,7 @@ export default function AdminTestimonialsPage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search by name or course..."
-          className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+          className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
         />
       </div>
 
@@ -154,21 +154,21 @@ export default function AdminTestimonialsPage() {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="bg-[#141927]/60 border border-gray-800/50 rounded-2xl p-5 space-y-4"
+              className="bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 rounded-2xl p-5 space-y-4"
             >
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gray-700/50 animate-pulse" />
+                <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
                 <div className="space-y-2 flex-1">
-                  <div className="w-24 h-4 bg-gray-700/50 rounded animate-pulse" />
-                  <div className="w-16 h-3 bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-24 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-16 h-3 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                 </div>
               </div>
-              <div className="w-full h-16 bg-gray-700/50 rounded animate-pulse" />
+              <div className="w-full h-16 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
             </div>
           ))}
         </div>
       ) : filteredTestimonials.length === 0 ? (
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl py-16 text-center">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl py-16 text-center">
           <Inbox className="w-12 h-12 text-gray-600 mx-auto mb-3" />
           <p className="text-gray-400 font-medium">No testimonials found</p>
           <p className="text-gray-500 text-sm mt-1">
@@ -180,7 +180,7 @@ export default function AdminTestimonialsPage() {
           {filteredTestimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-5 hover:border-gray-700/50 transition-all group"
+              className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-5 hover:border-gray-200 dark:border-gray-700/50 transition-all group"
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
@@ -197,7 +197,7 @@ export default function AdminTestimonialsPage() {
                     )}
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-white">{testimonial.name}</h3>
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{testimonial.name}</h3>
                     {testimonial.courseAz && (
                       <p className="text-xs text-gray-500 mt-0.5">{testimonial.courseAz}</p>
                     )}
@@ -225,7 +225,7 @@ export default function AdminTestimonialsPage() {
               </p>
 
               {/* Actions */}
-              <div className="flex items-center justify-between pt-3 border-t border-gray-800/30">
+              <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-800/30">
                 <span
                   className={cn(
                     'text-[10px] font-medium px-2 py-0.5 rounded-full',

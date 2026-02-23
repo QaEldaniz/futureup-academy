@@ -344,7 +344,7 @@ export default function AdminCorporatePage() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Corporate</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Corporate</h1>
           <p className="text-gray-400 mt-1">
             Manage B2B services, training programs, and client inquiries.
           </p>
@@ -353,7 +353,7 @@ export default function AdminCorporatePage() {
           <button
             onClick={openAddModal}
             className={cn(
-              'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+              'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
               'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
               'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
               'active:scale-[0.98]'
@@ -365,7 +365,7 @@ export default function AdminCorporatePage() {
         ) : (
           <button
             onClick={fetchInquiries}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-gray-300 hover:text-white hover:border-gray-700/50 transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-200 dark:border-gray-700/50 transition-all"
           >
             <RefreshCw className={cn('w-4 h-4', loadingInqs && 'animate-spin')} />
             Refresh
@@ -374,7 +374,7 @@ export default function AdminCorporatePage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-[#141927]/60 border border-gray-800/50 rounded-xl w-fit">
+      <div className="flex gap-1 p-1 bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl w-fit">
         <button
           onClick={() => setActiveTab('services')}
           className={cn(
@@ -418,7 +418,7 @@ export default function AdminCorporatePage() {
                 'px-4 py-2 rounded-xl text-sm font-medium border transition-all',
                 filterType === 'ALL'
                   ? 'bg-primary-500/10 text-primary-400 border-primary-500/20'
-                  : 'bg-[#141927]/60 text-gray-400 border-gray-800/50 hover:border-gray-700/50'
+                  : 'bg-white dark:bg-[#141927]/60 text-gray-400 border-gray-200 dark:border-gray-800/50 hover:border-gray-200 dark:border-gray-700/50'
               )}
             >
               All ({services.length})
@@ -434,7 +434,7 @@ export default function AdminCorporatePage() {
                     'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border transition-all',
                     filterType === type.value
                       ? type.color
-                      : 'bg-[#141927]/60 text-gray-400 border-gray-800/50 hover:border-gray-700/50'
+                      : 'bg-white dark:bg-[#141927]/60 text-gray-400 border-gray-200 dark:border-gray-800/50 hover:border-gray-200 dark:border-gray-700/50'
                   )}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -449,12 +449,12 @@ export default function AdminCorporatePage() {
               {Array.from({ length: 6 }).map((_, i) => (
                 <div
                   key={i}
-                  className="bg-[#141927]/60 border border-gray-800/50 rounded-2xl p-5 h-48 animate-pulse"
+                  className="bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 rounded-2xl p-5 h-48 animate-pulse"
                 />
               ))}
             </div>
           ) : filteredServices.length === 0 ? (
-            <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl py-16 text-center">
+            <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl py-16 text-center">
               <Inbox className="w-12 h-12 text-gray-600 mx-auto mb-3" />
               <p className="text-gray-400 font-medium">No services yet</p>
               <p className="text-gray-500 text-sm mt-1">Add your first corporate service to get started.</p>
@@ -467,7 +467,7 @@ export default function AdminCorporatePage() {
                 return (
                   <div
                     key={service.id}
-                    className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-5 hover:border-gray-700/50 transition-all group"
+                    className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-5 hover:border-gray-200 dark:border-gray-700/50 transition-all group"
                   >
                     {/* Header */}
                     <div className="flex items-start justify-between mb-3">
@@ -492,7 +492,7 @@ export default function AdminCorporatePage() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-sm font-semibold text-white truncate mb-1">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate mb-1">
                       {service.titleAz}
                     </h3>
                     <p className="text-xs text-gray-500 line-clamp-2 mb-3">
@@ -506,7 +506,7 @@ export default function AdminCorporatePage() {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-800/30">
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-800/30">
                       <span className="text-[10px] text-gray-500 bg-gray-800/50 px-2 py-0.5 rounded-full">
                         #{service.order}
                       </span>
@@ -550,7 +550,7 @@ export default function AdminCorporatePage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by company, contact, or email..."
-                className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               />
             </div>
             <div className="relative">
@@ -558,7 +558,7 @@ export default function AdminCorporatePage() {
               <select
                 value={filterInqStatus}
                 onChange={(e) => setFilterInqStatus(e.target.value)}
-                className="pl-11 pr-10 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer"
+                className="pl-11 pr-10 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer"
               >
                 <option value="ALL">All Statuses</option>
                 {INQ_STATUS_OPTIONS.map((status) => (
@@ -583,10 +583,10 @@ export default function AdminCorporatePage() {
                     'px-3 py-3 rounded-xl border transition-all text-left',
                     filterInqStatus === status
                       ? INQ_STATUS_CONFIG[status].className + ' border-current'
-                      : 'bg-[#141927]/60 border-gray-800/50 hover:border-gray-700/50'
+                      : 'bg-white dark:bg-[#141927]/60 border-gray-200 dark:border-gray-800/50 hover:border-gray-200 dark:border-gray-700/50'
                   )}
                 >
-                  <p className="text-xl font-bold text-white">{count}</p>
+                  <p className="text-xl font-bold text-gray-900 dark:text-white">{count}</p>
                   <p className="text-[10px] text-gray-400">{INQ_STATUS_CONFIG[status].label}</p>
                 </button>
               );
@@ -594,17 +594,17 @@ export default function AdminCorporatePage() {
           </div>
 
           {/* Table */}
-          <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
+          <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
             {loadingInqs ? (
               <div className="divide-y divide-gray-800/30">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <div key={i} className="px-6 py-4 flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-gray-700/50 animate-pulse" />
+                    <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
                     <div className="flex-1 space-y-2">
-                      <div className="w-32 h-4 bg-gray-700/50 rounded animate-pulse" />
-                      <div className="w-48 h-3 bg-gray-700/50 rounded animate-pulse" />
+                      <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                      <div className="w-48 h-3 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                     </div>
-                    <div className="w-24 h-8 bg-gray-700/50 rounded animate-pulse" />
+                    <div className="w-24 h-8 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                   </div>
                 ))}
               </div>
@@ -621,7 +621,7 @@ export default function AdminCorporatePage() {
             ) : (
               <>
                 {/* Desktop table header */}
-                <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3 border-b border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3 border-b border-gray-200 dark:border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
                   <div className="col-span-2">Company</div>
                   <div className="col-span-2">Contact</div>
                   <div className="col-span-2">Service</div>
@@ -634,14 +634,14 @@ export default function AdminCorporatePage() {
                 <div className="divide-y divide-gray-800/30">
                   {filteredInquiries.map((inq) => (
                     <div key={inq.id}>
-                      <div className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-800/20 transition-colors">
+                      <div className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors">
                         {/* Company */}
                         <div className="col-span-2 flex items-center gap-3">
                           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500/20 to-secondary-500/20 flex items-center justify-center text-primary-400 font-bold text-sm shrink-0">
                             {inq.companyName.charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-white truncate">{inq.companyName}</p>
+                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{inq.companyName}</p>
                             <p className="text-xs text-gray-500 truncate lg:hidden">{inq.contactName}</p>
                           </div>
                         </div>
@@ -689,7 +689,7 @@ export default function AdminCorporatePage() {
                             )}
                           >
                             {INQ_STATUS_OPTIONS.map((status) => (
-                              <option key={status} value={status} className="bg-[#141927] text-white">
+                              <option key={status} value={status} className="bg-white dark:bg-[#141927] text-gray-900 dark:text-white">
                                 {INQ_STATUS_CONFIG[status].label}
                               </option>
                             ))}
@@ -742,7 +742,7 @@ export default function AdminCorporatePage() {
                                   }
                                   placeholder="Add notes about this inquiry..."
                                   rows={3}
-                                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
+                                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
                                 />
                                 <div className="flex items-center gap-2">
                                   <button
@@ -766,7 +766,7 @@ export default function AdminCorporatePage() {
                                 onClick={() =>
                                   setEditingNotes({ id: inq.id, notes: inq.notes || '' })
                                 }
-                                className="px-4 py-3 rounded-xl bg-gray-900/30 border border-gray-800/30 text-sm text-gray-400 cursor-pointer hover:border-gray-700/50 transition-all min-h-[60px]"
+                                className="px-4 py-3 rounded-xl bg-gray-900/30 border border-gray-200 dark:border-gray-800/30 text-sm text-gray-400 cursor-pointer hover:border-gray-200 dark:border-gray-700/50 transition-all min-h-[60px]"
                               >
                                 {inq.notes || (
                                   <span className="text-gray-600 italic">
@@ -774,7 +774,7 @@ export default function AdminCorporatePage() {
                                   </span>
                                 )}
                                 {inq.message && !inq.notes && (
-                                  <div className="mt-2 pt-2 border-t border-gray-800/30">
+                                  <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-800/30">
                                     <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Client Message:</p>
                                     <p className="text-gray-400">{inq.message}</p>
                                   </div>
@@ -798,15 +798,15 @@ export default function AdminCorporatePage() {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {modal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#141927] border border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800/50 sticky top-0 bg-[#141927] z-10">
-              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+          <div className="bg-white dark:bg-[#141927] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800/50 sticky top-0 bg-white dark:bg-[#141927] z-10">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <Building2 className="w-5 h-5 text-primary-400" />
                 {modal.mode === 'add' ? 'Add Service' : 'Edit Service'}
               </h3>
               <button
                 onClick={() => setModal(null)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -835,7 +835,7 @@ export default function AdminCorporatePage() {
                           'flex items-center gap-2 px-3 py-2.5 rounded-xl border text-xs font-medium transition-all',
                           modal.form.type === type.value
                             ? type.color
-                            : 'bg-gray-900/50 border-gray-700/50 text-gray-400'
+                            : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400'
                         )}
                       >
                         <Icon className="w-3.5 h-3.5" />
@@ -858,7 +858,7 @@ export default function AdminCorporatePage() {
                     setModal({ ...modal, form: { ...modal.form, titleAz: e.target.value } })
                   }
                   placeholder="Service title in Azerbaijani"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
 
@@ -872,7 +872,7 @@ export default function AdminCorporatePage() {
                     setModal({ ...modal, form: { ...modal.form, titleRu: e.target.value } })
                   }
                   placeholder="Service title in Russian"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
 
@@ -886,7 +886,7 @@ export default function AdminCorporatePage() {
                     setModal({ ...modal, form: { ...modal.form, titleEn: e.target.value } })
                   }
                   placeholder="Service title in English"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
 
@@ -900,7 +900,7 @@ export default function AdminCorporatePage() {
                   }
                   placeholder="Service description"
                   rows={3}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
                 />
               </div>
 
@@ -915,7 +915,7 @@ export default function AdminCorporatePage() {
                       setModal({ ...modal, form: { ...modal.form, icon: e.target.value } })
                     }
                     placeholder="e.g. Shield"
-                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                 </div>
                 <div>
@@ -930,7 +930,7 @@ export default function AdminCorporatePage() {
                       })
                     }
                     min={0}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                 </div>
               </div>
@@ -950,17 +950,17 @@ export default function AdminCorporatePage() {
                     'w-full px-4 py-3 rounded-xl border text-sm font-medium transition-all text-left',
                     modal.form.isActive
                       ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                      : 'bg-gray-900/50 border-gray-700/50 text-gray-400'
+                      : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400'
                   )}
                 >
                   {modal.form.isActive ? 'Active' : 'Inactive'}
                 </button>
               </div>
             </div>
-            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-800/50 sticky bottom-0 bg-[#141927]">
+            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-800/50 sticky bottom-0 bg-white dark:bg-[#141927]">
               <button
                 onClick={() => setModal(null)}
-                className="px-4 py-2 rounded-xl border border-gray-700/50 text-gray-300 hover:text-white text-sm font-medium transition-all"
+                className="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-white text-sm font-medium transition-all"
               >
                 Cancel
               </button>
@@ -968,7 +968,7 @@ export default function AdminCorporatePage() {
                 onClick={handleSave}
                 disabled={saving}
                 className={cn(
-                  'flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+                  'flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
                   'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
                   'shadow-lg shadow-primary-500/25',
                   'disabled:opacity-50 disabled:cursor-not-allowed'

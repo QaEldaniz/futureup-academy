@@ -172,14 +172,14 @@ export default function AdminApplicationsPage() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">{t.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.title}</h1>
           <p className="text-gray-400 mt-1">
             {t.description}
           </p>
         </div>
         <button
           onClick={fetchApplications}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-gray-300 hover:text-white hover:border-gray-700/50 transition-all"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-200 dark:border-gray-700/50 transition-all"
         >
           <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
           {tCommon.refresh}
@@ -195,7 +195,7 @@ export default function AdminApplicationsPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t.searchPlaceholder}
-            className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+            className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
           />
         </div>
         <div className="relative">
@@ -203,7 +203,7 @@ export default function AdminApplicationsPage() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="pl-11 pr-10 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer"
+            className="pl-11 pr-10 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer"
           >
             <option value="ALL">{t.allStatuses}</option>
             {STATUS_OPTIONS.map((status) => (
@@ -219,7 +219,7 @@ export default function AdminApplicationsPage() {
           <select
             value={filterSource}
             onChange={(e) => setFilterSource(e.target.value)}
-            className="pl-11 pr-10 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer"
+            className="pl-11 pr-10 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer"
           >
             {SOURCE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -243,10 +243,10 @@ export default function AdminApplicationsPage() {
                 'px-4 py-3 rounded-xl border transition-all text-left',
                 filterStatus === status
                   ? STATUS_CONFIG[status].className + ' border-current'
-                  : 'bg-[#141927]/60 border-gray-800/50 hover:border-gray-700/50'
+                  : 'bg-white dark:bg-[#141927]/60 border-gray-200 dark:border-gray-800/50 hover:border-gray-200 dark:border-gray-700/50'
               )}
             >
-              <p className="text-2xl font-bold text-white">{count}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{count}</p>
               <p className="text-xs text-gray-400">{STATUS_CONFIG[status].label}</p>
             </button>
           );
@@ -254,17 +254,17 @@ export default function AdminApplicationsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
+      <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
         {loading ? (
           <div className="divide-y divide-gray-800/30">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="px-6 py-4 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-gray-700/50 animate-pulse" />
+                <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
                 <div className="flex-1 space-y-2">
-                  <div className="w-32 h-4 bg-gray-700/50 rounded animate-pulse" />
-                  <div className="w-48 h-3 bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                  <div className="w-48 h-3 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                 </div>
-                <div className="w-24 h-8 bg-gray-700/50 rounded animate-pulse" />
+                <div className="w-24 h-8 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
               </div>
             ))}
           </div>
@@ -281,7 +281,7 @@ export default function AdminApplicationsPage() {
         ) : (
           <>
             {/* Desktop table header */}
-            <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3 border-b border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3 border-b border-gray-200 dark:border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
               <div className="col-span-3">{t.applicant}</div>
               <div className="col-span-2">{t.contact}</div>
               <div className="col-span-2">{t.course}</div>
@@ -294,14 +294,14 @@ export default function AdminApplicationsPage() {
             <div className="divide-y divide-gray-800/30">
               {filteredApplications.map((app) => (
                 <div key={app.id}>
-                  <div className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-800/20 transition-colors">
+                  <div className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors">
                     {/* Applicant */}
                     <div className="col-span-3 flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500/20 to-secondary-500/20 flex items-center justify-center text-primary-400 font-bold text-sm shrink-0">
                         {app.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-white truncate">{app.name}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{app.name}</p>
                         <p className="text-xs text-gray-500 truncate lg:hidden">{app.email}</p>
                       </div>
                     </div>
@@ -334,7 +334,7 @@ export default function AdminApplicationsPage() {
                         app.utmSource
                           ? 'bg-secondary-500/10 text-secondary-400 border border-secondary-500/20'
                           : extractHearAbout(app.message)
-                            ? 'bg-gray-700/50 text-gray-400'
+                            ? 'bg-gray-200 dark:bg-gray-700/50 text-gray-400'
                             : 'text-gray-600'
                       )}>
                         {getSourceDisplay(app)}
@@ -354,7 +354,7 @@ export default function AdminApplicationsPage() {
                         )}
                       >
                         {STATUS_OPTIONS.map((status) => (
-                          <option key={status} value={status} className="bg-[#141927] text-white">
+                          <option key={status} value={status} className="bg-white dark:bg-[#141927] text-gray-900 dark:text-white">
                             {STATUS_CONFIG[status].label}
                           </option>
                         ))}
@@ -427,7 +427,7 @@ export default function AdminApplicationsPage() {
                               }
                               placeholder={t.addNotesPlaceholder}
                               rows={3}
-                              className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
+                              className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
                             />
                             <div className="flex items-center gap-2">
                               <button
@@ -451,7 +451,7 @@ export default function AdminApplicationsPage() {
                             onClick={() =>
                               setEditingNotes({ id: app.id, notes: app.notes || '' })
                             }
-                            className="px-4 py-3 rounded-xl bg-gray-900/30 border border-gray-800/30 text-sm text-gray-400 cursor-pointer hover:border-gray-700/50 transition-all min-h-[60px]"
+                            className="px-4 py-3 rounded-xl bg-gray-900/30 border border-gray-200 dark:border-gray-800/30 text-sm text-gray-400 cursor-pointer hover:border-gray-200 dark:border-gray-700/50 transition-all min-h-[60px]"
                           >
                             {app.notes || (
                               <span className="text-gray-600 italic">

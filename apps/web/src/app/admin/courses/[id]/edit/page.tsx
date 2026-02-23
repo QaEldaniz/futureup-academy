@@ -261,45 +261,45 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
       <div className="space-y-6 max-w-4xl">
         {/* Header skeleton */}
         <div className="flex items-center gap-4">
-          <div className="w-9 h-9 rounded-xl bg-gray-700/50 animate-pulse" />
+          <div className="w-9 h-9 rounded-xl bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
           <div className="space-y-2">
-            <div className="w-48 h-6 bg-gray-700/50 rounded animate-pulse" />
-            <div className="w-32 h-4 bg-gray-700/50 rounded animate-pulse" />
+            <div className="w-48 h-6 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+            <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
           </div>
         </div>
 
         {/* Language tabs skeleton */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6 space-y-5">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 space-y-5">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-20 h-8 bg-gray-700/50 rounded-lg animate-pulse" />
-            <div className="w-20 h-8 bg-gray-700/50 rounded-lg animate-pulse" />
-            <div className="w-20 h-8 bg-gray-700/50 rounded-lg animate-pulse" />
+            <div className="w-20 h-8 bg-gray-200 dark:bg-gray-700/50 rounded-lg animate-pulse" />
+            <div className="w-20 h-8 bg-gray-200 dark:bg-gray-700/50 rounded-lg animate-pulse" />
+            <div className="w-20 h-8 bg-gray-200 dark:bg-gray-700/50 rounded-lg animate-pulse" />
           </div>
           <div className="space-y-4">
-            <div className="w-full h-12 bg-gray-700/50 rounded-xl animate-pulse" />
-            <div className="w-full h-32 bg-gray-700/50 rounded-xl animate-pulse" />
+            <div className="w-full h-12 bg-gray-200 dark:bg-gray-700/50 rounded-xl animate-pulse" />
+            <div className="w-full h-32 bg-gray-200 dark:bg-gray-700/50 rounded-xl animate-pulse" />
           </div>
         </div>
 
         {/* Details skeleton */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6 space-y-5">
-          <div className="w-32 h-5 bg-gray-700/50 rounded animate-pulse mb-4" />
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 space-y-5">
+          <div className="w-32 h-5 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse mb-4" />
           <div className="space-y-4">
-            <div className="w-full h-12 bg-gray-700/50 rounded-xl animate-pulse" />
-            <div className="w-full h-12 bg-gray-700/50 rounded-xl animate-pulse" />
+            <div className="w-full h-12 bg-gray-200 dark:bg-gray-700/50 rounded-xl animate-pulse" />
+            <div className="w-full h-12 bg-gray-200 dark:bg-gray-700/50 rounded-xl animate-pulse" />
             <div className="grid grid-cols-2 gap-5">
-              <div className="w-full h-12 bg-gray-700/50 rounded-xl animate-pulse" />
-              <div className="w-full h-12 bg-gray-700/50 rounded-xl animate-pulse" />
-              <div className="w-full h-12 bg-gray-700/50 rounded-xl animate-pulse" />
-              <div className="w-full h-12 bg-gray-700/50 rounded-xl animate-pulse" />
+              <div className="w-full h-12 bg-gray-200 dark:bg-gray-700/50 rounded-xl animate-pulse" />
+              <div className="w-full h-12 bg-gray-200 dark:bg-gray-700/50 rounded-xl animate-pulse" />
+              <div className="w-full h-12 bg-gray-200 dark:bg-gray-700/50 rounded-xl animate-pulse" />
+              <div className="w-full h-12 bg-gray-200 dark:bg-gray-700/50 rounded-xl animate-pulse" />
             </div>
           </div>
         </div>
 
         {/* Actions skeleton */}
         <div className="flex justify-end gap-3 pt-2">
-          <div className="w-24 h-10 bg-gray-700/50 rounded-xl animate-pulse" />
-          <div className="w-36 h-10 bg-gray-700/50 rounded-xl animate-pulse" />
+          <div className="w-24 h-10 bg-gray-200 dark:bg-gray-700/50 rounded-xl animate-pulse" />
+          <div className="w-36 h-10 bg-gray-200 dark:bg-gray-700/50 rounded-xl animate-pulse" />
         </div>
       </div>
     );
@@ -311,12 +311,12 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
       <div className="flex items-center gap-4">
         <Link
           href="/admin/courses"
-          className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all"
+          className="p-2 rounded-xl text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all"
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-white">Edit Course</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit Course</h1>
           <p className="text-gray-400 mt-0.5 text-sm">
             Update course information
           </p>
@@ -332,7 +332,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Language Tabs + Localized Fields */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
           <div className="flex items-center gap-1 px-6 pt-5 pb-0">
             <Globe className="w-4 h-4 text-gray-500 mr-2" />
             {langTabs.map((tab) => (
@@ -344,7 +344,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                   'px-4 py-2 rounded-t-xl text-sm font-medium transition-all border-b-2',
                   activeTab === tab.key
                     ? 'text-primary-400 border-primary-500 bg-primary-500/5'
-                    : 'text-gray-500 border-transparent hover:text-gray-300 hover:bg-gray-800/30'
+                    : 'text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800/30'
                 )}
               >
                 <span className="mr-1.5 text-[10px] font-bold opacity-60">{tab.flag}</span>
@@ -353,7 +353,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
             ))}
           </div>
 
-          <div className="p-6 space-y-5 border-t border-gray-800/30">
+          <div className="p-6 space-y-5 border-t border-gray-200 dark:border-gray-800/30">
             {/* Title */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -371,7 +371,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                     )
                   }
                   placeholder={`Course title in ${langTabs.find((t) => t.key === activeTab)?.label}`}
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
             </div>
@@ -392,7 +392,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                   )
                 }
                 placeholder={`Short description for cards (${langTabs.find((t) => t.key === activeTab)?.label})`}
-                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               />
             </div>
 
@@ -411,7 +411,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                 }
                 placeholder={`Course description in ${langTabs.find((t) => t.key === activeTab)?.label}`}
                 rows={5}
-                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all resize-none"
+                className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all resize-none"
               />
             </div>
 
@@ -446,8 +446,8 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
         </div>
 
         {/* Course Details */}
-        <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6 space-y-5">
-          <h2 className="text-base font-semibold text-white mb-1">Course Details</h2>
+        <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 space-y-5">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-1">Course Details</h2>
 
           {/* Slug */}
           <div>
@@ -459,7 +459,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                 value={form.slug}
                 onChange={(e) => updateField('slug', e.target.value)}
                 placeholder="course-slug"
-                className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               />
             </div>
             <p className="text-xs text-gray-500 mt-1.5">
@@ -477,7 +477,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                 value={form.image}
                 onChange={(e) => updateField('image', e.target.value)}
                 placeholder="https://example.com/image.jpg"
-                className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               />
             </div>
           </div>
@@ -494,7 +494,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                   value={form.duration}
                   onChange={(e) => updateField('duration', e.target.value)}
                   placeholder="e.g. 3 months"
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
             </div>
@@ -511,7 +511,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                   value={form.price}
                   onChange={(e) => updateField('price', e.target.value)}
                   placeholder="0.00"
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
             </div>
@@ -524,7 +524,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                 <select
                   value={form.level}
                   onChange={(e) => updateField('level', e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all appearance-none cursor-pointer"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all appearance-none cursor-pointer"
                 >
                   <option value="BEGINNER">Beginner</option>
                   <option value="INTERMEDIATE">Intermediate</option>
@@ -544,7 +544,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                     'flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium border transition-all',
                     form.audience === 'ADULTS'
                       ? 'bg-primary-500/15 border-primary-500/40 text-primary-400'
-                      : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                      : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:border-gray-600/50'
                   )}
                 >
                   <Users className="w-4 h-4" />
@@ -557,7 +557,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                     'flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium border transition-all',
                     form.audience === 'KIDS'
                       ? 'bg-orange-500/15 border-orange-500/40 text-orange-400'
-                      : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                      : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:border-gray-600/50'
                   )}
                 >
                   <Baby className="w-4 h-4" />
@@ -580,7 +580,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                         'flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-medium border transition-all',
                         form.ageGroup === ag.value
                           ? 'bg-orange-500/15 border-orange-500/40 text-orange-400'
-                          : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                          : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:border-gray-600/50'
                       )}
                     >
                       <span>{ag.emoji}</span>
@@ -599,7 +599,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                 <select
                   value={form.categoryId}
                   onChange={(e) => updateField('categoryId', e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all appearance-none cursor-pointer"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all appearance-none cursor-pointer"
                 >
                   <option value="">Select a category</option>
                   {categories.map((cat) => (
@@ -639,7 +639,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                           'flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium border transition-all text-left',
                           selected
                             ? 'bg-primary-500/15 border-primary-500/40 text-primary-400'
-                            : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                            : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:border-gray-600/50'
                         )}
                       >
                         <span className={cn('w-2 h-2 rounded-full', selected ? 'bg-primary-400' : 'bg-gray-600')} />
@@ -682,7 +682,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
                           'flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm border transition-all',
                           selected
                             ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                            : 'bg-gray-900/30 border-gray-800/50 text-gray-400 hover:text-gray-300 hover:border-gray-700/50'
+                            : 'bg-gray-900/30 border-gray-200 dark:border-gray-800/50 text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:border-gray-200 dark:border-gray-700/50'
                         )}
                       >
                         <span className="flex items-center gap-2">
@@ -710,7 +710,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
             <button
               type="button"
               onClick={() => updateField('isActive', !form.isActive)}
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               {form.isActive ? (
                 <ToggleRight className="w-10 h-10 text-primary-500" />
@@ -725,7 +725,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
         <div className="flex items-center justify-end gap-3 pt-2">
           <Link
             href="/admin/courses"
-            className="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-800/30 transition-all"
+            className="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-white border border-gray-200 dark:border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-100 dark:bg-gray-800/30 transition-all"
           >
             Cancel
           </Link>
@@ -733,7 +733,7 @@ export default function AdminEditCoursePage({ params }: { params: Promise<{ id: 
             type="submit"
             disabled={saving}
             className={cn(
-              'inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+              'inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
               'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
               'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
               'active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100'

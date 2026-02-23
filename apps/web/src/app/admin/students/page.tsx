@@ -137,7 +137,7 @@ export default function AdminStudentsPage() {
       {/* Page header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Students</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Students</h1>
           <p className="text-gray-400 mt-1">
             Manage all enrolled students
             {!loading && <span className="text-gray-500"> &middot; {total} total</span>}
@@ -158,7 +158,7 @@ export default function AdminStudentsPage() {
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-4">
+      <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Search */}
           <div className="relative flex-1">
@@ -168,7 +168,7 @@ export default function AdminStudentsPage() {
               placeholder="Search by name, email, or phone..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all text-sm"
+              className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all text-sm"
             />
             {search && (
               <button
@@ -187,7 +187,7 @@ export default function AdminStudentsPage() {
               'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all',
               showFilters || activeFiltersCount > 0
                 ? 'bg-primary-500/10 border-primary-500/30 text-primary-400'
-                : 'bg-gray-900/50 border-gray-700/50 text-gray-400 hover:text-gray-300 hover:border-gray-600/50'
+                : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:border-gray-600/50'
             )}
           >
             <Filter className="w-4 h-4" />
@@ -202,11 +202,11 @@ export default function AdminStudentsPage() {
 
         {/* Expanded filters */}
         {showFilters && (
-          <div className="mt-3 pt-3 border-t border-gray-800/50 flex flex-col sm:flex-row gap-3">
+          <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-800/50 flex flex-col sm:flex-row gap-3">
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              className="px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
             >
               {STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -220,7 +220,7 @@ export default function AdminStudentsPage() {
               placeholder="Filter by course name..."
               value={courseFilter}
               onChange={(e) => setCourseFilter(e.target.value)}
-              className="px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+              className="px-4 py-2.5 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
             />
 
             {activeFiltersCount > 0 && (
@@ -229,7 +229,7 @@ export default function AdminStudentsPage() {
                   setStatusFilter('');
                   setCourseFilter('');
                 }}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all"
               >
                 <X className="w-3.5 h-3.5" />
                 Clear filters
@@ -240,11 +240,11 @@ export default function AdminStudentsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
+      <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-800/50">
+              <tr className="border-b border-gray-200 dark:border-gray-800/50">
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                   Student
                 </th>
@@ -271,24 +271,24 @@ export default function AdminStudentsPage() {
                   <tr key={i}>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gray-700/50 animate-pulse" />
-                        <div className="w-32 h-4 bg-gray-700/50 rounded animate-pulse" />
+                        <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
+                        <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                       </div>
                     </td>
                     <td className="px-6 py-4 hidden md:table-cell">
-                      <div className="w-40 h-4 bg-gray-700/50 rounded animate-pulse" />
+                      <div className="w-40 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                     </td>
                     <td className="px-6 py-4 hidden lg:table-cell">
-                      <div className="w-28 h-4 bg-gray-700/50 rounded animate-pulse" />
+                      <div className="w-28 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                     </td>
                     <td className="px-6 py-4 hidden sm:table-cell">
-                      <div className="w-8 h-4 bg-gray-700/50 rounded animate-pulse mx-auto" />
+                      <div className="w-8 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse mx-auto" />
                     </td>
                     <td className="px-6 py-4">
-                      <div className="w-16 h-6 bg-gray-700/50 rounded-full animate-pulse mx-auto" />
+                      <div className="w-16 h-6 bg-gray-200 dark:bg-gray-700/50 rounded-full animate-pulse mx-auto" />
                     </td>
                     <td className="px-6 py-4">
-                      <div className="w-20 h-4 bg-gray-700/50 rounded animate-pulse ml-auto" />
+                      <div className="w-20 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse ml-auto" />
                     </td>
                   </tr>
                 ))
@@ -303,7 +303,7 @@ export default function AdminStudentsPage() {
                   return (
                     <tr
                       key={student.id}
-                      className="hover:bg-gray-800/20 transition-colors group"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors group"
                     >
                       {/* Student name + avatar */}
                       <td className="px-6 py-4">
@@ -322,7 +322,7 @@ export default function AdminStudentsPage() {
                             </div>
                           )}
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-white truncate">
+                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                               {student.name}
                             </p>
                             <p className="text-xs text-gray-500 md:hidden truncate">
@@ -369,7 +369,7 @@ export default function AdminStudentsPage() {
                         <div className="inline-flex items-center gap-1">
                           <Link
                             href={`/admin/students/${student.id}/edit`}
-                            className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all"
+                            className="p-2 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all"
                             title="Edit student"
                           >
                             <Edit3 className="w-4 h-4" />
@@ -418,7 +418,7 @@ export default function AdminStudentsPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-gray-800/50">
+          <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-gray-800/50">
             <p className="text-sm text-gray-500">
               Page {page} of {totalPages}
             </p>
@@ -429,8 +429,8 @@ export default function AdminStudentsPage() {
                 className={cn(
                   'p-2 rounded-lg border transition-all text-sm',
                   page === 1
-                    ? 'border-gray-800/30 text-gray-600 cursor-not-allowed'
-                    : 'border-gray-700/50 text-gray-300 hover:text-white hover:bg-gray-800/50'
+                    ? 'border-gray-200 dark:border-gray-800/30 text-gray-600 cursor-not-allowed'
+                    : 'border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
                 )}
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -457,7 +457,7 @@ export default function AdminStudentsPage() {
                         'w-9 h-9 rounded-lg text-sm font-medium transition-all',
                         page === pageNum
                           ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30'
-                          : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                          : 'text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
                       )}
                     >
                       {pageNum}
@@ -472,8 +472,8 @@ export default function AdminStudentsPage() {
                 className={cn(
                   'p-2 rounded-lg border transition-all text-sm',
                   page === totalPages
-                    ? 'border-gray-800/30 text-gray-600 cursor-not-allowed'
-                    : 'border-gray-700/50 text-gray-300 hover:text-white hover:bg-gray-800/50'
+                    ? 'border-gray-200 dark:border-gray-800/30 text-gray-600 cursor-not-allowed'
+                    : 'border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
                 )}
               >
                 <ChevronRight className="w-4 h-4" />
@@ -490,13 +490,13 @@ export default function AdminStudentsPage() {
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => !deleting && setDeleteId(null)}
           />
-          <div className="relative bg-[#1a2035] border border-gray-800/50 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+          <div className="relative bg-white dark:bg-[#1a2035] border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 w-full max-w-md shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center">
                 <AlertCircle className="w-5 h-5 text-red-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Delete Student</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Delete Student</h3>
                 <p className="text-sm text-gray-400">This action cannot be undone.</p>
               </div>
             </div>
@@ -508,7 +508,7 @@ export default function AdminStudentsPage() {
               <button
                 onClick={() => setDeleteId(null)}
                 disabled={deleting}
-                className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 transition-all disabled:opacity-50"
+                className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -516,7 +516,7 @@ export default function AdminStudentsPage() {
                 onClick={() => handleDelete(deleteId)}
                 disabled={deleting}
                 className={cn(
-                  'px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-all',
+                  'px-4 py-2.5 rounded-xl text-sm font-medium text-gray-900 dark:text-white transition-all',
                   'bg-red-500/80 hover:bg-red-500 shadow-lg shadow-red-500/20',
                   'disabled:opacity-50 disabled:cursor-not-allowed'
                 )}

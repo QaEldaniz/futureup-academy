@@ -330,7 +330,7 @@ export default function AdminScholarshipsPage() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Scholarships</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Scholarships</h1>
           <p className="text-gray-400 mt-1">
             Manage scholarship programs and track applications.
           </p>
@@ -339,7 +339,7 @@ export default function AdminScholarshipsPage() {
           <button
             onClick={openAddModal}
             className={cn(
-              'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+              'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
               'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
               'shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30',
               'active:scale-[0.98]'
@@ -351,7 +351,7 @@ export default function AdminScholarshipsPage() {
         ) : (
           <button
             onClick={fetchApplications}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-gray-300 hover:text-white hover:border-gray-700/50 transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-gray-200 dark:border-gray-700/50 transition-all"
           >
             <RefreshCw className={cn('w-4 h-4', loadingApps && 'animate-spin')} />
             Refresh
@@ -360,7 +360,7 @@ export default function AdminScholarshipsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-[#141927]/60 border border-gray-800/50 rounded-xl w-fit">
+      <div className="flex gap-1 p-1 bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 rounded-xl w-fit">
         <button
           onClick={() => setActiveTab('programs')}
           className={cn(
@@ -401,12 +401,12 @@ export default function AdminScholarshipsPage() {
               {Array.from({ length: 6 }).map((_, i) => (
                 <div
                   key={i}
-                  className="bg-[#141927]/60 border border-gray-800/50 rounded-2xl p-5 h-48 animate-pulse"
+                  className="bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 rounded-2xl p-5 h-48 animate-pulse"
                 />
               ))}
             </div>
           ) : scholarships.length === 0 ? (
-            <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl py-16 text-center">
+            <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl py-16 text-center">
               <Inbox className="w-12 h-12 text-gray-600 mx-auto mb-3" />
               <p className="text-gray-400 font-medium">No scholarships yet</p>
               <p className="text-gray-500 text-sm mt-1">Add your first scholarship program to get started.</p>
@@ -416,7 +416,7 @@ export default function AdminScholarshipsPage() {
               {scholarships.map((scholarship) => (
                 <div
                   key={scholarship.id}
-                  className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-5 hover:border-gray-700/50 transition-all group"
+                  className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl p-5 hover:border-gray-200 dark:border-gray-700/50 transition-all group"
                 >
                   {/* Header */}
                   <div className="flex items-start justify-between mb-3">
@@ -436,7 +436,7 @@ export default function AdminScholarshipsPage() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-sm font-semibold text-white truncate mb-1">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate mb-1">
                     {scholarship.titleAz}
                   </h3>
 
@@ -468,7 +468,7 @@ export default function AdminScholarshipsPage() {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-800/30">
+                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-800/30">
                     <span className="text-[10px] text-gray-500 bg-gray-800/50 px-2 py-0.5 rounded-full">
                       #{scholarship.order}
                     </span>
@@ -511,7 +511,7 @@ export default function AdminScholarshipsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by name or email..."
-                className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
               />
             </div>
             <div className="relative">
@@ -519,7 +519,7 @@ export default function AdminScholarshipsPage() {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="pl-11 pr-10 py-2.5 rounded-xl bg-[#141927]/60 border border-gray-800/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer"
+                className="pl-11 pr-10 py-2.5 rounded-xl bg-white dark:bg-[#141927]/60 border border-gray-200 dark:border-gray-800/50 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all cursor-pointer"
               >
                 <option value="ALL">All Statuses</option>
                 {APP_STATUS_OPTIONS.map((status) => (
@@ -544,10 +544,10 @@ export default function AdminScholarshipsPage() {
                     'px-4 py-3 rounded-xl border transition-all text-left',
                     filterStatus === status
                       ? APP_STATUS_CONFIG[status].className + ' border-current'
-                      : 'bg-[#141927]/60 border-gray-800/50 hover:border-gray-700/50'
+                      : 'bg-white dark:bg-[#141927]/60 border-gray-200 dark:border-gray-800/50 hover:border-gray-200 dark:border-gray-700/50'
                   )}
                 >
-                  <p className="text-2xl font-bold text-white">{count}</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{count}</p>
                   <p className="text-xs text-gray-400">{APP_STATUS_CONFIG[status].label}</p>
                 </button>
               );
@@ -555,17 +555,17 @@ export default function AdminScholarshipsPage() {
           </div>
 
           {/* Table */}
-          <div className="bg-[#141927]/60 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden">
+          <div className="bg-white dark:bg-[#141927]/60 backdrop-blur-sm border border-gray-200 dark:border-gray-800/50 rounded-2xl overflow-hidden">
             {loadingApps ? (
               <div className="divide-y divide-gray-800/30">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <div key={i} className="px-6 py-4 flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-gray-700/50 animate-pulse" />
+                    <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-700/50 animate-pulse" />
                     <div className="flex-1 space-y-2">
-                      <div className="w-32 h-4 bg-gray-700/50 rounded animate-pulse" />
-                      <div className="w-48 h-3 bg-gray-700/50 rounded animate-pulse" />
+                      <div className="w-32 h-4 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
+                      <div className="w-48 h-3 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                     </div>
-                    <div className="w-24 h-8 bg-gray-700/50 rounded animate-pulse" />
+                    <div className="w-24 h-8 bg-gray-200 dark:bg-gray-700/50 rounded animate-pulse" />
                   </div>
                 ))}
               </div>
@@ -582,7 +582,7 @@ export default function AdminScholarshipsPage() {
             ) : (
               <>
                 {/* Desktop table header */}
-                <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3 border-b border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3 border-b border-gray-200 dark:border-gray-800/50 text-xs font-medium text-gray-500 uppercase tracking-wider">
                   <div className="col-span-2">Applicant</div>
                   <div className="col-span-2">Contact</div>
                   <div className="col-span-2">Scholarship</div>
@@ -595,14 +595,14 @@ export default function AdminScholarshipsPage() {
                 <div className="divide-y divide-gray-800/30">
                   {filteredApplications.map((app) => (
                     <div key={app.id}>
-                      <div className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-800/20 transition-colors">
+                      <div className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors">
                         {/* Applicant */}
                         <div className="col-span-2 flex items-center gap-3">
                           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500/20 to-secondary-500/20 flex items-center justify-center text-primary-400 font-bold text-sm shrink-0">
                             {app.name.charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-white truncate">{app.name}</p>
+                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{app.name}</p>
                             <p className="text-xs text-gray-500 truncate lg:hidden">{app.email}</p>
                           </div>
                         </div>
@@ -648,7 +648,7 @@ export default function AdminScholarshipsPage() {
                             )}
                           >
                             {APP_STATUS_OPTIONS.map((status) => (
-                              <option key={status} value={status} className="bg-[#141927] text-white">
+                              <option key={status} value={status} className="bg-white dark:bg-[#141927] text-gray-900 dark:text-white">
                                 {APP_STATUS_CONFIG[status].label}
                               </option>
                             ))}
@@ -701,7 +701,7 @@ export default function AdminScholarshipsPage() {
                                   }
                                   placeholder="Add notes about this application..."
                                   rows={3}
-                                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
+                                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
                                 />
                                 <div className="flex items-center gap-2">
                                   <button
@@ -725,7 +725,7 @@ export default function AdminScholarshipsPage() {
                                 onClick={() =>
                                   setEditingNotes({ id: app.id, notes: app.notes || '' })
                                 }
-                                className="px-4 py-3 rounded-xl bg-gray-900/30 border border-gray-800/30 text-sm text-gray-400 cursor-pointer hover:border-gray-700/50 transition-all min-h-[60px]"
+                                className="px-4 py-3 rounded-xl bg-gray-900/30 border border-gray-200 dark:border-gray-800/30 text-sm text-gray-400 cursor-pointer hover:border-gray-200 dark:border-gray-700/50 transition-all min-h-[60px]"
                               >
                                 {app.notes || (
                                   <span className="text-gray-600 italic">
@@ -751,15 +751,15 @@ export default function AdminScholarshipsPage() {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       {modal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#141927] border border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800/50 sticky top-0 bg-[#141927] z-10">
-              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+          <div className="bg-white dark:bg-[#141927] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800/50 sticky top-0 bg-white dark:bg-[#141927] z-10">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <GraduationCap className="w-5 h-5 text-primary-400" />
                 {modal.mode === 'add' ? 'Add Scholarship' : 'Edit Scholarship'}
               </h3>
               <button
                 onClick={() => setModal(null)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -787,7 +787,7 @@ export default function AdminScholarshipsPage() {
                     setModal({ ...modal, form: { ...modal.form, titleAz: newTitle, slug: newSlug } });
                   }}
                   placeholder="Scholarship title in Azerbaijani"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
 
@@ -803,7 +803,7 @@ export default function AdminScholarshipsPage() {
                     setModal({ ...modal, form: { ...modal.form, slug: generateSlug(e.target.value) } })
                   }
                   placeholder="auto-generated-from-title"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all font-mono text-sm"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all font-mono text-sm"
                 />
                 <p className="mt-1 text-xs text-gray-500">Auto-generated from title. Edit to customize.</p>
               </div>
@@ -820,7 +820,7 @@ export default function AdminScholarshipsPage() {
                     setModal({ ...modal, form: { ...modal.form, titleRu: e.target.value } })
                   }
                   placeholder="Scholarship title in Russian"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
 
@@ -836,7 +836,7 @@ export default function AdminScholarshipsPage() {
                     setModal({ ...modal, form: { ...modal.form, titleEn: e.target.value } })
                   }
                   placeholder="Scholarship title in English"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>
 
@@ -852,7 +852,7 @@ export default function AdminScholarshipsPage() {
                   }
                   placeholder="Scholarship description in Azerbaijani"
                   rows={3}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
                 />
               </div>
 
@@ -877,7 +877,7 @@ export default function AdminScholarshipsPage() {
                     min={0}
                     max={100}
                     placeholder="e.g. 50"
-                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                 </div>
                 <div>
@@ -890,7 +890,7 @@ export default function AdminScholarshipsPage() {
                     onChange={(e) =>
                       setModal({ ...modal, form: { ...modal.form, deadline: e.target.value } })
                     }
-                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                 </div>
               </div>
@@ -913,7 +913,7 @@ export default function AdminScholarshipsPage() {
                       'w-full px-4 py-3 rounded-xl border text-sm font-medium transition-all text-left',
                       modal.form.isActive
                         ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                        : 'bg-gray-900/50 border-gray-700/50 text-gray-400'
+                        : 'bg-gray-900/50 border-gray-200 dark:border-gray-700/50 text-gray-400'
                     )}
                   >
                     {modal.form.isActive ? 'Active' : 'Inactive'}
@@ -933,15 +933,15 @@ export default function AdminScholarshipsPage() {
                       })
                     }
                     min={0}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                   />
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-800/50 sticky bottom-0 bg-[#141927]">
+            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-800/50 sticky bottom-0 bg-white dark:bg-[#141927]">
               <button
                 onClick={() => setModal(null)}
-                className="px-4 py-2 rounded-xl border border-gray-700/50 text-gray-300 hover:text-white text-sm font-medium transition-all"
+                className="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:text-white text-sm font-medium transition-all"
               >
                 Cancel
               </button>
@@ -949,7 +949,7 @@ export default function AdminScholarshipsPage() {
                 onClick={handleSave}
                 disabled={saving}
                 className={cn(
-                  'flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-white text-sm transition-all duration-200',
+                  'flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-gray-900 dark:text-white text-sm transition-all duration-200',
                   'bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700',
                   'shadow-lg shadow-primary-500/25',
                   'disabled:opacity-50 disabled:cursor-not-allowed'
