@@ -30,9 +30,9 @@ function AdminPanelLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <ThemeProvider>
+    <div className="dark">
     <AdminAuthGuard>
-      <div className="min-h-screen bg-gray-50 dark:bg-[#0b0f1a] text-gray-900 dark:text-gray-100">
+      <div className="min-h-screen bg-[#0b0f1a] text-gray-100">
         {/* Mobile sidebar overlay */}
         {sidebarOpen && (
           <div
@@ -53,6 +53,6 @@ function AdminPanelLayout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
     </AdminAuthGuard>
-    </ThemeProvider>
+    </div>
   );
 }

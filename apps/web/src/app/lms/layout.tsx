@@ -122,8 +122,8 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ThemeProvider>
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="dark">
+    <div className="min-h-screen bg-gray-950">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
@@ -241,6 +241,6 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
         </main>
       </div>
     </div>
-    </ThemeProvider>
+    </div>
   );
 }

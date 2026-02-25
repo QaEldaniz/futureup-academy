@@ -67,8 +67,8 @@ interface CourseDetail {
   level: string;
   isActive: boolean;
   isFeatured: boolean;
-  syllabus: SyllabusModule[];
-  features: string[];
+  syllabus: SyllabusModule[] | null;
+  features: string[] | null;
   category: {
     id: string;
     nameAz: string;
@@ -179,7 +179,9 @@ export default function CourseDetailPage() {
   const gradient = gradientMap[course.category.slug] || 'from-primary-500 to-secondary-500';
   const IconComp = iconMap[course.category.icon] || GraduationCap;
   const levelLower = course.level.toLowerCase();
-  const totalHours = course.syllabus.reduce((sum, m) => sum + m.hours, 0);
+  const syllabus = course.syllabus || [];
+  const features = course.features || [];
+  const totalHours = syllabus.reduce((sum, m) => sum + m.hours, 0);
 
   return (
     <>
@@ -237,13 +239,13 @@ export default function CourseDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2 space-y-12">
               {/* Features */}
-              {course.features.length > 0 && (
+              {features.length > 0 && (
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                     {locale === 'az' ? 'Kursun xüsusiyyətləri' : locale === 'ru' ? 'Особенности курса' : 'Course features'}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {course.features.map((feature, i) => (
+                    {features.map((feature, i) => (
                       <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-green-50/50 dark:bg-green-900/10 border border-green-100 dark:border-green-900/20">
                         <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
                         <span className="text-sm text-gray-700 dark:text-gray-300">{feature}</span>
@@ -254,11 +256,11 @@ export default function CourseDetailPage() {
               )}
 
               {/* Curriculum */}
-              {course.syllabus.length > 0 && (
+              {syllabus.length > 0 && (
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t('curriculum')}</h2>
                   <div className="space-y-3">
-                    {course.syllabus.map((module, i) => (
+                    {syllabus.map((module, i) => (
                       <AccordionItem key={i} module={module} index={i} />
                     ))}
                   </div>
@@ -309,7 +311,7 @@ export default function CourseDetailPage() {
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <BookOpen className="w-4 h-4 text-primary-500" />
-                    <span>{course.syllabus.length} {locale === 'az' ? 'modul' : locale === 'ru' ? 'модулей' : 'modules'} &middot; {totalHours} {locale === 'az' ? 'saat' : locale === 'ru' ? 'часов' : 'hours'}</span>
+                    <span>{syllabus.length} {locale === 'az' ? 'modul' : locale === 'ru' ? 'модулей' : 'modules'} &middot; {totalHours} {locale === 'az' ? 'saat' : locale === 'ru' ? 'часов' : 'hours'}</span>
                   </div>
                   {course.teachers.length > 0 && (
                     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">

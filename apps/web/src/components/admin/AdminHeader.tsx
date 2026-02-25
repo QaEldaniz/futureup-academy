@@ -146,7 +146,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
     if (!token) return;
     setNotifLoading(true);
     try {
-      const res = await api.get<{ success: boolean; data: { stats: NotificationData; recentApplications: RecentApplication[]; recentReviews: RecentReview[] } }>('/dashboard', { token });
+      const res = await api.get<{ success: boolean; data: { stats: NotificationData; recentApplications: RecentApplication[]; recentReviews: RecentReview[] } }>('/admin/dashboard', { token });
       const data = res.data;
       setNotifData({
         pendingApplications: data.stats?.pendingApplications || 0,
