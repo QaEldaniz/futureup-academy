@@ -19,77 +19,250 @@ import {
   Blocks,
   Brain,
   Cpu,
+  Headphones,
+  Network,
+  Bug,
+  Briefcase,
+  Database,
+  Smartphone,
+  Container,
+  ShieldCheck,
+  Target,
+  GitMerge,
+  Scale,
+  Radio,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
 type AgeGroup = '8-11' | '12-15';
+type AdultCategory = 'development' | 'cyber' | 'data-ai' | 'devops-it' | 'business';
 
 interface CourseCard {
   icon: React.ElementType;
   titleKey: string;
   descriptionKey: string;
-  level: string;
-  duration: string;
+  levelKey: string;
+  durationMonths: string;
   gradient: string;
   borderGradient: string;
   ageGroup?: AgeGroup;
+  category?: AdultCategory;
 }
 
+const ADULT_CATEGORIES: { key: AdultCategory; labelKey: string; icon: React.ElementType }[] = [
+  { key: 'development', labelKey: 'catDevelopment', icon: Code2 },
+  { key: 'cyber', labelKey: 'catCyber', icon: Shield },
+  { key: 'data-ai', labelKey: 'catDataAi', icon: Brain },
+  { key: 'devops-it', labelKey: 'catDevopsIt', icon: Container },
+  { key: 'business', labelKey: 'catBusiness', icon: Briefcase },
+];
+
 const adultCourses: CourseCard[] = [
+  // === Development (4) ===
   {
     icon: Code2,
     titleKey: 'frontend',
     descriptionKey: 'frontendDesc',
-    level: 'Beginner',
-    duration: '6 months',
+    levelKey: 'beginner',
+    durationMonths: '6',
     gradient: 'from-primary-400 to-primary-600',
     borderGradient: 'from-primary-400/50 to-primary-600/50',
+    category: 'development',
   },
   {
     icon: Server,
-    titleKey: 'backend',
-    descriptionKey: 'backendDesc',
-    level: 'Intermediate',
-    duration: '6 months',
+    titleKey: 'backendJava',
+    descriptionKey: 'backendJavaDesc',
+    levelKey: 'intermediate',
+    durationMonths: '6',
     gradient: 'from-secondary-500 to-secondary-600',
     borderGradient: 'from-secondary-500/50 to-secondary-600/50',
+    category: 'development',
   },
+  {
+    icon: Server,
+    titleKey: 'backendCsharp',
+    descriptionKey: 'backendCsharpDesc',
+    levelKey: 'intermediate',
+    durationMonths: '6',
+    gradient: 'from-violet-500 to-purple-600',
+    borderGradient: 'from-violet-500/50 to-purple-600/50',
+    category: 'development',
+  },
+  {
+    icon: Smartphone,
+    titleKey: 'mobile',
+    descriptionKey: 'mobileDesc',
+    levelKey: 'intermediate',
+    durationMonths: '6',
+    gradient: 'from-sky-500 to-blue-600',
+    borderGradient: 'from-sky-500/50 to-blue-600/50',
+    category: 'development',
+  },
+  // === Cybersecurity (5) ===
+  {
+    icon: Target,
+    titleKey: 'redTeam',
+    descriptionKey: 'redTeamDesc',
+    levelKey: 'advanced',
+    durationMonths: '6',
+    gradient: 'from-red-500 to-red-700',
+    borderGradient: 'from-red-500/50 to-red-700/50',
+    category: 'cyber',
+  },
+  {
+    icon: Shield,
+    titleKey: 'blueTeam',
+    descriptionKey: 'blueTeamDesc',
+    levelKey: 'advanced',
+    durationMonths: '6',
+    gradient: 'from-blue-600 to-indigo-700',
+    borderGradient: 'from-blue-600/50 to-indigo-700/50',
+    category: 'cyber',
+  },
+  {
+    icon: GitMerge,
+    titleKey: 'purpleTeam',
+    descriptionKey: 'purpleTeamDesc',
+    levelKey: 'advanced',
+    durationMonths: '5',
+    gradient: 'from-purple-500 to-violet-700',
+    borderGradient: 'from-purple-500/50 to-violet-700/50',
+    category: 'cyber',
+  },
+  {
+    icon: Scale,
+    titleKey: 'whiteTeam',
+    descriptionKey: 'whiteTeamDesc',
+    levelKey: 'intermediate',
+    durationMonths: '5',
+    gradient: 'from-slate-500 to-gray-700',
+    borderGradient: 'from-slate-500/50 to-gray-700/50',
+    category: 'cyber',
+  },
+  {
+    icon: Radio,
+    titleKey: 'cyberOps',
+    descriptionKey: 'cyberOpsDesc',
+    levelKey: 'advanced',
+    durationMonths: '6',
+    gradient: 'from-cyan-600 to-blue-800',
+    borderGradient: 'from-cyan-600/50 to-blue-800/50',
+    category: 'cyber',
+  },
+  // === Data & AI (3) ===
+  {
+    icon: Brain,
+    titleKey: 'aiMl',
+    descriptionKey: 'aiMlDesc',
+    levelKey: 'intermediate',
+    durationMonths: '6',
+    gradient: 'from-accent-500 to-secondary-500',
+    borderGradient: 'from-accent-500/50 to-secondary-500/50',
+    category: 'data-ai',
+  },
+  {
+    icon: Database,
+    titleKey: 'dataEng',
+    descriptionKey: 'dataEngDesc',
+    levelKey: 'intermediate',
+    durationMonths: '5',
+    gradient: 'from-emerald-500 to-teal-600',
+    borderGradient: 'from-emerald-500/50 to-teal-600/50',
+    category: 'data-ai',
+  },
+  {
+    icon: BarChart3,
+    titleKey: 'dataAnalytics',
+    descriptionKey: 'dataAnalyticsDesc',
+    levelKey: 'beginner',
+    durationMonths: '5',
+    gradient: 'from-primary-500 to-secondary-500',
+    borderGradient: 'from-primary-500/50 to-secondary-500/50',
+    category: 'data-ai',
+  },
+  // === DevOps & IT (4) ===
+  {
+    icon: Container,
+    titleKey: 'devops',
+    descriptionKey: 'devopsDesc',
+    levelKey: 'intermediate',
+    durationMonths: '5',
+    gradient: 'from-fuchsia-500 to-pink-600',
+    borderGradient: 'from-fuchsia-500/50 to-pink-600/50',
+    category: 'devops-it',
+  },
+  {
+    icon: ShieldCheck,
+    titleKey: 'devsecops',
+    descriptionKey: 'devsecopsDesc',
+    levelKey: 'advanced',
+    durationMonths: '5',
+    gradient: 'from-rose-500 to-fuchsia-600',
+    borderGradient: 'from-rose-500/50 to-fuchsia-600/50',
+    category: 'devops-it',
+  },
+  {
+    icon: Headphones,
+    titleKey: 'helpdesk',
+    descriptionKey: 'helpdeskDesc',
+    levelKey: 'beginner',
+    durationMonths: '3',
+    gradient: 'from-gray-500 to-gray-600',
+    borderGradient: 'from-gray-500/50 to-gray-600/50',
+    category: 'devops-it',
+  },
+  {
+    icon: Network,
+    titleKey: 'systems',
+    descriptionKey: 'systemsDesc',
+    levelKey: 'intermediate',
+    durationMonths: '5',
+    gradient: 'from-zinc-500 to-slate-600',
+    borderGradient: 'from-zinc-500/50 to-slate-600/50',
+    category: 'devops-it',
+  },
+  // === Business & Design (4) ===
   {
     icon: Palette,
     titleKey: 'design',
     descriptionKey: 'designDesc',
-    level: 'Beginner',
-    duration: '4 months',
+    levelKey: 'beginner',
+    durationMonths: '4',
     gradient: 'from-pink-500 to-rose-500',
     borderGradient: 'from-pink-500/50 to-rose-500/50',
-  },
-  {
-    icon: BarChart3,
-    titleKey: 'data',
-    descriptionKey: 'dataDesc',
-    level: 'Intermediate',
-    duration: '5 months',
-    gradient: 'from-primary-500 to-secondary-500',
-    borderGradient: 'from-primary-500/50 to-secondary-500/50',
-  },
-  {
-    icon: Shield,
-    titleKey: 'cyber',
-    descriptionKey: 'cyberDesc',
-    level: 'Advanced',
-    duration: '6 months',
-    gradient: 'from-red-500 to-orange-500',
-    borderGradient: 'from-red-500/50 to-orange-500/50',
+    category: 'business',
   },
   {
     icon: Megaphone,
     titleKey: 'marketing',
     descriptionKey: 'marketingDesc',
-    level: 'Beginner',
-    duration: '3 months',
+    levelKey: 'beginner',
+    durationMonths: '3',
     gradient: 'from-amber-500 to-yellow-500',
     borderGradient: 'from-amber-500/50 to-yellow-500/50',
+    category: 'business',
+  },
+  {
+    icon: Bug,
+    titleKey: 'qa',
+    descriptionKey: 'qaDesc',
+    levelKey: 'beginner',
+    durationMonths: '4',
+    gradient: 'from-indigo-500 to-purple-500',
+    borderGradient: 'from-indigo-500/50 to-purple-500/50',
+    category: 'business',
+  },
+  {
+    icon: Briefcase,
+    titleKey: 'productOwner',
+    descriptionKey: 'productOwnerDesc',
+    levelKey: 'intermediate',
+    durationMonths: '3',
+    gradient: 'from-teal-500 to-cyan-600',
+    borderGradient: 'from-teal-500/50 to-cyan-600/50',
+    category: 'business',
   },
 ];
 
@@ -99,8 +272,8 @@ const kidsCourses: CourseCard[] = [
     icon: Blocks,
     titleKey: 'scratch',
     descriptionKey: 'scratchDesc',
-    level: 'Beginner',
-    duration: '3 months',
+    levelKey: 'beginner',
+    durationMonths: '3',
     gradient: 'from-orange-500 to-amber-500',
     borderGradient: 'from-orange-500/50 to-amber-500/50',
     ageGroup: '8-11',
@@ -109,8 +282,8 @@ const kidsCourses: CourseCard[] = [
     icon: Cpu,
     titleKey: 'roblox',
     descriptionKey: 'robloxDesc',
-    level: 'Beginner',
-    duration: '3 months',
+    levelKey: 'beginner',
+    durationMonths: '3',
     gradient: 'from-sky-500 to-blue-500',
     borderGradient: 'from-sky-500/50 to-blue-500/50',
     ageGroup: '8-11',
@@ -119,8 +292,8 @@ const kidsCourses: CourseCard[] = [
     icon: Shield,
     titleKey: 'cyberKids',
     descriptionKey: 'cyberKidsDesc',
-    level: 'Beginner',
-    duration: '2 months',
+    levelKey: 'beginner',
+    durationMonths: '2',
     gradient: 'from-red-500 to-orange-500',
     borderGradient: 'from-red-500/50 to-orange-500/50',
     ageGroup: '8-11',
@@ -130,8 +303,8 @@ const kidsCourses: CourseCard[] = [
     icon: Gamepad2,
     titleKey: 'pythonKids',
     descriptionKey: 'pythonKidsDesc',
-    level: 'Beginner',
-    duration: '4 months',
+    levelKey: 'beginner',
+    durationMonths: '4',
     gradient: 'from-green-500 to-teal-500',
     borderGradient: 'from-green-500/50 to-teal-500/50',
     ageGroup: '12-15',
@@ -140,8 +313,8 @@ const kidsCourses: CourseCard[] = [
     icon: Brain,
     titleKey: 'aiKids',
     descriptionKey: 'aiKidsDesc',
-    level: 'Beginner',
-    duration: '2 months',
+    levelKey: 'beginner',
+    durationMonths: '2',
     gradient: 'from-accent-500 to-secondary-500',
     borderGradient: 'from-accent-500/50 to-secondary-500/50',
     ageGroup: '12-15',
@@ -150,8 +323,8 @@ const kidsCourses: CourseCard[] = [
     icon: Code2,
     titleKey: 'webKids',
     descriptionKey: 'webKidsDesc',
-    level: 'Intermediate',
-    duration: '5 months',
+    levelKey: 'intermediate',
+    durationMonths: '5',
     gradient: 'from-primary-400 to-primary-500',
     borderGradient: 'from-primary-400/50 to-primary-500/50',
     ageGroup: '12-15',
@@ -210,13 +383,13 @@ function CourseCardComponent({ course, isKids }: { course: CourseCard; isKids: b
           <div className="flex items-center gap-1.5">
             <Signal className={cn('w-3.5 h-3.5', isKids ? 'text-orange-500' : 'text-primary-500')} />
             <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
-              {course.level}
+              {t(`courses.${course.levelKey}`)}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <Clock className={cn('w-3.5 h-3.5', isKids ? 'text-orange-500' : 'text-primary-500')} />
             <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
-              {course.duration}
+              {course.durationMonths} {t('courses.months')}
             </span>
           </div>
         </div>
@@ -253,10 +426,12 @@ export function CoursesSection() {
   const t = useTranslations('home');
   const [activeTab, setActiveTab] = useState<'adults' | 'kids'>('adults');
   const [kidsAgeGroup, setKidsAgeGroup] = useState<AgeGroup>('8-11');
+  const [adultCategory, setAdultCategory] = useState<AdultCategory>('development');
   const isKids = activeTab === 'kids';
+
   const currentCourses = isKids
     ? kidsCourses.filter((c) => c.ageGroup === kidsAgeGroup)
-    : adultCourses;
+    : adultCourses.filter((c) => c.category === adultCategory);
 
   return (
     <section className={cn(
@@ -284,7 +459,9 @@ export function CoursesSection() {
             )} />
           </div>
           <div className="text-center lg:text-left">
-            <span className="section-subtitle mb-3 block">{isKids ? '— Junior Programs —' : '— Academic Programs —'}</span>
+            <span className="section-subtitle mb-3 block">
+              {isKids ? `— ${t('courses.juniorPrograms')} —` : `— ${t('courses.academicPrograms')} —`}
+            </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-heading tracking-elegant text-gray-900 dark:text-white mb-3">
               {isKids ? t('courses.kidsTitle') : t('courses.title')}
             </h2>
@@ -327,6 +504,30 @@ export function CoursesSection() {
             </div>
           </div>
         </div>
+
+        {/* Adults category sub-tabs */}
+        {!isKids && (
+          <div className="flex items-center justify-center gap-2 mb-10 flex-wrap">
+            {ADULT_CATEGORIES.map((cat) => {
+              const CatIcon = cat.icon;
+              return (
+                <button
+                  key={cat.key}
+                  onClick={() => setAdultCategory(cat.key)}
+                  className={cn(
+                    'inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border',
+                    adultCategory === cat.key
+                      ? 'bg-primary-500 text-white border-primary-500 shadow-md shadow-primary-500/20'
+                      : 'bg-white dark:bg-surface-dark text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-primary-300'
+                  )}
+                >
+                  <CatIcon className="w-3.5 h-3.5" />
+                  {t(`courses.${cat.labelKey}`)}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {/* Kids age sub-tabs */}
         {isKids && (
