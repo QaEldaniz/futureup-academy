@@ -12,7 +12,7 @@ export const STATS = {
 
 export const SOCIAL_LINKS = {
   facebook: '',
-  instagram: 'https://www.instagram.com/reel/DRycxfBkUul/?igsh=MWJ1NjczdXU1NTZheA==',
+  instagram: 'https://www.instagram.com/futureup.academy/',
   linkedin: '',
   youtube: '',
   telegram: '',
