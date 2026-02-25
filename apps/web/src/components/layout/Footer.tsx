@@ -17,6 +17,15 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 
+// TikTok icon (not available in lucide-react)
+function TikTokIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V9.42a8.16 8.16 0 004.76 1.52v-3.4a4.85 4.85 0 01-1-.85z" />
+    </svg>
+  );
+}
+
 interface SiteSettings {
   phone?: string;
   email?: string;
@@ -29,6 +38,7 @@ interface SiteSettings {
   linkedin?: string;
   youtube?: string;
   telegram?: string;
+  tiktok?: string;
   [key: string]: string | undefined;
 }
 
@@ -68,6 +78,7 @@ export function Footer() {
     { icon: Linkedin, href: settings?.linkedin || SOCIAL_LINKS.linkedin },
     { icon: Youtube, href: settings?.youtube || SOCIAL_LINKS.youtube },
     { icon: Send, href: settings?.telegram || SOCIAL_LINKS.telegram },
+    { icon: TikTokIcon, href: settings?.tiktok || SOCIAL_LINKS.tiktok },
   ];
 
   const whatsapp = settings?.whatsapp;
