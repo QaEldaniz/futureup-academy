@@ -183,7 +183,7 @@ export default function AdminCertificatesPage() {
                   {filteredCertificates.map((cert) => (
                     <tr
                       key={cert.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-800/40 dark:bg-gray-800/20 transition-colors"
                     >
                       {/* Student */}
                       <td className="px-6 py-4">
@@ -289,7 +289,7 @@ export default function AdminCertificatesPage() {
               {filteredCertificates.map((cert) => (
                 <div
                   key={cert.id}
-                  className="px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors"
+                  className="px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/40 dark:bg-gray-800/20 transition-colors"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0 flex-1">

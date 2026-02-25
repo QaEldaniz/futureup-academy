@@ -413,7 +413,7 @@ export default function AdminSchedulePage() {
                           key={`${day.value}-${hour}`}
                           className={cn(
                             'min-h-[48px] rounded-lg border border-gray-800/20 relative',
-                            slotSchedules.length === 0 && 'bg-gray-900/20 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors'
+                            slotSchedules.length === 0 && 'bg-gray-900/20 hover:bg-gray-50 dark:hover:bg-gray-800/40 dark:bg-gray-800/20 transition-colors'
                           )}
                         >
                           {startsHere.map((schedule) => {
@@ -524,7 +524,7 @@ export default function AdminSchedulePage() {
                   return (
                     <div
                       key={schedule.id}
-                      className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors"
+                      className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-50 dark:hover:bg-gray-800/40 dark:bg-gray-800/20 transition-colors"
                     >
                       {/* Day */}
                       <div className="col-span-1">

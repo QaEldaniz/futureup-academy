@@ -161,7 +161,7 @@ export default function AdminNewsPage() {
             {filteredArticles.map((article) => (
               <div
                 key={article.id}
-                className="px-6 py-5 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors group"
+                className="px-6 py-5 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-800/40 dark:bg-gray-800/20 transition-colors group"
               >
                 {/* Image thumbnail */}
                 <div className="w-16 h-16 rounded-xl bg-gray-800/50 border border-gray-200 dark:border-gray-700/30 overflow-hidden shrink-0 flex items-center justify-center">

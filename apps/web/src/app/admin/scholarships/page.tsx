@@ -595,7 +595,7 @@ export default function AdminScholarshipsPage() {
                 <div className="divide-y divide-gray-800/30">
                   {filteredApplications.map((app) => (
                     <div key={app.id}>
-                      <div className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors">
+                      <div className="px-6 py-4 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center space-y-3 lg:space-y-0 hover:bg-gray-50 dark:hover:bg-gray-800/40 dark:bg-gray-800/20 transition-colors">
                         {/* Applicant */}
                         <div className="col-span-2 flex items-center gap-3">
                           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500/20 to-secondary-500/20 flex items-center justify-center text-primary-400 font-bold text-sm shrink-0">

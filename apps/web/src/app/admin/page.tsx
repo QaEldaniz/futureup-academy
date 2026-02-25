@@ -310,7 +310,7 @@ export default function AdminDashboardPage() {
               ))
             ) : stats.recentApplications.length > 0 ? (
               stats.recentApplications.slice(0, 5).map((app) => (
-                <div key={app.id} className="px-6 py-4 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors">
+                <div key={app.id} className="px-6 py-4 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-800/40 dark:bg-gray-800/20 transition-colors">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500/20 to-secondary-500/20 flex items-center justify-center text-primary-400 font-bold text-sm">
                     {app.name.charAt(0).toUpperCase()}
                   </div>

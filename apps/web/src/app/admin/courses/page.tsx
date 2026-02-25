@@ -329,7 +329,7 @@ export default function AdminCoursesPage() {
             {courses.map((course) => (
               <div
                 key={course.id}
-                className="grid grid-cols-1 md:grid-cols-[3.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-4 items-center hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors group"
+                className="grid grid-cols-1 md:grid-cols-[3.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 px-6 py-4 items-center hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors group"
               >
                 {/* Course Info */}
                 <div className="flex items-center gap-4">

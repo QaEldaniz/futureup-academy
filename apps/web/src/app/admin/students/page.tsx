@@ -320,7 +320,7 @@ export default function AdminStudentsPage() {
                   return (
                     <tr
                       key={student.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors group"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-800/40 dark:bg-gray-800/20 transition-colors group"
                     >
                       {/* Student name + avatar */}
                       <td className="px-6 py-4">

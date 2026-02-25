@@ -323,7 +323,7 @@ export default function CourseLessonsPage() {
               >
                 {/* Lesson Header */}
                 <div
-                  className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors"
+                  className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/40 dark:bg-gray-800/20 transition-colors"
                   onClick={() => toggleExpand(lesson.id)}
                 >
                   <div className="text-gray-600 hover:text-gray-400 cursor-grab">
@@ -407,7 +407,7 @@ export default function CourseLessonsPage() {
                           return (
                             <div
                               key={material.id}
-                              className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-100 dark:bg-gray-800/20 transition-colors group"
+                              className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/40 dark:bg-gray-800/20 transition-colors group"
                             >
                               <div className="pl-8">
                                 <div className={cn('flex items-center justify-center w-8 h-8 rounded-lg border', config.color)}>
