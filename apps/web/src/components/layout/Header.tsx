@@ -46,7 +46,7 @@ export function Header() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <Image src="/images/logo.png" alt="FutureUp Academy" width={64} height={64} unoptimized className="group-hover:scale-105 transition-transform dark:brightness-0 dark:invert" />
+            <Image src="/images/logo.png" alt="FutureUp Academy" width={64} height={64} unoptimized className="group-hover:scale-105 transition-transform" />
             <div className="flex flex-col">
               <span className="text-xl font-bold font-serif-heading text-primary-500 dark:text-white">
                 FutureUp
