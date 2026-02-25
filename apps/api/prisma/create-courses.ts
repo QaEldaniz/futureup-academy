@@ -1,5 +1,5 @@
 /**
- * Create all categories and 20 courses via Admin API
+ * Create all categories and courses via Admin API
  * Usage: cd apps/api && npx tsx prisma/create-courses.ts
  *
  * Set BASE_URL env var for production:
@@ -66,28 +66,18 @@ const CATEGORIES = [
     icon: 'Shield',
     order: 7,
   },
+  {
+    slug: 'kids-programs',
+    nameAz: 'Uşaq Proqramları',
+    nameRu: 'Детские программы',
+    nameEn: 'Kids Programs',
+    icon: 'Baby',
+    order: 8,
+  },
 ];
 
-// ─── Courses ──────────────────────────────────────────────────────────────────
-// Mapping by category slug
-const COURSES: Array<{
-  slug: string;
-  titleAz: string;
-  titleRu: string;
-  titleEn: string;
-  descAz: string;
-  descRu: string;
-  descEn: string;
-  shortDescAz: string;
-  shortDescRu: string;
-  shortDescEn: string;
-  duration: string;
-  price: number;
-  level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
-  audience: 'ADULTS';
-  categorySlug: string;
-  order: number;
-}> = [
+// ─── Adult Courses (20) ──────────────────────────────────────────────────────
+const ADULT_COURSES = [
   // ─── Traditional IT (gray) ─────────────────────────────────────
   {
     slug: 'help-desk',
@@ -100,10 +90,9 @@ const COURSES: Array<{
     shortDescAz: 'IT dəstəyi və xidmət masası əsasları',
     shortDescRu: 'Основы IT-поддержки и сервис-деска',
     shortDescEn: 'IT support and service desk fundamentals',
-    duration: '4 months',
+    duration: '4 ay',
     price: 600,
     level: 'BEGINNER',
-    audience: 'ADULTS',
     categorySlug: 'traditional-it',
     order: 1,
   },
@@ -118,14 +107,12 @@ const COURSES: Array<{
     shortDescAz: 'Şəbəkə və sistem administrasiyası',
     shortDescRu: 'Сетевое и системное администрирование',
     shortDescEn: 'Network and system administration',
-    duration: '6 months',
+    duration: '6 ay',
     price: 800,
     level: 'INTERMEDIATE',
-    audience: 'ADULTS',
     categorySlug: 'traditional-it',
     order: 2,
   },
-
   // ─── Business-IT (purple) ──────────────────────────────────────
   {
     slug: 'qa-engineering',
@@ -138,16 +125,15 @@ const COURSES: Array<{
     shortDescAz: 'Proqram təminatı test mühəndisliyi',
     shortDescRu: 'Тестирование программного обеспечения',
     shortDescEn: 'Software quality assurance and testing',
-    duration: '5 months',
+    duration: '5 ay',
     price: 700,
     level: 'BEGINNER',
-    audience: 'ADULTS',
     categorySlug: 'business-it',
     order: 3,
   },
   {
     slug: 'product-owner',
-    titleAz: 'Product Owner',
+    titleAz: 'Məhsul Sahibi (Product Owner)',
     titleRu: 'Product Owner',
     titleEn: 'Product Owner',
     descAz: 'Agile/Scrum çərçivələri, məhsul yol xəritəsi, backlog idarəetmə, stakeholder ünsiyyəti, MVP planlaması, istifadəçi hekayələri yazma və məhsulun həyat dövrü idarəetməsi.',
@@ -156,14 +142,12 @@ const COURSES: Array<{
     shortDescAz: 'Məhsul idarəetmə və Agile metodologiyası',
     shortDescRu: 'Управление продуктом и Agile-методология',
     shortDescEn: 'Product management and Agile methodology',
-    duration: '4 months',
+    duration: '4 ay',
     price: 800,
     level: 'INTERMEDIATE',
-    audience: 'ADULTS',
     categorySlug: 'business-it',
     order: 4,
   },
-
   // ─── Marketing & BD (green) ────────────────────────────────────
   {
     slug: 'digital-marketing',
@@ -176,10 +160,9 @@ const COURSES: Array<{
     shortDescAz: 'Rəqəmsal marketinq strategiyaları və alətlər',
     shortDescRu: 'Стратегии и инструменты цифрового маркетинга',
     shortDescEn: 'Digital marketing strategies and tools',
-    duration: '4 months',
+    duration: '4 ay',
     price: 600,
     level: 'BEGINNER',
-    audience: 'ADULTS',
     categorySlug: 'marketing-bd',
     order: 5,
   },
@@ -194,14 +177,12 @@ const COURSES: Array<{
     shortDescAz: 'İstifadəçi interfeysi və təcrübə dizaynı',
     shortDescRu: 'Дизайн пользовательского интерфейса и опыта',
     shortDescEn: 'User interface and experience design',
-    duration: '5 months',
+    duration: '5 ay',
     price: 700,
     level: 'BEGINNER',
-    audience: 'ADULTS',
     categorySlug: 'marketing-bd',
     order: 6,
   },
-
   // ─── Data Science (brown/black) ────────────────────────────────
   {
     slug: 'ai-machine-learning',
@@ -214,16 +195,15 @@ const COURSES: Array<{
     shortDescAz: 'AI, ML və dərin öyrənmə texnologiyaları',
     shortDescRu: 'Технологии AI, ML и глубокого обучения',
     shortDescEn: 'AI, ML and deep learning technologies',
-    duration: '8 months',
+    duration: '8 ay',
     price: 1600,
     level: 'ADVANCED',
-    audience: 'ADULTS',
     categorySlug: 'data-science',
     order: 7,
   },
   {
     slug: 'data-engineering',
-    titleAz: 'Data Engineering',
+    titleAz: 'Data Mühəndisliyi',
     titleRu: 'Дата Инженерия',
     titleEn: 'Data Engineering',
     descAz: 'ETL/ELT prosesləri, data pipeline qurulması, Apache Spark, Kafka, Airflow, verilənlər anbarı arxitekturası, SQL/NoSQL, bulud data platformaları (AWS, GCP, Azure).',
@@ -232,10 +212,9 @@ const COURSES: Array<{
     shortDescAz: 'Data pipeline və verilənlər infrastrukturu',
     shortDescRu: 'Data pipeline и инфраструктура данных',
     shortDescEn: 'Data pipelines and data infrastructure',
-    duration: '7 months',
+    duration: '7 ay',
     price: 1400,
     level: 'INTERMEDIATE',
-    audience: 'ADULTS',
     categorySlug: 'data-science',
     order: 8,
   },
@@ -250,14 +229,12 @@ const COURSES: Array<{
     shortDescAz: 'Data analiz və biznes analitikası',
     shortDescRu: 'Анализ данных и бизнес-аналитика',
     shortDescEn: 'Data analysis and business analytics',
-    duration: '5 months',
+    duration: '5 ay',
     price: 800,
     level: 'BEGINNER',
-    audience: 'ADULTS',
     categorySlug: 'data-science',
     order: 9,
   },
-
   // ─── Software Engineering (yellow) ─────────────────────────────
   {
     slug: 'mobile-development',
@@ -270,10 +247,9 @@ const COURSES: Array<{
     shortDescAz: 'Mobil tətbiq hazırlama (React Native / Flutter)',
     shortDescRu: 'Мобильная разработка (React Native / Flutter)',
     shortDescEn: 'Mobile app development (React Native / Flutter)',
-    duration: '6 months',
+    duration: '6 ay',
     price: 1000,
     level: 'INTERMEDIATE',
-    audience: 'ADULTS',
     categorySlug: 'sw-engineering',
     order: 10,
   },
@@ -288,10 +264,9 @@ const COURSES: Array<{
     shortDescAz: 'Java Spring Boot ilə backend proqramlaşdırma',
     shortDescRu: 'Backend-разработка на Java Spring Boot',
     shortDescEn: 'Backend development with Java Spring Boot',
-    duration: '7 months',
+    duration: '7 ay',
     price: 1200,
     level: 'INTERMEDIATE',
-    audience: 'ADULTS',
     categorySlug: 'sw-engineering',
     order: 11,
   },
@@ -306,10 +281,9 @@ const COURSES: Array<{
     shortDescAz: '.NET Core ilə backend proqramlaşdırma',
     shortDescRu: 'Backend-разработка на .NET Core',
     shortDescEn: 'Backend development with .NET Core',
-    duration: '7 months',
+    duration: '7 ay',
     price: 1200,
     level: 'INTERMEDIATE',
-    audience: 'ADULTS',
     categorySlug: 'sw-engineering',
     order: 12,
   },
@@ -324,57 +298,52 @@ const COURSES: Array<{
     shortDescAz: 'Müasir veb interfeyslər hazırlama',
     shortDescRu: 'Создание современных веб-интерфейсов',
     shortDescEn: 'Building modern web interfaces',
-    duration: '6 months',
+    duration: '6 ay',
     price: 1000,
     level: 'BEGINNER',
-    audience: 'ADULTS',
     categorySlug: 'sw-engineering',
     order: 13,
   },
-
   // ─── DevOps & DevSecOps (magenta) ──────────────────────────────
   {
     slug: 'devops',
-    titleAz: 'DevOps',
-    titleRu: 'DevOps',
-    titleEn: 'DevOps',
+    titleAz: 'DevOps Mühəndisliyi',
+    titleRu: 'DevOps Инженерия',
+    titleEn: 'DevOps Engineering',
     descAz: 'Linux administrasiyası, Docker, Kubernetes, CI/CD pipeline (Jenkins, GitLab CI), Terraform, Ansible, bulud xidmətləri (AWS/GCP/Azure), monitoring (Prometheus, Grafana).',
     descRu: 'Администрирование Linux, Docker, Kubernetes, CI/CD pipeline (Jenkins, GitLab CI), Terraform, Ansible, облачные сервисы (AWS/GCP/Azure), мониторинг (Prometheus, Grafana).',
     descEn: 'Linux administration, Docker, Kubernetes, CI/CD pipeline (Jenkins, GitLab CI), Terraform, Ansible, cloud services (AWS/GCP/Azure), monitoring (Prometheus, Grafana).',
     shortDescAz: 'DevOps mühəndisliyi və bulud texnologiyaları',
     shortDescRu: 'DevOps-инженерия и облачные технологии',
     shortDescEn: 'DevOps engineering and cloud technologies',
-    duration: '7 months',
+    duration: '7 ay',
     price: 1400,
     level: 'INTERMEDIATE',
-    audience: 'ADULTS',
     categorySlug: 'dev-team',
     order: 14,
   },
   {
     slug: 'devsecops',
-    titleAz: 'DevSecOps',
-    titleRu: 'DevSecOps',
-    titleEn: 'DevSecOps',
+    titleAz: 'DevSecOps Mühəndisliyi',
+    titleRu: 'DevSecOps Инженерия',
+    titleEn: 'DevSecOps Engineering',
     descAz: 'Təhlükəsizlik-orientasiyalı DevOps, SAST/DAST, container security, supply chain security, OWASP, compliance automation, SonarQube, Snyk və security pipeline inteqrasiyası.',
     descRu: 'Security-ориентированный DevOps, SAST/DAST, безопасность контейнеров, безопасность цепочки поставок, OWASP, автоматизация compliance, SonarQube, Snyk и интеграция security pipeline.',
     descEn: 'Security-oriented DevOps, SAST/DAST, container security, supply chain security, OWASP, compliance automation, SonarQube, Snyk and security pipeline integration.',
     shortDescAz: 'Təhlükəsizlik-odaqlı DevOps mühəndisliyi',
     shortDescRu: 'Security-ориентированная DevOps-инженерия',
     shortDescEn: 'Security-focused DevOps engineering',
-    duration: '8 months',
+    duration: '8 ay',
     price: 1600,
     level: 'ADVANCED',
-    audience: 'ADULTS',
     categorySlug: 'dev-team',
     order: 15,
   },
-
   // ─── Cyber Security (navy) ─────────────────────────────────────
   {
     slug: 'red-team',
-    titleAz: 'Red Team',
-    titleRu: 'Red Team',
+    titleAz: 'Red Team — Hücum Komandası',
+    titleRu: 'Red Team — Команда Атаки',
     titleEn: 'Red Team',
     descAz: 'Hücum simulyasiyası, penetration testing, sosial mühəndislik, zəiflik istismarı, Kali Linux, Metasploit, Burp Suite və təcavüz ssenariləri hazırlanması.',
     descRu: 'Симуляция атак, тестирование на проникновение, социальная инженерия, эксплуатация уязвимостей, Kali Linux, Metasploit, Burp Suite и разработка сценариев атак.',
@@ -382,17 +351,16 @@ const COURSES: Array<{
     shortDescAz: 'Hücum simulyasiyası və penetrasiya testi',
     shortDescRu: 'Симуляция атак и тестирование на проникновение',
     shortDescEn: 'Attack simulation and penetration testing',
-    duration: '8 months',
+    duration: '8 ay',
     price: 1600,
     level: 'ADVANCED',
-    audience: 'ADULTS',
     categorySlug: 'cyber-security',
     order: 16,
   },
   {
     slug: 'blue-team',
-    titleAz: 'Blue Team',
-    titleRu: 'Blue Team',
+    titleAz: 'Blue Team — Müdafiə Komandası',
+    titleRu: 'Blue Team — Команда Защиты',
     titleEn: 'Blue Team',
     descAz: 'Müdafiə strategiyaları, SIEM (Splunk, QRadar), insidentlərə reaksiya, log analizi, threat intelligence, network forensics və SOC əməliyyatları.',
     descRu: 'Стратегии защиты, SIEM (Splunk, QRadar), реагирование на инциденты, анализ логов, threat intelligence, сетевая форензика и операции SOC.',
@@ -400,17 +368,16 @@ const COURSES: Array<{
     shortDescAz: 'Kiber müdafiə və SOC əməliyyatları',
     shortDescRu: 'Киберзащита и операции SOC',
     shortDescEn: 'Cyber defense and SOC operations',
-    duration: '7 months',
+    duration: '7 ay',
     price: 1400,
     level: 'INTERMEDIATE',
-    audience: 'ADULTS',
     categorySlug: 'cyber-security',
     order: 17,
   },
   {
     slug: 'purple-team',
-    titleAz: 'Purple Team',
-    titleRu: 'Purple Team',
+    titleAz: 'Purple Team — Birgə Komanda',
+    titleRu: 'Purple Team — Совместная Команда',
     titleEn: 'Purple Team',
     descAz: 'Red və Blue Team əməkdaşlığı, MITRE ATT&CK framework, threat hunting, hücum-müdafiə simulyasiyaları, təhlükəsizlik strategiyasının təkmilləşdirilməsi.',
     descRu: 'Сотрудничество Red и Blue Team, фреймворк MITRE ATT&CK, threat hunting, симуляции атака-защита, совершенствование стратегии безопасности.',
@@ -418,17 +385,16 @@ const COURSES: Array<{
     shortDescAz: 'Hücum-müdafiə əməkdaşlığı və threat hunting',
     shortDescRu: 'Сотрудничество атака-защита и threat hunting',
     shortDescEn: 'Attack-defense collaboration and threat hunting',
-    duration: '6 months',
+    duration: '6 ay',
     price: 1200,
     level: 'ADVANCED',
-    audience: 'ADULTS',
     categorySlug: 'cyber-security',
     order: 18,
   },
   {
     slug: 'white-team',
-    titleAz: 'White Team',
-    titleRu: 'White Team',
+    titleAz: 'White Team — Siyasət Komandası',
+    titleRu: 'White Team — Команда Политик',
     titleEn: 'White Team',
     descAz: 'Təhlükəsizlik siyasəti idarəetmə, uyğunluq (compliance) audit, risk qiymətləndirmə, ISO 27001, NIST framework, məlumat qorunması (GDPR, KVKK) və governance.',
     descRu: 'Управление политиками безопасности, аудит соответствия (compliance), оценка рисков, ISO 27001, NIST framework, защита данных (GDPR, KVKK) и governance.',
@@ -436,30 +402,89 @@ const COURSES: Array<{
     shortDescAz: 'Təhlükəsizlik siyasəti və uyğunluq idarəetmə',
     shortDescRu: 'Политики безопасности и управление соответствием',
     shortDescEn: 'Security policy and compliance management',
-    duration: '5 months',
+    duration: '5 ay',
     price: 1000,
     level: 'INTERMEDIATE',
-    audience: 'ADULTS',
     categorySlug: 'cyber-security',
     order: 19,
   },
   {
     slug: 'cyber-ops',
-    titleAz: 'Cyber Ops',
-    titleRu: 'Cyber Ops',
-    titleEn: 'Cyber Ops',
+    titleAz: 'Kiber Əməliyyatlar Komandası',
+    titleRu: 'Команда Кибер Операций',
+    titleEn: 'Cyber Operations Team',
     descAz: 'Real-time kiber əməliyyatlar, SOC menecmenti, insidentlərə avtomatlaşdırılmış cavab (SOAR), digital forensics, malware analizi və kiber müharibə strategiyaları.',
     descRu: 'Кибероперации в реальном времени, менеджмент SOC, автоматизированное реагирование на инциденты (SOAR), цифровая форензика, анализ вредоносного ПО и стратегии кибервойны.',
     descEn: 'Real-time cyber operations, SOC management, automated incident response (SOAR), digital forensics, malware analysis and cyber warfare strategies.',
     shortDescAz: 'Kiber əməliyyatlar və avtomatlaşdırılmış cavab',
     shortDescRu: 'Кибероперации и автоматизированное реагирование',
     shortDescEn: 'Cyber operations and automated response',
-    duration: '8 months',
+    duration: '8 ay',
     price: 1600,
     level: 'ADVANCED',
-    audience: 'ADULTS',
     categorySlug: 'cyber-security',
     order: 20,
+  },
+];
+
+// ─── Kids Courses (3) ────────────────────────────────────────────────────────
+const KIDS_COURSES = [
+  {
+    slug: 'kids-ai',
+    titleAz: 'Uşaqlar üçün Süni İntellekt',
+    titleRu: 'Искусственный Интеллект для детей',
+    titleEn: 'AI for Kids',
+    descAz: 'Süni intellektin əsasları, maşın öyrənmə anlayışları, chatbot yaratma, şəkil tanıma, Scratch ilə AI layihələr, məntiq və alqoritmik düşüncə bacarıqlarının inkişafı. Uşaqlar interaktiv layihələr vasitəsilə AI dünyasını kəşf edəcəklər.',
+    descRu: 'Основы искусственного интеллекта, понятия машинного обучения, создание чат-ботов, распознавание изображений, AI-проекты на Scratch, развитие логического и алгоритмического мышления. Дети познакомятся с миром AI через интерактивные проекты.',
+    descEn: 'Fundamentals of artificial intelligence, machine learning concepts, chatbot creation, image recognition, AI projects with Scratch, development of logical and algorithmic thinking. Kids will explore the world of AI through interactive projects.',
+    shortDescAz: 'Uşaqlar üçün süni intellekt əsasları',
+    shortDescRu: 'Основы ИИ для детей',
+    shortDescEn: 'AI fundamentals for kids',
+    duration: '4 ay',
+    price: 400,
+    level: 'BEGINNER',
+    audience: 'KIDS',
+    ageGroup: 'AGE_9_11',
+    categorySlug: 'kids-programs',
+    order: 21,
+  },
+  {
+    slug: 'kids-cybersecurity',
+    titleAz: 'Uşaqlar üçün Kiber Təhlükəsizlik',
+    titleRu: 'Кибербезопасность для детей',
+    titleEn: 'Cybersecurity for Kids',
+    descAz: 'İnternet təhlükəsizliyi, parol idarəetmə, fişinq hücumlarını tanıma, şəxsi məlumatların qorunması, onlayn davranış qaydaları, əsas kriptoqrafiya anlayışları və etik hakerlik giriş. Uşaqlar rəqəmsal dünyada özlərini qorumağı öyrənəcəklər.',
+    descRu: 'Интернет-безопасность, управление паролями, распознавание фишинговых атак, защита личных данных, правила поведения в интернете, основные понятия криптографии и введение в этичный хакинг. Дети научатся защищать себя в цифровом мире.',
+    descEn: 'Internet safety, password management, phishing attack recognition, personal data protection, online behavior rules, basic cryptography concepts and ethical hacking introduction. Kids will learn to protect themselves in the digital world.',
+    shortDescAz: 'Uşaqlar üçün onlayn təhlükəsizlik',
+    shortDescRu: 'Онлайн-безопасность для детей',
+    shortDescEn: 'Online safety for kids',
+    duration: '3 ay',
+    price: 350,
+    level: 'BEGINNER',
+    audience: 'KIDS',
+    ageGroup: 'AGE_9_11',
+    categorySlug: 'kids-programs',
+    order: 22,
+  },
+  {
+    slug: 'kids-programming',
+    titleAz: 'Uşaqlar üçün Proqramlaşdırma',
+    titleRu: 'Программирование для детей',
+    titleEn: 'Programming for Kids',
+    descAz: 'Scratch, Python əsasları, oyun hazırlama, veb səhifə yaratma, alqoritmik düşüncə, dəyişənlər, döngülər, şərtlər, funksiyalar. Uşaqlar öz oyunlarını və tətbiqlərini yaratmağı öyrənəcəklər.',
+    descRu: 'Scratch, основы Python, создание игр, создание веб-страниц, алгоритмическое мышление, переменные, циклы, условия, функции. Дети научатся создавать собственные игры и приложения.',
+    descEn: 'Scratch, Python basics, game development, web page creation, algorithmic thinking, variables, loops, conditions, functions. Kids will learn to create their own games and applications.',
+    shortDescAz: 'Uşaqlar üçün proqramlaşdırma əsasları',
+    shortDescRu: 'Основы программирования для детей',
+    shortDescEn: 'Programming fundamentals for kids',
+    duration: '4 ay',
+    price: 400,
+    level: 'BEGINNER',
+    audience: 'KIDS',
+    ageGroup: 'AGE_9_11',
+    categorySlug: 'kids-programs',
+    order: 23,
   },
 ];
 
@@ -498,89 +523,143 @@ async function main() {
   console.log('📂 Fetching existing categories...');
   const catRes = await fetch(`${BASE_URL}/api/categories`, { headers });
   const catData = await catRes.json();
-  const existingCats: Array<{ id: string; slug: string }> = catData.data || catData || [];
+  const existingCats: Array<{ id: string; slug: string; nameEn: string }> =
+    catData.data || catData || [];
   console.log(`   Found ${existingCats.length} existing categories`);
 
-  // 3. Create missing categories
+  // 3. Create or find categories
   const categoryMap: Record<string, string> = {};
 
   for (const cat of existingCats) {
     categoryMap[cat.slug] = cat.id;
+    console.log(`   ✓ Existing: "${cat.nameEn || cat.slug}" → ${cat.id}`);
   }
 
   for (const cat of CATEGORIES) {
     if (categoryMap[cat.slug]) {
-      console.log(`   ✓ Category "${cat.nameEn}" already exists (${categoryMap[cat.slug]})`);
-      continue;
+      continue; // already exists
     }
 
-    const res = await fetch(`${BASE_URL}/api/categories`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(cat),
-    });
+    console.log(`   Creating category "${cat.nameEn}"...`);
+    try {
+      const res = await fetch(`${BASE_URL}/api/categories`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(cat),
+      });
 
-    if (res.ok) {
-      const data = await res.json();
-      const id = data.data?.id;
-      categoryMap[cat.slug] = id;
-      console.log(`   ✅ Created category "${cat.nameEn}" (${id})`);
-    } else {
-      console.error(`   ❌ Failed to create "${cat.nameEn}":`, res.status, await res.text());
+      const text = await res.text();
+      if (res.ok) {
+        const data = JSON.parse(text);
+        const id = data.data?.id;
+        if (id) {
+          categoryMap[cat.slug] = id;
+          console.log(`   ✅ Created "${cat.nameEn}" → ${id}`);
+        } else {
+          console.error(`   ❌ No id returned for "${cat.nameEn}":`, text);
+        }
+      } else {
+        // If unique constraint error, try to find existing by listing all
+        console.error(`   ⚠️  Failed (${res.status}): ${text}`);
+        console.log(`   🔄 Trying to find existing...`);
+
+        // Re-fetch all categories to find it
+        const retry = await fetch(`${BASE_URL}/api/categories`, { headers });
+        const retryData = await retry.json();
+        const found = (retryData.data || []).find(
+          (c: { slug: string }) => c.slug === cat.slug
+        );
+        if (found) {
+          categoryMap[cat.slug] = found.id;
+          console.log(`   ✓ Found existing "${cat.nameEn}" → ${found.id}`);
+        }
+      }
+    } catch (err) {
+      console.error(`   ❌ Error creating "${cat.nameEn}":`, err);
     }
   }
 
-  console.log(`\n📚 Creating ${COURSES.length} courses...\n`);
+  // Verify all categories exist
+  const missingCats = CATEGORIES.filter((c) => !categoryMap[c.slug]);
+  if (missingCats.length > 0) {
+    console.error('\n❌ Missing categories:', missingCats.map((c) => c.slug).join(', '));
+    console.error('   Cannot proceed without all categories.');
+    process.exit(1);
+  }
 
-  // 4. Check existing courses (to avoid duplicates)
-  const existCoursesRes = await fetch(`${BASE_URL}/api/admin/courses?limit=100`, { headers });
+  console.log(`\n📂 Category map ready (${Object.keys(categoryMap).length} categories)\n`);
+
+  // 4. Get existing courses
+  console.log('📚 Fetching existing courses...');
+  const existCoursesRes = await fetch(`${BASE_URL}/api/admin/courses?limit=200`, { headers });
   const existCoursesData = await existCoursesRes.json();
-  const existingSlugs = new Set(
-    (existCoursesData.data || []).map((c: { slug: string }) => c.slug)
-  );
+  const existingCourses: Array<{ slug: string; id: string }> = existCoursesData.data || [];
+  const existingSlugs = new Set(existingCourses.map((c) => c.slug));
+  console.log(`   Found ${existingCourses.length} existing courses\n`);
+
+  // 5. Create adult courses
+  const allCourses = [
+    ...ADULT_COURSES.map((c) => ({ ...c, audience: 'ADULTS' as const })),
+    ...KIDS_COURSES,
+  ];
 
   let created = 0;
   let skipped = 0;
+  let failed = 0;
 
-  for (const course of COURSES) {
+  console.log(`🚀 Creating ${allCourses.length} courses...\n`);
+
+  for (const course of allCourses) {
     if (existingSlugs.has(course.slug)) {
-      console.log(`   ⏭  Skipping "${course.titleEn}" (already exists)`);
+      console.log(`   ⏭  Skip "${course.titleEn}" (exists)`);
       skipped++;
       continue;
     }
 
     const categoryId = categoryMap[course.categorySlug];
     if (!categoryId) {
-      console.error(`   ❌ No category for "${course.titleEn}" (slug: ${course.categorySlug})`);
+      console.error(`   ❌ No category "${course.categorySlug}" for "${course.titleEn}"`);
+      failed++;
       continue;
     }
 
-    const { categorySlug, ...courseData } = course;
-    const payload = {
-      ...courseData,
+    const { categorySlug, ...rest } = course;
+    const payload: Record<string, any> = {
+      ...rest,
       categoryId,
       isActive: true,
       isFeatured: false,
     };
 
-    const res = await fetch(`${BASE_URL}/api/admin/courses`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetch(`${BASE_URL}/api/admin/courses`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload),
+      });
 
-    if (res.ok) {
-      const data = await res.json();
-      console.log(`   ✅ [${created + 1}/${COURSES.length}] ${course.titleEn} (${data.data?.id})`);
-      created++;
-    } else {
-      const errText = await res.text();
-      console.error(`   ❌ Failed "${course.titleEn}":`, res.status, errText);
+      const text = await res.text();
+      if (res.ok) {
+        const data = JSON.parse(text);
+        console.log(
+          `   ✅ [${created + 1}] ${course.titleAz} | ${course.titleRu} | ${course.titleEn} (${data.data?.id})`
+        );
+        created++;
+      } else {
+        console.error(`   ❌ "${course.titleEn}" (${res.status}): ${text}`);
+        failed++;
+      }
+    } catch (err) {
+      console.error(`   ❌ Error "${course.titleEn}":`, err);
+      failed++;
     }
   }
 
   console.log(`\n═══════════════════════════════════════════════`);
-  console.log(`✅ Done! Created: ${created}, Skipped: ${skipped}, Total: ${COURSES.length}`);
+  console.log(`✅ Created: ${created}`);
+  console.log(`⏭  Skipped: ${skipped} (already existed)`);
+  if (failed > 0) console.log(`❌ Failed: ${failed}`);
+  console.log(`📊 Total: ${allCourses.length}`);
   console.log(`═══════════════════════════════════════════════\n`);
 }
 
