@@ -67,14 +67,14 @@ export default function StudentDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Active Courses', value: activeCourses.length, icon: BookOpen, color: 'blue' },
-          { label: 'Completed', value: completedCourses.length, icon: Award, color: 'green' },
-          { label: 'Overall Progress', value: `${overallProgress}%`, icon: TrendingUp, color: 'secondary' },
-          { label: 'Total Enrolled', value: courses.length, icon: Clock, color: 'amber' },
+          { label: 'Active Courses', value: activeCourses.length, icon: BookOpen, bg: 'bg-blue-100 dark:bg-blue-900/20', text: 'text-blue-600 dark:text-blue-400' },
+          { label: 'Completed', value: completedCourses.length, icon: Award, bg: 'bg-green-100 dark:bg-green-900/20', text: 'text-green-600 dark:text-green-400' },
+          { label: 'Overall Progress', value: `${overallProgress}%`, icon: TrendingUp, bg: 'bg-purple-100 dark:bg-purple-900/20', text: 'text-purple-600 dark:text-purple-400' },
+          { label: 'Total Enrolled', value: courses.length, icon: Clock, bg: 'bg-amber-100 dark:bg-amber-900/20', text: 'text-amber-600 dark:text-amber-400' },
         ].map((stat) => (
           <div key={stat.label} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-${stat.color}-100 dark:bg-${stat.color}-900/20`}>
-              <stat.icon className={`w-5 h-5 text-${stat.color}-600 dark:text-${stat.color}-400`} />
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${stat.bg}`}>
+              <stat.icon className={`w-5 h-5 ${stat.text}`} />
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
             <p className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</p>

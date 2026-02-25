@@ -21,6 +21,10 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'dev-team': Container,
   'cyber-security': Shield,
   'kids-programs': GraduationCap,
+  // Kids subcategories
+  'kids-ai': Database,
+  'kids-cybersecurity': Shield,
+  'kids-programming': Code,
 };
 
 const CATEGORY_GRADIENTS: Record<string, string> = {
@@ -32,6 +36,9 @@ const CATEGORY_GRADIENTS: Record<string, string> = {
   'dev-team': 'from-fuchsia-500 to-pink-600',
   'cyber-security': 'from-red-500 to-rose-600',
   'kids-programs': 'from-orange-500 to-amber-500',
+  'kids-ai': 'from-violet-500 to-purple-600',
+  'kids-cybersecurity': 'from-red-500 to-orange-500',
+  'kids-programming': 'from-emerald-500 to-green-600',
 };
 
 const BORDER_GRADIENTS: Record<string, string> = {
@@ -43,7 +50,17 @@ const BORDER_GRADIENTS: Record<string, string> = {
   'dev-team': 'from-fuchsia-500/50 to-pink-600/50',
   'cyber-security': 'from-red-500/50 to-rose-600/50',
   'kids-programs': 'from-orange-500/50 to-amber-500/50',
+  'kids-ai': 'from-violet-500/50 to-purple-600/50',
+  'kids-cybersecurity': 'from-red-500/50 to-orange-500/50',
+  'kids-programming': 'from-emerald-500/50 to-green-600/50',
 };
+
+/* ─── Kids virtual subcategories (by course slug) ────────────────────────── */
+const KIDS_SUBCATEGORIES: { slug: string; nameEn: string; nameAz: string; nameRu: string; matchPrefix: string; icon: React.ElementType }[] = [
+  { slug: 'kids-ai', nameEn: 'AI & Technology', nameAz: 'AI & Texnologiya', nameRu: 'AI & Технологии', matchPrefix: 'kids-ai', icon: Database },
+  { slug: 'kids-cybersecurity', nameEn: 'Cybersecurity', nameAz: 'Kibertəhlükəsizlik', nameRu: 'Кибербезопасность', matchPrefix: 'kids-cyber', icon: Shield },
+  { slug: 'kids-programming', nameEn: 'Programming', nameAz: 'Proqramlaşdırma', nameRu: 'Программирование', matchPrefix: 'kids-program', icon: Code },
+];
 
 /* ─── Types ───────────────────────────────────────────────────────────────── */
 interface ApiCategory {
@@ -206,16 +223,33 @@ export function CoursesSection() {
   const adultCourses = courses.filter(c => c.audience === 'ADULTS');
   const kidsCourses = courses.filter(c => c.audience === 'KIDS');
 
+  // Determine which kids subcategories actually have courses
+  const activeKidsSubcats = KIDS_SUBCATEGORIES.filter(sc =>
+    kidsCourses.some(c => c.slug.startsWith(sc.matchPrefix))
+  );
+
+  const [activeKidsCategory, setActiveKidsCategory] = useState<string>('all');
+
   // Courses for current view
   const currentCourses = isKids
-    ? kidsCourses
+    ? activeKidsCategory === 'all'
+      ? kidsCourses
+      : kidsCourses.filter(c => {
+          const subcat = KIDS_SUBCATEGORIES.find(sc => sc.slug === activeKidsCategory);
+          return subcat ? c.slug.startsWith(subcat.matchPrefix) : true;
+        })
     : adultCourses.filter(c => {
         const cat = categories.find(cat => cat.id === c.categoryId);
         return cat?.slug === activeCategory;
       });
 
-  // Get category slug for a course
+  // Get category slug for a course (for icon/gradient lookup)
   const getCatSlug = (course: ApiCourse) => {
+    if (course.audience === 'KIDS') {
+      // Use course slug for kids icon/gradient matching
+      const subcat = KIDS_SUBCATEGORIES.find(sc => course.slug.startsWith(sc.matchPrefix));
+      return subcat?.slug || 'kids-programs';
+    }
     const cat = categories.find(c => c.id === course.categoryId);
     return cat?.slug || '';
   };
@@ -312,6 +346,43 @@ export function CoursesSection() {
                 >
                   <CatIcon className="w-3.5 h-3.5" />
                   {catName}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Kids category tabs */}
+        {isKids && activeKidsSubcats.length > 1 && (
+          <div className="flex items-center justify-center gap-2 mb-10 flex-wrap">
+            <button
+              onClick={() => setActiveKidsCategory('all')}
+              className={cn(
+                'inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border',
+                activeKidsCategory === 'all'
+                  ? 'bg-orange-500 text-white border-orange-500 shadow-md shadow-orange-500/20'
+                  : 'bg-white dark:bg-surface-dark text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-orange-300'
+              )}
+            >
+              <GraduationCap className="w-3.5 h-3.5" />
+              {locale === 'az' ? 'Hamısı' : locale === 'ru' ? 'Все' : 'All'}
+            </button>
+            {activeKidsSubcats.map((sc) => {
+              const SubIcon = sc.icon;
+              const name = locale === 'az' ? sc.nameAz : locale === 'ru' ? sc.nameRu : sc.nameEn;
+              return (
+                <button
+                  key={sc.slug}
+                  onClick={() => setActiveKidsCategory(sc.slug)}
+                  className={cn(
+                    'inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border',
+                    activeKidsCategory === sc.slug
+                      ? 'bg-orange-500 text-white border-orange-500 shadow-md shadow-orange-500/20'
+                      : 'bg-white dark:bg-surface-dark text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-orange-300'
+                  )}
+                >
+                  <SubIcon className="w-3.5 h-3.5" />
+                  {name}
                 </button>
               );
             })}

@@ -68,9 +68,16 @@ export async function buildApp() {
     await prisma.$disconnect();
   });
 
-  // CORS — open to all origins (public endpoints are unauthenticated, admin endpoints are JWT-protected)
+  // CORS — restrict to allowed origins
+  const allowedOrigins = (process.env.CORS_ORIGINS || 'https://futureupacademy.az,http://localhost:3000').split(',').map(s => s.trim());
   await app.register(cors, {
-    origin: true,
+    origin: (origin, cb) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        cb(null, true);
+      } else {
+        cb(null, false);
+      }
+    },
     credentials: true,
   });
 

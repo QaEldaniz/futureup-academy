@@ -21,9 +21,6 @@ import {
   Sparkles,
   UserCog,
   Wallet,
-  Building2,
-  Baby,
-  CalendarDays,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -31,15 +28,13 @@ interface AdminSidebarProps {
   onClose: () => void;
 }
 
-type SidebarKey = 'dashboard' | 'courses' | 'teachers' | 'students' | 'parents' | 'schedule' | 'applications' | 'certificates' | 'news' | 'testimonials' | 'reviews' | 'scholarships' | 'corporate' | 'partners' | 'lms' | 'settings';
+type SidebarKey = 'dashboard' | 'courses' | 'teachers' | 'students' | 'applications' | 'certificates' | 'news' | 'testimonials' | 'reviews' | 'scholarships' | 'partners' | 'lms' | 'settings';
 
 const menuItems: { key: SidebarKey; href: string; icon: typeof LayoutDashboard }[] = [
   { key: 'dashboard', href: '/admin', icon: LayoutDashboard },
   { key: 'courses', href: '/admin/courses', icon: BookOpen },
   { key: 'teachers', href: '/admin/teachers', icon: Users },
   { key: 'students', href: '/admin/students', icon: GraduationCap },
-  { key: 'parents', href: '/admin/parents', icon: Baby },
-  { key: 'schedule', href: '/admin/schedule', icon: CalendarDays },
   { key: 'lms', href: '/lms/teacher', icon: GraduationCap },
   { key: 'applications', href: '/admin/applications', icon: FileText },
   { key: 'certificates', href: '/admin/certificates', icon: Award },
@@ -47,7 +42,6 @@ const menuItems: { key: SidebarKey; href: string; icon: typeof LayoutDashboard }
   { key: 'testimonials', href: '/admin/testimonials', icon: MessageSquare },
   { key: 'reviews', href: '/admin/reviews', icon: Star },
   { key: 'scholarships', href: '/admin/scholarships', icon: Wallet },
-  { key: 'corporate', href: '/admin/corporate', icon: Building2 },
   { key: 'partners', href: '/admin/partners', icon: Handshake },
   { key: 'settings', href: '/admin/settings', icon: Settings },
 ];

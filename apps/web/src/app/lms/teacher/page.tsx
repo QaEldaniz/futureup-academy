@@ -57,12 +57,12 @@ export default function TeacherDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'My Courses', value: data?.courses?.length || 0, icon: BookOpen, color: 'blue' },
-          { label: 'Total Students', value: data?.courses?.reduce((s: number, c: any) => s + (c.course?._count?.students || 0), 0) || 0, icon: Users, color: 'green' },
+          { label: 'My Courses', value: data?.courses?.length || 0, icon: BookOpen, bg: 'bg-blue-100 dark:bg-blue-900/20', text: 'text-blue-600 dark:text-blue-400' },
+          { label: 'Total Students', value: data?.courses?.reduce((s: number, c: any) => s + (c.course?._count?.students || 0), 0) || 0, icon: Users, bg: 'bg-green-100 dark:bg-green-900/20', text: 'text-green-600 dark:text-green-400' },
         ].map((stat) => (
           <div key={stat.label} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-${stat.color}-100 dark:bg-${stat.color}-900/20`}>
-              <stat.icon className={`w-5 h-5 text-${stat.color}-600 dark:text-${stat.color}-400`} />
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${stat.bg}`}>
+              <stat.icon className={`w-5 h-5 ${stat.text}`} />
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
             <p className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</p>

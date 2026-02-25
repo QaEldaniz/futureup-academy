@@ -317,7 +317,7 @@ export default function TeacherAssignmentsPage() {
                     {selectedAssignment.submissions.map((sub) => (
                       <div key={sub.id} className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-secondary-500 flex items-center justify-center text-white font-bold text-sm">
-                          {sub.student.name.charAt(0).toUpperCase()}
+                          {(sub.student?.name || 'S').charAt(0).toUpperCase()}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">

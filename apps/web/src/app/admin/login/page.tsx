@@ -88,7 +88,7 @@ export default function AdminLoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="admin@futureup.az"
+                  placeholder="Enter your email"
                   className="w-full pl-11 pr-4 py-3 rounded-xl bg-[#0b0f1a]/80 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
                 />
               </div>

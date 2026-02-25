@@ -47,9 +47,12 @@ export default function StudentCalendarPage() {
     const days: { date: string; day: number; isCurrentMonth: boolean }[] = [];
     // Previous month padding
     const prevMonthDays = new Date(year, month, 0).getDate();
+    const prevDate = new Date(year, month - 1, 1);
+    const prevYear = prevDate.getFullYear();
+    const prevMonth = prevDate.getMonth() + 1;
     for (let i = firstDayOfWeek - 1; i >= 0; i--) {
       const d = prevMonthDays - i;
-      const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const dateStr = `${prevYear}-${String(prevMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       days.push({ date: dateStr, day: d, isCurrentMonth: false });
     }
     // Current month
@@ -58,9 +61,12 @@ export default function StudentCalendarPage() {
       days.push({ date: dateStr, day: d, isCurrentMonth: true });
     }
     // Next month padding
+    const nextDate = new Date(year, month + 1, 1);
+    const nextYear = nextDate.getFullYear();
+    const nextMonth = nextDate.getMonth() + 1;
     const remaining = 42 - days.length;
     for (let d = 1; d <= remaining; d++) {
-      const dateStr = `${year}-${String(month + 2).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const dateStr = `${nextYear}-${String(nextMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       days.push({ date: dateStr, day: d, isCurrentMonth: false });
     }
     return days;
@@ -107,7 +113,7 @@ export default function StudentCalendarPage() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-20"><div className="w-10 h-10 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+          <div className="flex justify-center py-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
         ) : (
           /* Month Grid */
           <div className="p-4">

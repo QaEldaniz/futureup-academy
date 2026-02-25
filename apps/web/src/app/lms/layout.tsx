@@ -9,8 +9,6 @@ import {
   ClipboardCheck, Star, CalendarDays, FileText, FileQuestion, Trophy,
 } from 'lucide-react';
 import NotificationBell from '@/components/lms/NotificationBell';
-import { ThemeProvider } from '@/components/shared/ThemeProvider';
-import { ThemeToggle } from '@/components/shared/ThemeToggle';
 import { LmsLanguageSwitcher } from '@/components/lms/LmsLanguageSwitcher';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -98,7 +96,25 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
       .catch(() => {});
   }, [mounted, token, logout, router]);
 
-  // Admin can now access LMS as super-teacher (no redirect)
+  // Role guard: redirect if user tries to access wrong role's pages
+  useEffect(() => {
+    if (!mounted || !user) return;
+    const isTeacherPath = pathname.startsWith('/lms/teacher');
+    const isStudentPath = pathname.startsWith('/lms/student');
+    const isParentPath = pathname.startsWith('/lms/parent');
+    // Teachers and admins can access teacher pages
+    if (isTeacherPath && user.type !== 'teacher' && user.type !== 'admin') {
+      router.push(`/lms/${user.type}`);
+    }
+    // Only students can access student pages
+    if (isStudentPath && user.type !== 'student') {
+      router.push(`/lms/${user.type === 'admin' ? 'teacher' : user.type}`);
+    }
+    // Only parents can access parent pages
+    if (isParentPath && user.type !== 'parent') {
+      router.push(`/lms/${user.type === 'admin' ? 'teacher' : user.type}`);
+    }
+  }, [mounted, user, pathname, router]);
 
   if (!mounted || isLoading) {
     return (
@@ -226,7 +242,6 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
           <div className="flex-1" />
           <div className="flex items-center gap-2 sm:gap-3">
             <LmsLanguageSwitcher />
-            <ThemeToggle />
             <NotificationBell />
             <div className="hidden sm:flex items-center gap-2 text-sm">
               <span className="text-gray-500 dark:text-gray-400">Hello,</span>

@@ -108,7 +108,7 @@ export function Footer() {
             </p>
             {/* Social links */}
             <div className="flex items-center gap-3">
-              {socialLinks.map(({ icon: Icon, href }, i) => (
+              {socialLinks.filter(({ href }) => !!href).map(({ icon: Icon, href }, i) => (
                 <a
                   key={i}
                   href={href}
