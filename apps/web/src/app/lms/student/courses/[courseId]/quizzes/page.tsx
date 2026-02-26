@@ -110,6 +110,7 @@ export default function StudentQuizzesPage() {
       const res = await fetch(`${API}/api/quizzes/student/courses/${courseId}/${quiz.id}/start`, {
         method: 'POST',
         headers,
+        body: JSON.stringify({}),
       });
       const data = await res.json();
       if (data.success) {
@@ -174,6 +175,7 @@ export default function StudentQuizzesPage() {
       const res = await fetch(`${API}/api/quizzes/student/attempts/${attemptId}/complete`, {
         method: 'POST',
         headers,
+        body: JSON.stringify({}),
       });
       const data = await res.json();
       if (data.success) {
@@ -425,7 +427,7 @@ export default function StudentQuizzesPage() {
 
     return (
       <div className="max-w-3xl mx-auto space-y-6">
-        <button onClick={backToList} className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+        <button onClick={backToList} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all">
           <ArrowLeft className="w-4 h-4" /> Back to quizzes
         </button>
 
@@ -569,7 +571,7 @@ export default function StudentQuizzesPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button onClick={() => router.push(`/lms/student/courses/${courseId}`)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+        <button onClick={() => router.push(`/lms/student/courses/${courseId}`)} className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
