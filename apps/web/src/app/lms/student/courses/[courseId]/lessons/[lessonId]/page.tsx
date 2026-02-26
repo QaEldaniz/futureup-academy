@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
 import {
   ArrowLeft, ArrowRight, CheckCircle2, Play, FileText, Video,
-  Presentation, Sheet, Link2, File, ChevronLeft, ChevronRight, Bot
+  Presentation, Sheet, Link2, File, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -191,9 +191,6 @@ export default function LessonViewPage() {
         </div>
       )}
 
-      {/* Ask AI Tutor draggable floating button */}
-      <DraggableAIButton onClick={() => router.push(`/lms/student/courses/${courseId}/ai-tutor?lessonId=${lessonId}`)} />
-
       {/* Prev/Next navigation */}
       <div className="flex items-center justify-between">
         {lesson.navigation?.prev ? (
@@ -217,59 +214,3 @@ export default function LessonViewPage() {
   );
 }
 
-// ================================================================
-// Draggable AI Button
-// ================================================================
-function DraggableAIButton({ onClick }: { onClick: () => void }) {
-  const btnRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [initialized, setInitialized] = useState(false);
-  const dragging = useRef(false);
-  const dragStart = useRef({ x: 0, y: 0 });
-  const hasMoved = useRef(false);
-
-  // Initialize position to bottom-right
-  useEffect(() => {
-    setPos({ x: window.innerWidth - 160, y: window.innerHeight - 80 });
-    setInitialized(true);
-  }, []);
-
-  const onPointerDown = useCallback((e: React.PointerEvent) => {
-    dragging.current = true;
-    hasMoved.current = false;
-    dragStart.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
-    btnRef.current?.setPointerCapture(e.pointerId);
-  }, [pos]);
-
-  const onPointerMove = useCallback((e: React.PointerEvent) => {
-    if (!dragging.current) return;
-    hasMoved.current = true;
-    const newX = Math.max(0, Math.min(window.innerWidth - 150, e.clientX - dragStart.current.x));
-    const newY = Math.max(0, Math.min(window.innerHeight - 60, e.clientY - dragStart.current.y));
-    setPos({ x: newX, y: newY });
-  }, []);
-
-  const onPointerUp = useCallback((e: React.PointerEvent) => {
-    dragging.current = false;
-    btnRef.current?.releasePointerCapture(e.pointerId);
-    if (!hasMoved.current) {
-      onClick();
-    }
-  }, [onClick]);
-
-  if (!initialized) return null;
-
-  return (
-    <div
-      ref={btnRef}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      style={{ left: pos.x, top: pos.y, touchAction: 'none' }}
-      className="fixed z-50 flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold shadow-lg shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/30 cursor-grab active:cursor-grabbing select-none transition-shadow"
-    >
-      <Bot className="w-5 h-5" />
-      Ask AI
-    </div>
-  );
-}
