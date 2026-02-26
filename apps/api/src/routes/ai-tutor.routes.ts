@@ -7,6 +7,7 @@ import {
   buildAnalyticsPrompt,
   TutorMaterial,
 } from '../utils/claude.js';
+import { extractContentFromUrl } from '../utils/url-parser.js';
 import { awardXP, checkAndAwardBadges } from '../utils/gamification.js';
 
 /* ================================================================== */
@@ -57,6 +58,34 @@ export async function aiTutorRoutes(server: FastifyInstance) {
     return reply.send({ success: true, data: config });
   });
 
+  // POST /materials/parse-url — Extract content from URL (Google Docs/Slides/webpage)
+  server.post('/materials/parse-url', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
+    const { url } = request.body as { url?: string };
+
+    if (!url || typeof url !== 'string') {
+      return reply.status(400).send({ success: false, message: 'URL is required' });
+    }
+
+    try {
+      const result = await extractContentFromUrl(url.trim());
+      return reply.send({
+        success: true,
+        data: {
+          content: result.content,
+          sourceType: result.sourceType,
+          title: result.title || null,
+        },
+      });
+    } catch (error: any) {
+      const msg = error.message || 'Failed to extract content from URL';
+      const isClientError = msg.includes('Invalid URL') ||
+                            msg.includes('Cannot access') ||
+                            msg.includes('Could not extract') ||
+                            msg.includes('not allowed');
+      return reply.status(isClientError ? 400 : 500).send({ success: false, message: msg });
+    }
+  });
+
   // GET /materials/:courseId — List materials
   server.get('/materials/:courseId', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { courseId } = request.params as { courseId: string };
@@ -71,13 +100,14 @@ export async function aiTutorRoutes(server: FastifyInstance) {
   // POST /materials/:courseId — Add material
   server.post('/materials/:courseId', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { courseId } = request.params as { courseId: string };
-    const { title, content, tags, notes, lessonId, order } = request.body as {
+    const { title, content, tags, notes, lessonId, order, sourceUrl } = request.body as {
       title: string;
       content: string;
       tags?: string[];
       notes?: string;
       lessonId?: string;
       order?: number;
+      sourceUrl?: string;
     };
 
     if (!title || !content) {
@@ -85,7 +115,7 @@ export async function aiTutorRoutes(server: FastifyInstance) {
     }
 
     const material = await server.prisma.aiTutorMaterial.create({
-      data: { courseId, lessonId: lessonId || null, title, content, tags: tags || [], notes, order: order || 0 },
+      data: { courseId, lessonId: lessonId || null, title, content, sourceUrl: sourceUrl || null, tags: tags || [], notes, order: order || 0 },
       include: { lesson: { select: { id: true, titleEn: true, titleAz: true, titleRu: true } } },
     });
 
@@ -95,11 +125,11 @@ export async function aiTutorRoutes(server: FastifyInstance) {
   // PUT /materials/:id — Update material
   server.put('/materials/:id', { preHandler: [adminOrTeacherAuth] }, async (request, reply) => {
     const { id } = request.params as { id: string };
-    const body = request.body as { title?: string; content?: string; tags?: string[]; notes?: string; lessonId?: string; order?: number };
+    const body = request.body as { title?: string; content?: string; tags?: string[]; notes?: string; lessonId?: string; order?: number; sourceUrl?: string };
 
     const material = await server.prisma.aiTutorMaterial.update({
       where: { id },
-      data: { ...body, lessonId: body.lessonId || null },
+      data: { ...body, lessonId: body.lessonId || null, sourceUrl: body.sourceUrl !== undefined ? (body.sourceUrl || null) : undefined },
       include: { lesson: { select: { id: true, titleEn: true, titleAz: true, titleRu: true } } },
     });
 

@@ -32,6 +32,7 @@ const LANG_INSTRUCTIONS: Record<string, string> = {
 export interface TutorMaterial {
   title: string;
   content: string;
+  sourceUrl?: string;
   tags?: string[];
   notes?: string;
 }

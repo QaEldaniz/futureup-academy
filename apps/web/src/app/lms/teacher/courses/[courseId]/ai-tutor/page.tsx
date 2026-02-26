@@ -7,7 +7,7 @@ import {
   ArrowLeft, Bot, BookOpen, Plus, Edit3, Trash2, Save,
   Tag, StickyNote, Loader2, X, AlertTriangle, Settings,
   MessageSquare, ThumbsUp, ThumbsDown, Brain, Sparkles,
-  Globe, HelpCircle, ChevronDown,
+  Globe, HelpCircle, ChevronDown, Link2, ExternalLink, Download,
 } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -18,6 +18,7 @@ interface AiMaterial {
   lessonId: string | null;
   title: string;
   content: string;
+  sourceUrl: string | null;
   tags: string[];
   notes: string | null;
   order: number;
@@ -124,7 +125,7 @@ export default function TeacherAiTutorPage() {
   };
 
   // Save material
-  const handleSaveMaterial = async (formData: { title: string; content: string; tags: string[]; notes: string; lessonId: string; order: number }) => {
+  const handleSaveMaterial = async (formData: { title: string; content: string; tags: string[]; notes: string; lessonId: string; order: number; sourceUrl: string }) => {
     if (!token) return;
     setSaving(true);
     try {
@@ -507,20 +508,56 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
   material: AiMaterial | null;
   lessons: LessonOption[];
   saving: boolean;
-  onSave: (data: { title: string; content: string; tags: string[]; notes: string; lessonId: string; order: number }) => void;
+  onSave: (data: { title: string; content: string; tags: string[]; notes: string; lessonId: string; order: number; sourceUrl: string }) => void;
   onClose: () => void;
 }) {
+  const { token } = useAuthStore();
   const [title, setTitle] = useState(material?.title || '');
   const [content, setContent] = useState(material?.content || '');
+  const [sourceUrl, setSourceUrl] = useState(material?.sourceUrl || '');
   const [tags, setTags] = useState<string[]>(material?.tags || []);
   const [notes, setNotes] = useState(material?.notes || '');
   const [lessonId, setLessonId] = useState(material?.lessonId || '');
   const [order, setOrder] = useState(material?.order || 0);
+  const [isExtracting, setIsExtracting] = useState(false);
+  const [extractError, setExtractError] = useState<string | null>(null);
+  const [extractSuccess, setExtractSuccess] = useState(false);
 
   const canSave = title.trim() && content.trim();
 
   const toggleTag = (tag: string) => {
     setTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+  };
+
+  const handleExtractContent = async () => {
+    if (!sourceUrl.trim()) return;
+    setIsExtracting(true);
+    setExtractError(null);
+    setExtractSuccess(false);
+
+    try {
+      const res = await fetch(`${API_URL}/api/ai-tutor/materials/parse-url`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ url: sourceUrl.trim() }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Failed to extract content');
+      }
+
+      setContent(data.data.content);
+      if (!title && data.data.title) {
+        setTitle(data.data.title);
+      }
+      setExtractSuccess(true);
+      setTimeout(() => setExtractSuccess(false), 3000);
+    } catch (err: any) {
+      setExtractError(err.message || 'Failed to extract content from URL');
+    } finally {
+      setIsExtracting(false);
+    }
   };
 
   const inputClassName = 'w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white text-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all';
@@ -554,15 +591,49 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
             </select>
           </div>
 
+          {/* Source URL */}
+          <div>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">
+              <span className="flex items-center gap-1.5"><Link2 className="w-3.5 h-3.5" /> Source URL (optional)</span>
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={sourceUrl}
+                onChange={(e) => { setSourceUrl(e.target.value); setExtractError(null); setExtractSuccess(false); }}
+                className={`flex-1 ${inputClassName}`}
+                placeholder="https://docs.google.com/document/d/... or any URL"
+              />
+              <button
+                type="button"
+                onClick={handleExtractContent}
+                disabled={!sourceUrl.trim() || isExtracting}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              >
+                {isExtracting ? <><Loader2 className="w-4 h-4 animate-spin" /> Extracting...</> : <><Download className="w-4 h-4" /> Extract</>}
+              </button>
+            </div>
+            {extractError && <p className="text-xs text-red-500 mt-1.5">{extractError}</p>}
+            {extractSuccess && <p className="text-xs text-green-500 mt-1.5">Content extracted successfully!</p>}
+            {sourceUrl && !extractError && !extractSuccess && !isExtracting && (
+              <p className="text-[10px] text-gray-400 mt-1">Supports Google Docs, Google Slides, and web pages. Document must be publicly shared.</p>
+            )}
+            {material?.sourceUrl && (
+              <a href={material.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-violet-500 hover:text-violet-600 mt-1">
+                <ExternalLink className="w-3 h-3" /> View original source
+              </a>
+            )}
+          </div>
+
           {/* Content */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">Content * (paste your lesson material here)</label>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">Content * {sourceUrl ? '(auto-extracted or paste manually)' : '(paste your lesson material here)'}</label>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={10}
               className={`${inputClassName} resize-y font-mono text-xs`}
-              placeholder="Paste the full text content of the lesson material here. This will be used as AI context to help students..."
+              placeholder="Paste the full text content of the lesson material here, or extract from a URL above. This will be used as AI context to help students..."
             />
             <p className="text-[10px] text-gray-400 mt-1">{content.length} characters</p>
           </div>
@@ -605,7 +676,7 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
           <button onClick={onClose} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all">Cancel</button>
           <button
             disabled={!canSave || saving}
-            onClick={() => onSave({ title: title.trim(), content: content.trim(), tags, notes: notes.trim(), lessonId, order })}
+            onClick={() => onSave({ title: title.trim(), content: content.trim(), tags, notes: notes.trim(), lessonId, order, sourceUrl: sourceUrl.trim() })}
             className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? <span className="flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Saving...</span> : 'Save'}

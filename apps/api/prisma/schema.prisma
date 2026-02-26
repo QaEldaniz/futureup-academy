@@ -1145,14 +1145,15 @@ model AiTutorConfig {
 }
 
 model AiTutorMaterial {
-  id       String  @id @default(cuid())
-  courseId  String
-  lessonId String?
-  title    String
-  content  String  @db.Text
-  tags     Json?   // ["important", "often_confused", "key_skill", "exam_topic"]
-  notes    String? @db.Text
-  order    Int     @default(0)
+  id        String  @id @default(cuid())
+  courseId   String
+  lessonId  String?
+  title     String
+  content   String  @db.Text
+  sourceUrl String? // URL from which content was extracted (Google Docs/Slides/webpage)
+  tags      Json?   // ["important", "often_confused", "key_skill", "exam_topic"]
+  notes     String? @db.Text
+  order     Int     @default(0)
 
   course Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lesson Lesson? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
