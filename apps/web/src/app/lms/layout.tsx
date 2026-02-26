@@ -269,28 +269,32 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
 function GlobalAskAIButton({ pathname }: { pathname: string }) {
   const router = useRouter();
   const btnRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const posRef = useRef({ x: 0, y: 0 });
+  const [renderPos, setRenderPos] = useState({ x: 0, y: 0 });
   const [initialized, setInitialized] = useState(false);
   const dragging = useRef(false);
-  const dragStart = useRef({ x: 0, y: 0 });
+  const dragStartOffset = useRef({ x: 0, y: 0 });
   const hasMoved = useRef(false);
+  const pathnameRef = useRef(pathname);
+  pathnameRef.current = pathname;
 
-  // Don't show on AI tutor page itself
-  if (pathname.includes('/ai-tutor')) return null;
-
-  // Extract courseId from URL if on a course page
-  const courseMatch = pathname.match(/\/lms\/student\/courses\/([^/]+)/);
-  const courseId = courseMatch?.[1];
+  const isHidden = pathname.includes('/ai-tutor');
 
   useEffect(() => {
-    setPos({ x: window.innerWidth - 160, y: window.innerHeight - 80 });
+    const x = window.innerWidth - 160;
+    const y = window.innerHeight - 80;
+    posRef.current = { x, y };
+    setRenderPos({ x, y });
     setInitialized(true);
   }, []);
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
+    const p = pathnameRef.current;
+    const courseMatch = p.match(/\/lms\/student\/courses\/([^/]+)/);
+    const courseId = courseMatch?.[1];
+
     if (courseId) {
-      // Extract lessonId if on a lesson page
-      const lessonMatch = pathname.match(/\/lessons\/([^/]+)/);
+      const lessonMatch = p.match(/\/lessons\/([^/]+)/);
       const lessonId = lessonMatch?.[1];
       const url = lessonId
         ? `/lms/student/courses/${courseId}/ai-tutor?lessonId=${lessonId}`
@@ -299,30 +303,36 @@ function GlobalAskAIButton({ pathname }: { pathname: string }) {
     } else {
       router.push('/lms/student/courses');
     }
-  };
+  }, [router]);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     dragging.current = true;
     hasMoved.current = false;
-    dragStart.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
+    dragStartOffset.current = {
+      x: e.clientX - posRef.current.x,
+      y: e.clientY - posRef.current.y,
+    };
     btnRef.current?.setPointerCapture(e.pointerId);
-  }, [pos]);
+  }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
     if (!dragging.current) return;
     hasMoved.current = true;
-    const newX = Math.max(0, Math.min(window.innerWidth - 150, e.clientX - dragStart.current.x));
-    const newY = Math.max(0, Math.min(window.innerHeight - 60, e.clientY - dragStart.current.y));
-    setPos({ x: newX, y: newY });
+    const newX = Math.max(0, Math.min(window.innerWidth - 150, e.clientX - dragStartOffset.current.x));
+    const newY = Math.max(0, Math.min(window.innerHeight - 60, e.clientY - dragStartOffset.current.y));
+    posRef.current = { x: newX, y: newY };
+    setRenderPos({ x: newX, y: newY });
   }, []);
 
   const onPointerUp = useCallback((e: React.PointerEvent) => {
     dragging.current = false;
     btnRef.current?.releasePointerCapture(e.pointerId);
-    if (!hasMoved.current) handleClick();
-  }, [pathname, courseId]);
+    if (!hasMoved.current) {
+      handleClick();
+    }
+  }, [handleClick]);
 
-  if (!initialized) return null;
+  if (!initialized || isHidden) return null;
 
   return (
     <div
@@ -330,7 +340,7 @@ function GlobalAskAIButton({ pathname }: { pathname: string }) {
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      style={{ left: pos.x, top: pos.y, touchAction: 'none' }}
+      style={{ left: renderPos.x, top: renderPos.y, touchAction: 'none' }}
       className="fixed z-50 flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold shadow-lg shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/30 cursor-grab active:cursor-grabbing select-none transition-shadow"
     >
       <Bot className="w-5 h-5" />
