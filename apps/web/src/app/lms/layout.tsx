@@ -257,7 +257,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Global Ask AI button for students */}
-      {user?.type === 'student' && <GlobalAskAIButton pathname={pathname} />}
+      {user?.type === 'student' && <GlobalAskAIButton pathname={pathname} token={token} />}
     </div>
     </div>
   );
@@ -266,12 +266,15 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
 // ================================================================
 // Global Draggable Ask AI Button (visible on all student pages)
 // ================================================================
-function GlobalAskAIButton({ pathname }: { pathname: string }) {
+function GlobalAskAIButton({ pathname, token }: { pathname: string; token: string | null }) {
   const router = useRouter();
   const btnRef = useRef<HTMLDivElement>(null);
   const posRef = useRef({ x: 0, y: 0 });
   const [renderPos, setRenderPos] = useState({ x: 0, y: 0 });
   const [initialized, setInitialized] = useState(false);
+  const [showCourseMenu, setShowCourseMenu] = useState(false);
+  const [courses, setCourses] = useState<{ id: string; titleEn: string }[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(false);
   const dragging = useRef(false);
   const dragStartOffset = useRef({ x: 0, y: 0 });
   const hasMoved = useRef(false);
@@ -288,7 +291,40 @@ function GlobalAskAIButton({ pathname }: { pathname: string }) {
     setInitialized(true);
   }, []);
 
-  const handleClick = useCallback(() => {
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (!showCourseMenu) return;
+    const handler = (e: MouseEvent) => {
+      if (btnRef.current && !btnRef.current.contains(e.target as Node)) {
+        setShowCourseMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showCourseMenu]);
+
+  const fetchCourses = useCallback(async () => {
+    if (!token) return;
+    setLoadingCourses(true);
+    try {
+      const res = await fetch(`${API_URL}/api/student/courses`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (data.success && data.data) {
+        const list = data.data.map((c: any) => ({ id: c.course?.id || c.id, titleEn: c.course?.titleEn || c.titleEn || 'Course' }));
+        setCourses(list);
+        return list;
+      }
+    } catch (err) {
+      console.error('Failed to fetch courses:', err);
+    } finally {
+      setLoadingCourses(false);
+    }
+    return [];
+  }, [token]);
+
+  const handleClick = useCallback(async () => {
     const p = pathnameRef.current;
     const courseMatch = p.match(/\/lms\/student\/courses\/([^/]+)/);
     const courseId = courseMatch?.[1];
@@ -301,9 +337,17 @@ function GlobalAskAIButton({ pathname }: { pathname: string }) {
         : `/lms/student/courses/${courseId}/ai-tutor`;
       router.push(url);
     } else {
-      router.push('/lms/student/courses');
+      // No course in URL — fetch courses and decide
+      const list = courses.length > 0 ? courses : await fetchCourses();
+      if (list.length === 1) {
+        router.push(`/lms/student/courses/${list[0].id}/ai-tutor`);
+      } else if (list.length > 1) {
+        setShowCourseMenu(true);
+      } else {
+        router.push('/lms/student/courses');
+      }
     }
-  }, [router]);
+  }, [router, courses, fetchCourses]);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     dragging.current = true;
@@ -335,16 +379,38 @@ function GlobalAskAIButton({ pathname }: { pathname: string }) {
   if (!initialized || isHidden) return null;
 
   return (
-    <div
-      ref={btnRef}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      style={{ left: renderPos.x, top: renderPos.y, touchAction: 'none' }}
-      className="fixed z-50 flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold shadow-lg shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/30 cursor-grab active:cursor-grabbing select-none transition-shadow"
-    >
-      <Bot className="w-5 h-5" />
-      Ask AI
+    <div ref={btnRef}>
+      {/* Course selection popup */}
+      {showCourseMenu && (
+        <div
+          style={{ left: Math.min(renderPos.x, window.innerWidth - 280), top: renderPos.y - 10 }}
+          className="fixed z-[60] transform -translate-y-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl p-2 min-w-[240px]"
+        >
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 px-3 py-2">Select a course:</p>
+          {courses.map(c => (
+            <button
+              key={c.id}
+              onClick={() => { setShowCourseMenu(false); router.push(`/lms/student/courses/${c.id}/ai-tutor`); }}
+              className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 dark:text-white hover:bg-violet-50 dark:hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-violet-400 transition-all flex items-center gap-2"
+            >
+              <BookOpen className="w-4 h-4 text-violet-500" />
+              {c.titleEn}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Draggable button */}
+      <div
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        style={{ left: renderPos.x, top: renderPos.y, touchAction: 'none' }}
+        className="fixed z-50 flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold shadow-lg shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/30 cursor-grab active:cursor-grabbing select-none transition-shadow"
+      >
+        <Bot className="w-5 h-5" />
+        {loadingCourses ? 'Loading...' : 'Ask AI'}
+      </div>
     </div>
   );
 }
