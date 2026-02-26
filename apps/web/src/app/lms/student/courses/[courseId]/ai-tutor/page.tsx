@@ -305,8 +305,8 @@ function StudentAiTutorContent() {
     );
   }
 
-  // Show survey if not completed
-  if (showSurvey && !profile?.surveyCompleted) {
+  // Show survey if not completed or if user wants to update profile
+  if (showSurvey) {
     return (
       <SurveyScreen
         token={token!}
