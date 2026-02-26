@@ -35,6 +35,7 @@ import { quizRoutes } from './routes/quiz.routes.js';
 import { messageRoutes } from './routes/message.routes.js';
 import { gamificationRoutes } from './routes/gamification.routes.js';
 import { calendarRoutes } from './routes/calendar.routes.js';
+import { aiTutorRoutes } from './routes/ai-tutor.routes.js';
 
 // Extend Fastify types
 declare module 'fastify' {
@@ -131,6 +132,7 @@ export async function buildApp() {
   await app.register(messageRoutes, { prefix: '/api/messages' });
   await app.register(gamificationRoutes, { prefix: '/api/gamification' });
   await app.register(calendarRoutes, { prefix: '/api/calendar' });
+  await app.register(aiTutorRoutes, { prefix: '/api/ai-tutor' });
   await app.register(dashboardRoutes, { prefix: '/api/admin/dashboard' });
   await app.register(teacherPortalRoutes, { prefix: '/api/teacher' });
   await app.register(studentPortalRoutes, { prefix: '/api/student' });

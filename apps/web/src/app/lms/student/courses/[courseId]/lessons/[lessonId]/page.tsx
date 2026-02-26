@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
 import {
   ArrowLeft, ArrowRight, CheckCircle2, Play, FileText, Video,
-  Presentation, Sheet, Link2, File, ChevronLeft, ChevronRight
+  Presentation, Sheet, Link2, File, ChevronLeft, ChevronRight, Bot
 } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -190,6 +190,15 @@ export default function LessonViewPage() {
           )}
         </div>
       )}
+
+      {/* Ask AI Tutor floating button */}
+      <button
+        onClick={() => router.push(`/lms/student/courses/${courseId}/ai-tutor?lessonId=${lessonId}`)}
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold shadow-lg shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/30 hover:scale-105 transition-all"
+      >
+        <Bot className="w-5 h-5" />
+        Ask AI
+      </button>
 
       {/* Prev/Next navigation */}
       <div className="flex items-center justify-between">

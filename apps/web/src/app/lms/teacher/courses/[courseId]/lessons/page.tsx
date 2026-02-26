@@ -23,6 +23,7 @@ import {
   X,
   AlertTriangle,
   Loader2,
+  Bot,
 } from 'lucide-react';
 
 // ---- Types ----
@@ -96,6 +97,7 @@ export default function TeacherLessonsPage() {
   const [deleteModal, setDeleteModal] = useState<{ open: boolean; type: 'lesson' | 'material'; id: string; lessonId?: string; name: string }>({ open: false, type: 'lesson', id: '', name: '' });
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [generatingQuiz, setGeneratingQuiz] = useState<string | null>(null);
 
   // ---- Fetch lessons ----
   const fetchLessons = useCallback(async () => {
@@ -290,6 +292,29 @@ export default function TeacherLessonsPage() {
     }
   };
 
+  // ---- Generate AI Quiz ----
+  const handleGenerateQuiz = async (lessonId: string) => {
+    if (!token || generatingQuiz) return;
+    setGeneratingQuiz(lessonId);
+    try {
+      const res = await fetch(`${API_URL}/api/ai-tutor/generate-quiz/${courseId}/${lessonId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ questionCount: 5, locale: 'en' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(`Quiz "${data.data.title}" generated with ${data.data.questions?.length || 0} questions! Go to Quizzes to review and publish.`);
+      } else {
+        alert(data.message || 'Failed to generate quiz. Make sure AI materials are added.');
+      }
+    } catch (err) {
+      alert('Failed to generate quiz. Check AI materials.');
+    } finally {
+      setGeneratingQuiz(null);
+    }
+  };
+
   // ---- Totals ----
   const totalMaterials = lessons.reduce((acc, l) => acc + l.materials.length, 0);
 
@@ -411,6 +436,17 @@ export default function TeacherLessonsPage() {
 
                   {/* Action buttons */}
                   <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleGenerateQuiz(lesson.id);
+                      }}
+                      disabled={generatingQuiz === lesson.id}
+                      className="p-1.5 rounded-lg text-gray-400 dark:text-gray-500 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-500/10 transition-all disabled:opacity-50"
+                      title="Generate AI Quiz"
+                    >
+                      {generatingQuiz === lesson.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Bot className="w-3.5 h-3.5" />}
+                    </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();

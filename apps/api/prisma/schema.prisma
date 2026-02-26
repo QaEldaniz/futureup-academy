@@ -76,6 +76,10 @@ model Course {
   assignments     Assignment[]
   quizzes         Quiz[]
   conversations   Conversation[]
+  aiTutorConfig   AiTutorConfig?
+  aiTutorMaterials AiTutorMaterial[]
+  aiChatSessions  AiChatSession[]
+  aiAnalytics     AiAnalyticsSnapshot[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -198,6 +202,9 @@ model Student {
   xpTransactions  XPTransaction[]
   xpTotal         Int              @default(0)
   emailNotifications Boolean       @default(true)
+  aiProfile       StudentAiProfile?
+  aiChatSessions  AiChatSession[]
+  aiAnalytics     AiAnalyticsSnapshot[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -571,6 +578,7 @@ model Lesson {
   lessonProgress  LessonProgress[]
   teacherComments TeacherComment[]
   grades          Grade[]
+  aiTutorMaterials AiTutorMaterial[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1114,4 +1122,134 @@ model XPTransaction {
 
   @@index([studentId, createdAt])
   @@map("xp_transactions")
+}
+
+// ==========================================
+// AI TUTOR MODULE
+// ==========================================
+
+model AiTutorConfig {
+  id               String   @id @default(cuid())
+  courseId          String   @unique
+  isEnabled        Boolean  @default(false)
+  socraticMode     Boolean  @default(true)
+  locale           String   @default("en") // az, ru, en
+  systemPromptExtra String? @db.Text
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ai_tutor_configs")
+}
+
+model AiTutorMaterial {
+  id       String  @id @default(cuid())
+  courseId  String
+  lessonId String?
+  title    String
+  content  String  @db.Text
+  tags     Json?   // ["important", "often_confused", "key_skill", "exam_topic"]
+  notes    String? @db.Text
+  order    Int     @default(0)
+
+  course Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson Lesson? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+  @@index([lessonId])
+  @@map("ai_tutor_materials")
+}
+
+model AiChatSession {
+  id           String  @id @default(cuid())
+  studentId    String
+  courseId     String
+  lessonId     String?
+  messages     Json    @default("[]") // [{role, content, timestamp}]
+  messageCount Int     @default(0)
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  feedback AiFeedback[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, courseId])
+  @@map("ai_chat_sessions")
+}
+
+model AiFeedback {
+  id           String @id @default(cuid())
+  sessionId    String
+  studentId    String
+  messageIndex Int
+  rating       Int    // 1 = thumbs up, -1 = thumbs down
+  comment      String?
+
+  session AiChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([sessionId, messageIndex])
+  @@map("ai_feedback")
+}
+
+model StudentAiProfile {
+  id          String  @id @default(cuid())
+  studentId   String  @unique
+  student     Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  // From survey
+  interests      Json?   // ["gaming", "music", "sports", "anime", "science"]
+  learningStyle  String? // "visual" | "reading" | "hands-on" | "discussion"
+  personality    String? // "competitive" | "collaborative" | "independent" | "social"
+  motivation     String? // "career" | "curiosity" | "grades" | "fun"
+  preferredPace  String? // "fast" | "moderate" | "slow"
+
+  // AI-determined (updated after each session)
+  strengths       Json?   // ["problem-solving", "syntax"]
+  weaknesses      Json?   // ["recursion", "OOP concepts"]
+  engagementLevel String? // "high" | "medium" | "low"
+
+  surveyCompleted Boolean  @default(false)
+  lastSurveyAt    DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("student_ai_profiles")
+}
+
+model AiAnalyticsSnapshot {
+  id        String @id @default(cuid())
+  studentId String
+  courseId   String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course    Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  period    String  // "lesson" | "week" | "month"
+  periodRef String? // lessonId, "2026-W09", "2026-02"
+
+  // AI-generated insights
+  strengths       Json  // ["Хорошо понимает циклы"]
+  weaknesses      Json  // ["Путает if/else с switch"]
+  recommendations Json  // ["Повторить тему X"]
+  overallScore    Int?  // 0-100
+  engagement      String? // "active" | "passive" | "struggling" | "excelling"
+
+  // Raw data used for analysis
+  quizScores     Json? // [{quizId, score, maxScore}]
+  chatActivity   Json? // {messageCount, topicsDiscussed}
+  assignmentData Json? // [{assignmentId, grade}]
+
+  createdAt DateTime @default(now())
+
+  @@index([studentId, courseId, period])
+  @@map("ai_analytics_snapshots")
 }

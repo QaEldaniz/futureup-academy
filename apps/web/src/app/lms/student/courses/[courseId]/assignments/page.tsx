@@ -6,7 +6,7 @@ import { useAuthStore } from '@/stores/auth';
 import {
   ArrowLeft, Clock, CheckCircle2, AlertCircle, Send, FileText,
   Link2, MessageSquare, Award, Upload, Loader2, X, ChevronDown,
-  Calendar,
+  Calendar, Bot,
 } from 'lucide-react';
 import MarkdownEditor from '@/components/shared/MarkdownEditor';
 import MarkdownRenderer from '@/components/shared/MarkdownRenderer';
@@ -214,6 +214,12 @@ export default function StudentCourseAssignmentsPage() {
                     <Upload className="w-4 h-4" /> Re-submit
                   </button>
                 )}
+                <button
+                  onClick={() => router.push(`/lms/student/courses/${courseId}/ai-tutor?assignmentId=${a.id}`)}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-violet-700 dark:text-violet-300 bg-violet-100 dark:bg-violet-900/30 rounded-xl hover:bg-violet-200 dark:hover:bg-violet-800/40 transition-colors"
+                >
+                  <Bot className="w-4 h-4" /> AI Help
+                </button>
                 <button
                   onClick={() => setDetailModal({ open: true, assignment: a })}
                   className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"

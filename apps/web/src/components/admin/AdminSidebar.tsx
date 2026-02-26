@@ -21,6 +21,7 @@ import {
   Sparkles,
   UserCog,
   Wallet,
+  Brain,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -28,7 +29,7 @@ interface AdminSidebarProps {
   onClose: () => void;
 }
 
-type SidebarKey = 'dashboard' | 'courses' | 'teachers' | 'students' | 'applications' | 'certificates' | 'news' | 'testimonials' | 'reviews' | 'scholarships' | 'partners' | 'lms' | 'settings';
+type SidebarKey = 'dashboard' | 'courses' | 'teachers' | 'students' | 'applications' | 'certificates' | 'news' | 'testimonials' | 'reviews' | 'scholarships' | 'partners' | 'lms' | 'aiAnalytics' | 'settings';
 
 const menuItems: { key: SidebarKey; href: string; icon: typeof LayoutDashboard }[] = [
   { key: 'dashboard', href: '/admin', icon: LayoutDashboard },
@@ -36,6 +37,7 @@ const menuItems: { key: SidebarKey; href: string; icon: typeof LayoutDashboard }
   { key: 'teachers', href: '/admin/teachers', icon: Users },
   { key: 'students', href: '/admin/students', icon: GraduationCap },
   { key: 'lms', href: '/lms/teacher', icon: GraduationCap },
+  { key: 'aiAnalytics', href: '/admin/ai-analytics', icon: Brain },
   { key: 'applications', href: '/admin/applications', icon: FileText },
   { key: 'certificates', href: '/admin/certificates', icon: Award },
   { key: 'news', href: '/admin/news', icon: Newspaper },

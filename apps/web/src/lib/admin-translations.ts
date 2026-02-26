@@ -48,6 +48,7 @@ const translations = {
     parents: { az: 'Valideynlər', ru: 'Родители', en: 'Parents' },
     schedule: { az: 'Cədvəl', ru: 'Расписание', en: 'Schedule' },
     lms: { az: 'LMS İdarəetmə', ru: 'Управление LMS', en: 'LMS Management' },
+    aiAnalytics: { az: 'AI Analitika', ru: 'AI Аналитика', en: 'AI Analytics' },
     partners: { az: 'Tərəfdaşlar', ru: 'Партнёры', en: 'Partners' },
     settings: { az: 'Parametrlər', ru: 'Настройки', en: 'Settings' },
     adminSettings: { az: 'Admin parametrləri', ru: 'Настройки админа', en: 'Admin Settings' },

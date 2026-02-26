@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
-import { ArrowLeft, Users, TrendingUp, BookOpen, FileText, ClipboardList, FileQuestion } from 'lucide-react';
+import { ArrowLeft, Users, TrendingUp, BookOpen, FileText, ClipboardList, FileQuestion, Bot, Brain } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -47,7 +47,21 @@ export default function TeacherCourseDetail() {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{course?.titleEn || 'Course'}</h1>
             <p className="text-gray-500 dark:text-gray-400 mt-1">{course?.level} &bull; {students.length} students</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={() => router.push(`/lms/teacher/courses/${courseId}/ai-tutor`)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-colors"
+            >
+              <Bot className="w-4 h-4" />
+              AI Tutor
+            </button>
+            <button
+              onClick={() => router.push(`/lms/teacher/courses/${courseId}/ai-analytics`)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-colors"
+            >
+              <Brain className="w-4 h-4" />
+              AI Analytics
+            </button>
             <button
               onClick={() => router.push(`/lms/teacher/courses/${courseId}/quizzes`)}
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-secondary-600 hover:bg-secondary-700 text-white rounded-xl text-sm font-semibold transition-colors"
