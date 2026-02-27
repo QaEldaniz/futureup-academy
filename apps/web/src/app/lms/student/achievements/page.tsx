@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 import { Trophy, Star, Zap, Medal, TrendingUp } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -11,17 +12,24 @@ interface EarnedBadge { id: string; badgeId: string; awardedAt: string; badge: B
 interface XPTransaction { id: string; amount: number; reason: string; createdAt: string; }
 interface LeaderboardEntry { rank: number; studentId: string; studentName: string; xpTotal: number; badgeCount: number; }
 
-const LEVELS = [
-  { name: 'Beginner', min: 0, max: 99, color: 'from-gray-400 to-gray-500' },
-  { name: 'Explorer', min: 100, max: 299, color: 'from-green-400 to-emerald-500' },
-  { name: 'Achiever', min: 300, max: 599, color: 'from-primary-400 to-primary-600' },
-  { name: 'Master', min: 600, max: 999, color: 'from-secondary-400 to-secondary-600' },
-  { name: 'Legend', min: 1000, max: 99999, color: 'from-yellow-400 to-orange-500' },
+const LEVEL_DEFS = [
+  { key: 'levelBeginner', min: 0, max: 99, color: 'from-gray-400 to-gray-500' },
+  { key: 'levelExplorer', min: 100, max: 299, color: 'from-green-400 to-emerald-500' },
+  { key: 'levelAchiever', min: 300, max: 599, color: 'from-primary-400 to-primary-600' },
+  { key: 'levelMaster', min: 600, max: 999, color: 'from-secondary-400 to-secondary-600' },
+  { key: 'levelLegend', min: 1000, max: 99999, color: 'from-yellow-400 to-orange-500' },
 ];
 
-const CATEGORIES = ['all', 'learning', 'quiz', 'attendance', 'social'];
+const CATEGORY_KEYS: { value: string; labelKey: string }[] = [
+  { value: 'all', labelKey: 'all' },
+  { value: 'learning', labelKey: 'catLearning' },
+  { value: 'quiz', labelKey: 'catQuiz' },
+  { value: 'attendance', labelKey: 'catAttendance' },
+  { value: 'social', labelKey: 'catSocial' },
+];
 
 export default function AchievementsPage() {
+  const { t, tField } = useLmsT();
   const { user, token } = useAuthStore();
   const [xpTotal, setXpTotal] = useState(0);
   const [rank, setRank] = useState(0);
@@ -61,8 +69,9 @@ export default function AchievementsPage() {
       .then(r => r.json()).then(j => { if (j.success) setLeaderboard(j.data || []); }).catch(console.error);
   }, [selectedCourse, token]);
 
-  const currentLevel = LEVELS.find(l => xpTotal >= l.min && xpTotal <= l.max) || LEVELS[0];
-  const nextLevel = LEVELS[LEVELS.indexOf(currentLevel) + 1];
+  const levels = LEVEL_DEFS.map(l => ({ ...l, name: t(l.key) }));
+  const currentLevel = levels.find(l => xpTotal >= l.min && xpTotal <= l.max) || levels[0];
+  const nextLevel = levels[levels.indexOf(currentLevel) + 1];
   const progressToNext = nextLevel ? ((xpTotal - currentLevel.min) / (nextLevel.min - currentLevel.min)) * 100 : 100;
   const earnedIds = new Set(earnedBadges.map(eb => eb.badgeId));
 
@@ -71,14 +80,14 @@ export default function AchievementsPage() {
   const medalIcons = ['', '🥇', '🥈', '🥉'];
 
   const reasonLabels: Record<string, string> = {
-    lesson_completed: 'Lesson Completed',
-    assignment_submitted: 'Assignment Submitted',
-    assignment_high_grade: 'High Grade',
-    quiz_completed: 'Quiz Completed',
-    quiz_high_score: 'High Quiz Score',
-    attendance_present: 'Attendance',
-    badge_earned: 'Badge Bonus',
-    first_message: 'First Message',
+    lesson_completed: t('xpLessonCompleted'),
+    assignment_submitted: t('xpAssignmentSubmitted'),
+    assignment_high_grade: t('xpHighGrade'),
+    quiz_completed: t('xpQuizCompleted'),
+    quiz_high_score: t('xpHighQuizScore'),
+    attendance_present: t('xpAttendance'),
+    badge_earned: t('xpBadgeBonus'),
+    first_message: t('xpFirstMessage'),
   };
 
   if (loading) {
@@ -92,8 +101,8 @@ export default function AchievementsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Achievements</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Your badges, XP, and leaderboard</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('achievements')}</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{t('badgesXpLeaderboard')}</p>
       </div>
 
       {/* Stats Cards */}
@@ -101,28 +110,28 @@ export default function AchievementsPage() {
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center"><Zap className="w-5 h-5 text-yellow-600" /></div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">Total XP</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">{t('totalXP')}</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">{xpTotal}</p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><TrendingUp className="w-5 h-5 text-blue-600" /></div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">Rank</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">{t('rank')}</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">#{rank}</p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center"><Trophy className="w-5 h-5 text-primary-600" /></div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">Badges</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">{t('badges')}</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">{earnedBadges.length}<span className="text-lg text-gray-400">/{allBadges.length}</span></p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
           <div className="flex items-center gap-3 mb-2">
             <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${currentLevel.color} flex items-center justify-center`}><Star className="w-5 h-5 text-white" /></div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">Level</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">{t('level')}</span>
           </div>
           <p className="text-xl font-bold text-gray-900 dark:text-white">{currentLevel.name}</p>
           {nextLevel && (
@@ -140,12 +149,12 @@ export default function AchievementsPage() {
 
       {/* Badges */}
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">My Badges</h2>
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">{t('myBadges')}</h2>
         <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-          {CATEGORIES.map(cat => (
-            <button key={cat} onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors ${activeCategory === cat ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
-              {cat.charAt(0).toUpperCase() + cat.slice(1)}
+          {CATEGORY_KEYS.map(cat => (
+            <button key={cat.value} onClick={() => setActiveCategory(cat.value)}
+              className={`px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors ${activeCategory === cat.value ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+              {t(cat.labelKey)}
             </button>
           ))}
         </div>
@@ -159,7 +168,7 @@ export default function AchievementsPage() {
                 <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">{badge.name}</h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{badge.description}</p>
                 {earned && eb ? (
-                  <span className="text-[10px] text-primary-600 dark:text-primary-400 font-medium">Earned {new Date(eb.awardedAt).toLocaleDateString()}</span>
+                  <span className="text-[10px] text-primary-600 dark:text-primary-400 font-medium">{t('earned')} {new Date(eb.awardedAt).toLocaleDateString()}</span>
                 ) : (
                   <span className="text-[10px] text-gray-400">+{badge.xpReward} XP</span>
                 )}
@@ -174,18 +183,18 @@ export default function AchievementsPage() {
         {/* Leaderboard */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Leaderboard</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('leaderboard')}</h2>
             <select value={selectedCourse} onChange={e => setSelectedCourse(e.target.value)}
               className="px-3 py-1.5 text-sm rounded-lg bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
-              <option value="global">Global</option>
+              <option value="global">{t('global')}</option>
               {courses.map((c: any) => {
                 const course = c.course || c;
-                return <option key={course.id} value={course.id}>{course.titleEn || course.titleAz}</option>;
+                return <option key={course.id} value={course.id}>{tField(course, 'title')}</option>;
               })}
             </select>
           </div>
           <div className="space-y-2">
-            {leaderboard.length === 0 ? <p className="text-sm text-gray-400 text-center py-4">No data yet</p> :
+            {leaderboard.length === 0 ? <p className="text-sm text-gray-400 text-center py-4">{t('noData')}</p> :
               leaderboard.map((entry, i) => {
                 const isMe = entry.studentId === user?.id;
                 return (
@@ -193,11 +202,11 @@ export default function AchievementsPage() {
                     <span className="w-8 text-center text-sm font-bold text-gray-400">{i < 3 ? medalIcons[i + 1] : `#${entry.rank}`}</span>
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-secondary-500 flex items-center justify-center text-white text-xs font-bold">{entry.studentName?.charAt(0) || '?'}</div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-semibold truncate ${isMe ? 'text-primary-700 dark:text-primary-300' : 'text-gray-900 dark:text-white'}`}>{entry.studentName}{isMe && ' (You)'}</p>
+                      <p className={`text-sm font-semibold truncate ${isMe ? 'text-primary-700 dark:text-primary-300' : 'text-gray-900 dark:text-white'}`}>{entry.studentName}{isMe && ` ${t('you')}`}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-bold text-gray-900 dark:text-white">{entry.xpTotal} XP</p>
-                      <p className="text-[10px] text-gray-400">{entry.badgeCount} badges</p>
+                      <p className="text-[10px] text-gray-400">{entry.badgeCount} {t('badges').toLowerCase()}</p>
                     </div>
                   </div>
                 );
@@ -207,9 +216,9 @@ export default function AchievementsPage() {
 
         {/* XP History */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Recent XP</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">{t('recentXP')}</h2>
           <div className="space-y-3">
-            {xpHistory.length === 0 ? <p className="text-sm text-gray-400 text-center py-4">No XP earned yet</p> :
+            {xpHistory.length === 0 ? <p className="text-sm text-gray-400 text-center py-4">{t('noXPYet')}</p> :
               xpHistory.map(tx => (
                 <div key={tx.id} className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50">
                   <div>

@@ -7,6 +7,7 @@ import {
   CheckCircle2, XCircle, Trophy, ChevronRight,
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -28,6 +29,7 @@ interface QuizData {
 
 export default function StudentAllQuizzesPage() {
   const router = useRouter();
+  const { t, tField } = useLmsT();
   const { token } = useAuthStore();
   const [quizzes, setQuizzes] = useState<QuizData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,8 +76,8 @@ export default function StudentAllQuizzesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">My Quizzes</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">All quizzes across your enrolled courses</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('myQuizzes')}</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{t('allQuizzesCourses')}</p>
       </div>
 
       {/* Stats */}
@@ -84,7 +86,7 @@ export default function StudentAllQuizzesPage() {
           <div className="flex items-center gap-2">
             <FileQuestion className="w-5 h-5 text-gray-400" />
             <div>
-              <p className="text-xs text-gray-500">Total</p>
+              <p className="text-xs text-gray-500">{t('total')}</p>
               <p className="text-xl font-bold text-gray-900 dark:text-white">{total}</p>
             </div>
           </div>
@@ -93,7 +95,7 @@ export default function StudentAllQuizzesPage() {
           <div className="flex items-center gap-2">
             <Clock className="w-5 h-5 text-yellow-500" />
             <div>
-              <p className="text-xs text-gray-500">Pending</p>
+              <p className="text-xs text-gray-500">{t('statusPending')}</p>
               <p className="text-xl font-bold text-yellow-600">{pending}</p>
             </div>
           </div>
@@ -102,7 +104,7 @@ export default function StudentAllQuizzesPage() {
           <div className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-blue-500" />
             <div>
-              <p className="text-xs text-gray-500">Completed</p>
+              <p className="text-xs text-gray-500">{t('statusCompleted')}</p>
               <p className="text-xl font-bold text-blue-600">{completed}</p>
             </div>
           </div>
@@ -111,7 +113,7 @@ export default function StudentAllQuizzesPage() {
           <div className="flex items-center gap-2">
             <Trophy className="w-5 h-5 text-green-500" />
             <div>
-              <p className="text-xs text-gray-500">Passed</p>
+              <p className="text-xs text-gray-500">{t('statusPassed')}</p>
               <p className="text-xl font-bold text-green-600">{passed}</p>
             </div>
           </div>
@@ -121,10 +123,10 @@ export default function StudentAllQuizzesPage() {
       {/* Filter Tabs */}
       <div className="flex gap-2">
         {[
-          { key: 'all', label: 'All', count: total },
-          { key: 'pending', label: 'Pending', count: pending },
-          { key: 'completed', label: 'Completed', count: completed },
-          { key: 'passed', label: 'Passed', count: passed },
+          { key: 'all', label: t('all'), count: total },
+          { key: 'pending', label: t('statusPending'), count: pending },
+          { key: 'completed', label: t('statusCompleted'), count: completed },
+          { key: 'passed', label: t('statusPassed'), count: passed },
         ].map((tab) => (
           <button
             key={tab.key}
@@ -144,7 +146,7 @@ export default function StudentAllQuizzesPage() {
       {filteredQuizzes.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-12 text-center">
           <FileQuestion className="w-12 h-12 text-gray-200 dark:text-gray-700 mx-auto mb-3" />
-          <p className="text-gray-400 dark:text-gray-500">No quizzes found</p>
+          <p className="text-gray-400 dark:text-gray-500">{t('noQuizzesFound')}</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -162,17 +164,17 @@ export default function StudentAllQuizzesPage() {
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
                         quiz.passed ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                       }`}>
-                        {quiz.passed ? 'Passed' : 'Not Passed'}
+                        {quiz.passed ? t('statusPassed') : t('statusNotPassed')}
                       </span>
                     )}
                     {quiz.hasInProgress && (
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
-                        In Progress
+                        {t('statusInProgress')}
                       </span>
                     )}
                   </div>
                   <p className="text-xs text-primary-600 dark:text-primary-400 mb-2">
-                    {quiz.course.titleEn || quiz.course.titleAz}
+                    {tField(quiz.course, 'title')}
                   </p>
                   <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
                     <span className="flex items-center gap-1"><FileQuestion className="w-3 h-3" /> {quiz._count.questions} Q</span>

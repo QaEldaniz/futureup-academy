@@ -8,6 +8,7 @@ import {
   Trophy, TrendingUp, TrendingDown, Loader2, RefreshCw,
   ChevronRight, Target, Zap, Activity, BookOpen,
 } from 'lucide-react';
+import { useLmsT } from '@/hooks/useLmsT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -16,6 +17,7 @@ export default function TeacherAiAnalyticsPage() {
   const router = useRouter();
   const courseId = params.courseId as string;
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
 
   const [period, setPeriod] = useState('week');
   const [snapshots, setSnapshots] = useState<any[]>([]);
@@ -101,13 +103,13 @@ export default function TeacherAiAnalyticsPage() {
             onClick={() => router.push(`/lms/teacher/courses/${courseId}/ai-tutor`)}
             className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-primary-600 transition-colors mb-2"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to AI Tutor
+            <ArrowLeft className="w-4 h-4" /> {t('backToAiTutor')}
           </button>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
               <Brain className="w-5 h-5 text-white" />
             </div>
-            AI Analytics
+            {t('aiAnalytics')}
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -123,7 +125,7 @@ export default function TeacherAiAnalyticsPage() {
           <button onClick={handleGenerate} disabled={generating}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-colors disabled:opacity-50">
             {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-            Generate Analysis
+            {t('generateAnalysis')}
           </button>
         </div>
       </div>
@@ -132,17 +134,17 @@ export default function TeacherAiAnalyticsPage() {
       {classOverview && (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <StatCard icon={Users} label="Students Analyzed" value={classOverview.totalStudents} color="text-violet-600 bg-violet-50 dark:bg-violet-500/10" />
-            <StatCard icon={BarChart3} label="Avg Score" value={`${classOverview.avgScore}/100`} color="text-blue-600 bg-blue-50 dark:bg-blue-500/10" />
-            <StatCard icon={AlertTriangle} label="At Risk" value={classOverview.atRisk?.length || 0} color="text-red-600 bg-red-50 dark:bg-red-500/10" />
-            <StatCard icon={Trophy} label="Excelling" value={classOverview.excelling?.length || 0} color="text-green-600 bg-green-50 dark:bg-green-500/10" />
+            <StatCard icon={Users} label={t('studentsAnalyzed')} value={classOverview.totalStudents} color="text-violet-600 bg-violet-50 dark:bg-violet-500/10" />
+            <StatCard icon={BarChart3} label={t('avgScore')} value={`${classOverview.avgScore}/100`} color="text-blue-600 bg-blue-50 dark:bg-blue-500/10" />
+            <StatCard icon={AlertTriangle} label={t('atRisk')} value={classOverview.atRisk?.length || 0} color="text-red-600 bg-red-50 dark:bg-red-500/10" />
+            <StatCard icon={Trophy} label={t('excelling')} value={classOverview.excelling?.length || 0} color="text-green-600 bg-green-50 dark:bg-green-500/10" />
           </div>
 
           {/* Engagement Distribution */}
           {classOverview.engagementDistribution && (
             <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5">
               <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                <Activity className="w-4 h-4 text-violet-600" /> Engagement Distribution
+                <Activity className="w-4 h-4 text-violet-600" /> {t('engagementDistribution')}
               </h3>
               <div className="flex gap-4">
                 {Object.entries(classOverview.engagementDistribution).map(([key, val]) => (
@@ -159,7 +161,7 @@ export default function TeacherAiAnalyticsPage() {
           {classOverview.topWeaknesses?.length > 0 && (
             <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5">
               <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                <TrendingDown className="w-4 h-4 text-red-500" /> Common Weak Areas (Class-wide)
+                <TrendingDown className="w-4 h-4 text-red-500" /> {t('commonWeakAreas')}
               </h3>
               <div className="space-y-2">
                 {classOverview.topWeaknesses.map((w: any, idx: number) => (
@@ -167,7 +169,7 @@ export default function TeacherAiAnalyticsPage() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-sm text-gray-700 dark:text-gray-300">{w.topic}</span>
-                        <span className="text-xs text-gray-500">{w.count} students</span>
+                        <span className="text-xs text-gray-500">{w.count} {t('students')}</span>
                       </div>
                       <div className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                         <div className="h-full bg-red-400 rounded-full" style={{ width: `${Math.min((w.count / classOverview.totalStudents) * 100, 100)}%` }} />
@@ -183,7 +185,7 @@ export default function TeacherAiAnalyticsPage() {
           {classOverview.atRisk?.length > 0 && (
             <div className="bg-white dark:bg-gray-900 border border-red-200 dark:border-red-500/20 rounded-xl p-5">
               <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-500" /> Students at Risk
+                <AlertTriangle className="w-4 h-4 text-red-500" /> {t('studentsAtRisk')}
               </h3>
               <div className="space-y-2">
                 {classOverview.atRisk.map((s: any) => (
@@ -195,7 +197,7 @@ export default function TeacherAiAnalyticsPage() {
                       </div>
                       <div>
                         <p className="text-sm font-medium text-gray-900 dark:text-white">{s.name}</p>
-                        <p className="text-xs text-red-500">{s.engagement} • Score: {s.score ?? 'N/A'}</p>
+                        <p className="text-xs text-red-500">{s.engagement} • {t('score')}: {s.score ?? 'N/A'}</p>
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-gray-400" />

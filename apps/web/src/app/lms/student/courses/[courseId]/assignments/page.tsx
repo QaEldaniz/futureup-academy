@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import MarkdownEditor from '@/components/shared/MarkdownEditor';
 import MarkdownRenderer from '@/components/shared/MarkdownRenderer';
+import { useLmsT } from '@/hooks/useLmsT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -38,15 +39,16 @@ interface AssignmentItem {
 }
 
 function StatusBadge({ status, isOverdue }: { status: string; isOverdue?: boolean }) {
+  const { t } = useLmsT();
   if (isOverdue && (!status || status === 'NOT_SUBMITTED')) {
-    return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"><AlertCircle className="w-3 h-3" />Overdue</span>;
+    return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"><AlertCircle className="w-3 h-3" />{t('statusOverdue')}</span>;
   }
   const config: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-    NOT_SUBMITTED: { label: 'Pending', color: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400', icon: Clock },
-    SUBMITTED: { label: 'Submitted', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', icon: Send },
-    LATE: { label: 'Late', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', icon: AlertCircle },
-    GRADED: { label: 'Graded', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', icon: CheckCircle2 },
-    RETURNED: { label: 'Returned', color: 'bg-secondary-100 text-secondary-700 dark:bg-secondary-900/30 dark:text-secondary-400', icon: MessageSquare },
+    NOT_SUBMITTED: { label: t('statusPending'), color: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400', icon: Clock },
+    SUBMITTED: { label: t('statusSubmitted'), color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', icon: Send },
+    LATE: { label: t('statusLate'), color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', icon: AlertCircle },
+    GRADED: { label: t('statusGraded'), color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', icon: CheckCircle2 },
+    RETURNED: { label: t('statusReturned'), color: 'bg-secondary-100 text-secondary-700 dark:bg-secondary-900/30 dark:text-secondary-400', icon: MessageSquare },
   };
   const c = config[status] || config.NOT_SUBMITTED;
   const Icon = c.icon;
@@ -58,6 +60,7 @@ export default function StudentCourseAssignmentsPage() {
   const router = useRouter();
   const courseId = params.courseId as string;
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
 
   const [assignments, setAssignments] = useState<AssignmentItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,8 +128,8 @@ export default function StudentCourseAssignmentsPage() {
           <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Assignments</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{assignments.length} total assignments</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('navAssignments')}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{assignments.length} {t('totalAssignments')}</p>
         </div>
       </div>
 
@@ -134,15 +137,15 @@ export default function StudentCourseAssignmentsPage() {
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 text-center">
           <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{pending.length}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Pending</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('statusPending')}</p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 text-center">
           <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{submitted.length}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Submitted</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('statusSubmitted')}</p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 text-center">
           <p className="text-2xl font-bold text-green-600 dark:text-green-400">{graded.length}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Graded</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('statusGraded')}</p>
         </div>
       </div>
 
@@ -150,7 +153,7 @@ export default function StudentCourseAssignmentsPage() {
       {assignments.length === 0 ? (
         <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
           <FileText className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-700 mb-3" />
-          <p className="text-gray-500 dark:text-gray-400">No assignments for this course yet</p>
+          <p className="text-gray-500 dark:text-gray-400">{t('noAssignmentsYet')}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -171,7 +174,7 @@ export default function StudentCourseAssignmentsPage() {
                 {a.submission?.status === 'GRADED' && (
                   <div className="text-right ml-4">
                     <p className="text-lg font-bold text-green-600 dark:text-green-400">{a.submission.grade}/{a.maxScore}</p>
-                    <p className="text-xs text-gray-500">Grade</p>
+                    <p className="text-xs text-gray-500">{t('grade')}</p>
                   </div>
                 )}
               </div>
@@ -180,18 +183,18 @@ export default function StudentCourseAssignmentsPage() {
                 {a.dueDate && (
                   <span className={`flex items-center gap-1 ${a.isOverdue ? 'text-red-500 font-medium' : ''}`}>
                     <Calendar className="w-3.5 h-3.5" />
-                    Due: {new Date(a.dueDate).toLocaleString()}
-                    {a.isOverdue && ' (Overdue)'}
+                    {t('due')} {new Date(a.dueDate).toLocaleString()}
+                    {a.isOverdue && ` (${t('overdueLabel')})`}
                   </span>
                 )}
-                <span className="flex items-center gap-1"><Award className="w-3.5 h-3.5" />Max: {a.maxScore}</span>
-                {a.teacher && <span>By: {a.teacher.nameEn || a.teacher.nameAz}</span>}
+                <span className="flex items-center gap-1"><Award className="w-3.5 h-3.5" />{t('maxScore')} {a.maxScore}</span>
+                {a.teacher && <span>{t('by')} {tField(a.teacher, 'name')}</span>}
               </div>
 
               {/* Graded feedback */}
               {a.submission?.status === 'GRADED' && a.submission.feedback && (
                 <div className="mb-3 p-3 bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800/30 rounded-xl">
-                  <p className="text-xs font-medium text-green-700 dark:text-green-400 mb-1">Teacher Feedback:</p>
+                  <p className="text-xs font-medium text-green-700 dark:text-green-400 mb-1">{t('teacherFeedback')}</p>
                   <p className="text-sm text-green-800 dark:text-green-300">{a.submission.feedback}</p>
                 </div>
               )}
@@ -203,7 +206,7 @@ export default function StudentCourseAssignmentsPage() {
                     onClick={() => setSubmitModal({ open: true, assignment: a })}
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors"
                   >
-                    <Upload className="w-4 h-4" /> Submit
+                    <Upload className="w-4 h-4" /> {t('submit')}
                   </button>
                 )}
                 {a.submission && ['SUBMITTED', 'LATE'].includes(a.submission.status) && (
@@ -211,20 +214,20 @@ export default function StudentCourseAssignmentsPage() {
                     onClick={() => setSubmitModal({ open: true, assignment: a })}
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition-colors"
                   >
-                    <Upload className="w-4 h-4" /> Re-submit
+                    <Upload className="w-4 h-4" /> {t('reSubmit')}
                   </button>
                 )}
                 <button
                   onClick={() => router.push(`/lms/student/courses/${courseId}/ai-tutor?assignmentId=${a.id}`)}
                   className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-violet-700 dark:text-violet-300 bg-violet-100 dark:bg-violet-900/30 rounded-xl hover:bg-violet-200 dark:hover:bg-violet-800/40 transition-colors"
                 >
-                  <Bot className="w-4 h-4" /> AI Help
+                  <Bot className="w-4 h-4" /> {t('aiHelp')}
                 </button>
                 <button
                   onClick={() => setDetailModal({ open: true, assignment: a })}
                   className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 >
-                  Details
+                  {t('details')}
                 </button>
               </div>
             </div>
@@ -260,6 +263,7 @@ function SubmitModal({ assignment, saving, onSubmit, onClose }: {
   onSubmit: (data: { fileUrl: string; linkUrl: string; text: string }) => void;
   onClose: () => void;
 }) {
+  const { t } = useLmsT();
   const [fileUrl, setFileUrl] = useState(assignment.submission?.fileUrl || '');
   const [linkUrl, setLinkUrl] = useState(assignment.submission?.linkUrl || '');
   const [text, setText] = useState(assignment.submission?.text || '');
@@ -270,7 +274,7 @@ function SubmitModal({ assignment, saving, onSubmit, onClose }: {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Submit Assignment</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('submitAssignment')}</h3>
           <button onClick={onClose} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
             <X className="w-5 h-5 text-gray-500" />
           </button>
@@ -280,17 +284,17 @@ function SubmitModal({ assignment, saving, onSubmit, onClose }: {
           <h4 className="font-medium text-sm text-gray-900 dark:text-white mb-1">{assignment.title}</h4>
           {assignment.dueDate && (
             <p className={`text-xs ${assignment.isOverdue ? 'text-red-500 font-medium' : 'text-gray-500 dark:text-gray-400'}`}>
-              Due: {new Date(assignment.dueDate).toLocaleString()} {assignment.isOverdue && '(Overdue — will be marked as late)'}
+              {t('due')} {new Date(assignment.dueDate).toLocaleString()} {assignment.isOverdue && t('overdueLateMark')}
             </p>
           )}
         </div>
 
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">Provide at least one: file URL, link, or text answer.</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">{t('provideAtLeastOne')}</p>
 
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              <FileText className="w-4 h-4 inline mr-1" /> File URL
+              <FileText className="w-4 h-4 inline mr-1" /> {t('fileUrl')}
             </label>
             <input
               type="url"
@@ -302,7 +306,7 @@ function SubmitModal({ assignment, saving, onSubmit, onClose }: {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              <Link2 className="w-4 h-4 inline mr-1" /> Link URL
+              <Link2 className="w-4 h-4 inline mr-1" /> {t('linkUrl')}
             </label>
             <input
               type="url"
@@ -314,13 +318,13 @@ function SubmitModal({ assignment, saving, onSubmit, onClose }: {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              <MessageSquare className="w-4 h-4 inline mr-1" /> Text Answer
+              <MessageSquare className="w-4 h-4 inline mr-1" /> {t('textAnswer')}
             </label>
             <MarkdownEditor
               value={text}
               onChange={setText}
               label="Your Answer"
-              placeholder={'Write your answer here...\n\nYou can use:\n- **bold** and _italic_\n- `inline code` and code blocks\n- Tables, images, lists\n\n```python\nprint("Hello World")\n```'}
+              placeholder={t('writeAnswerHere')}
               minRows={8}
             />
           </div>
@@ -328,7 +332,7 @@ function SubmitModal({ assignment, saving, onSubmit, onClose }: {
 
         <div className="flex justify-end gap-3 mt-6">
           <button onClick={onClose} className="px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl">
-            Cancel
+            {t('cancel')}
           </button>
           <button
             onClick={() => onSubmit({ fileUrl, linkUrl, text })}
@@ -336,7 +340,7 @@ function SubmitModal({ assignment, saving, onSubmit, onClose }: {
             className="px-4 py-2.5 text-sm font-medium bg-primary-600 text-white rounded-xl hover:bg-primary-700 disabled:opacity-50 flex items-center gap-2"
           >
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-            <Send className="w-4 h-4" /> Submit
+            <Send className="w-4 h-4" /> {t('submit')}
           </button>
         </div>
       </div>
@@ -346,6 +350,7 @@ function SubmitModal({ assignment, saving, onSubmit, onClose }: {
 
 // ---- Detail Modal ----
 function DetailModal({ assignment, onClose }: { assignment: AssignmentItem; onClose: () => void }) {
+  const { t, tField } = useLmsT();
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
@@ -364,27 +369,27 @@ function DetailModal({ assignment, onClose }: { assignment: AssignmentItem; onCl
 
         <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400 mb-4">
           {assignment.dueDate && (
-            <p className="flex items-center gap-2"><Calendar className="w-4 h-4" /> Due: {new Date(assignment.dueDate).toLocaleString()}</p>
+            <p className="flex items-center gap-2"><Calendar className="w-4 h-4" /> {t('due')} {new Date(assignment.dueDate).toLocaleString()}</p>
           )}
-          <p className="flex items-center gap-2"><Award className="w-4 h-4" /> Max Score: {assignment.maxScore}</p>
-          {assignment.teacher && <p>Teacher: {assignment.teacher.nameEn || assignment.teacher.nameAz}</p>}
+          <p className="flex items-center gap-2"><Award className="w-4 h-4" /> {t('maxScore')} {assignment.maxScore}</p>
+          {assignment.teacher && <p>{t('by')} {tField(assignment.teacher, 'name')}</p>}
           <p>Status: <StatusBadge status={assignment.submission?.status || 'NOT_SUBMITTED'} isOverdue={assignment.isOverdue} /></p>
         </div>
 
         {assignment.submission && (
           <div className="border-t border-gray-200 dark:border-gray-800 pt-4 space-y-3">
-            <h4 className="font-medium text-sm text-gray-900 dark:text-white">Your Submission</h4>
+            <h4 className="font-medium text-sm text-gray-900 dark:text-white">{t('yourSubmission')}</h4>
             {assignment.submission.submittedAt && (
-              <p className="text-xs text-gray-500">Submitted: {new Date(assignment.submission.submittedAt).toLocaleString()}</p>
+              <p className="text-xs text-gray-500">{t('submitted')} {new Date(assignment.submission.submittedAt).toLocaleString()}</p>
             )}
             {assignment.submission.fileUrl && (
               <a href={assignment.submission.fileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-primary-600 hover:underline">
-                <FileText className="w-4 h-4" /> View File
+                <FileText className="w-4 h-4" /> {t('viewFile')}
               </a>
             )}
             {assignment.submission.linkUrl && (
               <a href={assignment.submission.linkUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-primary-600 hover:underline">
-                <Link2 className="w-4 h-4" /> View Link
+                <Link2 className="w-4 h-4" /> {t('viewLink')}
               </a>
             )}
             {assignment.submission.text && (
@@ -405,7 +410,7 @@ function DetailModal({ assignment, onClose }: { assignment: AssignmentItem; onCl
 
         <div className="flex justify-end mt-6">
           <button onClick={onClose} className="px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl">
-            Close
+            {t('close')}
           </button>
         </div>
       </div>

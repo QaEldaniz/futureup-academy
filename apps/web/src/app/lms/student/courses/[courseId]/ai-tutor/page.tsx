@@ -9,6 +9,8 @@ import {
   Palette, Code, FlaskConical, Trophy, Zap, Heart,
   ChevronRight,
 } from 'lucide-react';
+import MarkdownRenderer from '@/components/shared/MarkdownRenderer';
+import { useLmsT } from '@/hooks/useLmsT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -37,40 +39,40 @@ interface FeedbackItem {
 // Survey Options
 // ================================================================
 const INTERESTS = [
-  { value: 'gaming', label: 'Gaming', icon: Gamepad2 },
-  { value: 'music', label: 'Music', icon: Music },
-  { value: 'art', label: 'Art & Design', icon: Palette },
-  { value: 'coding', label: 'Programming', icon: Code },
-  { value: 'science', label: 'Science', icon: FlaskConical },
-  { value: 'sports', label: 'Sports', icon: Trophy },
-  { value: 'technology', label: 'Technology', icon: Zap },
-  { value: 'social', label: 'Social Media', icon: Heart },
+  { value: 'gaming', key: 'interestGaming', icon: Gamepad2 },
+  { value: 'music', key: 'interestMusic', icon: Music },
+  { value: 'art', key: 'interestArtDesign', icon: Palette },
+  { value: 'coding', key: 'interestProgramming', icon: Code },
+  { value: 'science', key: 'interestScience', icon: FlaskConical },
+  { value: 'sports', key: 'interestSports', icon: Trophy },
+  { value: 'technology', key: 'interestTechnology', icon: Zap },
+  { value: 'social', key: 'interestSocialMedia', icon: Heart },
 ];
 
 const LEARNING_STYLES = [
-  { value: 'visual', label: 'Visual', desc: 'Diagrams, charts, images' },
-  { value: 'reading', label: 'Reading', desc: 'Detailed text explanations' },
-  { value: 'hands-on', label: 'Hands-on', desc: 'Practical exercises' },
-  { value: 'discussion', label: 'Discussion', desc: 'Interactive Q&A' },
+  { value: 'visual', key: 'styleVisual', descKey: 'styleVisualDesc' },
+  { value: 'reading', key: 'styleReading', descKey: 'styleReadingDesc' },
+  { value: 'hands-on', key: 'styleHandsOn', descKey: 'styleHandsOnDesc' },
+  { value: 'discussion', key: 'styleDiscussion', descKey: 'styleDiscussionDesc' },
 ];
 
 const PERSONALITIES = [
-  { value: 'competitive', label: 'Competitive', desc: 'Love challenges!' },
-  { value: 'collaborative', label: 'Friendly', desc: 'Team player' },
-  { value: 'independent', label: 'Independent', desc: 'Self-driven' },
+  { value: 'competitive', key: 'personalityCompetitive', descKey: 'personalityCompetitiveDesc' },
+  { value: 'collaborative', key: 'personalityFriendly', descKey: 'personalityFriendlyDesc' },
+  { value: 'independent', key: 'personalityIndependent', descKey: 'personalityIndependentDesc' },
 ];
 
 const MOTIVATIONS = [
-  { value: 'career', label: 'Career Growth' },
-  { value: 'curiosity', label: 'Curiosity' },
-  { value: 'grades', label: 'Good Grades' },
-  { value: 'fun', label: 'Just for Fun' },
+  { value: 'career', key: 'motivationCareer' },
+  { value: 'curiosity', key: 'motivationCuriosity' },
+  { value: 'grades', key: 'motivationGrades' },
+  { value: 'fun', key: 'motivationFun' },
 ];
 
 const PACES = [
-  { value: 'fast', label: 'Fast — I learn quickly' },
-  { value: 'moderate', label: 'Moderate — Steady pace' },
-  { value: 'slow', label: 'Slow — I need time to absorb' },
+  { value: 'fast', key: 'paceFast' },
+  { value: 'moderate', key: 'paceModerate' },
+  { value: 'slow', key: 'paceSlow' },
 ];
 
 export default function StudentAiTutorPage() {
@@ -89,6 +91,7 @@ function StudentAiTutorContent() {
   const lessonId = searchParams.get('lessonId') || undefined;
   const assignmentId = searchParams.get('assignmentId') || undefined;
   const { token } = useAuthStore();
+  const { t } = useLmsT();
 
   const [profile, setProfile] = useState<AiProfile | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -240,7 +243,7 @@ function StudentAiTutorContent() {
     } catch (err: any) {
       setMessages(prev => {
         const updated = [...prev];
-        updated[updated.length - 1] = { ...updated[updated.length - 1], content: 'Sorry, something went wrong. Please try again.' };
+        updated[updated.length - 1] = { ...updated[updated.length - 1], content: t('somethingWentWrong') };
         return updated;
       });
     } finally {
@@ -296,10 +299,10 @@ function StudentAiTutorContent() {
     return (
       <div className="text-center py-20">
         <Bot className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">AI Tutor Not Available</h2>
-        <p className="text-gray-500 dark:text-gray-400 mb-6">The AI tutor hasn&apos;t been enabled for this course yet.</p>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('aiTutorNotAvailable')}</h2>
+        <p className="text-gray-500 dark:text-gray-400 mb-6">{t('aiTutorNotEnabled')}</p>
         <button onClick={() => router.back()} className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all">
-          <ArrowLeft className="w-4 h-4" /> Go Back
+          <ArrowLeft className="w-4 h-4" /> {t('goBack')}
         </button>
       </div>
     );
@@ -332,9 +335,9 @@ function StudentAiTutorContent() {
             <Bot className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-gray-900 dark:text-white">AI Tutor</h1>
+            <h1 className="text-lg font-bold text-gray-900 dark:text-white">{t('aiTutor')}</h1>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {assignmentId ? 'Homework Help Mode' : lessonId ? 'Lesson Context' : 'Course Assistant'}
+              {assignmentId ? t('homeworkHelpMode') : lessonId ? t('lessonContext') : t('courseAssistant')}
             </p>
           </div>
         </div>
@@ -342,7 +345,7 @@ function StudentAiTutorContent() {
           <button
             onClick={() => setShowSurvey(true)}
             className="p-2 rounded-lg text-gray-400 hover:text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-500/10 transition-all"
-            title="Update AI Profile"
+            title={t('updateAiProfile')}
           >
             <Brain className="w-5 h-5" />
           </button>
@@ -350,7 +353,7 @@ function StudentAiTutorContent() {
             <button
               onClick={handleClear}
               className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all"
-              title="Clear chat"
+              title={t('clearChat')}
             >
               <Trash2 className="w-5 h-5" />
             </button>
@@ -366,27 +369,27 @@ function StudentAiTutorContent() {
               <Sparkles className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              {assignmentId ? 'Need help with your assignment?' : 'Ready to learn!'}
+              {assignmentId ? t('needHelpAssignment') : t('readyToLearn')}
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md mx-auto">
               {assignmentId
-                ? "I'll guide you through the problem step by step — without giving away the answer!"
-                : 'Ask me anything about your course. I\'ll help you understand concepts and practice.'}
+                ? t('guideStepByStep')
+                : t('askAnythingCourse')}
             </p>
             {/* Quick prompts */}
             <div className="flex flex-wrap justify-center gap-2 mt-6">
               {[
-                'Explain the main concepts',
-                'Give me a practice problem',
-                'What should I focus on?',
-                'Help me understand...',
+                { key: 'promptExplainConcepts' },
+                { key: 'promptPracticeProblem' },
+                { key: 'promptFocusOn' },
+                { key: 'promptHelpUnderstand' },
               ].map(prompt => (
                 <button
-                  key={prompt}
-                  onClick={() => { setInput(prompt); }}
+                  key={prompt.key}
+                  onClick={() => { setInput(t(prompt.key)); }}
                   className="px-3 py-1.5 rounded-lg text-xs font-medium text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20 hover:bg-violet-100 dark:hover:bg-violet-500/20 transition-all"
                 >
-                  {prompt}
+                  {t(prompt.key)}
                 </button>
               ))}
             </div>
@@ -401,19 +404,21 @@ function StudentAiTutorContent() {
               </div>
             )}
             <div className={`max-w-[80%] ${msg.role === 'user' ? 'order-first' : ''}`}>
-              <div
-                className={`px-4 py-3 rounded-2xl text-sm whitespace-pre-wrap ${
-                  msg.role === 'user'
-                    ? 'bg-violet-600 text-white rounded-br-md'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-md'
-                }`}
-              >
-                {msg.content || (isStreaming && idx === messages.length - 1 ? (
-                  <span className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" /> Thinking...
-                  </span>
-                ) : '')}
-              </div>
+              {msg.role === 'assistant' ? (
+                <div className="px-4 py-3 rounded-2xl rounded-bl-md bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+                  {msg.content ? (
+                    <MarkdownRenderer content={msg.content} className="text-sm" />
+                  ) : (isStreaming && idx === messages.length - 1 ? (
+                    <span className="flex items-center gap-2 text-sm">
+                      <Loader2 className="w-4 h-4 animate-spin" /> {t('thinking')}
+                    </span>
+                  ) : null)}
+                </div>
+              ) : (
+                <div className="px-4 py-3 rounded-2xl text-sm whitespace-pre-wrap bg-violet-600 text-white rounded-br-md">
+                  {msg.content || ''}
+                </div>
+              )}
               {/* Feedback buttons for assistant messages */}
               {msg.role === 'assistant' && msg.content && !isStreaming && sessionId && (
                 <div className="flex items-center gap-1 mt-1">
@@ -452,7 +457,7 @@ function StudentAiTutorContent() {
             rows={1}
             disabled={isStreaming}
             className="flex-1 px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white text-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 resize-none disabled:opacity-50"
-            placeholder={assignmentId ? "Describe what you're stuck on..." : "Ask a question..."}
+            placeholder={assignmentId ? t('describeStuckOn') : t('askQuestion')}
           />
           <button
             onClick={handleSend}
@@ -463,7 +468,7 @@ function StudentAiTutorContent() {
           </button>
         </div>
         <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5 text-center">
-          AI can make mistakes. Verify important information with your teacher.
+          {t('aiDisclaimer')}
         </p>
       </div>
     </div>
@@ -479,6 +484,7 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
   onComplete: (profile: AiProfile) => void;
   onSkip: () => void;
 }) {
+  const { t } = useLmsT();
   const [step, setStep] = useState(0);
   const [interests, setInterests] = useState<string[]>([]);
   const [learningStyle, setLearningStyle] = useState('');
@@ -489,8 +495,8 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
 
   const steps = [
     {
-      title: 'What are your interests?',
-      desc: 'Select topics you enjoy (helps AI use relatable examples)',
+      title: t('surveyInterests'),
+      desc: t('surveyInterestsDesc'),
       component: (
         <div className="grid grid-cols-2 gap-3">
           {INTERESTS.map(i => {
@@ -500,7 +506,7 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
               <button key={i.value} onClick={() => setInterests(prev => selected ? prev.filter(x => x !== i.value) : [...prev, i.value])}
                 className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${selected ? 'border-violet-500 bg-violet-50 dark:bg-violet-500/10' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'}`}>
                 <Icon className={`w-5 h-5 ${selected ? 'text-violet-600' : 'text-gray-400'}`} />
-                <span className={`text-sm font-medium ${selected ? 'text-violet-600 dark:text-violet-400' : 'text-gray-700 dark:text-gray-300'}`}>{i.label}</span>
+                <span className={`text-sm font-medium ${selected ? 'text-violet-600 dark:text-violet-400' : 'text-gray-700 dark:text-gray-300'}`}>{t(i.key)}</span>
               </button>
             );
           })}
@@ -508,8 +514,8 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
       ),
     },
     {
-      title: 'How do you learn best?',
-      desc: 'Choose your preferred learning style',
+      title: t('surveyLearningStyle'),
+      desc: t('surveyLearningStyleDesc'),
       component: (
         <div className="space-y-3">
           {LEARNING_STYLES.map(s => (
@@ -519,8 +525,8 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
                 {learningStyle === s.value && <div className="w-2.5 h-2.5 rounded-full bg-violet-500" />}
               </div>
               <div>
-                <p className={`text-sm font-semibold ${learningStyle === s.value ? 'text-violet-600 dark:text-violet-400' : 'text-gray-900 dark:text-white'}`}>{s.label}</p>
-                <p className="text-xs text-gray-500">{s.desc}</p>
+                <p className={`text-sm font-semibold ${learningStyle === s.value ? 'text-violet-600 dark:text-violet-400' : 'text-gray-900 dark:text-white'}`}>{t(s.key)}</p>
+                <p className="text-xs text-gray-500">{t(s.descKey)}</p>
               </div>
             </button>
           ))}
@@ -528,8 +534,8 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
       ),
     },
     {
-      title: 'What describes you best?',
-      desc: 'This helps AI adjust its communication style',
+      title: t('surveyPersonality'),
+      desc: t('surveyPersonalityDesc'),
       component: (
         <div className="space-y-3">
           {PERSONALITIES.map(p => (
@@ -539,8 +545,8 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
                 {personality === p.value && <div className="w-2.5 h-2.5 rounded-full bg-violet-500" />}
               </div>
               <div>
-                <p className={`text-sm font-semibold ${personality === p.value ? 'text-violet-600 dark:text-violet-400' : 'text-gray-900 dark:text-white'}`}>{p.label}</p>
-                <p className="text-xs text-gray-500">{p.desc}</p>
+                <p className={`text-sm font-semibold ${personality === p.value ? 'text-violet-600 dark:text-violet-400' : 'text-gray-900 dark:text-white'}`}>{t(p.key)}</p>
+                <p className="text-xs text-gray-500">{t(p.descKey)}</p>
               </div>
             </button>
           ))}
@@ -548,22 +554,22 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
       ),
     },
     {
-      title: 'What motivates you?',
-      desc: 'Why are you studying this course?',
+      title: t('surveyMotivation'),
+      desc: t('surveyMotivationDesc'),
       component: (
         <div className="grid grid-cols-2 gap-3">
           {MOTIVATIONS.map(m => (
             <button key={m.value} onClick={() => setMotivation(m.value)}
               className={`p-4 rounded-xl border-2 transition-all text-center ${motivation === m.value ? 'border-violet-500 bg-violet-50 dark:bg-violet-500/10' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'}`}>
-              <span className={`text-sm font-medium ${motivation === m.value ? 'text-violet-600 dark:text-violet-400' : 'text-gray-700 dark:text-gray-300'}`}>{m.label}</span>
+              <span className={`text-sm font-medium ${motivation === m.value ? 'text-violet-600 dark:text-violet-400' : 'text-gray-700 dark:text-gray-300'}`}>{t(m.key)}</span>
             </button>
           ))}
         </div>
       ),
     },
     {
-      title: 'What pace works for you?',
-      desc: 'How fast do you prefer to learn?',
+      title: t('surveyPace'),
+      desc: t('surveyPaceDesc'),
       component: (
         <div className="space-y-3">
           {PACES.map(p => (
@@ -572,7 +578,7 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
               <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${preferredPace === p.value ? 'border-violet-500' : 'border-gray-300'}`}>
                 {preferredPace === p.value && <div className="w-2.5 h-2.5 rounded-full bg-violet-500" />}
               </div>
-              <p className={`text-sm font-medium ${preferredPace === p.value ? 'text-violet-600 dark:text-violet-400' : 'text-gray-700 dark:text-gray-300'}`}>{p.label}</p>
+              <p className={`text-sm font-medium ${preferredPace === p.value ? 'text-violet-600 dark:text-violet-400' : 'text-gray-700 dark:text-gray-300'}`}>{t(p.key)}</p>
             </button>
           ))}
         </div>
@@ -619,11 +625,11 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
       <div className="flex items-center justify-between">
         {step > 0 ? (
           <button onClick={() => setStep(s => s - 1)} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">
-            Back
+            {t('back')}
           </button>
         ) : (
           <button onClick={onSkip} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-gray-600 transition-all">
-            Skip for now
+            {t('skipForNow')}
           </button>
         )}
 
@@ -632,7 +638,7 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
             onClick={() => setStep(s => s + 1)}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-all shadow-sm"
           >
-            Next <ChevronRight className="w-4 h-4" />
+            {t('next')} <ChevronRight className="w-4 h-4" />
           </button>
         ) : (
           <button
@@ -641,7 +647,7 @@ function SurveyScreen({ token, courseId, onComplete, onSkip }: {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-all shadow-sm disabled:opacity-50"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            Start Learning!
+            {t('startLearning')}
           </button>
         )}
       </div>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 import { ArrowLeft, Users, TrendingUp, BookOpen, FileText, ClipboardList, FileQuestion, Bot, Brain } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -12,6 +13,7 @@ export default function TeacherCourseDetail() {
   const params = useParams();
   const courseId = params.courseId as string;
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
   const [course, setCourse] = useState<any>(null);
   const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,14 +40,14 @@ export default function TeacherCourseDetail() {
   return (
     <div className="space-y-6">
       <button onClick={() => router.push('/lms/teacher/courses')} className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Back to courses
+        <ArrowLeft className="w-4 h-4" /> {t('backToCourses')}
       </button>
 
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{course?.titleEn || 'Course'}</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">{course?.level} &bull; {students.length} students</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{tField(course, 'title') || t('course')}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">{course?.level} &bull; {students.length} {t('students')}</p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <button
@@ -53,35 +55,35 @@ export default function TeacherCourseDetail() {
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-colors"
             >
               <Bot className="w-4 h-4" />
-              AI Tutor
+              {t('aiTutor')}
             </button>
             <button
               onClick={() => router.push(`/lms/teacher/courses/${courseId}/ai-analytics`)}
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-colors"
             >
               <Brain className="w-4 h-4" />
-              AI Analytics
+              {t('aiAnalytics')}
             </button>
             <button
               onClick={() => router.push(`/lms/teacher/courses/${courseId}/quizzes`)}
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-secondary-600 hover:bg-secondary-700 text-white rounded-xl text-sm font-semibold transition-colors"
             >
               <FileQuestion className="w-4 h-4" />
-              Quizzes
+              {t('quizzes')}
             </button>
             <button
               onClick={() => router.push(`/lms/teacher/courses/${courseId}/assignments`)}
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-secondary-600 hover:bg-secondary-700 text-white rounded-xl text-sm font-semibold transition-colors"
             >
               <ClipboardList className="w-4 h-4" />
-              Assignments
+              {t('assignments')}
             </button>
             <button
               onClick={() => router.push(`/lms/teacher/courses/${courseId}/lessons`)}
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-lg shadow-primary-600/25"
             >
               <FileText className="w-4 h-4" />
-              Manage Lessons
+              {t('manageLessons')}
             </button>
           </div>
         </div>
@@ -89,11 +91,11 @@ export default function TeacherCourseDetail() {
 
       {/* Students list */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Students</h2>
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">{t('navStudents')}</h2>
         {students.length === 0 ? (
           <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-8 text-center">
             <Users className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No students enrolled yet</p>
+            <p className="text-gray-500">{t('noStudentsEnrolledYet')}</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -104,15 +106,15 @@ export default function TeacherCourseDetail() {
                 className="w-full flex items-center gap-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 hover:shadow-md transition-all text-left"
               >
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                  {(s.student?.name || 'S').charAt(0).toUpperCase()}
+                  {(tField(s.student, 'name') || 'S').charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 dark:text-white text-sm truncate">{s.student?.name || 'Student'}</p>
+                  <p className="font-semibold text-gray-900 dark:text-white text-sm truncate">{tField(s.student, 'name') || t('student')}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">{s.student?.email}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-primary-600 dark:text-primary-400">{s.progress || 0}%</p>
-                  <p className="text-xs text-gray-400">progress</p>
+                  <p className="text-xs text-gray-400">{t('progress')}</p>
                 </div>
               </button>
             ))}

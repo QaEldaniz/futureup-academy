@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 import { BookOpen, Clock, Signal, Play, CheckCircle2 } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -10,6 +11,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 export default function StudentCoursesPage() {
   const router = useRouter();
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'ACTIVE' | 'COMPLETED'>('all');
@@ -30,16 +32,16 @@ export default function StudentCoursesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">My Courses</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">Track your learning progress</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('myCourses')}</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">{t('trackProgress')}</p>
       </div>
 
       {/* Filters */}
       <div className="flex gap-2">
         {[
-          { label: 'All', value: 'all' as const },
-          { label: 'Active', value: 'ACTIVE' as const },
-          { label: 'Completed', value: 'COMPLETED' as const },
+          { label: t('all'), value: 'all' as const },
+          { label: t('statusActive'), value: 'ACTIVE' as const },
+          { label: t('statusCompleted'), value: 'COMPLETED' as const },
         ].map((f) => (
           <button
             key={f.value}
@@ -68,7 +70,7 @@ export default function StudentCoursesPage() {
       ) : filtered.length === 0 ? (
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-12 text-center">
           <BookOpen className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">No courses found</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('noCoursesFound')}</h3>
         </div>
       ) : (
         <div className="space-y-4">
@@ -84,7 +86,7 @@ export default function StudentCoursesPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-bold text-gray-900 dark:text-white truncate">
-                    {enrollment.course.titleEn}
+                    {tField(enrollment.course, 'title')}
                   </h3>
                   {enrollment.status === 'COMPLETED' && (
                     <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
@@ -93,12 +95,12 @@ export default function StudentCoursesPage() {
                 <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 mb-3">
                   <span className="flex items-center gap-1"><Signal className="w-3 h-3" />{enrollment.course.level}</span>
                   <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{enrollment.course.duration}</span>
-                  {enrollment.course.category && <span>{enrollment.course.category.nameEn}</span>}
+                  {enrollment.course.category && <span>{tField(enrollment.course.category, 'name')}</span>}
                 </div>
                 {/* Progress */}
                 <div>
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-gray-400">{enrollment.course._count?.lessons || 0} lessons</span>
+                    <span className="text-gray-400">{enrollment.course._count?.lessons || 0} {t('lessons')}</span>
                     <span className="font-semibold text-primary-600 dark:text-primary-400">{enrollment.progress.percentage}%</span>
                   </div>
                   <div className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">

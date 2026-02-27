@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 import { Calendar, Clock, MapPin, BookOpen } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -55,9 +56,13 @@ function getTodayDayIndex(): number {
 
 export default function TeacherSchedulePage() {
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
   const [schedules, setSchedules] = useState<ScheduleEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const DAYS_T = [t('monday'), t('tuesday'), t('wednesday'), t('thursday'), t('friday'), t('saturday')] as const;
+  const DAYS_SHORT_T = [t('mon'), t('tue'), t('wed'), t('thu'), t('fri'), t('sat')] as const;
 
   useEffect(() => {
     if (!token) return;
@@ -107,8 +112,8 @@ export default function TeacherSchedulePage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">Teaching Schedule</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Your weekly teaching timetable</p>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">{t('teachingSchedule')}</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">{t('weeklyTeachingTimetable')}</p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-8">
           <div className="animate-pulse space-y-4">
@@ -129,12 +134,12 @@ export default function TeacherSchedulePage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">Teaching Schedule</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Your weekly teaching timetable</p>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">{t('teachingSchedule')}</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">{t('weeklyTeachingTimetable')}</p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-12 text-center">
           <Calendar className="w-12 h-12 text-red-400 dark:text-red-500 mx-auto mb-4" />
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Failed to load schedule</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('failedToLoadSchedule')}</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">{error}</p>
         </div>
       </div>
@@ -146,14 +151,14 @@ export default function TeacherSchedulePage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">Teaching Schedule</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Your weekly teaching timetable</p>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">{t('teachingSchedule')}</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">{t('weeklyTeachingTimetable')}</p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-12 text-center">
           <Calendar className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">No schedule available</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('noScheduleAvailable')}</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Your teaching schedule will appear here once classes are assigned
+            {t('teachingScheduleWillAppear')}
           </p>
         </div>
       </div>
@@ -175,9 +180,9 @@ export default function TeacherSchedulePage() {
             {/* Day headers */}
             <div className="grid grid-cols-[80px_repeat(6,1fr)] border-b border-gray-200 dark:border-gray-800">
               <div className="p-3 text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                Time
+                {t('time')}
               </div>
-              {DAYS.map((day, idx) => {
+              {DAYS_T.map((day, idx) => {
                 const dayNum = idx + 1;
                 const isToday = dayNum === todayIndex;
                 return (
@@ -192,7 +197,7 @@ export default function TeacherSchedulePage() {
                     {day}
                     {isToday && (
                       <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
-                        Today
+                        {t('today')}
                       </span>
                     )}
                   </div>

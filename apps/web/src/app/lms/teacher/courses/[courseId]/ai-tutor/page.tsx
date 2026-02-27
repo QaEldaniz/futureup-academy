@@ -9,6 +9,7 @@ import {
   MessageSquare, ThumbsUp, ThumbsDown, Brain, Sparkles,
   Globe, HelpCircle, ChevronDown, Link2, ExternalLink, Download,
 } from 'lucide-react';
+import { useLmsT } from '@/hooks/useLmsT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -60,6 +61,7 @@ export default function TeacherAiTutorPage() {
   const router = useRouter();
   const courseId = params.courseId as string;
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
 
   const [config, setConfig] = useState<AiConfig>({ courseId, isEnabled: false, socraticMode: true, locale: 'en' });
   const [materials, setMaterials] = useState<AiMaterial[]>([]);
@@ -193,16 +195,16 @@ export default function TeacherAiTutorPage() {
             onClick={() => router.push(`/lms/teacher/courses/${courseId}`)}
             className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors mb-2"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to course
+            <ArrowLeft className="w-4 h-4" /> {t('backToCourse')}
           </button>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
               <Bot className="w-5 h-5 text-white" />
             </div>
-            AI Tutor Configuration
+            {t('aiTutorConfig')}
           </h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">
-            Configure AI tutor, manage materials, and view student feedback
+            {t('aiTutorConfigDesc')}
           </p>
         </div>
         <button
@@ -210,16 +212,16 @@ export default function TeacherAiTutorPage() {
           className="inline-flex items-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-colors"
         >
           <Brain className="w-4 h-4" />
-          AI Analytics
+          {t('aiAnalytics')}
         </button>
       </div>
 
       {/* Tabs */}
       <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
         {([
-          { key: 'settings', label: 'Settings', icon: Settings },
-          { key: 'materials', label: `Materials (${materials.length})`, icon: BookOpen },
-          { key: 'feedback', label: 'Feedback', icon: MessageSquare },
+          { key: 'settings', label: t('settings'), icon: Settings },
+          { key: 'materials', label: `${t('materials')} (${materials.length})`, icon: BookOpen },
+          { key: 'feedback', label: t('feedbackTab'), icon: MessageSquare },
         ] as const).map(tab => (
           <button
             key={tab.key}
@@ -242,8 +244,8 @@ export default function TeacherAiTutorPage() {
           {/* Enable toggle */}
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-gray-900 dark:text-white">Enable AI Tutor</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Students will be able to chat with AI tutor for this course</p>
+              <h3 className="font-semibold text-gray-900 dark:text-white">{t('enableAiTutor')}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{t('enableAiTutorDesc')}</p>
             </div>
             <button
               type="button"
@@ -262,12 +264,12 @@ export default function TeacherAiTutorPage() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                Socratic Mode
+                {t('socraticMode')}
                 <span className="text-[10px] px-1.5 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded font-medium">
-                  RECOMMENDED
+                  {t('recommended')}
                 </span>
               </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">AI guides students with questions instead of giving direct answers</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{t('socraticModeDesc')}</p>
             </div>
             <button
               type="button"
@@ -285,7 +287,7 @@ export default function TeacherAiTutorPage() {
           {/* Locale */}
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-              <Globe className="w-4 h-4" /> AI Response Language
+              <Globe className="w-4 h-4" /> {t('aiResponseLanguage')}
             </h3>
             <div className="grid grid-cols-3 gap-2">
               {[
@@ -311,9 +313,9 @@ export default function TeacherAiTutorPage() {
           {/* Extra instructions */}
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-              <StickyNote className="w-4 h-4" /> Custom Instructions (optional)
+              <StickyNote className="w-4 h-4" /> {t('customInstructions')}
             </h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Additional instructions for the AI tutor specific to your course</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{t('customInstructionsDesc')}</p>
             <textarea
               value={config.systemPromptExtra || ''}
               onChange={(e) => setConfig(c => ({ ...c, systemPromptExtra: e.target.value }))}
@@ -329,7 +331,7 @@ export default function TeacherAiTutorPage() {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm bg-violet-600 hover:bg-violet-700 transition-all shadow-sm disabled:opacity-50"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            Save Settings
+            {t('saveSettings')}
           </button>
         </div>
       )}
@@ -339,27 +341,27 @@ export default function TeacherAiTutorPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">AI Knowledge Base</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Add course content that the AI tutor will use to help students</p>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('aiKnowledgeBase')}</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{t('aiKnowledgeBaseDesc')}</p>
             </div>
             <button
               onClick={() => setMaterialModal({ open: true, material: null })}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm bg-violet-600 hover:bg-violet-700 transition-all shadow-sm"
             >
-              <Plus className="w-4 h-4" /> Add Material
+              <Plus className="w-4 h-4" /> {t('addMaterial')}
             </button>
           </div>
 
           {materials.length === 0 ? (
             <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl py-16 text-center">
               <BookOpen className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">No materials yet</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Add your course content so AI can use it as context when helping students.</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{t('noMaterialsAI')}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{t('noMaterialsAIDesc')}</p>
               <button
                 onClick={() => setMaterialModal({ open: true, material: null })}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm bg-violet-600 hover:bg-violet-700 transition-all shadow-sm"
               >
-                <Plus className="w-4 h-4" /> Add First Material
+                <Plus className="w-4 h-4" /> {t('addFirstMaterial')}
               </button>
             </div>
           ) : (
@@ -374,7 +376,7 @@ export default function TeacherAiTutorPage() {
                       <h4 className="font-semibold text-gray-900 dark:text-white text-sm">{mat.title}</h4>
                       {mat.lesson && (
                         <p className="text-xs text-violet-600 dark:text-violet-400 mt-0.5">
-                          Linked to: {mat.lesson.titleEn}
+                          {t('linkedTo')} {tField(mat.lesson, 'title')}
                         </p>
                       )}
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{mat.content}</p>
@@ -420,10 +422,10 @@ export default function TeacherAiTutorPage() {
         <div className="space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: 'Total Sessions', value: feedback.totalSessions, icon: MessageSquare, color: 'text-violet-600 bg-violet-50 dark:bg-violet-500/10' },
-              { label: 'Total Messages', value: feedback.totalMessages, icon: Bot, color: 'text-blue-600 bg-blue-50 dark:bg-blue-500/10' },
-              { label: 'Satisfaction', value: `${feedback.satisfactionRate}%`, icon: ThumbsUp, color: 'text-green-600 bg-green-50 dark:bg-green-500/10' },
-              { label: 'Total Feedback', value: feedback.totalFeedback, icon: Star, color: 'text-amber-600 bg-amber-50 dark:bg-amber-500/10' },
+              { label: t('totalSessions'), value: feedback.totalSessions, icon: MessageSquare, color: 'text-violet-600 bg-violet-50 dark:bg-violet-500/10' },
+              { label: t('totalMessages'), value: feedback.totalMessages, icon: Bot, color: 'text-blue-600 bg-blue-50 dark:bg-blue-500/10' },
+              { label: t('satisfaction'), value: `${feedback.satisfactionRate}%`, icon: ThumbsUp, color: 'text-green-600 bg-green-50 dark:bg-green-500/10' },
+              { label: t('totalFeedback'), value: feedback.totalFeedback, icon: Star, color: 'text-amber-600 bg-amber-50 dark:bg-amber-500/10' },
             ].map(stat => (
               <div key={stat.label} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
                 <div className={`w-8 h-8 rounded-lg ${stat.color} flex items-center justify-center mb-2`}>
@@ -435,17 +437,17 @@ export default function TeacherAiTutorPage() {
             ))}
           </div>
           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Feedback Breakdown</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">{t('feedbackBreakdown')}</h3>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <ThumbsUp className="w-5 h-5 text-green-500" />
                 <span className="text-lg font-bold text-gray-900 dark:text-white">{feedback.thumbsUp}</span>
-                <span className="text-sm text-gray-500">positive</span>
+                <span className="text-sm text-gray-500">{t('positive')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <ThumbsDown className="w-5 h-5 text-red-500" />
                 <span className="text-lg font-bold text-gray-900 dark:text-white">{feedback.thumbsDown}</span>
-                <span className="text-sm text-gray-500">negative</span>
+                <span className="text-sm text-gray-500">{t('negative')}</span>
               </div>
             </div>
             {feedback.totalFeedback > 0 && (
@@ -481,17 +483,17 @@ export default function TeacherAiTutorPage() {
                 <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Delete Material</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">This will permanently remove this material from AI context.</p>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('deleteMaterialAI')}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('deleteMaterialAIConfirm')}</p>
               </div>
             </div>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
-              Are you sure you want to delete <span className="font-semibold">&quot;{deleteModal.name}&quot;</span>?
+              {t('confirmDeleteName')} <span className="font-semibold">&quot;{deleteModal.name}&quot;</span>?
             </p>
             <div className="flex items-center justify-end gap-3">
-              <button onClick={() => setDeleteModal({ open: false, id: '', name: '' })} disabled={deleting} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all disabled:opacity-50">Cancel</button>
+              <button onClick={() => setDeleteModal({ open: false, id: '', name: '' })} disabled={deleting} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all disabled:opacity-50">{t('cancel')}</button>
               <button onClick={handleDelete} disabled={deleting} className="px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-red-600 hover:bg-red-700 transition-all shadow-sm disabled:opacity-50">
-                {deleting ? <span className="flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Deleting...</span> : 'Delete'}
+                {deleting ? <span className="flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />{t('deleting')}</span> : t('delete')}
               </button>
             </div>
           </div>
@@ -512,6 +514,7 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
   onClose: () => void;
 }) {
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
   const [title, setTitle] = useState(material?.title || '');
   const [content, setContent] = useState(material?.content || '');
   const [sourceUrl, setSourceUrl] = useState(material?.sourceUrl || '');
@@ -568,7 +571,7 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
       <div className="relative bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            {material ? 'Edit Material' : 'Add Material'}
+            {material ? t('editMaterial') : t('addMaterial')}
           </h3>
           <button onClick={onClose} className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800/30 transition-all">
             <X className="w-5 h-5" />
@@ -578,15 +581,15 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
         <div className="space-y-4">
           {/* Title */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">Title *</label>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">{t('materialTitle')}</label>
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className={inputClassName} placeholder="e.g. Introduction to Variables" />
           </div>
 
           {/* Linked lesson */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">Link to Lesson (optional)</label>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">{t('linkToLesson')}</label>
             <select value={lessonId} onChange={(e) => setLessonId(e.target.value)} className={inputClassName}>
-              <option value="">Course-wide (all lessons)</option>
+              <option value="">{t('courseWide')}</option>
               {lessons.map(l => <option key={l.id} value={l.id}>{l.order + 1}. {l.titleEn}</option>)}
             </select>
           </div>
@@ -594,7 +597,7 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
           {/* Source URL */}
           <div>
             <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">
-              <span className="flex items-center gap-1.5"><Link2 className="w-3.5 h-3.5" /> Source URL (optional)</span>
+              <span className="flex items-center gap-1.5"><Link2 className="w-3.5 h-3.5" /> {t('sourceUrl')}</span>
             </label>
             <div className="flex gap-2">
               <input
@@ -610,24 +613,24 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
                 disabled={!sourceUrl.trim() || isExtracting}
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
               >
-                {isExtracting ? <><Loader2 className="w-4 h-4 animate-spin" /> Extracting...</> : <><Download className="w-4 h-4" /> Extract</>}
+                {isExtracting ? <><Loader2 className="w-4 h-4 animate-spin" /> {t('extracting')}</> : <><Download className="w-4 h-4" /> {t('extract')}</>}
               </button>
             </div>
             {extractError && <p className="text-xs text-red-500 mt-1.5">{extractError}</p>}
-            {extractSuccess && <p className="text-xs text-green-500 mt-1.5">Content extracted successfully!</p>}
+            {extractSuccess && <p className="text-xs text-green-500 mt-1.5">{t('contentExtracted')}</p>}
             {sourceUrl && !extractError && !extractSuccess && !isExtracting && (
-              <p className="text-[10px] text-gray-400 mt-1">Supports Google Docs, Google Slides, and web pages. Document must be publicly shared.</p>
+              <p className="text-[10px] text-gray-400 mt-1">{t('supportsGoogleDocs')}</p>
             )}
             {material?.sourceUrl && (
               <a href={material.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-violet-500 hover:text-violet-600 mt-1">
-                <ExternalLink className="w-3 h-3" /> View original source
+                <ExternalLink className="w-3 h-3" /> {t('viewOriginalSource')}
               </a>
             )}
           </div>
 
           {/* Content */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">Content * {sourceUrl ? '(auto-extracted or paste manually)' : '(paste your lesson material here)'}</label>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">{t('content')} {sourceUrl ? t('contentAutoExtracted') : t('contentPasteManual')}</label>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -635,12 +638,12 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
               className={`${inputClassName} resize-y font-mono text-xs`}
               placeholder="Paste the full text content of the lesson material here, or extract from a URL above. This will be used as AI context to help students..."
             />
-            <p className="text-[10px] text-gray-400 mt-1">{content.length} characters</p>
+            <p className="text-[10px] text-gray-400 mt-1">{content.length} {t('characters')}</p>
           </div>
 
           {/* Tags */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">Tags (helps AI prioritize)</label>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">{t('tagsLabel')}</label>
             <div className="flex flex-wrap gap-2">
               {AVAILABLE_TAGS.map(tag => (
                 <button
@@ -661,7 +664,7 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
 
           {/* Teacher notes */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">Teacher Notes (visible only to AI)</label>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-400 mb-1.5">{t('teacherNotes')}</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -673,13 +676,13 @@ function MaterialFormModal({ material, lessons, saving, onSave, onClose }: {
         </div>
 
         <div className="flex items-center justify-end gap-3 mt-6">
-          <button onClick={onClose} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all">Cancel</button>
+          <button onClick={onClose} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all">{t('cancel')}</button>
           <button
             disabled={!canSave || saving}
             onClick={() => onSave({ title: title.trim(), content: content.trim(), tags, notes: notes.trim(), lessonId, order, sourceUrl: sourceUrl.trim() })}
             className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {saving ? <span className="flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Saving...</span> : 'Save'}
+            {saving ? <span className="flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />{t('saving')}</span> : t('save')}
           </button>
         </div>
       </div>

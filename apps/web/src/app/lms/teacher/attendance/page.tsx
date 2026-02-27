@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 import {
   Calendar, CheckCircle2, XCircle, Clock, AlertCircle, Save, Loader2,
   ClipboardList, History, ChevronLeft, ChevronRight, BarChart3,
@@ -25,6 +26,11 @@ const STATUS_CELL: Record<string, { icon: string; color: string; bg: string; lab
 
 export default function TeacherAttendancePage() {
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
+
+  const statusLabel: Record<string, string> = { PRESENT: t('present'), ABSENT: t('absent'), LATE: t('late'), EXCUSED: t('excused') };
+  const statusShort: Record<string, string> = { PRESENT: t('presentShort'), ABSENT: t('absentShort'), LATE: t('lateShort'), EXCUSED: t('excusedShort') };
+
   const [courses, setCourses] = useState<any[]>([]);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [loading, setLoading] = useState(true);
@@ -206,19 +212,19 @@ export default function TeacherAttendancePage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Attendance</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('navAttendance')}</h1>
       </div>
 
       {/* Course selector */}
       <div className="max-w-xs">
-        <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Course</label>
+        <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">{t('course')}</label>
         <select
           value={selectedCourse}
           onChange={(e) => setSelectedCourse(e.target.value)}
           className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-primary-500"
         >
           {courses.map((c) => (
-            <option key={c.id} value={c.id}>{c.titleEn || c.titleAz}</option>
+            <option key={c.id} value={c.id}>{tField(c, 'title')}</option>
           ))}
         </select>
       </div>
@@ -233,7 +239,7 @@ export default function TeacherAttendancePage() {
               : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
           }`}
         >
-          <ClipboardList className="w-4 h-4" /> Mark Attendance
+          <ClipboardList className="w-4 h-4" /> {t('markAttendance')}
         </button>
         <button
           onClick={() => setActiveTab('history')}
@@ -243,7 +249,7 @@ export default function TeacherAttendancePage() {
               : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
           }`}
         >
-          <History className="w-4 h-4" /> History
+          <History className="w-4 h-4" /> {t('history')}
         </button>
       </div>
 
@@ -253,7 +259,7 @@ export default function TeacherAttendancePage() {
           {/* Date + Quick actions */}
           <div className="flex flex-wrap items-end gap-4">
             <div>
-              <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Date</label>
+              <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">{t('date')}</label>
               <input
                 type="date"
                 value={selectedDate}
@@ -262,14 +268,14 @@ export default function TeacherAttendancePage() {
               />
             </div>
             <div className="flex gap-2 items-center">
-              <span className="text-sm text-gray-500 dark:text-gray-400">Mark all:</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">{t('markAll')}</span>
               {STATUS_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => setAllStatus(opt.value)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${opt.bg} ${opt.color} border-current/20 hover:opacity-80`}
                 >
-                  {opt.label}
+                  {statusLabel[opt.value] || opt.label}
                 </button>
               ))}
             </div>
@@ -279,7 +285,7 @@ export default function TeacherAttendancePage() {
           {students.length === 0 ? (
             <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-12 text-center">
               <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p className="text-gray-500 dark:text-gray-400">No students enrolled in this course</p>
+              <p className="text-gray-500 dark:text-gray-400">{t('noStudentsEnrolled')}</p>
             </div>
           ) : (
             <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
@@ -287,9 +293,9 @@ export default function TeacherAttendancePage() {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-800">
-                      <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Student</th>
-                      <th className="text-center px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Status</th>
-                      <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Note</th>
+                      <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t('student')}</th>
+                      <th className="text-center px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t('status')}</th>
+                      <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t('note')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -303,7 +309,7 @@ export default function TeacherAttendancePage() {
                                 {s.student.name?.charAt(0) || 'S'}
                               </div>
                               <div>
-                                <p className="text-sm font-medium text-gray-900 dark:text-white">{s.student.name}</p>
+                                <p className="text-sm font-medium text-gray-900 dark:text-white">{tField(s.student, 'name')}</p>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">{s.student.email}</p>
                               </div>
                             </div>
@@ -322,7 +328,7 @@ export default function TeacherAttendancePage() {
                                         ? `${opt.bg} ${opt.color} ring-2 ring-current/30`
                                         : 'text-gray-300 dark:text-gray-600 hover:text-gray-500 dark:hover:text-gray-400'
                                     }`}
-                                    title={opt.label}
+                                    title={statusLabel[opt.value] || opt.label}
                                   >
                                     <Icon className="w-5 h-5" />
                                   </button>
@@ -334,7 +340,7 @@ export default function TeacherAttendancePage() {
                             <input
                               value={rec.note}
                               onChange={(e) => setRecords({ ...records, [s.student.id]: { ...rec, note: e.target.value } })}
-                              placeholder="Optional note..."
+                              placeholder={t('optionalNote')}
                               className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-900 dark:text-white outline-none focus:ring-1 focus:ring-primary-500"
                             />
                           </td>
@@ -356,7 +362,7 @@ export default function TeacherAttendancePage() {
                 className="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-500 text-white font-medium hover:bg-primary-600 disabled:opacity-50 transition-colors"
               >
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                {saving ? 'Saving...' : 'Save Attendance'}
+                {saving ? t('saving') : t('saveAttendance')}
               </button>
               {message && (
                 <p className={`text-sm font-medium ${message.includes('saved') ? 'text-green-500' : 'text-red-500'}`}>
@@ -391,7 +397,7 @@ export default function TeacherAttendancePage() {
           ) : historyGrid.students.length === 0 ? (
             <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-12 text-center">
               <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p className="text-gray-500 dark:text-gray-400">No attendance records for this month</p>
+              <p className="text-gray-500 dark:text-gray-400">{t('noAttendanceMonth')}</p>
             </div>
           ) : (
             <>
@@ -402,12 +408,12 @@ export default function TeacherAttendancePage() {
                     <span className={`inline-flex items-center justify-center w-6 h-6 rounded ${val.bg} ${val.color} font-bold text-xs`}>
                       {val.icon}
                     </span>
-                    <span className="text-gray-600 dark:text-gray-400">{val.label}</span>
+                    <span className="text-gray-600 dark:text-gray-400">{statusLabel[key] || val.label}</span>
                   </div>
                 ))}
                 <div className="flex items-center gap-1.5">
                   <span className="inline-flex items-center justify-center w-6 h-6 rounded bg-gray-100 dark:bg-gray-800 text-gray-300 dark:text-gray-600 font-bold text-xs">-</span>
-                  <span className="text-gray-600 dark:text-gray-400">No record</span>
+                  <span className="text-gray-600 dark:text-gray-400">{t('noRecord')}</span>
                 </div>
               </div>
 
@@ -418,7 +424,7 @@ export default function TeacherAttendancePage() {
                     <thead>
                       <tr className="border-b border-gray-200 dark:border-gray-800">
                         <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase sticky left-0 bg-white dark:bg-gray-900 z-10 min-w-[180px]">
-                          Student
+                          {t('student')}
                         </th>
                         {historyGrid.dates.map((date) => {
                           const d = new Date(date + 'T00:00:00');
@@ -432,7 +438,7 @@ export default function TeacherAttendancePage() {
                           );
                         })}
                         <th className="text-center px-3 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase sticky right-0 bg-white dark:bg-gray-900 z-10 min-w-[60px]">
-                          Rate
+                          {t('rate')}
                         </th>
                       </tr>
                     </thead>
@@ -448,7 +454,7 @@ export default function TeacherAttendancePage() {
                                   {student.name?.charAt(0) || 'S'}
                                 </div>
                                 <div className="min-w-0">
-                                  <p className="text-xs font-medium text-gray-900 dark:text-white truncate">{student.name}</p>
+                                  <p className="text-xs font-medium text-gray-900 dark:text-white truncate">{tField(student, 'name')}</p>
                                 </div>
                               </div>
                             </td>
@@ -460,7 +466,7 @@ export default function TeacherAttendancePage() {
                                   {cell ? (
                                     <span
                                       className={`inline-flex items-center justify-center w-7 h-7 rounded-lg ${cell.bg} ${cell.color} font-bold text-xs`}
-                                      title={`${cell.label} - ${new Date(date + 'T00:00:00').toLocaleDateString()}`}
+                                      title={`${statusLabel[status!] || cell.label} - ${new Date(date + 'T00:00:00').toLocaleDateString()}`}
                                     >
                                       {cell.icon}
                                     </span>
@@ -492,10 +498,10 @@ export default function TeacherAttendancePage() {
               {/* Summary stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { label: 'Total Records', value: historyData.length, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-900/20' },
-                  { label: 'Present', value: historyData.filter((r: any) => r.status === 'PRESENT').length, color: 'text-green-600 dark:text-green-400', bg: 'bg-green-50 dark:bg-green-900/20' },
-                  { label: 'Absent', value: historyData.filter((r: any) => r.status === 'ABSENT').length, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-900/20' },
-                  { label: 'Late', value: historyData.filter((r: any) => r.status === 'LATE').length, color: 'text-yellow-600 dark:text-yellow-400', bg: 'bg-yellow-50 dark:bg-yellow-900/20' },
+                  { label: t('totalRecords'), value: historyData.length, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-900/20' },
+                  { label: t('present'), value: historyData.filter((r: any) => r.status === 'PRESENT').length, color: 'text-green-600 dark:text-green-400', bg: 'bg-green-50 dark:bg-green-900/20' },
+                  { label: t('absent'), value: historyData.filter((r: any) => r.status === 'ABSENT').length, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-900/20' },
+                  { label: t('late'), value: historyData.filter((r: any) => r.status === 'LATE').length, color: 'text-yellow-600 dark:text-yellow-400', bg: 'bg-yellow-50 dark:bg-yellow-900/20' },
                 ].map((stat) => (
                   <div key={stat.label} className={`${stat.bg} rounded-xl p-4`}>
                     <p className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</p>

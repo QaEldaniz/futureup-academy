@@ -7,6 +7,7 @@ import {
   ArrowLeft, BookOpen, CheckCircle2, Circle, PlayCircle, Clock,
   FileText, Users as UsersIcon, Signal, ClipboardList, FileQuestion, Bot,
 } from 'lucide-react';
+import { useLmsT } from '@/hooks/useLmsT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -15,6 +16,7 @@ export default function StudentCourseDetail() {
   const params = useParams();
   const courseId = params.courseId as string;
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +49,7 @@ export default function StudentCourseDetail() {
     return (
       <div className="text-center py-20">
         <BookOpen className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Course not found</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('courseNotFound')}</h2>
       </div>
     );
   }
@@ -56,7 +58,7 @@ export default function StudentCourseDetail() {
     <div className="space-y-6">
       {/* Back */}
       <button onClick={() => router.push('/lms/student/courses')} className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Back to courses
+        <ArrowLeft className="w-4 h-4" /> {t('backToCourses')}
       </button>
 
       {/* Course header */}
@@ -66,21 +68,21 @@ export default function StudentCourseDetail() {
             <img src={course.image} alt="" className="w-full md:w-48 h-32 object-cover rounded-xl" />
           )}
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{course.titleEn}</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{tField(course, 'title')}</h1>
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
               <span className="flex items-center gap-1"><Signal className="w-4 h-4" /> {course.level}</span>
-              {course.category && <span>{course.category.nameEn}</span>}
+              {course.category && <span>{tField(course.category, 'name')}</span>}
               {course.teachers?.length > 0 && (
                 <span className="flex items-center gap-1">
                   <UsersIcon className="w-4 h-4" />
-                  {course.teachers.map((t: any) => t.teacher.nameEn).join(', ')}
+                  {course.teachers.map((tc: any) => tField(tc.teacher, 'name')).join(', ')}
                 </span>
               )}
             </div>
             {/* Course progress */}
             <div>
               <div className="flex items-center justify-between text-sm mb-2">
-                <span className="text-gray-500 dark:text-gray-400">Course Progress</span>
+                <span className="text-gray-500 dark:text-gray-400">{t('courseProgress')}</span>
                 <span className="font-bold text-primary-600 dark:text-primary-400">{course.courseProgress?.percentage || 0}%</span>
               </div>
               <div className="h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
@@ -105,8 +107,8 @@ export default function StudentCourseDetail() {
               <Bot className="w-5 h-5 text-violet-600 dark:text-violet-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 dark:text-white text-sm">AI Tutor</h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Get personalized help</p>
+              <h3 className="font-semibold text-gray-900 dark:text-white text-sm">{t('aiTutor')}</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{t('getPersonalizedHelp')}</p>
             </div>
           </div>
           <ArrowLeft className="w-5 h-5 text-gray-400 rotate-180" />
@@ -120,8 +122,8 @@ export default function StudentCourseDetail() {
               <ClipboardList className="w-5 h-5 text-orange-600 dark:text-orange-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Assignments</h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400">View and submit assignments</p>
+              <h3 className="font-semibold text-gray-900 dark:text-white text-sm">{t('navAssignments')}</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{t('viewSubmitAssignments')}</p>
             </div>
           </div>
           <ArrowLeft className="w-5 h-5 text-gray-400 rotate-180" />
@@ -135,8 +137,8 @@ export default function StudentCourseDetail() {
               <FileQuestion className="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Quizzes</h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Take quizzes and tests</p>
+              <h3 className="font-semibold text-gray-900 dark:text-white text-sm">{t('navQuizzes')}</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{t('takeQuizzesTests')}</p>
             </div>
           </div>
           <ArrowLeft className="w-5 h-5 text-gray-400 rotate-180" />
@@ -146,7 +148,7 @@ export default function StudentCourseDetail() {
       {/* Lessons */}
       <div>
         <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-          Lessons ({course.lessons?.length || 0})
+          {t('lessons')} ({course.lessons?.length || 0})
         </h2>
         <div className="space-y-2">
           {course.lessons?.map((lesson: any, index: number) => {
@@ -163,10 +165,10 @@ export default function StudentCourseDetail() {
                 <StatusIcon className={`w-6 h-6 flex-shrink-0 ${statusColor}`} />
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 dark:text-white text-sm truncate">
-                    {index + 1}. {lesson.titleEn}
+                    {index + 1}. {tField(lesson, 'title')}
                   </h3>
-                  {lesson.descEn && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{lesson.descEn}</p>
+                  {(lesson.descEn || lesson.descAz || lesson.descRu) && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{tField(lesson, 'desc')}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-400 flex-shrink-0">

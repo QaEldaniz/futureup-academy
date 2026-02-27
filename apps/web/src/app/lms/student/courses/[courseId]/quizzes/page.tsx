@@ -8,6 +8,7 @@ import {
   Timer, Trophy, Code, AlignLeft, ListChecks, CircleDot, Hash, Eye,
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 import MarkdownRenderer from '@/components/shared/MarkdownRenderer';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -48,6 +49,7 @@ export default function StudentQuizzesPage() {
   const { courseId } = useParams();
   const router = useRouter();
   const { token } = useAuthStore();
+  const { t } = useLmsT();
 
   const [quizzes, setQuizzes] = useState<QuizData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -142,7 +144,7 @@ export default function StudentQuizzesPage() {
 
         setViewMode('quiz');
       } else {
-        alert(data.message || 'Failed to start quiz');
+        alert(data.message || t('failedToStartQuiz'));
       }
     } catch (err) {
       console.error('Failed to start quiz:', err);
@@ -247,7 +249,7 @@ export default function StudentQuizzesPage() {
                   <Timer className="w-4 h-4" /> {formatTime(timeLeft)}
                 </div>
               )}
-              <span className="text-sm text-gray-500">{answeredCount}/{totalQuestions} answered</span>
+              <span className="text-sm text-gray-500">{answeredCount}/{totalQuestions} {t('answered')}</span>
             </div>
           </div>
           {/* Progress bar */}
@@ -271,7 +273,7 @@ export default function StudentQuizzesPage() {
             <span className="px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded-full font-medium">
               Q{currentQuestionIdx + 1}/{totalQuestions}
             </span>
-            <span>{currentQ.points} pt{currentQ.points > 1 ? 's' : ''}</span>
+            <span>{currentQ.points} {t('pts')}</span>
             <span>•</span>
             <span className="capitalize">{currentQ.type.replace(/_/g, ' ').toLowerCase()}</span>
           </div>
@@ -310,7 +312,7 @@ export default function StudentQuizzesPage() {
 
           {currentQ.type === 'MULTIPLE_SELECT' && currentQ.options && (
             <div className="space-y-2">
-              <p className="text-xs text-gray-400 mb-2">Select all that apply</p>
+              <p className="text-xs text-gray-400 mb-2">{t('selectAllApply')}</p>
               {currentQ.options.map((opt) => {
                 const currentAnswers: string[] = answers[currentQ.id] || [];
                 const isSelected = currentAnswers.includes(opt.id);
@@ -347,7 +349,7 @@ export default function StudentQuizzesPage() {
               onChange={(e) => handleSaveAnswer(currentQ.id, [e.target.value])}
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm leading-relaxed focus:ring-2 focus:ring-primary-500"
               rows={6}
-              placeholder="Type your answer here..."
+              placeholder={t('typeAnswerHere')}
             />
           )}
 
@@ -357,7 +359,7 @@ export default function StudentQuizzesPage() {
               onChange={(e) => handleSaveAnswer(currentQ.id, [e.target.value])}
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-900 text-green-400 text-sm font-mono leading-relaxed focus:ring-2 focus:ring-primary-500"
               rows={8}
-              placeholder="// Write your code here..."
+              placeholder={t('writeCodeHere')}
             />
           )}
         </div>
@@ -369,7 +371,7 @@ export default function StudentQuizzesPage() {
             disabled={currentQuestionIdx === 0}
             className="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl disabled:opacity-30 transition-colors"
           >
-            <ChevronLeft className="w-4 h-4" /> Previous
+            <ChevronLeft className="w-4 h-4" /> {t('previous')}
           </button>
 
           <div className="flex items-center gap-2">
@@ -396,7 +398,7 @@ export default function StudentQuizzesPage() {
               onClick={() => setCurrentQuestionIdx((p) => Math.min(totalQuestions - 1, p + 1))}
               className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors"
             >
-              Next <ChevronRight className="w-4 h-4" />
+              {t('next')} <ChevronRight className="w-4 h-4" />
             </button>
           ) : (
             <button
@@ -404,7 +406,7 @@ export default function StudentQuizzesPage() {
               disabled={submitting}
               className="flex items-center gap-2 px-5 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
             >
-              <Send className="w-4 h-4" /> {submitting ? 'Submitting...' : 'Submit Quiz'}
+              <Send className="w-4 h-4" /> {submitting ? t('submitting') : t('submitQuiz')}
             </button>
           )}
         </div>
@@ -413,7 +415,7 @@ export default function StudentQuizzesPage() {
         {answeredCount < totalQuestions && (
           <div className="flex items-center gap-2 text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/10 px-4 py-2 rounded-xl">
             <AlertTriangle className="w-4 h-4" />
-            {totalQuestions - answeredCount} question{totalQuestions - answeredCount > 1 ? 's' : ''} unanswered
+            {totalQuestions - answeredCount} {t('questions')} {t('unanswered')}
           </div>
         )}
       </div>
@@ -428,7 +430,7 @@ export default function StudentQuizzesPage() {
     return (
       <div className="max-w-3xl mx-auto space-y-6">
         <button onClick={backToList} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all">
-          <ArrowLeft className="w-4 h-4" /> Back to quizzes
+          <ArrowLeft className="w-4 h-4" /> {t('backToQuizzes')}
         </button>
 
         {/* Score Card */}
@@ -456,30 +458,30 @@ export default function StudentQuizzesPage() {
                 {results.score}%
               </div>
               <p className="text-gray-500 dark:text-gray-400 text-sm">
-                {results.totalPoints}/{results.maxPoints} points
+                {results.totalPoints}/{results.maxPoints} {t('points')}
               </p>
             </>
           ) : (
-            <p className="text-gray-500 dark:text-gray-400">Awaiting manual grading for some answers</p>
+            <p className="text-gray-500 dark:text-gray-400">{t('awaitingManualGrading')}</p>
           )}
 
           {results.passed !== null && (
             <div className={`mt-3 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium ${
               results.passed ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
             }`}>
-              {results.passed ? <><CheckCircle2 className="w-4 h-4" /> Passed</> : <><XCircle className="w-4 h-4" /> Not Passed</>}
+              {results.passed ? <><CheckCircle2 className="w-4 h-4" /> {t('statusPassed')}</> : <><XCircle className="w-4 h-4" /> {t('statusNotPassed')}</>}
             </div>
           )}
 
           {results.timeSpentSec && (
             <p className="text-xs text-gray-400 mt-3">
-              Time: {Math.floor(results.timeSpentSec / 60)}m {results.timeSpentSec % 60}s
+              {t('time')} {Math.floor(results.timeSpentSec / 60)}m {results.timeSpentSec % 60}s
             </p>
           )}
 
           {results.hasManualGrading && (
             <div className="mt-3 px-4 py-2 bg-yellow-50 dark:bg-yellow-900/10 rounded-xl text-xs text-yellow-700 dark:text-yellow-400">
-              Some answers require manual grading by the teacher. Your final score will be updated after review.
+              {t('manualGradingNote')}
             </div>
           )}
         </div>
@@ -488,7 +490,7 @@ export default function StudentQuizzesPage() {
         {results.answers && results.answers.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="font-semibold text-gray-900 dark:text-white">Answer Review</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white">{t('answerReview')}</h3>
             </div>
             <div className="divide-y divide-gray-100 dark:divide-gray-800">
               {results.answers.map((a: any, idx: number) => (
@@ -507,7 +509,7 @@ export default function StudentQuizzesPage() {
                       </div>
                       {/* Student's answer */}
                       <div className="text-xs">
-                        <span className="text-gray-400">Your answer: </span>
+                        <span className="text-gray-400">{t('yourAnswer')} </span>
                         <span className={`font-medium ${
                           a.isCorrect === true ? 'text-green-600' : a.isCorrect === false ? 'text-red-600' : 'text-gray-600'
                         }`}>
@@ -523,7 +525,7 @@ export default function StudentQuizzesPage() {
                       {/* Correct answer */}
                       {a.question.correctAnswer && a.isCorrect === false && (
                         <div className="text-xs mt-1">
-                          <span className="text-gray-400">Correct: </span>
+                          <span className="text-gray-400">{t('correctAnswer')} </span>
                           <span className="text-green-600 font-medium">
                             {a.question.options && Array.isArray(a.question.correctAnswer)
                               ? a.question.correctAnswer.map((aid: string) => {
@@ -543,7 +545,7 @@ export default function StudentQuizzesPage() {
                       )}
                       {/* Points */}
                       <div className="mt-1 text-[10px] text-gray-400">
-                        {a.pointsEarned !== null ? `${a.pointsEarned}/${a.question.points} pts` : 'Pending grading'}
+                        {a.pointsEarned !== null ? `${a.pointsEarned}/${a.question.points} ${t('pts')}` : t('pendingGrading')}
                       </div>
                     </div>
                   </div>
@@ -554,7 +556,7 @@ export default function StudentQuizzesPage() {
         )}
 
         <button onClick={backToList} className="w-full py-3 text-center text-primary-600 hover:text-primary-700 font-medium text-sm">
-          ← Back to all quizzes
+          ← {t('backToAllQuizzes')}
         </button>
       </div>
     );
@@ -575,27 +577,27 @@ export default function StudentQuizzesPage() {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Quizzes</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Test your knowledge</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('quizzes')}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t('testKnowledge')}</p>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-          <p className="text-xs text-gray-500 dark:text-gray-400">Total</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{t('total')}</p>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalQuizzes}</p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-          <p className="text-xs text-gray-500 dark:text-gray-400">Completed</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{t('statusCompleted')}</p>
           <p className="text-2xl font-bold text-blue-600">{completedQuizzes}</p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-          <p className="text-xs text-gray-500 dark:text-gray-400">Passed</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{t('statusPassed')}</p>
           <p className="text-2xl font-bold text-green-600">{passedQuizzes}</p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-          <p className="text-xs text-gray-500 dark:text-gray-400">Avg Score</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{t('avgScore')}</p>
           <p className="text-2xl font-bold text-secondary-600">{completedQuizzes > 0 ? Math.round(avgScore) : '—'}%</p>
         </div>
       </div>
@@ -604,8 +606,8 @@ export default function StudentQuizzesPage() {
       {quizzes.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-12 text-center">
           <FileQuestion className="w-16 h-16 text-gray-200 dark:text-gray-700 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-400 dark:text-gray-500">No quizzes available</h3>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Your teacher hasn&apos;t published any quizzes yet</p>
+          <h3 className="text-lg font-medium text-gray-400 dark:text-gray-500">{t('noQuizzesAvailable')}</h3>
+          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">{t('noQuizzesPublished')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -618,7 +620,7 @@ export default function StudentQuizzesPage() {
                     <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
                       quiz.passed ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                     }`}>
-                      {quiz.passed ? 'Passed' : 'Not Passed'}
+                      {quiz.passed ? t('statusPassed') : t('statusNotPassed')}
                     </span>
                   )}
                 </div>
@@ -629,19 +631,19 @@ export default function StudentQuizzesPage() {
                 {/* Quiz Meta */}
                 <div className="flex flex-wrap gap-2 mb-4 text-xs">
                   <span className="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-lg">
-                    <FileQuestion className="w-3 h-3" /> {quiz._count.questions} questions
+                    <FileQuestion className="w-3 h-3" /> {quiz._count.questions} {t('questions')}
                   </span>
                   {quiz.timeLimit && (
                     <span className="flex items-center gap-1 px-2 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-lg">
-                      <Clock className="w-3 h-3" /> {quiz.timeLimit} min
+                      <Clock className="w-3 h-3" /> {quiz.timeLimit} {t('min')}
                     </span>
                   )}
                   <span className="flex items-center gap-1 px-2 py-1 bg-secondary-50 dark:bg-secondary-900/20 text-secondary-700 dark:text-secondary-400 rounded-lg">
-                    <Target className="w-3 h-3" /> {quiz.attemptsUsed}/{quiz.maxAttempts} attempts
+                    <Target className="w-3 h-3" /> {quiz.attemptsUsed}/{quiz.maxAttempts} {t('attempts')}
                   </span>
                   {quiz.passingScore && (
                     <span className="flex items-center gap-1 px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-lg">
-                      <Award className="w-3 h-3" /> Pass: {quiz.passingScore}%
+                      <Award className="w-3 h-3" /> {t('pass')} {quiz.passingScore}%
                     </span>
                   )}
                 </div>
@@ -649,11 +651,11 @@ export default function StudentQuizzesPage() {
                 {/* Best Score */}
                 {quiz.bestAttempt && (
                   <div className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg mb-3">
-                    <span className="text-xs text-gray-500">Best Score</span>
+                    <span className="text-xs text-gray-500">{t('bestScore')}</span>
                     <span className={`font-bold text-sm ${
                       (quiz.bestAttempt.score || 0) >= 70 ? 'text-green-600' : (quiz.bestAttempt.score || 0) >= 50 ? 'text-yellow-600' : 'text-red-600'
                     }`}>
-                      {quiz.bestAttempt.score !== null ? `${quiz.bestAttempt.score}%` : 'Pending'}
+                      {quiz.bestAttempt.score !== null ? `${quiz.bestAttempt.score}%` : t('statusPending')}
                     </span>
                   </div>
                 )}
@@ -665,18 +667,18 @@ export default function StudentQuizzesPage() {
                       onClick={() => handleStartQuiz(quiz)}
                       className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 text-sm font-medium transition-colors"
                     >
-                      <RotateCcw className="w-4 h-4" /> Continue Quiz
+                      <RotateCcw className="w-4 h-4" /> {t('continueQuiz')}
                     </button>
                   ) : quiz.canRetake ? (
                     <button
                       onClick={() => handleStartQuiz(quiz)}
                       className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-xl hover:bg-primary-700 text-sm font-medium transition-colors"
                     >
-                      <Play className="w-4 h-4" /> {quiz.attemptsUsed > 0 ? 'Retake' : 'Start Quiz'}
+                      <Play className="w-4 h-4" /> {quiz.attemptsUsed > 0 ? t('retake') : t('startQuiz')}
                     </button>
                   ) : (
                     <div className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-500 rounded-xl text-sm">
-                      No attempts left
+                      {t('noAttemptsLeft')}
                     </div>
                   )}
                   {quiz.bestAttempt && (
@@ -684,7 +686,7 @@ export default function StudentQuizzesPage() {
                       onClick={() => handleViewResults(quiz.bestAttempt.id)}
                       className="flex items-center gap-1.5 px-3 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 text-sm text-gray-600 dark:text-gray-400"
                     >
-                      <Eye className="w-4 h-4" /> Results
+                      <Eye className="w-4 h-4" /> {t('results')}
                     </button>
                   )}
                 </div>

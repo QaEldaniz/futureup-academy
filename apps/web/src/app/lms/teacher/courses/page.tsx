@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 import { BookOpen, Users, ArrowRight } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -10,6 +11,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 export default function TeacherCoursesPage() {
   const router = useRouter();
   const { user, token } = useAuthStore();
+  const { t, tField } = useLmsT();
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +49,7 @@ export default function TeacherCoursesPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{isAdmin ? 'All Courses' : 'My Courses'}</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{isAdmin ? t('navAllCourses') : t('myCourses')}</h1>
 
       {loading ? (
         <div className="space-y-4">
@@ -56,7 +58,7 @@ export default function TeacherCoursesPage() {
       ) : courses.length === 0 ? (
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-12 text-center">
           <BookOpen className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-          <h3 className="font-semibold text-gray-900 dark:text-white">No courses assigned</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white">{t('noCoursesAssigned')}</h3>
         </div>
       ) : (
         <div className="space-y-4">
@@ -70,9 +72,9 @@ export default function TeacherCoursesPage() {
               >
                 {course.image && <img src={course.image} alt="" className="w-20 h-20 object-cover rounded-xl flex-shrink-0 hidden sm:block" />}
                 <div className="flex-1">
-                  <h3 className="font-bold text-gray-900 dark:text-white">{course.titleEn || course.titleAz}</h3>
+                  <h3 className="font-bold text-gray-900 dark:text-white">{tField(course, 'title')}</h3>
                   <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    <span className="flex items-center gap-1"><Users className="w-4 h-4" /> {course._count?.students || 0} students</span>
+                    <span className="flex items-center gap-1"><Users className="w-4 h-4" /> {course._count?.students || 0} {t('students')}</span>
                     <span>{course.level}</span>
                   </div>
                 </div>

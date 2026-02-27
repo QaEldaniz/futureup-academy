@@ -2,12 +2,13 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 import { Calendar, Clock, MapPin, BookOpen } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const;
-const DAYS_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
+const DAY_KEYS_FULL = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const;
+const DAY_KEYS_SHORT = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
 const HOURS = Array.from({ length: 13 }, (_, i) => i + 9); // 09:00 - 21:00
 
 const COURSE_COLORS = [
@@ -55,9 +56,13 @@ function getTodayDayIndex(): number {
 
 export default function StudentSchedulePage() {
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
   const [schedules, setSchedules] = useState<ScheduleEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const DAYS = DAY_KEYS_FULL.map(k => t(k));
+  const DAYS_SHORT = DAY_KEYS_SHORT.map(k => t(k));
 
   useEffect(() => {
     if (!token) return;
@@ -107,8 +112,8 @@ export default function StudentSchedulePage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">My Schedule</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Your weekly class timetable</p>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">{t('mySchedule')}</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">{t('weeklyTimetable')}</p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-8">
           <div className="animate-pulse space-y-4">
@@ -129,12 +134,12 @@ export default function StudentSchedulePage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">My Schedule</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Your weekly class timetable</p>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">{t('mySchedule')}</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">{t('weeklyTimetable')}</p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-12 text-center">
           <Calendar className="w-12 h-12 text-red-400 dark:text-red-500 mx-auto mb-4" />
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Failed to load schedule</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('failedToLoadSchedule')}</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">{error}</p>
         </div>
       </div>
@@ -146,14 +151,14 @@ export default function StudentSchedulePage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">My Schedule</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Your weekly class timetable</p>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">{t('mySchedule')}</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">{t('weeklyTimetable')}</p>
         </div>
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-12 text-center">
           <Calendar className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">No schedule available</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('noScheduleAvailable')}</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Your class schedule will appear here once courses are assigned
+            {t('scheduleWillAppear')}
           </p>
         </div>
       </div>
@@ -164,8 +169,8 @@ export default function StudentSchedulePage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">My Schedule</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">Your weekly class timetable</p>
+        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">{t('mySchedule')}</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">{t('weeklyTimetable')}</p>
       </div>
 
       {/* Desktop: Weekly timetable grid */}
@@ -175,7 +180,7 @@ export default function StudentSchedulePage() {
             {/* Day headers */}
             <div className="grid grid-cols-[80px_repeat(6,1fr)] border-b border-gray-200 dark:border-gray-800">
               <div className="p-3 text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                Time
+                {t('time')}
               </div>
               {DAYS.map((day, idx) => {
                 const dayNum = idx + 1;
@@ -192,7 +197,7 @@ export default function StudentSchedulePage() {
                     {day}
                     {isToday && (
                       <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
-                        Today
+                        {t('today')}
                       </span>
                     )}
                   </div>
@@ -238,15 +243,15 @@ export default function StudentSchedulePage() {
                               top: `${(offsetMin / 60) * 64 + 4}px`,
                               height: `${Math.max(duration * 64 - 8, 24)}px`,
                             }}
-                            title={`${entry.course.titleEn} - ${entry.startTime} to ${entry.endTime}`}
+                            title={`${tField(entry.course, 'title')} - ${entry.startTime} to ${entry.endTime}`}
                           >
                             <p className={`font-semibold ${colors.text} truncate leading-tight`}>
-                              {entry.course.titleEn}
+                              {tField(entry.course, 'title')}
                             </p>
                             {duration >= 1 && (
                               <>
                                 <p className="text-gray-500 dark:text-gray-400 truncate mt-0.5">
-                                  {entry.teacher.nameEn}
+                                  {tField(entry.teacher, 'name')}
                                 </p>
                                 <div className="flex items-center gap-2 mt-0.5 text-gray-400 dark:text-gray-500">
                                   <span className="flex items-center gap-0.5">
@@ -301,14 +306,14 @@ export default function StudentSchedulePage() {
                   </h3>
                   {isToday && (
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
-                      Today
+                      {t('today')}
                     </span>
                   )}
                 </div>
               </div>
               <div className="p-3 space-y-2">
                 {dayEntries.length === 0 ? (
-                  <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-3">No classes</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-3">{t('noClasses')}</p>
                 ) : (
                   dayEntries.map((entry) => {
                     const colors = courseColorMap[entry.course.id];
@@ -320,10 +325,10 @@ export default function StudentSchedulePage() {
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
                             <p className={`font-semibold text-sm ${colors.text} truncate`}>
-                              {entry.course.titleEn}
+                              {tField(entry.course, 'title')}
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                              {entry.teacher.nameEn}
+                              {tField(entry.teacher, 'name')}
                             </p>
                           </div>
                           <span className="text-xs font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap flex items-center gap-1">
@@ -349,7 +354,7 @@ export default function StudentSchedulePage() {
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4">
         <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
           <BookOpen className="w-4 h-4" />
-          Courses
+          {t('courses')}
         </h3>
         <div className="flex flex-wrap gap-3">
           {Object.entries(courseColorMap).map(([courseId, colors]) => {
@@ -358,7 +363,7 @@ export default function StudentSchedulePage() {
             return (
               <div key={courseId} className="flex items-center gap-2 text-sm">
                 <span className={`w-3 h-3 rounded-full ${colors.dot}`} />
-                <span className="text-gray-600 dark:text-gray-400">{entry.course.titleEn}</span>
+                <span className="text-gray-600 dark:text-gray-400">{tField(entry.course, 'title')}</span>
               </div>
             );
           })}

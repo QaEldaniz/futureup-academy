@@ -2,17 +2,20 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 import { ChevronLeft, ChevronRight, Calendar as CalIcon, X } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 interface CalEvent { id: string; title: string; date: string; time: string | null; endTime: string | null; type: 'lesson' | 'assignment' | 'quiz'; courseTitle: string; courseId: string; color: string; room?: string; }
 
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const TYPE_LABELS: Record<string, string> = { lesson: 'Lesson', assignment: 'Assignment Due', quiz: 'Quiz' };
+const DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
 export default function StudentCalendarPage() {
   const { token } = useAuthStore();
+  const { t } = useLmsT();
+  const DAYS = DAY_KEYS.map(k => t(k));
+  const TYPE_LABELS: Record<string, string> = { lesson: t('lessonLabel'), assignment: t('assignmentDue'), quiz: t('quizLabel') };
   const [events, setEvents] = useState<CalEvent[]>([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<'month' | 'week'>('month');
@@ -81,8 +84,8 @@ export default function StudentCalendarPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Calendar</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Your schedule, assignments, and quizzes</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('calendar')}</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{t('scheduleAssignmentsQuizzes')}</p>
       </div>
 
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
@@ -94,7 +97,7 @@ export default function StudentCalendarPage() {
             <button onClick={() => navigate(1)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"><ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-400" /></button>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={goToday} className="px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">Today</button>
+            <button onClick={goToday} className="px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">{t('today')}</button>
             <div className="flex gap-1">
               {(['month', 'week'] as const).map(v => (
                 <button key={v} onClick={() => setView(v)} className={`px-3 py-1.5 text-sm font-medium rounded-lg ${view === v ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>
@@ -107,9 +110,9 @@ export default function StudentCalendarPage() {
 
         {/* Legend */}
         <div className="flex items-center gap-4 px-6 py-2 text-xs border-b border-gray-50 dark:border-gray-800">
-          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-green-500" /> Lessons</span>
-          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-red-500" /> Assignments</span>
-          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /> Quizzes</span>
+          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-green-500" /> {t('lessons')}</span>
+          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-red-500" /> {t('navAssignments')}</span>
+          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /> {t('navQuizzes')}</span>
         </div>
 
         {loading ? (
@@ -144,7 +147,7 @@ export default function StudentCalendarPage() {
                           {e.time ? `${e.time} ` : ''}{e.title}
                         </div>
                       ))}
-                      {dayEvts.length > 3 && <div className="text-[10px] text-gray-400 pl-1">+{dayEvts.length - 3} more</div>}
+                      {dayEvts.length > 3 && <div className="text-[10px] text-gray-400 pl-1">+{dayEvts.length - 3} {t('more')}</div>}
                     </div>
                   </button>
                 );
@@ -189,10 +192,10 @@ export default function StudentCalendarPage() {
             </div>
             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{selectedEvent.title}</h3>
             <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-              <p><span className="font-medium">Course:</span> {selectedEvent.courseTitle}</p>
-              <p><span className="font-medium">Date:</span> {new Date(selectedEvent.date + 'T00:00:00').toLocaleDateString()}</p>
-              {selectedEvent.time && <p><span className="font-medium">Time:</span> {selectedEvent.time}{selectedEvent.endTime ? ` - ${selectedEvent.endTime}` : ''}</p>}
-              {selectedEvent.room && <p><span className="font-medium">Room:</span> {selectedEvent.room}</p>}
+              <p><span className="font-medium">{t('courseLabel')}</span> {selectedEvent.courseTitle}</p>
+              <p><span className="font-medium">{t('dateLabel')}</span> {new Date(selectedEvent.date + 'T00:00:00').toLocaleDateString()}</p>
+              {selectedEvent.time && <p><span className="font-medium">{t('timeLabel')}</span> {selectedEvent.time}{selectedEvent.endTime ? ` - ${selectedEvent.endTime}` : ''}</p>}
+              {selectedEvent.room && <p><span className="font-medium">{t('roomLabel')}</span> {selectedEvent.room}</p>}
             </div>
           </div>
         </div>

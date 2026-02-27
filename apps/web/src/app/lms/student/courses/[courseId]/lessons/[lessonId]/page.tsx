@@ -7,6 +7,7 @@ import {
   ArrowLeft, ArrowRight, CheckCircle2, Play, FileText, Video,
   Presentation, Sheet, Link2, File, ChevronLeft, ChevronRight
 } from 'lucide-react';
+import { useLmsT } from '@/hooks/useLmsT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -50,6 +51,7 @@ export default function LessonViewPage() {
   const courseId = params.courseId as string;
   const lessonId = params.lessonId as string;
   const { token } = useAuthStore();
+  const { t, tField } = useLmsT();
   const [lesson, setLesson] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeMaterial, setActiveMaterial] = useState(0);
@@ -95,7 +97,7 @@ export default function LessonViewPage() {
   }
 
   if (!lesson) {
-    return <div className="text-center py-20"><p className="text-gray-500">Lesson not found</p></div>;
+    return <div className="text-center py-20"><p className="text-gray-500">{t('lessonNotFound')}</p></div>;
   }
 
   const materials = lesson.materials || [];
@@ -108,10 +110,10 @@ export default function LessonViewPage() {
       {/* Navigation */}
       <div className="flex items-center justify-between">
         <button onClick={() => router.push(`/lms/student/courses/${courseId}`)} className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
-          <ArrowLeft className="w-4 h-4" /> Back to course
+          <ArrowLeft className="w-4 h-4" /> {t('backToCourse')}
         </button>
         <span className="text-sm text-gray-400">
-          Lesson {lesson.navigation?.current} of {lesson.navigation?.total}
+          {t('lesson')} {lesson.navigation?.current} {t('of')} {lesson.navigation?.total}
         </span>
       </div>
 
@@ -119,20 +121,20 @@ export default function LessonViewPage() {
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">{lesson.titleEn}</h1>
-            {lesson.descEn && <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">{lesson.descEn}</p>}
-            <p className="text-xs text-gray-400 mt-2">{lesson.course?.titleEn}</p>
+            <h1 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">{tField(lesson, 'title')}</h1>
+            {(lesson.descEn || lesson.descAz || lesson.descRu) && <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">{tField(lesson, 'desc')}</p>}
+            <p className="text-xs text-gray-400 mt-2">{tField(lesson.course, 'title')}</p>
           </div>
           {isCompleted ? (
             <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-xs font-semibold">
-              <CheckCircle2 className="w-4 h-4" /> Completed
+              <CheckCircle2 className="w-4 h-4" /> {t('statusCompleted')}
             </span>
           ) : (
             <button
               onClick={markComplete}
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-white text-sm font-semibold transition-colors"
             >
-              <CheckCircle2 className="w-4 h-4" /> Mark Complete
+              <CheckCircle2 className="w-4 h-4" /> {t('markComplete')}
             </button>
           )}
         </div>
@@ -182,7 +184,7 @@ export default function LessonViewPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-500 text-white font-semibold hover:bg-primary-600 transition-colors"
                   >
-                    <Link2 className="w-5 h-5" /> Open Material
+                    <Link2 className="w-5 h-5" /> {t('openMaterial')}
                   </a>
                 </div>
               )}
@@ -198,7 +200,7 @@ export default function LessonViewPage() {
             onClick={() => router.push(`/lms/student/courses/${courseId}/lessons/${lesson.navigation.prev.id}`)}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-sm font-medium text-gray-600 dark:text-gray-400 hover:border-primary-300 transition-all"
           >
-            <ChevronLeft className="w-4 h-4" /> Previous
+            <ChevronLeft className="w-4 h-4" /> {t('previous')}
           </button>
         ) : <div />}
         {lesson.navigation?.next ? (
@@ -206,7 +208,7 @@ export default function LessonViewPage() {
             onClick={() => router.push(`/lms/student/courses/${courseId}/lessons/${lesson.navigation.next.id}`)}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 text-white text-sm font-semibold hover:bg-primary-600 transition-all"
           >
-            Next <ChevronRight className="w-4 h-4" />
+            {t('next')} <ChevronRight className="w-4 h-4" />
           </button>
         ) : <div />}
       </div>

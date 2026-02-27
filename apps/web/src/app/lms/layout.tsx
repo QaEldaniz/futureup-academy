@@ -10,55 +10,56 @@ import {
 } from 'lucide-react';
 import NotificationBell from '@/components/lms/NotificationBell';
 import { LmsLanguageSwitcher } from '@/components/lms/LmsLanguageSwitcher';
+import { useLmsT } from '@/hooks/useLmsT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 interface NavItem {
-  label: string;
+  labelKey: string;
   href: string;
   icon: React.ElementType;
 }
 
 const navByRole: Record<UserType, NavItem[]> = {
   student: [
-    { label: 'Dashboard', href: '/lms/student', icon: LayoutDashboard },
-    { label: 'My Courses', href: '/lms/student/courses', icon: BookOpen },
-    { label: 'Assignments', href: '/lms/student/assignments', icon: FileText },
-    { label: 'Quizzes', href: '/lms/student/quizzes', icon: FileQuestion },
-    { label: 'Messages', href: '/lms/student/messages', icon: MessageSquare },
-    { label: 'Calendar', href: '/lms/student/calendar', icon: Calendar },
-    { label: 'Achievements', href: '/lms/student/achievements', icon: Trophy },
-    { label: 'Schedule', href: '/lms/student/schedule', icon: CalendarDays },
-    { label: 'Attendance', href: '/lms/student/attendance', icon: ClipboardCheck },
-    { label: 'Grades', href: '/lms/student/grades', icon: Star },
-    { label: 'Certificates', href: '/lms/student/certificates', icon: Award },
-    { label: 'Profile', href: '/lms/student/profile', icon: User },
+    { labelKey: 'navDashboard', href: '/lms/student', icon: LayoutDashboard },
+    { labelKey: 'navMyCourses', href: '/lms/student/courses', icon: BookOpen },
+    { labelKey: 'navAssignments', href: '/lms/student/assignments', icon: FileText },
+    { labelKey: 'navQuizzes', href: '/lms/student/quizzes', icon: FileQuestion },
+    { labelKey: 'navMessages', href: '/lms/student/messages', icon: MessageSquare },
+    { labelKey: 'navCalendar', href: '/lms/student/calendar', icon: Calendar },
+    { labelKey: 'navAchievements', href: '/lms/student/achievements', icon: Trophy },
+    { labelKey: 'navSchedule', href: '/lms/student/schedule', icon: CalendarDays },
+    { labelKey: 'navAttendance', href: '/lms/student/attendance', icon: ClipboardCheck },
+    { labelKey: 'navGrades', href: '/lms/student/grades', icon: Star },
+    { labelKey: 'navCertificates', href: '/lms/student/certificates', icon: Award },
+    { labelKey: 'navProfile', href: '/lms/student/profile', icon: User },
   ],
   teacher: [
-    { label: 'Dashboard', href: '/lms/teacher', icon: LayoutDashboard },
-    { label: 'My Courses', href: '/lms/teacher/courses', icon: BookOpen },
-    { label: 'Messages', href: '/lms/teacher/messages', icon: MessageSquare },
-    { label: 'Calendar', href: '/lms/teacher/calendar', icon: Calendar },
-    { label: 'Schedule', href: '/lms/teacher/schedule', icon: CalendarDays },
-    { label: 'Students', href: '/lms/teacher/students', icon: Users },
-    { label: 'Attendance', href: '/lms/teacher/attendance', icon: ClipboardCheck },
-    { label: 'Grades', href: '/lms/teacher/grades', icon: Star },
+    { labelKey: 'navDashboard', href: '/lms/teacher', icon: LayoutDashboard },
+    { labelKey: 'navMyCourses', href: '/lms/teacher/courses', icon: BookOpen },
+    { labelKey: 'navMessages', href: '/lms/teacher/messages', icon: MessageSquare },
+    { labelKey: 'navCalendar', href: '/lms/teacher/calendar', icon: Calendar },
+    { labelKey: 'navSchedule', href: '/lms/teacher/schedule', icon: CalendarDays },
+    { labelKey: 'navStudents', href: '/lms/teacher/students', icon: Users },
+    { labelKey: 'navAttendance', href: '/lms/teacher/attendance', icon: ClipboardCheck },
+    { labelKey: 'navGrades', href: '/lms/teacher/grades', icon: Star },
   ],
   parent: [
-    { label: 'Dashboard', href: '/lms/parent', icon: LayoutDashboard },
-    { label: 'Children', href: '/lms/parent/children', icon: Baby },
-    { label: 'Profile', href: '/lms/parent/profile', icon: User },
+    { labelKey: 'navDashboard', href: '/lms/parent', icon: LayoutDashboard },
+    { labelKey: 'navChildren', href: '/lms/parent/children', icon: Baby },
+    { labelKey: 'navProfile', href: '/lms/parent/profile', icon: User },
   ],
   admin: [
-    { label: 'Dashboard', href: '/lms/teacher', icon: LayoutDashboard },
-    { label: 'All Courses', href: '/lms/teacher/courses', icon: BookOpen },
-    { label: 'Messages', href: '/lms/teacher/messages', icon: MessageSquare },
-    { label: 'Calendar', href: '/lms/teacher/calendar', icon: Calendar },
-    { label: 'Schedule', href: '/lms/teacher/schedule', icon: CalendarDays },
-    { label: 'All Students', href: '/lms/teacher/students', icon: Users },
-    { label: 'Attendance', href: '/lms/teacher/attendance', icon: ClipboardCheck },
-    { label: 'Grades', href: '/lms/teacher/grades', icon: Star },
-    { label: 'Admin Panel', href: '/admin', icon: LayoutDashboard },
+    { labelKey: 'navDashboard', href: '/lms/teacher', icon: LayoutDashboard },
+    { labelKey: 'navAllCourses', href: '/lms/teacher/courses', icon: BookOpen },
+    { labelKey: 'navMessages', href: '/lms/teacher/messages', icon: MessageSquare },
+    { labelKey: 'navCalendar', href: '/lms/teacher/calendar', icon: Calendar },
+    { labelKey: 'navSchedule', href: '/lms/teacher/schedule', icon: CalendarDays },
+    { labelKey: 'navAllStudents', href: '/lms/teacher/students', icon: Users },
+    { labelKey: 'navAttendance', href: '/lms/teacher/attendance', icon: ClipboardCheck },
+    { labelKey: 'navGrades', href: '/lms/teacher/grades', icon: Star },
+    { labelKey: 'navAdminPanel', href: '/admin', icon: LayoutDashboard },
   ],
 };
 
@@ -72,6 +73,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
   const { user, isAuthenticated, token, logout, isLoading } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { t } = useLmsT();
 
   useEffect(() => {
     setMounted(true);
@@ -121,7 +123,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+          <p className="text-gray-500 dark:text-gray-400">{t('loading')}</p>
         </div>
       </div>
     );
@@ -179,7 +181,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
              user.type === 'teacher' ? <Users className="w-3 h-3" /> :
              user.type === 'admin' ? <GraduationCap className="w-3 h-3" /> :
              <Baby className="w-3 h-3" />}
-            {user.type === 'admin' ? 'Admin (Super)' : user.type.charAt(0).toUpperCase() + user.type.slice(1)}
+            {t(`role${user.type.charAt(0).toUpperCase() + user.type.slice(1)}`)}
           </span>
         </div>
 
@@ -201,7 +203,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
                 }`}
               >
                 <Icon className="w-5 h-5" />
-                {item.label}
+                {t(item.labelKey)}
                 {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
               </a>
             );
@@ -224,7 +226,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
             className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
           >
             <LogOut className="w-4 h-4" />
-            Sign Out
+            {t('signOut')}
           </button>
         </div>
       </aside>
@@ -244,7 +246,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
             <LmsLanguageSwitcher />
             <NotificationBell />
             <div className="hidden sm:flex items-center gap-2 text-sm">
-              <span className="text-gray-500 dark:text-gray-400">Hello,</span>
+              <span className="text-gray-500 dark:text-gray-400">{t('hello')}</span>
               <span className="font-semibold text-gray-900 dark:text-white">{displayName}</span>
             </div>
           </div>
@@ -268,6 +270,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
 // ================================================================
 function GlobalAskAIButton({ pathname, token }: { pathname: string; token: string | null }) {
   const router = useRouter();
+  const { t, tField } = useLmsT();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ x: -999, y: -999 });
   const [initialized, setInitialized] = useState(false);
@@ -381,7 +384,7 @@ function GlobalAskAIButton({ pathname, token }: { pathname: string; token: strin
           style={{ left: Math.min(pos.x, window.innerWidth - 280), top: pos.y - 10 }}
           className="fixed z-[60] transform -translate-y-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl p-2 min-w-[240px]"
         >
-          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 px-3 py-2">Select a course:</p>
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 px-3 py-2">{t('selectACourse')}</p>
           {courses.map(c => (
             <button
               key={c.id}
@@ -389,7 +392,7 @@ function GlobalAskAIButton({ pathname, token }: { pathname: string; token: strin
               className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium text-gray-900 dark:text-white hover:bg-violet-50 dark:hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-violet-400 transition-all flex items-center gap-2"
             >
               <BookOpen className="w-4 h-4 text-violet-500" />
-              {c.titleEn}
+              {tField(c, 'title') !== '—' ? tField(c, 'title') : c.titleEn}
             </button>
           ))}
         </div>
@@ -402,7 +405,7 @@ function GlobalAskAIButton({ pathname, token }: { pathname: string; token: strin
         className="fixed z-50 flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold shadow-lg shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/30 cursor-grab active:cursor-grabbing select-none"
       >
         <Bot className="w-5 h-5" />
-        {loadingCourses ? 'Loading...' : 'Ask AI'}
+        {loadingCourses ? t('loading') : t('askAI')}
       </div>
     </div>
   );

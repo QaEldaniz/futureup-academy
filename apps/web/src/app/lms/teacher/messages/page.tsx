@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useAuthStore } from '@/stores/auth';
+import { useLmsT } from '@/hooks/useLmsT';
 import { MessageSquare, Send, Plus, X, Users, Search, ArrowLeft, ChevronDown } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -29,6 +30,7 @@ interface Message {
 
 export default function TeacherMessagesPage() {
   const { user, token } = useAuthStore();
+  const { t, tField } = useLmsT();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
@@ -162,8 +164,8 @@ export default function TeacherMessagesPage() {
   return (
     <div className="h-[calc(100vh-8rem)] flex flex-col">
       <div className="mb-4">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Messages</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Chat with your students</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('navMessages')}</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{t('chatWithStudents')}</p>
       </div>
 
       <div className="flex-1 min-h-0 flex bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
@@ -172,19 +174,19 @@ export default function TeacherMessagesPage() {
           <div className="p-3 space-y-2 border-b border-gray-100 dark:border-gray-800">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)}
+              <input type="text" placeholder={t('search')} value={search} onChange={e => setSearch(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500" />
             </div>
             <button onClick={() => setShowNewChat(true)} className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-xl bg-primary-500 hover:bg-primary-600 text-white transition-colors">
-              <Plus className="w-4 h-4" /> New Chat
+              <Plus className="w-4 h-4" /> {t('newChat')}
             </button>
           </div>
           <div className="flex-1 overflow-y-auto">
-            {loading ? <div className="p-4 text-center text-gray-400">Loading...</div> :
+            {loading ? <div className="p-4 text-center text-gray-400">{t('loading')}</div> :
               filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full p-6 text-center">
                   <MessageSquare className="w-10 h-10 text-gray-300 dark:text-gray-600 mb-3" />
-                  <p className="text-sm text-gray-500">No conversations yet</p>
+                  <p className="text-sm text-gray-500">{t('noConversationsYet')}</p>
                 </div>
               ) : filtered.map(conv => (
                 <button key={conv.id} onClick={() => { setActiveConvId(conv.id); setMobileShowChat(true); }}
@@ -198,7 +200,7 @@ export default function TeacherMessagesPage() {
                       {conv.lastMessage && <span className="text-xs text-gray-400 ml-2 flex-shrink-0">{formatTime(conv.lastMessage.createdAt)}</span>}
                     </div>
                     <div className="flex items-center justify-between mt-0.5">
-                      <p className="text-xs text-gray-500 truncate">{conv.lastMessage?.text || 'No messages'}</p>
+                      <p className="text-xs text-gray-500 truncate">{conv.lastMessage?.text || t('noMessages')}</p>
                       {(conv.unreadCount || 0) > 0 && <span className="ml-2 w-5 h-5 rounded-full bg-primary-500 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">{conv.unreadCount}</span>}
                     </div>
                   </div>
@@ -212,8 +214,8 @@ export default function TeacherMessagesPage() {
           {!activeConv ? (
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
               <MessageSquare className="w-16 h-16 text-gray-200 dark:text-gray-700 mb-4" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Select a conversation</h2>
-              <p className="text-sm text-gray-500 mt-1">Pick a chat or start a new one</p>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('selectConversation')}</h2>
+              <p className="text-sm text-gray-500 mt-1">{t('pickChatOrNew')}</p>
             </div>
           ) : (
             <>
@@ -223,13 +225,13 @@ export default function TeacherMessagesPage() {
                   {activeConv.isGroup ? <Users className="w-5 h-5" /> : getConvName(activeConv).charAt(0).toUpperCase()}
                 </div>
                 <div><h3 className="text-sm font-semibold text-gray-900 dark:text-white">{getConvName(activeConv)}</h3>
-                  {activeConv.isGroup && <p className="text-xs text-gray-500">{activeConv.participants?.length || 0} members</p>}
+                  {activeConv.isGroup && <p className="text-xs text-gray-500">{activeConv.participants?.length || 0} {t('members')}</p>}
                 </div>
               </div>
 
               <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-gray-50 dark:bg-gray-950">
                 {loadingMsgs ? <div className="flex justify-center py-8"><div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" /></div> :
-                  messages.length === 0 ? <div className="text-center py-8 text-sm text-gray-400">No messages yet</div> :
+                  messages.length === 0 ? <div className="text-center py-8 text-sm text-gray-400">{t('noMessagesYet')}</div> :
                     messages.map(msg => {
                       const isMine = msg.senderId === user?.id;
                       return (
@@ -249,7 +251,7 @@ export default function TeacherMessagesPage() {
 
               <div className="px-4 py-3 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
                 <div className="flex items-center gap-2">
-                  <input type="text" placeholder="Type a message..." value={messageText} onChange={e => setMessageText(e.target.value)}
+                  <input type="text" placeholder={t('typeMessage')} value={messageText} onChange={e => setMessageText(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
                     className="flex-1 px-4 py-2.5 text-sm rounded-xl bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500" />
                   <button onClick={handleSend} disabled={!messageText.trim() || sending}
@@ -268,41 +270,41 @@ export default function TeacherMessagesPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl w-full max-w-lg max-h-[80vh] flex flex-col">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-800">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">New Chat</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('newChat')}</h2>
               <button onClick={() => { setShowNewChat(false); setSelectedCourseId(null); }} className="p-1 text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
             </div>
             <div className="px-5 pt-4 flex gap-2">
-              <button onClick={() => setChatType('direct')} className={`flex-1 py-2 text-sm font-medium rounded-lg ${chatType === 'direct' ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>Direct Message</button>
-              <button onClick={() => setChatType('group')} className={`flex-1 py-2 text-sm font-medium rounded-lg ${chatType === 'group' ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>Group Chat</button>
+              <button onClick={() => setChatType('direct')} className={`flex-1 py-2 text-sm font-medium rounded-lg ${chatType === 'direct' ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>{t('directMessage')}</button>
+              <button onClick={() => setChatType('group')} className={`flex-1 py-2 text-sm font-medium rounded-lg ${chatType === 'group' ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>{t('groupChat')}</button>
             </div>
             <div className="flex-1 overflow-y-auto px-5 py-4">
               {chatType === 'group' ? (
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Select a course:</p>
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">{t('selectCourse')}</p>
                   {courses.map(c => (
                     <button key={c.id} onClick={() => createGroupChat(c.id)} className="w-full flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-left">
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white"><Users className="w-5 h-5" /></div>
-                      <div><p className="text-sm font-semibold text-gray-900 dark:text-white">{c.titleEn || c.titleAz}</p></div>
+                      <div><p className="text-sm font-semibold text-gray-900 dark:text-white">{tField(c, 'title')}</p></div>
                     </button>
                   ))}
                 </div>
               ) : (
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select course:</p>
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('selectCourse')}</p>
                     <select value={selectedCourseId || ''} onChange={e => setSelectedCourseId(e.target.value || null)}
                       className="w-full px-3 py-2.5 text-sm rounded-xl bg-gray-100 dark:bg-gray-800 border-0 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
-                      <option value="">Choose...</option>
-                      {courses.map(c => <option key={c.id} value={c.id}>{c.titleEn || c.titleAz}</option>)}
+                      <option value="">{t('choose')}</option>
+                      {courses.map(c => <option key={c.id} value={c.id}>{tField(c, 'title')}</option>)}
                     </select>
                   </div>
                   {selectedCourseId && (
                     <div className="space-y-1">
-                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select student:</p>
-                      {students.length === 0 ? <p className="text-sm text-gray-400">No students found</p> :
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('selectStudent')}</p>
+                      {students.length === 0 ? <p className="text-sm text-gray-400">{t('noStudentsFound')}</p> :
                         students.map((s: any) => {
                           const st = s.student || s;
-                          const name = st.name || st.nameEn || st.nameAz || 'Student';
+                          const name = tField(st, 'name') !== '—' ? tField(st, 'name') : (st.name || t('student'));
                           const sid = st.id || s.studentId;
                           return (
                             <button key={sid} onClick={() => startDirectChat(sid, 'student')} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 text-left">

@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth';
 import { BookOpen, Award, Clock, TrendingUp, ArrowRight, Play } from 'lucide-react';
 import { GradeChart } from '@/components/charts/GradeChart';
 import { AttendanceChart } from '@/components/charts/AttendanceChart';
+import { useLmsT } from '@/hooks/useLmsT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -26,6 +27,7 @@ interface CourseEnrollment {
 export default function StudentDashboard() {
   const router = useRouter();
   const { token, user } = useAuthStore();
+  const { t, tField } = useLmsT();
   const [courses, setCourses] = useState<CourseEnrollment[]>([]);
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -59,18 +61,18 @@ export default function StudentDashboard() {
       {/* Welcome */}
       <div>
         <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
-          Welcome back, {user?.name || 'Student'}!
+          {t('welcomeBack')} {user?.name || t('student')}!
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">Continue where you left off</p>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">{t('continueWhereLeft')}</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Active Courses', value: activeCourses.length, icon: BookOpen, bg: 'bg-blue-100 dark:bg-blue-900/20', text: 'text-blue-600 dark:text-blue-400' },
-          { label: 'Completed', value: completedCourses.length, icon: Award, bg: 'bg-green-100 dark:bg-green-900/20', text: 'text-green-600 dark:text-green-400' },
-          { label: 'Overall Progress', value: `${overallProgress}%`, icon: TrendingUp, bg: 'bg-purple-100 dark:bg-purple-900/20', text: 'text-purple-600 dark:text-purple-400' },
-          { label: 'Total Enrolled', value: courses.length, icon: Clock, bg: 'bg-amber-100 dark:bg-amber-900/20', text: 'text-amber-600 dark:text-amber-400' },
+          { label: t('activeCourses'), value: activeCourses.length, icon: BookOpen, bg: 'bg-blue-100 dark:bg-blue-900/20', text: 'text-blue-600 dark:text-blue-400' },
+          { label: t('completed'), value: completedCourses.length, icon: Award, bg: 'bg-green-100 dark:bg-green-900/20', text: 'text-green-600 dark:text-green-400' },
+          { label: t('overallProgress'), value: `${overallProgress}%`, icon: TrendingUp, bg: 'bg-purple-100 dark:bg-purple-900/20', text: 'text-purple-600 dark:text-purple-400' },
+          { label: t('totalEnrolled'), value: courses.length, icon: Clock, bg: 'bg-amber-100 dark:bg-amber-900/20', text: 'text-amber-600 dark:text-amber-400' },
         ].map((stat) => (
           <div key={stat.label} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${stat.bg}`}>
@@ -85,12 +87,12 @@ export default function StudentDashboard() {
       {/* Active Courses */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">My Courses</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('myCourses')}</h2>
           <button
             onClick={() => router.push('/lms/student/courses')}
             className="text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1"
           >
-            View all <ArrowRight className="w-4 h-4" />
+            {t('viewAll')} <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
@@ -107,8 +109,8 @@ export default function StudentDashboard() {
         ) : activeCourses.length === 0 ? (
           <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-12 text-center">
             <BookOpen className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">No active courses</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">You haven&apos;t enrolled in any courses yet</p>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{t('noActiveCourses')}</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t('notEnrolledYet')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -122,7 +124,7 @@ export default function StudentDashboard() {
                   <img src={enrollment.course.image} alt="" className="w-full h-32 object-cover rounded-xl mb-4" />
                 )}
                 <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors mb-1">
-                  {enrollment.course.titleEn}
+                  {tField(enrollment.course, 'title')}
                 </h3>
                 <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-4 inline-block">
                   {enrollment.course.level}
@@ -130,7 +132,7 @@ export default function StudentDashboard() {
                 {/* Progress bar */}
                 <div className="mt-3">
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-gray-500 dark:text-gray-400">Progress</span>
+                    <span className="text-gray-500 dark:text-gray-400">{t('progress')}</span>
                     <span className="font-semibold text-primary-600 dark:text-primary-400">{enrollment.progress.percentage}%</span>
                   </div>
                   <div className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
@@ -143,7 +145,7 @@ export default function StudentDashboard() {
                 {/* Continue button */}
                 <div className="flex items-center gap-2 mt-4 text-sm font-semibold text-primary-600 dark:text-primary-400">
                   <Play className="w-4 h-4" />
-                  Continue Learning
+                  {t('continueLearning')}
                 </div>
               </button>
             ))}
@@ -153,8 +155,8 @@ export default function StudentDashboard() {
 
       {/* Grade & Attendance Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <GradeChart title="Grade Trend" data={stats?.grades || []} />
-        <AttendanceChart title="Attendance" data={stats?.attendance || []} />
+        <GradeChart title={t('gradeTrend')} data={stats?.grades || []} />
+        <AttendanceChart title={t('attendance')} data={stats?.attendance || []} />
       </div>
     </div>
   );
