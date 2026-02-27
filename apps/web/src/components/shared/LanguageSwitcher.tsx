@@ -24,6 +24,9 @@ export function LanguageSwitcher() {
     setIsOpen(false);
     if (newLocale === locale) return;
 
+    // Set NEXT_LOCALE cookie so next-intl middleware respects the new locale
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=lax`;
+
     const currentPath = window.location.pathname;
     const search = window.location.search; // preserve query params (?utm_source=...)
 
