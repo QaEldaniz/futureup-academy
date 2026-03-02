@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/Footer';
 import { WhatsAppButton } from '@/components/shared/WhatsAppButton';
 import { CourseAdvisor } from '@/components/shared/CourseAdvisor';
 import { locales } from '@/i18n/config';
+import { OrganizationJsonLd, LocalBusinessJsonLd, WebSiteJsonLd } from '@/components/seo/JsonLd';
 import type { Metadata } from 'next';
 
 type Props = {
@@ -23,15 +24,37 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const messages = await getMessages({ locale });
   const meta = messages.meta as Record<string, string>;
 
+  const baseUrl = 'https://futureupacademy.az';
+  const localePath = locale === 'az' ? '' : `/${locale}`;
+
   return {
     title: meta?.title || 'FutureUp Academy',
     description: meta?.description || "Azerbaijan's #1 IT Academy",
+    keywords: meta?.keywords,
     openGraph: {
       title: meta?.title || 'FutureUp Academy',
       description: meta?.description,
       siteName: 'FutureUp Academy',
       locale: locale === 'az' ? 'az_AZ' : locale === 'ru' ? 'ru_RU' : 'en_US',
       type: 'website',
+      url: `${baseUrl}${localePath}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: meta?.title || 'FutureUp Academy',
+      description: meta?.description,
+    },
+    alternates: {
+      canonical: `${baseUrl}${localePath}`,
+      languages: {
+        az: `${baseUrl}`,
+        ru: `${baseUrl}/ru`,
+        en: `${baseUrl}/en`,
+      },
+    },
+    other: {
+      'geo.region': 'AZ',
+      'geo.placename': 'Baku',
     },
   };
 }
@@ -49,6 +72,9 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <ThemeProvider>
+        <OrganizationJsonLd />
+        <LocalBusinessJsonLd />
+        <WebSiteJsonLd />
         <Header />
         <main>{children}</main>
         <Footer />
