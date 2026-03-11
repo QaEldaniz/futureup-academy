@@ -9,17 +9,31 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
 const faqItems = [
-  { qKey: 'q1', aKey: 'a1', category: 'general' },
-  { qKey: 'q2', aKey: 'a2', category: 'general' },
-  { qKey: 'q3', aKey: 'a3', category: 'coursesFaq' },
-  { qKey: 'q4', aKey: 'a4', category: 'certificateFaq' },
-  { qKey: 'q5', aKey: 'a5', category: 'coursesFaq' },
-  { qKey: 'q6', aKey: 'a6', category: 'payment' },
-  { qKey: 'q7', aKey: 'a7', category: 'general' },
-  { qKey: 'q8', aKey: 'a8', category: 'coursesFaq' },
+  { qKey: 'q1', aKey: 'a1', category: 'admission' },
+  { qKey: 'q2', aKey: 'a2', category: 'admission' },
+  { qKey: 'q3', aKey: 'a3', category: 'admission' },
+  { qKey: 'q4', aKey: 'a4', category: 'admission' },
+  { qKey: 'q5', aKey: 'a5', category: 'admission' },
+  { qKey: 'q6', aKey: 'a6', category: 'corporate' },
+  { qKey: 'q7', aKey: 'a7', category: 'corporate' },
+  { qKey: 'q8', aKey: 'a8', category: 'corporate' },
+  { qKey: 'q9', aKey: 'a9', category: 'corporate' },
+  { qKey: 'q10', aKey: 'a10', category: 'learningModel' },
+  { qKey: 'q11', aKey: 'a11', category: 'learningModel' },
+  { qKey: 'q12', aKey: 'a12', category: 'learningModel' },
+  { qKey: 'q13', aKey: 'a13', category: 'learningModel' },
+  { qKey: 'q14', aKey: 'a14', category: 'learningModel' },
+  { qKey: 'q15', aKey: 'a15', category: 'outcomes' },
+  { qKey: 'q16', aKey: 'a16', category: 'outcomes' },
+  { qKey: 'q17', aKey: 'a17', category: 'outcomes' },
+  { qKey: 'q18', aKey: 'a18', category: 'outcomes' },
+  { qKey: 'q19', aKey: 'a19', category: 'outcomes' },
+  { qKey: 'q20', aKey: 'a20', category: 'parents' },
+  { qKey: 'q21', aKey: 'a21', category: 'parents' },
+  { qKey: 'q22', aKey: 'a22', category: 'parents' },
 ];
 
-const categories = ['general', 'coursesFaq', 'payment', 'certificateFaq'];
+const categories = ['admission', 'corporate', 'learningModel', 'outcomes', 'parents'];
 
 function AccordionItem({ qKey, aKey, isOpen, onToggle }: { qKey: string; aKey: string; isOpen: boolean; onToggle: () => void }) {
   const t = useTranslations('faq');
@@ -43,7 +57,7 @@ export default function FAQPage() {
   const t = useTranslations('faq');
   const [openIndex, setOpenIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState('general');
+  const [activeCategory, setActiveCategory] = useState('admission');
 
   const filteredFaqs = faqItems.filter((item) => {
     const matchesCategory = item.category === activeCategory;

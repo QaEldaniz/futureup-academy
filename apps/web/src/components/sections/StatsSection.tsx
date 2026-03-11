@@ -14,7 +14,7 @@ interface StatItem {
 
 const stats: StatItem[] = [
   { icon: Users, value: 500, suffix: '+', labelKey: 'students' },
-  { icon: BookOpen, value: 50, suffix: '+', labelKey: 'courses' },
+  { icon: BookOpen, value: 20, suffix: '+', labelKey: 'courses' },
   { icon: TrendingUp, value: 95, suffix: '%', labelKey: 'employment' },
   { icon: Award, value: 30, suffix: '+', labelKey: 'teachers' },
 ];

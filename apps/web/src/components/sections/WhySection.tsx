@@ -6,8 +6,6 @@ import {
   Users,
   MonitorPlay,
   Briefcase,
-  CalendarClock,
-  Cpu,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -20,40 +18,28 @@ interface Feature {
 
 const features: Feature[] = [
   {
-    icon: Award,
-    titleKey: 'certificate',
-    descKey: 'certificateDesc',
+    icon: Users,
+    titleKey: 'cohort',
+    descKey: 'cohortDesc',
     iconGradient: 'from-primary-500 to-primary-700',
   },
   {
-    icon: Users,
-    titleKey: 'mentorship',
-    descKey: 'mentorshipDesc',
+    icon: MonitorPlay,
+    titleKey: 'projectLearning',
+    descKey: 'projectLearningDesc',
     iconGradient: 'from-secondary-500 to-secondary-700',
   },
   {
-    icon: MonitorPlay,
-    titleKey: 'practice',
-    descKey: 'practiceDesc',
+    icon: Award,
+    titleKey: 'competency',
+    descKey: 'competencyDesc',
     iconGradient: 'from-accent-500 to-accent-700',
   },
   {
     icon: Briefcase,
-    titleKey: 'career',
-    descKey: 'careerDesc',
+    titleKey: 'industryAligned',
+    descKey: 'industryAlignedDesc',
     iconGradient: 'from-green-500 to-emerald-600',
-  },
-  {
-    icon: CalendarClock,
-    titleKey: 'flexible',
-    descKey: 'flexibleDesc',
-    iconGradient: 'from-orange-500 to-amber-600',
-  },
-  {
-    icon: Cpu,
-    titleKey: 'modern',
-    descKey: 'modernDesc',
-    iconGradient: 'from-pink-500 to-rose-600',
   },
 ];
 
@@ -134,7 +120,7 @@ export function WhySection() {
         </div>
 
         {/* Features grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature) => (
             <FeatureCard key={feature.titleKey} feature={feature} />
           ))}
