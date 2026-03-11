@@ -16,37 +16,37 @@
   --color-primary-800: #0F182E;
   --color-primary-900: #0B1224;
 
-  /* Secondary (Gold) */
-  --color-secondary-50: #FBF6E8;
-  --color-secondary-100: #F5E9C4;
-  --color-secondary-200: #EDD99C;
-  --color-secondary-300: #E4C874;
-  --color-secondary-400: #D4B35E;
-  --color-secondary-500: #C5A55A;
-  --color-secondary-600: #B0914A;
-  --color-secondary-700: #947A3D;
-  --color-secondary-800: #786330;
-  --color-secondary-900: #5C4C25;
+  /* Secondary (Red) */
+  --color-secondary-50: #FEF2F2;
+  --color-secondary-100: #FDE3E5;
+  --color-secondary-200: #FBCACF;
+  --color-secondary-300: #F7A0A8;
+  --color-secondary-400: #EE6876;
+  --color-secondary-500: #CC2030;
+  --color-secondary-600: #B81C2B;
+  --color-secondary-700: #9A1724;
+  --color-secondary-800: #7E131D;
+  --color-secondary-900: #631016;
 
-  /* Accent (Warm Gold) */
-  --color-accent-50: #FFFDF5;
-  --color-accent-100: #FFF9E5;
-  --color-accent-200: #FFF0C2;
-  --color-accent-300: #FFE49E;
-  --color-accent-400: #FFD77A;
-  --color-accent-500: #F5C542;
-  --color-accent-600: #D4A520;
-  --color-accent-700: #B08618;
-  --color-accent-800: #8C6A12;
-  --color-accent-900: #6B500E;
+  /* Accent (Warm Orange) */
+  --color-accent-50: #FFF8F0;
+  --color-accent-100: #FFEDD5;
+  --color-accent-200: #FED7AA;
+  --color-accent-300: #FDBA74;
+  --color-accent-400: #FB923C;
+  --color-accent-500: #F97316;
+  --color-accent-600: #EA580C;
+  --color-accent-700: #C2410C;
+  --color-accent-800: #9A3412;
+  --color-accent-900: #7C2D12;
 
   /* Surface */
   --color-surface-light: #FFFDF8;
-  --color-surface-dark: #0D1526;
+  --color-surface-dark: #111827;
 
   /* Background */
   --color-bg-light: #FAF8F2;
-  --color-bg-dark: #080D18;
+  --color-bg-dark: #0B1120;
 
   /* Classical extras */
   --color-cream: #FAF8F2;
@@ -97,11 +97,14 @@ html {
 }
 
 /* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: var(--color-bg-dark);
+}
 .dark ::-webkit-scrollbar-thumb {
-  background: var(--color-primary-700);
+  background: var(--color-secondary-900);
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary-500);
+  background: var(--color-secondary-700);
 }
 
 /* Animations */
@@ -209,17 +212,22 @@ html {
 
 /* Dark mode classical card */
 .dark .classical-card {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 .dark .classical-card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow: 0 8px 30px rgba(204, 32, 48, 0.08), 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 /* Subtle parchment texture overlay */
 .parchment-bg {
   background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(197, 165, 90, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 50%, rgba(204, 32, 48, 0.03) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 50%, rgba(27, 42, 74, 0.02) 0%, transparent 50%);
+}
+.dark .parchment-bg {
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(204, 32, 48, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(71, 85, 140, 0.04) 0%, transparent 50%);
 }
 
 /* Gold accent underline for headings */
@@ -249,6 +257,31 @@ html {
 }
 .dark .section-subtitle {
   color: var(--color-secondary-400);
+}
+
+/* Dark mode divider refinements */
+.dark .classical-divider::before,
+.dark .classical-divider::after {
+  background: linear-gradient(90deg, transparent, var(--color-secondary-700), transparent);
+}
+.dark .ornamental-line::before {
+  background: linear-gradient(90deg, transparent, var(--color-secondary-700));
+}
+.dark .ornamental-line::after {
+  background: linear-gradient(90deg, var(--color-secondary-700), transparent);
+}
+.dark .ornamental-line .diamond {
+  background: var(--color-secondary-600);
+}
+.dark .double-line-ornament::before,
+.dark .double-line-ornament::after {
+  background: var(--color-secondary-800);
+}
+.dark .gold-top-border {
+  border-top-color: var(--color-secondary-700);
+}
+.dark .gold-underline::after {
+  background: linear-gradient(90deg, transparent, var(--color-secondary-600), transparent);
 }
 
 @keyframes marquee {

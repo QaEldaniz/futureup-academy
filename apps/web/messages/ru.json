@@ -12,7 +12,13 @@
     "faqTitle": "Часто Задаваемые Вопросы — FutureUp Academy",
     "faqDescription": "Часто задаваемые вопросы об IT курсах FutureUp Academy. Цены, продолжительность, сертификат, трудоустройство.",
     "newsTitle": "Новости — FutureUp Academy | Новости IT Образования",
-    "newsDescription": "Последние новости от FutureUp Academy: IT образование, мероприятия и истории успеха."
+    "newsDescription": "Последние новости от FutureUp Academy: IT образование, мероприятия и истории успеха.",
+    "scholarshipsTitle": "Стипендии — FutureUp Academy | Гранты на IT Образование",
+    "scholarshipsDescription": "Стипендии на IT курсы в FutureUp Academy. Подайте заявку на финансовую помощь для изучения программирования, дизайна, AI бесплатно или со скидкой.",
+    "corporateTitle": "Корпоративное Обучение — FutureUp Academy | Повышение Квалификации",
+    "corporateDescription": "Корпоративные IT программы обучения от FutureUp Academy. Повышение квалификации сотрудников, командные тренинги, цифровая трансформация для компаний Азербайджана.",
+    "teachersTitle": "Наши Преподаватели — FutureUp Academy | Эксперты IT",
+    "teachersDescription": "Познакомьтесь с экспертными преподавателями FutureUp Academy. Профессионалы отрасли, преподающие программирование, дизайн, аналитику данных, AI."
   },
   "nav": {
     "home": "Главная",

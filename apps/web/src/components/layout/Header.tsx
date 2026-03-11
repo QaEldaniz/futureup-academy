@@ -45,16 +45,8 @@ export function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <Image src="/images/logo.png" alt="FutureUp Academy" width={64} height={64} unoptimized className="group-hover:scale-105 transition-transform" />
-            <div className="flex flex-col">
-              <span className="text-xl font-bold font-serif-heading text-primary-500 dark:text-white">
-                FutureUp
-              </span>
-              <span className="text-[10px] font-medium text-secondary-500 dark:text-secondary-400 -mt-1 tracking-[0.2em] uppercase">
-                Academy
-              </span>
-            </div>
+          <Link href="/" className="flex items-center group">
+            <Image src="/images/logo.png" alt="FutureUp Academy" width={160} height={60} unoptimized className="group-hover:scale-105 transition-transform h-10 lg:h-12 w-auto" />
           </Link>
 
           {/* Desktop Nav */}

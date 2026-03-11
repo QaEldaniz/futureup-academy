@@ -12,7 +12,13 @@
     "faqTitle": "FAQ — FutureUp Academy",
     "faqDescription": "Frequently asked questions about FutureUp Academy IT courses. Pricing, duration, certificates, career opportunities.",
     "newsTitle": "News — FutureUp Academy | IT Education Updates",
-    "newsDescription": "Latest news from FutureUp Academy: IT education updates, events, and success stories."
+    "newsDescription": "Latest news from FutureUp Academy: IT education updates, events, and success stories.",
+    "scholarshipsTitle": "Scholarships — FutureUp Academy | IT Education Grants",
+    "scholarshipsDescription": "IT course scholarships at FutureUp Academy. Apply for financial aid and study programming, design, AI for free or at reduced cost.",
+    "corporateTitle": "Corporate Training — FutureUp Academy | Employee Upskilling",
+    "corporateDescription": "Corporate IT training programs by FutureUp Academy. Employee upskilling, team training, digital transformation for companies in Azerbaijan.",
+    "teachersTitle": "Our Instructors — FutureUp Academy | Expert IT Teachers",
+    "teachersDescription": "Meet FutureUp Academy's expert instructors. Industry professionals teaching programming, design, data analytics, AI and more."
   },
   "nav": {
     "home": "Home",
