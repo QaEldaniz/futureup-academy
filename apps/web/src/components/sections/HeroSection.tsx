@@ -27,7 +27,7 @@ export function HeroSection() {
         <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-md bg-primary-100/60 dark:bg-primary-900/30 border border-primary-200/40 dark:border-primary-700/30 mb-8">
           <div className="h-px w-6 bg-secondary-400/60" />
           <span className="text-xs font-serif-heading font-semibold tracking-regal text-primary-600 dark:text-primary-300 uppercase">
-            Est. 2024
+            EST. 2022
           </span>
           <div className="w-1 h-1 rotate-45 bg-secondary-500" />
           <span className="text-xs font-serif-heading font-semibold tracking-regal text-primary-600 dark:text-primary-300 uppercase">
