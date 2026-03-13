@@ -111,7 +111,7 @@ export function Footer() {
             {/* Classical established line */}
             <div className="flex items-center gap-2 mb-4 pl-1">
               <div className="h-px w-4 bg-secondary-600/50" />
-              <span className="text-[10px] font-serif-heading tracking-[0.15em] text-secondary-500/70 uppercase">Est. 2024</span>
+              <span className="text-[10px] font-serif-heading tracking-[0.15em] text-secondary-500/70 uppercase">Est. 2022</span>
               <div className="h-px w-4 bg-secondary-600/50" />
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
