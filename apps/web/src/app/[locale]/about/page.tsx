@@ -52,10 +52,10 @@ export default function AboutPage() {
   }, []);
 
   const stats = [
-    { value: publicStats ? `${publicStats.totalStudents}+` : '500+', labelKey: 'students' },
-    { value: publicStats ? `${publicStats.totalCourses}+` : '15+', labelKey: 'courses' },
+    { value: '500+', labelKey: 'students' },
+    { value: '20+', labelKey: 'courses' },
     { value: '92%', labelKey: 'employment' },
-    { value: publicStats ? `${publicStats.totalTeachers}+` : '20+', labelKey: 'teachers' },
+    { value: '30+', labelKey: 'teachers' },
   ];
 
   return (

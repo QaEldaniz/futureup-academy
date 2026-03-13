@@ -27,6 +27,7 @@ export function Header() {
     { href: '/scholarships', label: t('scholarships') },
     { href: '/corporate', label: t('corporate') },
     { href: '/about', label: t('about') },
+    { href: '/faq', label: t('faq') },
     { href: '/contact', label: t('contact') },
   ];
 
