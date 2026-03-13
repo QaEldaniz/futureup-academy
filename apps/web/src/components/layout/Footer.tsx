@@ -158,7 +158,7 @@ export function Footer() {
               {t('programs')}
             </h3>
             <ul className="space-y-2.5">
-              {['Frontend Development', 'Backend Development', 'UI/UX Design', 'Data Analytics', 'Cyber Security', 'Digital Marketing'].map(
+              {['Frontend Development', 'Backend Development', 'UI/UX Design', 'Data Analytics', 'Cybersecurity', 'Digital Marketing', 'DevOps', 'AI & Machine Learning'].map(
                 (program) => (
                   <li key={program}>
                     <Link
