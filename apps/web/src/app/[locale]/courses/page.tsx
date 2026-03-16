@@ -116,7 +116,7 @@ function CourseCard({ course, locale, isKids }: { course: Course; locale: string
             <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5">
               {course.ageGroup && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold bg-amber-500 text-white shadow-lg shadow-amber-500/30">
-                  {course.ageGroup === 'AGE_6_8' ? '6-8' : course.ageGroup === 'AGE_9_11' ? '9-11' : course.ageGroup === 'AGE_12_14' ? '12-14' : '15-17'} {locale === 'az' ? 'yaş' : locale === 'ru' ? 'лет' : 'y.o.'}
+                  {course.ageGroup === 'AGE_8_12' ? '8-12' : '12-16'} {locale === 'az' ? 'yaş' : locale === 'ru' ? 'лет' : 'y.o.'}
                 </span>
               )}
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-orange-500 text-white shadow-lg shadow-orange-500/30">
@@ -161,15 +161,9 @@ function CourseCard({ course, locale, isKids }: { course: Course; locale: string
               </div>
             </div>
             <div className={cn(
-              'flex items-center justify-between pt-4 border-t',
+              'flex items-center justify-end pt-4 border-t',
               isKids ? 'border-orange-200/50 dark:border-orange-800/30' : 'border-gray-100 dark:border-gray-800'
             )}>
-              <span className={cn(
-                'text-sm font-bold',
-                isKids ? 'text-orange-600 dark:text-orange-400' : 'text-primary-600 dark:text-primary-400'
-              )}>
-                {course.price} ₼
-              </span>
               <div className={cn(
                 'w-8 h-8 rounded-lg flex items-center justify-center transition-colors',
                 isKids
@@ -194,7 +188,7 @@ export default function CoursesPage() {
   const locale = useLocale();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedAudience, setSelectedAudience] = useState<'ADULTS' | 'KIDS'>('ADULTS');
+  const [selectedAudience, setSelectedAudience] = useState<'ADULTS' | 'KIDS'>('KIDS');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -296,18 +290,6 @@ export default function CoursesPage() {
           {/* Audience Tabs */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex items-center justify-center gap-3 mt-8">
             <button
-              onClick={() => { setSelectedAudience('ADULTS'); setSelectedCategory('all'); setSelectedAgeGroup('all'); }}
-              className={cn(
-                'inline-flex items-center gap-2.5 px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300',
-                selectedAudience === 'ADULTS'
-                  ? 'bg-primary-500 text-white shadow-xl shadow-primary-500/30 scale-105'
-                  : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-primary-300 hover:text-primary-600'
-              )}
-            >
-              <Users className="w-5 h-5" />
-              {t('adults')}
-            </button>
-            <button
               onClick={() => { setSelectedAudience('KIDS'); setSelectedCategory('all'); setSelectedAgeGroup('all'); }}
               className={cn(
                 'inline-flex items-center gap-2.5 px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300',
@@ -318,6 +300,18 @@ export default function CoursesPage() {
             >
               <Baby className="w-5 h-5" />
               {t('itKids')}
+            </button>
+            <button
+              onClick={() => { setSelectedAudience('ADULTS'); setSelectedCategory('all'); setSelectedAgeGroup('all'); }}
+              className={cn(
+                'inline-flex items-center gap-2.5 px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300',
+                selectedAudience === 'ADULTS'
+                  ? 'bg-primary-500 text-white shadow-xl shadow-primary-500/30 scale-105'
+                  : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-primary-300 hover:text-primary-600'
+              )}
+            >
+              <Users className="w-5 h-5" />
+              {t('adults')}
             </button>
           </motion.div>
 
@@ -360,10 +354,8 @@ export default function CoursesPage() {
                   {t('allAges')}
                 </button>
                 {[
-                  { value: 'AGE_6_8', label: '6-8', desc: locale === 'az' ? '1-2 sinif' : locale === 'ru' ? '1-2 класс' : 'Grade 1-2' },
-                  { value: 'AGE_9_11', label: '9-11', desc: locale === 'az' ? '3-5 sinif' : locale === 'ru' ? '3-5 класс' : 'Grade 3-5' },
-                  { value: 'AGE_12_14', label: '12-14', desc: locale === 'az' ? '6-8 sinif' : locale === 'ru' ? '6-8 класс' : 'Grade 6-8' },
-                  { value: 'AGE_15_17', label: '15-17', desc: locale === 'az' ? '9-11 sinif' : locale === 'ru' ? '9-11 класс' : 'Grade 9-11' },
+                  { value: 'AGE_8_12', label: '8-12', desc: locale === 'az' ? 'yaş' : locale === 'ru' ? 'лет' : 'y.o.' },
+                  { value: 'AGE_12_16', label: '12-16', desc: locale === 'az' ? 'yaş' : locale === 'ru' ? 'лет' : 'y.o.' },
                 ].map((ag) => (
                   <button key={ag.value} onClick={() => setSelectedAgeGroup(ag.value)}
                     className={cn('inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all',

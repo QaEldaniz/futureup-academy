@@ -186,6 +186,7 @@ export default function ScholarshipsPage() {
       {/* Scholarship Cards */}
       <section className="py-16 sm:py-20 bg-bg-light dark:bg-bg-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Previous Scholarship Programs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -193,14 +194,14 @@ export default function ScholarshipsPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl sm:text-4xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
-              {getText(locale, 'Mövcud Təqaüdlər', 'Доступные Стипендии', 'Available Scholarships')}
+              {getText(locale, 'Əvvəlki Təqaüd Proqramları', 'Предыдущие Стипендиальные Программы', 'Previous Scholarship Programs')}
             </h2>
             <p className="max-w-2xl mx-auto text-gray-600 dark:text-gray-400">
               {getText(
                 locale,
-                'Sizin üçün ən uyğun təqaüd proqramını seçin və müraciət edin.',
-                'Выберите наиболее подходящую для вас стипендиальную программу и подайте заявку.',
-                'Choose the most suitable scholarship program and apply.'
+                'Keçmişdə həyata keçirdiyimiz təqaüd proqramları.',
+                'Стипендиальные программы, реализованные ранее.',
+                'Scholarship programs we have implemented in the past.'
               )}
             </p>
           </motion.div>
@@ -321,6 +322,33 @@ export default function ScholarshipsPage() {
               })}
             </motion.div>
           )}
+        </div>
+      </section>
+
+      {/* Current Scholarship Programs */}
+      <section className="py-12 bg-bg-light dark:bg-bg-dark">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold font-serif-heading text-gray-900 dark:text-white mb-4">
+              {getText(locale, 'Mövcud Təqaüd Proqramları', 'Текущие Стипендиальные Программы', 'Current Scholarship Programs')}
+            </h2>
+            <div className="max-w-2xl mx-auto p-8 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700">
+              <GraduationCap className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                {getText(
+                  locale,
+                  'Hazırda fəal təqaüd proqramımız mövcud deyildir. İzləmədə qalın!',
+                  'В настоящее время активных стипендиальных программ нет. Следите за обновлениями!',
+                  'There are currently no active scholarship programs. Stay tuned!'
+                )}
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 

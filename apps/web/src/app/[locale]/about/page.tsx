@@ -15,7 +15,6 @@ const values = [
   { icon: Users, key: 'value3', gradient: 'from-secondary-500 to-secondary-600' },
   { icon: Globe, key: 'value4', gradient: 'from-primary-400 to-primary-600' },
   { icon: Wrench, key: 'value5', gradient: 'from-orange-500 to-amber-500' },
-  { icon: TrendingUp, key: 'value6', gradient: 'from-pink-500 to-rose-500' },
 ];
 
 interface PublicStats {
@@ -52,10 +51,10 @@ export default function AboutPage() {
   }, []);
 
   const stats = [
-    { value: '500+', labelKey: 'students' },
+    { value: '300+', labelKey: 'students' },
     { value: '20+', labelKey: 'courses' },
-    { value: '92%', labelKey: 'employment' },
     { value: '30+', labelKey: 'teachers' },
+    { value: '90%+', labelKey: 'employment' },
   ];
 
   return (
