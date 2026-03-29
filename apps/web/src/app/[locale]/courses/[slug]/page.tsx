@@ -166,7 +166,7 @@ export default function CourseDetailPage() {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
           {locale === 'az' ? 'Kurs tapılmadı' : locale === 'ru' ? 'Курс не найден' : 'Course not found'}
         </h1>
-        <Link href="/courses">
+        <Link href="/courses/kids">
           <Button>{locale === 'az' ? 'Kurslara qayıt' : locale === 'ru' ? 'К курсам' : 'Back to courses'}</Button>
         </Link>
       </div>

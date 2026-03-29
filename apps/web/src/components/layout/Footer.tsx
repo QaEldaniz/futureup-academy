@@ -84,7 +84,7 @@ export function Footer() {
   const whatsapp = settings?.whatsapp;
 
   const quickLinks = [
-    { href: '/courses', label: navT('courses') },
+    { href: '/courses/kids', label: navT('courses') },
     { href: '/teachers', label: navT('teachers') },
     { href: '/scholarships', label: navT('scholarships') },
     { href: '/corporate', label: navT('corporate') },
@@ -156,7 +156,7 @@ export function Footer() {
                 (program) => (
                   <li key={program}>
                     <Link
-                      href="/courses"
+                      href="/courses/adults"
                       className="text-gray-400 hover:text-white text-sm transition-colors"
                     >
                       {program}

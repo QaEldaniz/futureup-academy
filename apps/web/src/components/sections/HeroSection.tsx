@@ -62,7 +62,7 @@ export function HeroSection() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-          <Link href="/courses">
+          <Link href="/courses/kids">
             <Button size="xl" rightIcon={<ArrowRight className="w-5 h-5" />}>
               {t('hero.exploreCourses')}
             </Button>

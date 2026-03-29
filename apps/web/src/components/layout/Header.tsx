@@ -22,7 +22,7 @@ export function Header() {
   }, []);
 
   const navLinks = [
-    { href: '/courses', label: t('courses') },
+    { href: '/courses/kids', label: t('courses') },
     { href: '/teachers', label: t('teachers') },
     { href: '/scholarships', label: t('scholarships') },
     { href: '/corporate', label: t('corporate') },

@@ -405,7 +405,7 @@ export function CoursesSection() {
 
         {/* View all button */}
         <div className="text-center">
-          <Link href="/courses">
+          <Link href="/courses/kids">
             <Button size="lg" variant="outline" rightIcon={<ArrowRight className="w-4 h-4" />}>
               {t('courses.viewAll')}
             </Button>
