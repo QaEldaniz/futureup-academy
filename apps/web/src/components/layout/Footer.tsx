@@ -101,12 +101,6 @@ export function Footer() {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-2">
               <Image src="/images/logo.png" alt="FutureUp Academy" width={64} height={64} unoptimized />
-              <div>
-                <span className="text-xl font-bold font-serif-heading text-white">FutureUp</span>
-                <span className="text-xs block text-gray-400 -mt-0.5 tracking-[0.2em] uppercase">
-                  Academy
-                </span>
-              </div>
             </div>
             {/* Classical established line */}
             <div className="flex items-center gap-2 mb-4 pl-1">
