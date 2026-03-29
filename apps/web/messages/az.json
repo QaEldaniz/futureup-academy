@@ -468,7 +468,8 @@
     "noAccount": "Hesabınız yoxdur?",
     "register": "Tələbə kimi qeydiyyatdan keç",
     "roleHint": "Tələbələr, müəllimlər və valideynlər e-poçt ilə daxil ola bilər",
-    "pendingApproval": "Hesabınız admin tərəfindən təsdiq gözləyir. Zəhmət olmasa gözləyin."
+    "pendingApproval": "Hesabınız admin tərəfindən təsdiq gözləyir. Zəhmət olmasa gözləyin.",
+    "forgotPassword": "Şifrəni unutdun?"
   },
   "register": {
     "title": "Hesab yarat",
@@ -492,6 +493,38 @@
     "emailExists": "Bu e-poçt artıq qeydiyyatdan keçib",
     "passwordTooShort": "Şifrə minimum 6 simvol olmalıdır",
     "nameRequired": "Ad məlumatı tələb olunur",
-    "pendingApproval": "Hesabınız uğurla yaradıldı! Admin təsdiqini gözləyin."
+    "pendingApproval": "Hesabınız uğurla yaradıldı! Admin təsdiqini gözləyin.",
+    "verificationSent": "Təsdiq kodu e-poçtunuza göndərildi!",
+    "verifyTitle": "E-poçtu təsdiq edin",
+    "verifySubtitle": "E-poçtunuza göndərilən 6 rəqəmli kodu daxil edin",
+    "verificationCode": "Təsdiq kodu",
+    "verifyButton": "Təsdiq et",
+    "invalidCode": "Kod yanlış və ya müddəti bitib",
+    "verifiedSuccess": "E-poçt təsdiqləndi! Yönləndirilir...",
+    "verifiedPendingApproval": "E-poçt təsdiqləndi! Admin təsdiqini gözləyin.",
+    "resendCode": "Kodu yenidən göndər",
+    "resendIn": "Yenidən göndərmə",
+    "codeSent": "Yeni kod göndərildi!"
+  },
+  "forgotPassword": {
+    "title": "Şifrəni unutdun?",
+    "subtitle": "E-poçtunuzu daxil edin, sizə sıfırlama kodu göndərəcəyik",
+    "email": "E-poçt",
+    "emailPlaceholder": "sizin@email.com",
+    "sendCode": "Kod göndər",
+    "sending": "Göndərilir...",
+    "codeSent": "Sıfırlama kodu e-poçtunuza göndərildi!",
+    "enterCode": "Sıfırlama kodu",
+    "newPassword": "Yeni şifrə",
+    "newPasswordPlaceholder": "Minimum 6 simvol",
+    "resetPassword": "Şifrəni yenilə",
+    "resetting": "Yenilənir...",
+    "invalidCode": "Kod yanlış və ya müddəti bitib",
+    "resetSuccess": "Şifrə uğurla yeniləndi! Daxil olun.",
+    "backToLogin": "Daxil olmağa qayıt",
+    "networkError": "Şəbəkə xətası. Yenidən cəhd edin.",
+    "resendCode": "Kodu yenidən göndər",
+    "resendIn": "Yenidən göndərmə",
+    "passwordTooShort": "Şifrə minimum 6 simvol olmalıdır"
   }
 }

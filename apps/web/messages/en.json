@@ -472,7 +472,8 @@
     "noAccount": "Don't have an account?",
     "register": "Register as student",
     "roleHint": "Students, teachers, and parents can sign in with their email",
-    "pendingApproval": "Your account is pending admin approval. Please wait."
+    "pendingApproval": "Your account is pending admin approval. Please wait.",
+    "forgotPassword": "Forgot password?"
   },
   "register": {
     "title": "Create Account",
@@ -496,6 +497,38 @@
     "emailExists": "This email is already registered",
     "passwordTooShort": "Password must be at least 6 characters",
     "nameRequired": "Name is required",
-    "pendingApproval": "Account created! Awaiting admin approval."
+    "pendingApproval": "Account created! Awaiting admin approval.",
+    "verificationSent": "Verification code sent to your email!",
+    "verifyTitle": "Verify your email",
+    "verifySubtitle": "Enter the 6-digit code sent to your email",
+    "verificationCode": "Verification code",
+    "verifyButton": "Verify",
+    "invalidCode": "Invalid or expired code",
+    "verifiedSuccess": "Email verified! Redirecting...",
+    "verifiedPendingApproval": "Email verified! Awaiting admin approval.",
+    "resendCode": "Resend code",
+    "resendIn": "Resend in",
+    "codeSent": "New code sent!"
+  },
+  "forgotPassword": {
+    "title": "Forgot password?",
+    "subtitle": "Enter your email and we'll send you a reset code",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "sendCode": "Send code",
+    "sending": "Sending...",
+    "codeSent": "Reset code sent to your email!",
+    "enterCode": "Reset code",
+    "newPassword": "New password",
+    "newPasswordPlaceholder": "Minimum 6 characters",
+    "resetPassword": "Reset password",
+    "resetting": "Resetting...",
+    "invalidCode": "Invalid or expired code",
+    "resetSuccess": "Password reset successfully! Please log in.",
+    "backToLogin": "Back to login",
+    "networkError": "Network error. Please try again.",
+    "resendCode": "Resend code",
+    "resendIn": "Resend in",
+    "passwordTooShort": "Password must be at least 6 characters"
   }
 }

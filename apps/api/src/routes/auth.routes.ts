@@ -1,6 +1,12 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import { adminAuth, teacherAuth, anyAuth } from '../middleware/auth.middleware.js';
+import { sendEmail, emailVerificationCode, emailPasswordReset } from '../utils/resend.js';
+
+function generateCode(): string {
+  return crypto.randomInt(100000, 999999).toString();
+}
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 const COOKIE_OPTIONS = {
@@ -267,13 +273,28 @@ export async function authRoutes(server: FastifyInstance) {
 
     const hashed = await bcrypt.hash(password, 10);
     const student = await server.prisma.student.create({
-      data: { name, email: emailLower, password: hashed, phone, isActive: false },
+      data: { name, email: emailLower, password: hashed, phone, isActive: false, emailVerified: false },
     });
+
+    // Send verification email
+    const code = generateCode();
+    await server.prisma.verificationToken.create({
+      data: {
+        email: emailLower,
+        code,
+        type: 'EMAIL_VERIFICATION',
+        userType: 'student',
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 min
+      },
+    });
+
+    const emailContent = emailVerificationCode(code, name);
+    await sendEmail(emailLower, emailContent.subject, emailContent.html);
 
     return reply.status(201).send({
       success: true,
       message: 'REGISTRATION_PENDING',
-      data: { name: student.name, email: student.email },
+      data: { name: student.name, email: student.email, requiresVerification: true },
     });
   });
 
@@ -319,25 +340,29 @@ export async function authRoutes(server: FastifyInstance) {
         email: emailLower,
         password: hashed,
         phone,
-        lastLoginAt: new Date(),
+        emailVerified: false,
       },
     });
 
-    const token = server.jwt.sign({ id: parent.id, role: 'parent', type: 'parent' as const });
+    // Send verification email
+    const code = generateCode();
+    await server.prisma.verificationToken.create({
+      data: {
+        email: emailLower,
+        code,
+        type: 'EMAIL_VERIFICATION',
+        userType: 'parent',
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 min
+      },
+    });
 
-    reply.setCookie('futureup_token', token, COOKIE_OPTIONS);
+    const emailContent = emailVerificationCode(code, nameAz);
+    await sendEmail(emailLower, emailContent.subject, emailContent.html);
+
     return reply.status(201).send({
       success: true,
-      data: {
-        token,
-        type: 'parent',
-        redirect: '/lms/parent',
-        user: {
-          id: parent.id, email: parent.email,
-          nameAz: parent.nameAz, nameRu: parent.nameRu, nameEn: parent.nameEn,
-          avatar: parent.avatar,
-        },
-      },
+      message: 'VERIFICATION_REQUIRED',
+      data: { email: parent.email, nameAz: parent.nameAz, requiresVerification: true },
     });
   });
 
@@ -390,6 +415,283 @@ export async function authRoutes(server: FastifyInstance) {
     }
 
     return reply.status(400).send({ success: false, message: 'Invalid user type' });
+  });
+
+  // ==========================================
+  // VERIFY EMAIL
+  // ==========================================
+  server.post('/verify-email', authRateLimit, async (request, reply) => {
+    const { email, code } = request.body as { email: string; code: string };
+
+    if (!email || !code) {
+      return reply.status(400).send({ success: false, message: 'Email and code are required' });
+    }
+
+    const emailLower = email.toLowerCase().trim();
+
+    // Find valid token
+    const token = await server.prisma.verificationToken.findFirst({
+      where: {
+        email: emailLower,
+        code,
+        type: 'EMAIL_VERIFICATION',
+        used: false,
+        expiresAt: { gt: new Date() },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!token) {
+      return reply.status(400).send({ success: false, message: 'Invalid or expired code' });
+    }
+
+    // Mark token as used
+    await server.prisma.verificationToken.update({
+      where: { id: token.id },
+      data: { used: true },
+    });
+
+    // Update emailVerified on the right user type
+    if (token.userType === 'student') {
+      const student = await server.prisma.student.update({
+        where: { email: emailLower },
+        data: { emailVerified: true },
+      });
+
+      // If student is active (approved by admin or existing), log them in
+      if (student.isActive) {
+        const jwt = server.jwt.sign({ id: student.id, role: 'student', type: 'student' as const });
+        reply.setCookie('futureup_token', jwt, COOKIE_OPTIONS);
+        return reply.send({
+          success: true,
+          message: 'EMAIL_VERIFIED',
+          data: {
+            token: jwt,
+            type: 'student',
+            redirect: '/lms/student',
+            user: { id: student.id, email: student.email, name: student.name, photo: student.photo },
+          },
+        });
+      }
+
+      // Student not yet active — pending admin approval
+      return reply.send({
+        success: true,
+        message: 'EMAIL_VERIFIED_PENDING_APPROVAL',
+        data: { email: student.email, name: student.name },
+      });
+    }
+
+    if (token.userType === 'parent') {
+      const parent = await server.prisma.parent.update({
+        where: { email: emailLower },
+        data: { emailVerified: true, isActive: true, lastLoginAt: new Date() },
+      });
+
+      const jwt = server.jwt.sign({ id: parent.id, role: 'parent', type: 'parent' as const });
+      reply.setCookie('futureup_token', jwt, COOKIE_OPTIONS);
+      return reply.send({
+        success: true,
+        message: 'EMAIL_VERIFIED',
+        data: {
+          token: jwt,
+          type: 'parent',
+          redirect: '/lms/parent',
+          user: {
+            id: parent.id, email: parent.email,
+            nameAz: parent.nameAz, nameRu: parent.nameRu, nameEn: parent.nameEn,
+            avatar: parent.avatar,
+          },
+        },
+      });
+    }
+
+    return reply.send({ success: true, message: 'EMAIL_VERIFIED' });
+  });
+
+  // ==========================================
+  // RESEND VERIFICATION CODE
+  // ==========================================
+  server.post('/resend-code', authRateLimit, async (request, reply) => {
+    const { email, type } = request.body as { email: string; type?: 'EMAIL_VERIFICATION' | 'PASSWORD_RESET' };
+
+    if (!email) {
+      return reply.status(400).send({ success: false, message: 'Email is required' });
+    }
+
+    const emailLower = email.toLowerCase().trim();
+    const tokenType = type || 'EMAIL_VERIFICATION';
+
+    // Find the user
+    let userName = '';
+    let userType = '';
+
+    const student = await server.prisma.student.findUnique({ where: { email: emailLower } });
+    if (student) { userName = student.name; userType = 'student'; }
+
+    if (!userType) {
+      const parent = await server.prisma.parent.findUnique({ where: { email: emailLower } });
+      if (parent) { userName = parent.nameAz; userType = 'parent'; }
+    }
+
+    if (!userType) {
+      const teacher = await server.prisma.teacher.findUnique({ where: { email: emailLower } });
+      if (teacher) { userName = teacher.nameAz; userType = 'teacher'; }
+    }
+
+    if (!userType) {
+      const admin = await server.prisma.user.findUnique({ where: { email: emailLower } });
+      if (admin) { userName = admin.name; userType = 'admin'; }
+    }
+
+    // Always return success to prevent email enumeration
+    if (!userType) {
+      return reply.send({ success: true, message: 'If the email exists, a code has been sent' });
+    }
+
+    // Invalidate old tokens
+    await server.prisma.verificationToken.updateMany({
+      where: { email: emailLower, type: tokenType, used: false },
+      data: { used: true },
+    });
+
+    // Create new token
+    const code = generateCode();
+    await server.prisma.verificationToken.create({
+      data: {
+        email: emailLower,
+        code,
+        type: tokenType,
+        userType,
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+      },
+    });
+
+    // Send email
+    const emailContent = tokenType === 'PASSWORD_RESET'
+      ? emailPasswordReset(code, userName)
+      : emailVerificationCode(code, userName);
+    await sendEmail(emailLower, emailContent.subject, emailContent.html);
+
+    return reply.send({ success: true, message: 'If the email exists, a code has been sent' });
+  });
+
+  // ==========================================
+  // FORGOT PASSWORD — sends reset code
+  // ==========================================
+  server.post('/forgot-password', authRateLimit, async (request, reply) => {
+    const { email } = request.body as { email: string };
+
+    if (!email) {
+      return reply.status(400).send({ success: false, message: 'Email is required' });
+    }
+
+    const emailLower = email.toLowerCase().trim();
+
+    // Find user across all tables
+    let userName = '';
+    let userType = '';
+
+    const student = await server.prisma.student.findUnique({ where: { email: emailLower } });
+    if (student && student.password) { userName = student.name; userType = 'student'; }
+
+    if (!userType) {
+      const parent = await server.prisma.parent.findUnique({ where: { email: emailLower } });
+      if (parent) { userName = parent.nameAz; userType = 'parent'; }
+    }
+
+    if (!userType) {
+      const teacher = await server.prisma.teacher.findUnique({ where: { email: emailLower } });
+      if (teacher && teacher.password) { userName = teacher.nameAz; userType = 'teacher'; }
+    }
+
+    if (!userType) {
+      const admin = await server.prisma.user.findUnique({ where: { email: emailLower } });
+      if (admin) { userName = admin.name; userType = 'admin'; }
+    }
+
+    // Always return success to prevent email enumeration
+    if (!userType) {
+      return reply.send({ success: true, message: 'If the email exists, a reset code has been sent' });
+    }
+
+    // Invalidate old reset tokens
+    await server.prisma.verificationToken.updateMany({
+      where: { email: emailLower, type: 'PASSWORD_RESET', used: false },
+      data: { used: true },
+    });
+
+    // Create new reset token
+    const code = generateCode();
+    await server.prisma.verificationToken.create({
+      data: {
+        email: emailLower,
+        code,
+        type: 'PASSWORD_RESET',
+        userType,
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+      },
+    });
+
+    const emailContent = emailPasswordReset(code, userName);
+    await sendEmail(emailLower, emailContent.subject, emailContent.html);
+
+    return reply.send({ success: true, message: 'If the email exists, a reset code has been sent' });
+  });
+
+  // ==========================================
+  // RESET PASSWORD — verify code + set new password
+  // ==========================================
+  server.post('/reset-password', authRateLimit, async (request, reply) => {
+    const { email, code, newPassword } = request.body as { email: string; code: string; newPassword: string };
+
+    if (!email || !code || !newPassword) {
+      return reply.status(400).send({ success: false, message: 'Email, code and new password are required' });
+    }
+
+    if (newPassword.length < 6) {
+      return reply.status(400).send({ success: false, message: 'Password must be at least 6 characters' });
+    }
+
+    const emailLower = email.toLowerCase().trim();
+
+    // Find valid reset token
+    const token = await server.prisma.verificationToken.findFirst({
+      where: {
+        email: emailLower,
+        code,
+        type: 'PASSWORD_RESET',
+        used: false,
+        expiresAt: { gt: new Date() },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!token) {
+      return reply.status(400).send({ success: false, message: 'Invalid or expired code' });
+    }
+
+    // Mark token as used
+    await server.prisma.verificationToken.update({
+      where: { id: token.id },
+      data: { used: true },
+    });
+
+    // Hash new password
+    const hashed = await bcrypt.hash(newPassword, 10);
+
+    // Update password in the right table
+    if (token.userType === 'student') {
+      await server.prisma.student.update({ where: { email: emailLower }, data: { password: hashed } });
+    } else if (token.userType === 'parent') {
+      await server.prisma.parent.update({ where: { email: emailLower }, data: { password: hashed } });
+    } else if (token.userType === 'teacher') {
+      await server.prisma.teacher.update({ where: { email: emailLower }, data: { password: hashed } });
+    } else if (token.userType === 'admin') {
+      await server.prisma.user.update({ where: { email: emailLower }, data: { password: hashed } });
+    }
+
+    return reply.send({ success: true, message: 'Password reset successfully' });
   });
 
   // POST /logout - Clear auth cookie
