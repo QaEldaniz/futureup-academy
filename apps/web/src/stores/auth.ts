@@ -28,6 +28,12 @@ interface AuthState {
   setAdminLocale: (locale: string) => void;
 }
 
+const API_URL = (() => {
+  const raw = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  if (typeof window !== 'undefined' && raw.includes('localhost')) return '';
+  return raw;
+})();
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
@@ -43,13 +49,19 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: true,
           isLoading: false,
         }),
-      logout: () =>
+      logout: () => {
+        // Clear server-side cookie
+        fetch(`${API_URL}/api/auth/logout`, {
+          method: 'POST',
+          credentials: 'include',
+        }).catch(() => {});
         set({
           token: null,
           user: null,
           isAuthenticated: false,
           isLoading: false,
-        }),
+        });
+      },
       setLoading: (loading) => set({ isLoading: loading }),
       setAdminLocale: (locale) => set({ adminLocale: locale }),
     }),

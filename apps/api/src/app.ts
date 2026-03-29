@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
+import cookie from '@fastify/cookie';
 import multipart from '@fastify/multipart';
 import rateLimit from '@fastify/rate-limit';
 import { PrismaClient } from '@prisma/client';
@@ -82,10 +83,19 @@ export async function buildApp() {
     credentials: true,
   });
 
-  // JWT
+  // Cookie
+  await app.register(cookie, {
+    secret: process.env.COOKIE_SECRET || process.env.JWT_SECRET || 'cookie-secret-fallback',
+  });
+
+  // JWT — read from cookie first, then Authorization header
   await app.register(jwt, {
     secret: process.env.JWT_SECRET || (() => { console.warn('WARNING: JWT_SECRET not set, using random secret. Set JWT_SECRET in .env for production!'); return require('crypto').randomBytes(32).toString('hex'); })(),
     sign: { expiresIn: '7d' },
+    cookie: {
+      cookieName: 'futureup_token',
+      signed: false,
+    },
   });
 
   // Rate Limit

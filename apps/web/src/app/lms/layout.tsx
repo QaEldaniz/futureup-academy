@@ -88,7 +88,7 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
   // Verify token is still valid on mount
   useEffect(() => {
     if (!mounted || !token) return;
-    fetch(`${API_URL}/api/health`, { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${API_URL}/api/health`, { headers: { Authorization: `Bearer ${token}` }, credentials: 'include' })
       .then((r) => {
         if (r.status === 401) {
           logout();

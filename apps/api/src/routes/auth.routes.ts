@@ -2,6 +2,15 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import bcrypt from 'bcrypt';
 import { adminAuth, teacherAuth, anyAuth } from '../middleware/auth.middleware.js';
 
+const IS_PROD = process.env.NODE_ENV === 'production';
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: IS_PROD,
+  sameSite: IS_PROD ? 'strict' as const : 'lax' as const,
+  path: '/',
+  maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
+};
+
 export async function authRoutes(server: FastifyInstance) {
   // Rate limit config for auth endpoints (5 attempts per minute)
   const authRateLimit = { config: { rateLimit: { max: 5, timeWindow: '1 minute' } } };
@@ -32,6 +41,7 @@ export async function authRoutes(server: FastifyInstance) {
       type: 'admin' as const,
     });
 
+    reply.setCookie('futureup_token', token, COOKIE_OPTIONS);
     return reply.send({
       success: true,
       data: {
@@ -72,6 +82,7 @@ export async function authRoutes(server: FastifyInstance) {
       type: 'teacher' as const,
     });
 
+    reply.setCookie('futureup_token', token, COOKIE_OPTIONS);
     return reply.send({
       success: true,
       data: {
@@ -106,6 +117,7 @@ export async function authRoutes(server: FastifyInstance) {
       const valid = await bcrypt.compare(password, admin.password);
       if (valid) {
         const token = server.jwt.sign({ id: admin.id, role: admin.role, type: 'admin' as const });
+        reply.setCookie('futureup_token', token, COOKIE_OPTIONS);
         return reply.send({
           success: true,
           data: {
@@ -125,6 +137,7 @@ export async function authRoutes(server: FastifyInstance) {
       if (valid) {
         await server.prisma.teacher.update({ where: { id: teacher.id }, data: {} }); // touch updatedAt
         const token = server.jwt.sign({ id: teacher.id, role: 'teacher', type: 'teacher' as const });
+        reply.setCookie('futureup_token', token, COOKIE_OPTIONS);
         return reply.send({
           success: true,
           data: {
@@ -155,6 +168,7 @@ export async function authRoutes(server: FastifyInstance) {
         }
         await server.prisma.student.update({ where: { id: student.id }, data: { lastLoginAt: new Date() } });
         const token = server.jwt.sign({ id: student.id, role: 'student', type: 'student' as const });
+        reply.setCookie('futureup_token', token, COOKIE_OPTIONS);
         return reply.send({
           success: true,
           data: {
@@ -176,6 +190,7 @@ export async function authRoutes(server: FastifyInstance) {
       if (valid) {
         await server.prisma.parent.update({ where: { id: parent.id }, data: { lastLoginAt: new Date() } });
         const token = server.jwt.sign({ id: parent.id, role: 'parent', type: 'parent' as const });
+        reply.setCookie('futureup_token', token, COOKIE_OPTIONS);
         return reply.send({
           success: true,
           data: {
@@ -229,6 +244,7 @@ export async function authRoutes(server: FastifyInstance) {
         data: { password: hashed, name, phone, lastLoginAt: new Date() },
       });
       const token = server.jwt.sign({ id: updated.id, role: 'student', type: 'student' as const });
+      reply.setCookie('futureup_token', token, COOKIE_OPTIONS);
       return reply.send({
         success: true,
         data: {
@@ -309,6 +325,7 @@ export async function authRoutes(server: FastifyInstance) {
 
     const token = server.jwt.sign({ id: parent.id, role: 'parent', type: 'parent' as const });
 
+    reply.setCookie('futureup_token', token, COOKIE_OPTIONS);
     return reply.status(201).send({
       success: true,
       data: {
@@ -373,5 +390,11 @@ export async function authRoutes(server: FastifyInstance) {
     }
 
     return reply.status(400).send({ success: false, message: 'Invalid user type' });
+  });
+
+  // POST /logout - Clear auth cookie
+  server.post('/logout', async (_request, reply) => {
+    reply.clearCookie('futureup_token', { path: '/' });
+    return reply.send({ success: true, message: 'Logged out' });
   });
 }
