@@ -91,7 +91,7 @@ export async function buildApp() {
   // JWT — read from cookie first, then Authorization header
   await app.register(jwt, {
     secret: process.env.JWT_SECRET || (() => { console.warn('WARNING: JWT_SECRET not set, using random secret. Set JWT_SECRET in .env for production!'); return require('crypto').randomBytes(32).toString('hex'); })(),
-    sign: { expiresIn: '7d' },
+    sign: { expiresIn: '15m' },
     cookie: {
       cookieName: 'futureup_token',
       signed: false,
@@ -109,6 +109,29 @@ export async function buildApp() {
     limits: {
       fileSize: 10 * 1024 * 1024, // 10MB
     },
+  });
+
+  // CSRF protection — double-submit cookie pattern
+  app.addHook('onRequest', async (request, reply) => {
+    // Only check state-changing methods
+    if (['GET', 'HEAD', 'OPTIONS'].includes(request.method)) return;
+    // Only check requests with auth cookie (skip API-key/Bearer clients)
+    if (!request.cookies.futureup_token) return;
+    // Skip auth endpoints that don't have CSRF cookie yet
+    const skipPaths = [
+      '/api/auth/login', '/api/auth/unified-login', '/api/auth/teacher/login',
+      '/api/auth/student/register', '/api/auth/parent/register', '/api/auth/refresh',
+      '/api/auth/verify-email', '/api/auth/forgot-password', '/api/auth/reset-password',
+      '/api/auth/resend-code', '/api/auth/logout',
+    ];
+    if (skipPaths.some(p => request.url.startsWith(p))) return;
+
+    const csrfHeader = request.headers['x-csrf-token'] as string | undefined;
+    const csrfCookie = request.cookies.futureup_csrf;
+
+    if (!csrfHeader || !csrfCookie || csrfHeader !== csrfCookie) {
+      return reply.status(403).send({ success: false, message: 'CSRF validation failed' });
+    }
   });
 
   // Health check

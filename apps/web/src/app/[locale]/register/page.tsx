@@ -68,10 +68,10 @@ export default function RegisterPage() {
         return;
       }
 
-      // Legacy: auto-login if token is returned (admin-created student setting password)
+      // Auto-login if token is returned (admin-created student setting password)
       if (data.data?.token) {
-        const { token, type, redirect, user } = data.data;
-        login(token, {
+        const { type, redirect, user } = data.data;
+        login({
           ...user,
           type,
           name: user.name || '',
@@ -118,8 +118,8 @@ export default function RegisterPage() {
       }
 
       if (data.data?.token) {
-        const { token, type, redirect, user } = data.data;
-        login(token, {
+        const { type, redirect, user } = data.data;
+        login({
           ...user,
           type,
           name: user.name || '',

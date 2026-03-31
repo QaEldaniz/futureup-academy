@@ -17,12 +17,12 @@ interface User {
 }
 
 interface AuthState {
-  token: string | null;
+  token: null; // Always null — token lives in httpOnly cookie now. Kept for backward compat.
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   adminLocale: string;
-  login: (token: string, user: User) => void;
+  login: (userOrToken: User | string, user?: User) => void;
   logout: () => void;
   setLoading: (loading: boolean) => void;
   setAdminLocale: (locale: string) => void;
@@ -42,21 +42,21 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isLoading: true,
       adminLocale: 'az',
-      login: (token, user) =>
+      // Accepts both login(user) and legacy login(token, user)
+      login: (userOrToken: User | string, user?: User) => {
+        const actualUser = typeof userOrToken === 'string' ? user! : userOrToken;
         set({
-          token,
-          user,
+          user: actualUser,
           isAuthenticated: true,
           isLoading: false,
-        }),
+        });
+      },
       logout: () => {
-        // Clear server-side cookie
         fetch(`${API_URL}/api/auth/logout`, {
           method: 'POST',
           credentials: 'include',
         }).catch(() => {});
         set({
-          token: null,
           user: null,
           isAuthenticated: false,
           isLoading: false,
@@ -68,7 +68,6 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'futureup-auth',
       partialize: (state) => ({
-        token: state.token,
         user: state.user,
         isAuthenticated: state.isAuthenticated,
         adminLocale: state.adminLocale,

@@ -47,10 +47,10 @@ export default function LoginPage() {
         return;
       }
 
-      const { token, type, redirect, user } = data.data;
+      const { type, redirect, user } = data.data;
 
-      // Normalize user object for auth store
-      login(token, {
+      // Token is in httpOnly cookie now — store only user info
+      login({
         ...user,
         type,
         name: user.name || user.nameAz || user.nameEn || '',

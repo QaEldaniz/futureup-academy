@@ -19,6 +19,8 @@ model User {
   role      Role     @default(ADMIN)
   avatar    String?
   isActive  Boolean  @default(true)
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -141,6 +143,8 @@ model Teacher {
   github         String?
   website        String?
   isActive       Boolean @default(true)
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
   order          Int     @default(0)
 
   courses           TeacherCourse[]
@@ -183,6 +187,8 @@ model Student {
   password  String?  // bcrypt hash for Student Portal login
   emailVerified Boolean @default(false)
   isActive  Boolean  @default(true)
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
   lastLoginAt DateTime?
 
   courses         StudentCourse[]
@@ -626,6 +632,8 @@ model Parent {
   avatar      String?
   emailVerified Boolean @default(false)
   isActive    Boolean  @default(true)
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
   lastLoginAt DateTime?
 
   children StudentParent[]
@@ -659,6 +667,39 @@ model VerificationToken {
 enum TokenType {
   EMAIL_VERIFICATION
   PASSWORD_RESET
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  token     String    @unique  // sha256 hash of actual token
+  userId    String
+  userType  String               // 'admin' | 'teacher' | 'student' | 'parent'
+  family    String               // rotation family — revoke all on reuse
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([token])
+  @@index([userId, userType])
+  @@index([family])
+  @@map("refresh_tokens")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  event     String   // LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT, PASSWORD_CHANGE, PASSWORD_RESET, TOKEN_REFRESH, ACCOUNT_LOCKED
+  userId    String?
+  userType  String?
+  email     String?
+  ip        String?
+  userAgent String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId, userType])
+  @@index([email, event])
+  @@index([createdAt])
+  @@map("audit_logs")
 }
 
 model StudentParent {

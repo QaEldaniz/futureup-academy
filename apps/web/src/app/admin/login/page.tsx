@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
       }>('/auth/login', { email, password });
 
       if (res.success) {
-        login(res.data.token, { ...res.data.user, type: 'admin' });
+        login({ ...res.data.user, type: 'admin' });
         router.push('/admin');
       }
     } catch (err: unknown) {
