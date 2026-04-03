@@ -3,7 +3,7 @@
  * Usage: cd apps/api && npx tsx prisma/update-prices.ts
  *
  * For production:
- *   BASE_URL=https://futureupacademy.az npx tsx prisma/update-prices.ts
+ *   BASE_URL=https://futureup.az npx tsx prisma/update-prices.ts
  */
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';

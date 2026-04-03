@@ -421,8 +421,8 @@ export async function aiTutorRoutes(server: FastifyInstance) {
       reply.hijack();
       const allowedOrigins = [
         'http://localhost:3000',
-        'https://futureupacademy.az',
-        'https://www.futureupacademy.az',
+        'https://futureup.az',
+        'https://www.futureup.az',
       ];
       const origin = request.headers.origin || '';
       const corsOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];

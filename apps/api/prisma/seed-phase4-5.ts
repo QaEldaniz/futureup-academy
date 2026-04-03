@@ -149,7 +149,7 @@ async function main() {
           courseId: courses[1].id,
           teacherId: qaTeacher.id,
           title: 'Bug Report Practice',
-          description: `## Task\nFind and report **5 bugs** on the practice website: https://practice.futureupacademy.az\n\n## Bug Report Format\n\n\`\`\`markdown\n**Bug ID:** BUG-001\n**Title:** [Short descriptive title]\n**Severity:** Critical / Major / Minor / Trivial\n**Priority:** P1 / P2 / P3\n**Environment:** Chrome 120, macOS 14\n**Steps to Reproduce:**\n1. Go to ...\n2. Click on ...\n3. Enter ...\n\n**Expected Result:** ...\n**Actual Result:** ...\n**Screenshot:** [attach]\n\`\`\`\n\n## Grading\n- Quality of bug descriptions: 40%\n- Severity accuracy: 20%\n- Reproducibility: 20%\n- Coverage variety: 20%`,
+          description: `## Task\nFind and report **5 bugs** on the practice website: https://practice.futureup.az\n\n## Bug Report Format\n\n\`\`\`markdown\n**Bug ID:** BUG-001\n**Title:** [Short descriptive title]\n**Severity:** Critical / Major / Minor / Trivial\n**Priority:** P1 / P2 / P3\n**Environment:** Chrome 120, macOS 14\n**Steps to Reproduce:**\n1. Go to ...\n2. Click on ...\n3. Enter ...\n\n**Expected Result:** ...\n**Actual Result:** ...\n**Screenshot:** [attach]\n\`\`\`\n\n## Grading\n- Quality of bug descriptions: 40%\n- Severity accuracy: 20%\n- Reproducibility: 20%\n- Coverage variety: 20%`,
           dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
           maxScore: 100,
         },

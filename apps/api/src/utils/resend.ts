@@ -1,8 +1,8 @@
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM_EMAIL = process.env.EMAIL_FROM || 'FutureUp Academy <noreply@futureupacademy.az>';
-const SITE_URL = process.env.SITE_URL || 'https://futureupacademy.az';
+const FROM_EMAIL = process.env.EMAIL_FROM || 'FutureUp Academy <noreply@futureup.az>';
+const SITE_URL = process.env.SITE_URL || 'https://futureup.az';
 
 // Brand colors
 const NAVY = '#1B2A4A';
@@ -40,7 +40,7 @@ function baseTemplate(title: string, content: string): string {
             <td style="background:#f9fafb;padding:20px 40px;text-align:center;border-top:1px solid #e5e7eb;">
               <p style="margin:0;color:#9ca3af;font-size:12px;">
                 &copy; ${new Date().getFullYear()} FutureUp Academy. All rights reserved.<br/>
-                <a href="${SITE_URL}" style="color:${RED};text-decoration:none;">futureupacademy.az</a>
+                <a href="${SITE_URL}" style="color:${RED};text-decoration:none;">futureup.az</a>
               </p>
             </td>
           </tr>

@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const messages = await getMessages({ locale });
   const meta = messages.meta as Record<string, string>;
 
-  const baseUrl = 'https://futureupacademy.az';
+  const baseUrl = 'https://futureup.az';
   const localePath = locale === 'az' ? '' : `/${locale}`;
 
   return {

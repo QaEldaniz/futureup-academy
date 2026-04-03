@@ -3,12 +3,12 @@
 # FutureUp Academy - Test Data Seeder
 # Creates: 1 teacher, 2 courses, 5 students, 2 parents, lessons, materials, grades, attendance
 
-API="https://futureupacademy.az/api"
+API="https://futureup.az/api"
 
 echo "=== Getting admin token ==="
 TOKEN=$(curl -s -X POST "$API/auth/unified-login" \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@futureupacademy.az","password":"FtUp#Adm1n$2024xZ"}' | python3 -c "import sys,json; print(json.load(sys.stdin)['data']['token'])")
+  -d '{"email":"admin@futureup.az","password":"FtUp#Adm1n$2024xZ"}' | python3 -c "import sys,json; print(json.load(sys.stdin)['data']['token'])")
 
 echo "Token: ${TOKEN:0:30}..."
 
@@ -46,7 +46,7 @@ TEACHER_RESULT=$(curl -s -X POST "$API/admin/teachers" \
     "bioAz": "5 il tecrubeli Full-Stack developer. React, Node.js ve Python uzre mutexessis.",
     "bioRu": "Full-Stack разработчик с 5-летним опытом. Специалист по React, Node.js и Python.",
     "bioEn": "Full-Stack developer with 5 years of experience. Specialist in React, Node.js and Python.",
-    "email": "elvin.teacher@futureupacademy.az",
+    "email": "elvin.teacher@futureup.az",
     "password": "Teacher123!",
     "specialization": "Full-Stack Development",
     "isActive": true
@@ -317,7 +317,7 @@ echo "  TEST DATA CREATED SUCCESSFULLY!"
 echo "==========================================="
 echo ""
 echo "ACCOUNTS:"
-echo "  Teacher: elvin.teacher@futureupacademy.az / Teacher123!"
+echo "  Teacher: elvin.teacher@futureup.az / Teacher123!"
 echo "  Student 1: murad.test@academy.az / Student123"
 echo "  Student 2: leyla.test@academy.az / Student123"
 echo "  Student 3: rashad.test@academy.az / Student123"

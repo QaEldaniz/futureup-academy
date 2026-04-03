@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-const BASE_URL = 'https://futureupacademy.az';
+const BASE_URL = 'https://futureup.az';
 
 const locales = ['az', 'ru', 'en'] as const;
 const defaultLocale = 'az';

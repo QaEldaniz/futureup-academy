@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin/', '/lms/', '/teacher-portal/', '/api/', '/embed/'],
       },
     ],
-    sitemap: 'https://futureupacademy.az/sitemap.xml',
+    sitemap: 'https://futureup.az/sitemap.xml',
   };
 }

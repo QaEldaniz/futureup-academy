@@ -14,8 +14,8 @@ export function OrganizationJsonLd() {
       'FutureUp IT Academy',
       'FutureUp Akademiya',
     ],
-    url: 'https://futureupacademy.az',
-    logo: 'https://futureupacademy.az/images/logo.png',
+    url: 'https://futureup.az',
+    logo: 'https://futureup.az/images/logo.png',
     description:
       locale === 'az'
         ? 'Bakıda ən yaxşı IT kursları — proqramlaşdırma, veb dizayn, data analitika, süni intellekt, kibertəhlükəsizlik. Uşaqlar və böyüklər üçün IT təhsil.'
@@ -94,10 +94,10 @@ export function LocalBusinessJsonLd() {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': 'https://futureupacademy.az',
+    '@id': 'https://futureup.az',
     name: 'FutureUp Academy',
-    image: 'https://futureupacademy.az/images/logo.png',
-    url: 'https://futureupacademy.az',
+    image: 'https://futureup.az/images/logo.png',
+    url: 'https://futureup.az',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Baku',
@@ -133,12 +133,12 @@ export function WebSiteJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'FutureUp Academy',
-    url: 'https://futureupacademy.az',
+    url: 'https://futureup.az',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://futureupacademy.az/courses?q={search_term_string}',
+        urlTemplate: 'https://futureup.az/courses?q={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },

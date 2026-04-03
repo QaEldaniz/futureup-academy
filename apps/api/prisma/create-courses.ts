@@ -3,7 +3,7 @@
  * Usage: cd apps/api && npx tsx prisma/create-courses.ts
  *
  * Set BASE_URL env var for production:
- *   BASE_URL=https://futureupacademy.az npx tsx prisma/create-courses.ts
+ *   BASE_URL=https://futureup.az npx tsx prisma/create-courses.ts
  */
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';

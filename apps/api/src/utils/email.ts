@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const EMAIL_FROM = process.env.EMAIL_FROM || 'FutureUp Academy <noreply@futureupacademy.az>';
+const EMAIL_FROM = process.env.EMAIL_FROM || 'FutureUp Academy <noreply@futureup.az>';
 
 function baseTemplate(title: string, content: string): string {
   return `
@@ -44,7 +44,7 @@ function baseTemplate(title: string, content: string): string {
             <td style="background:#f9fafb;padding:20px 40px;text-align:center;border-top:1px solid #e5e7eb;">
               <p style="margin:0;color:#9ca3af;font-size:12px;">
                 &copy; ${new Date().getFullYear()} FutureUp Academy. All rights reserved.<br/>
-                <a href="https://futureupacademy.az" style="color:#6366f1;text-decoration:none;">futureupacademy.az</a>
+                <a href="https://futureup.az" style="color:#6366f1;text-decoration:none;">futureup.az</a>
               </p>
             </td>
           </tr>
@@ -92,7 +92,7 @@ export function emailNewGrade(studentName: string, courseName: string, grade: nu
       <p style="margin:0;font-size:28px;font-weight:700;color:#16a34a;">${grade}/${maxGrade}</p>
     </div>
     ${feedback ? `<p style="color:#4b5563;line-height:1.6;"><strong>Feedback:</strong> ${feedback}</p>` : ''}
-    <a href="https://futureupacademy.az/lms/student/grades" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">View Grades</a>
+    <a href="https://futureup.az/lms/student/grades" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">View Grades</a>
   `);
   return { subject, html };
 }
@@ -109,7 +109,7 @@ export function emailAbsentNotice(parentName: string, studentName: string, cours
     <p style="color:#4b5563;line-height:1.6;">
       If this was expected, no action is needed. Otherwise, please contact the academy.
     </p>
-    <a href="https://futureupacademy.az/lms/parent" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">View Dashboard</a>
+    <a href="https://futureup.az/lms/parent" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">View Dashboard</a>
   `);
   return { subject, html };
 }
@@ -127,7 +127,7 @@ export function emailNewAssignment(studentName: string, assignmentTitle: string,
       <p style="margin:0;font-weight:700;color:#1e40af;font-size:16px;">${assignmentTitle}</p>
       ${dueDate ? `<p style="margin:8px 0 0;color:#3b82f6;">Deadline: ${dueDate}</p>` : ''}
     </div>
-    <a href="https://futureupacademy.az/lms/student/assignments" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">View Assignment</a>
+    <a href="https://futureup.az/lms/student/assignments" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">View Assignment</a>
   `);
   return { subject, html };
 }
@@ -145,7 +145,7 @@ export function emailAssignmentGraded(studentName: string, assignmentTitle: stri
       <p style="margin:0;font-size:28px;font-weight:700;color:#16a34a;">${grade}/${maxScore}</p>
     </div>
     ${feedback ? `<p style="color:#4b5563;line-height:1.6;"><strong>Feedback:</strong> ${feedback}</p>` : ''}
-    <a href="https://futureupacademy.az/lms/student/assignments" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">View Details</a>
+    <a href="https://futureup.az/lms/student/assignments" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">View Details</a>
   `);
   return { subject, html };
 }
@@ -161,7 +161,7 @@ export function emailBadgeEarned(studentName: string, badgeName: string, badgeIc
       <h3 style="margin:12px 0 4px;color:#1f2937;">${badgeName}</h3>
       <p style="margin:0;color:#6b7280;">${badgeDescription}</p>
     </div>
-    <a href="https://futureupacademy.az/lms/student/achievements" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">View Achievements</a>
+    <a href="https://futureup.az/lms/student/achievements" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">View Achievements</a>
   `);
   return { subject, html };
 }
@@ -178,7 +178,7 @@ export function emailNewQuiz(studentName: string, quizTitle: string, courseName:
     <div style="background:#faf5ff;border-left:4px solid #a855f7;padding:16px;border-radius:0 8px 8px 0;margin:20px 0;">
       <p style="margin:0;font-weight:700;color:#7c3aed;font-size:16px;">${quizTitle}</p>
     </div>
-    <a href="https://futureupacademy.az/lms/student/quizzes" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">Start Quiz</a>
+    <a href="https://futureup.az/lms/student/quizzes" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px;">Start Quiz</a>
   `);
   return { subject, html };
 }

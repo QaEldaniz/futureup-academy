@@ -71,7 +71,7 @@ export async function buildApp() {
   });
 
   // CORS — restrict to allowed origins
-  const allowedOrigins = (process.env.CORS_ORIGINS || 'https://futureupacademy.az,http://localhost:3000').split(',').map(s => s.trim());
+  const allowedOrigins = (process.env.CORS_ORIGINS || 'https://futureup.az,http://localhost:3000').split(',').map(s => s.trim());
   await app.register(cors, {
     origin: (origin, cb) => {
       if (!origin || allowedOrigins.includes(origin)) {
