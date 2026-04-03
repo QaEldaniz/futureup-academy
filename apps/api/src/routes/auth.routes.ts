@@ -689,10 +689,10 @@ export async function authRoutes(server: FastifyInstance) {
     let userName = '', userType = '';
 
     const student = await server.prisma.student.findUnique({ where: { email: emailLower } });
-    if (student && student.password) { userName = student.name; userType = 'student'; }
-    if (!userType) { const parent = await server.prisma.parent.findUnique({ where: { email: emailLower } }); if (parent) { userName = parent.nameAz; userType = 'parent'; } }
-    if (!userType) { const teacher = await server.prisma.teacher.findUnique({ where: { email: emailLower } }); if (teacher && teacher.password) { userName = teacher.nameAz; userType = 'teacher'; } }
-    if (!userType) { const admin = await server.prisma.user.findUnique({ where: { email: emailLower } }); if (admin) { userName = admin.name; userType = 'admin'; } }
+    if (student && student.password && student.isActive && student.emailVerified) { userName = student.name; userType = 'student'; }
+    if (!userType) { const parent = await server.prisma.parent.findUnique({ where: { email: emailLower } }); if (parent && parent.isActive && parent.emailVerified) { userName = parent.nameAz; userType = 'parent'; } }
+    if (!userType) { const teacher = await server.prisma.teacher.findUnique({ where: { email: emailLower } }); if (teacher && teacher.password && teacher.isActive) { userName = teacher.nameAz; userType = 'teacher'; } }
+    if (!userType) { const admin = await server.prisma.user.findUnique({ where: { email: emailLower } }); if (admin && admin.isActive) { userName = admin.name; userType = 'admin'; } }
 
     if (!userType) return reply.send({ success: true, message: 'If the email exists, a reset code has been sent' });
 
