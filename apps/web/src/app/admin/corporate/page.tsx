@@ -72,7 +72,11 @@ interface ServiceForm {
   titleRu: string;
   titleEn: string;
   descAz: string;
+  descRu: string;
+  descEn: string;
   shortDescAz: string;
+  shortDescRu: string;
+  shortDescEn: string;
   icon: string;
   isActive: boolean;
   order: number;
@@ -103,7 +107,11 @@ const emptyForm: ServiceForm = {
   titleRu: '',
   titleEn: '',
   descAz: '',
+  descRu: '',
+  descEn: '',
   shortDescAz: '',
+  shortDescRu: '',
+  shortDescEn: '',
   icon: '',
   isActive: true,
   order: 0,
@@ -202,7 +210,11 @@ export default function AdminCorporatePage() {
         titleRu: service.titleRu,
         titleEn: service.titleEn,
         descAz: service.descAz,
+        descRu: service.descRu || '',
+        descEn: service.descEn || '',
         shortDescAz: service.shortDescAz || '',
+        shortDescRu: service.shortDescRu || '',
+        shortDescEn: service.shortDescEn || '',
         icon: service.icon || '',
         isActive: service.isActive,
         order: service.order,
@@ -226,6 +238,8 @@ export default function AdminCorporatePage() {
         ...modal.form,
         icon: modal.form.icon || undefined,
         shortDescAz: modal.form.shortDescAz || undefined,
+        shortDescRu: modal.form.shortDescRu || undefined,
+        shortDescEn: modal.form.shortDescEn || undefined,
       };
 
       if (modal.mode === 'add') {
@@ -898,13 +912,83 @@ export default function AdminCorporatePage() {
                   onChange={(e) =>
                     setModal({ ...modal, form: { ...modal.form, descAz: e.target.value } })
                   }
-                  placeholder="Service description"
+                  placeholder="Service description in Azerbaijani"
                   rows={3}
                   className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
                 />
               </div>
 
-              {/* Icon & Short Description */}
+              {/* Description RU */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Description (RU)</label>
+                <textarea
+                  value={modal.form.descRu}
+                  onChange={(e) =>
+                    setModal({ ...modal, form: { ...modal.form, descRu: e.target.value } })
+                  }
+                  placeholder="Service description in Russian"
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
+                />
+              </div>
+
+              {/* Description EN */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Description (EN)</label>
+                <textarea
+                  value={modal.form.descEn}
+                  onChange={(e) =>
+                    setModal({ ...modal, form: { ...modal.form, descEn: e.target.value } })
+                  }
+                  placeholder="Service description in English"
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
+                />
+              </div>
+
+              {/* Short Description AZ */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Short Description (AZ)</label>
+                <input
+                  type="text"
+                  value={modal.form.shortDescAz}
+                  onChange={(e) =>
+                    setModal({ ...modal, form: { ...modal.form, shortDescAz: e.target.value } })
+                  }
+                  placeholder="Brief tagline in Azerbaijani"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                />
+              </div>
+
+              {/* Short Description RU */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Short Description (RU)</label>
+                <input
+                  type="text"
+                  value={modal.form.shortDescRu}
+                  onChange={(e) =>
+                    setModal({ ...modal, form: { ...modal.form, shortDescRu: e.target.value } })
+                  }
+                  placeholder="Brief tagline in Russian"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                />
+              </div>
+
+              {/* Short Description EN */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Short Description (EN)</label>
+                <input
+                  type="text"
+                  value={modal.form.shortDescEn}
+                  onChange={(e) =>
+                    setModal({ ...modal, form: { ...modal.form, shortDescEn: e.target.value } })
+                  }
+                  placeholder="Brief tagline in English"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
+                />
+              </div>
+
+              {/* Icon & Order */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Icon Name</label>

@@ -64,6 +64,8 @@ interface ScholarshipForm {
   titleRu: string;
   titleEn: string;
   descAz: string;
+  descRu: string;
+  descEn: string;
   percentage: number | '';
   deadline: string;
   isActive: boolean;
@@ -87,6 +89,8 @@ const emptyForm: ScholarshipForm = {
   titleRu: '',
   titleEn: '',
   descAz: '',
+  descRu: '',
+  descEn: '',
   percentage: '',
   deadline: '',
   isActive: true,
@@ -189,6 +193,8 @@ export default function AdminScholarshipsPage() {
         titleRu: scholarship.titleRu,
         titleEn: scholarship.titleEn,
         descAz: scholarship.descAz,
+        descRu: scholarship.descRu || '',
+        descEn: scholarship.descEn || '',
         percentage: scholarship.percentage ?? '',
         deadline: scholarship.deadline ? scholarship.deadline.split('T')[0] : '',
         isActive: scholarship.isActive,
@@ -851,6 +857,38 @@ export default function AdminScholarshipsPage() {
                     setModal({ ...modal, form: { ...modal.form, descAz: e.target.value } })
                   }
                   placeholder="Scholarship description in Azerbaijani"
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
+                />
+              </div>
+
+              {/* Description RU */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Description (RU)
+                </label>
+                <textarea
+                  value={modal.form.descRu}
+                  onChange={(e) =>
+                    setModal({ ...modal, form: { ...modal.form, descRu: e.target.value } })
+                  }
+                  placeholder="Scholarship description in Russian"
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
+                />
+              </div>
+
+              {/* Description EN */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Description (EN)
+                </label>
+                <textarea
+                  value={modal.form.descEn}
+                  onChange={(e) =>
+                    setModal({ ...modal, form: { ...modal.form, descEn: e.target.value } })
+                  }
+                  placeholder="Scholarship description in English"
                   rows={3}
                   className="w-full px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 resize-none transition-all"
                 />
