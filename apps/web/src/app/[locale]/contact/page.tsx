@@ -23,6 +23,76 @@ interface SiteSettings {
   [key: string]: string | undefined;
 }
 
+type BranchLocale = 'az' | 'ru' | 'en';
+
+interface Branch {
+  id: string;
+  name: Record<BranchLocale, string>;
+  address: Record<BranchLocale, string>;
+  query: string; // Google Maps search query used for the embed + "open in maps" link
+}
+
+// FutureUp branches / partner venues. Static data — edit here to add/change a location.
+const BRANCHES: Branch[] = [
+  {
+    id: 'adu-1',
+    name: {
+      az: 'Azərbaycan Dillər Universiteti — 1-ci korpus',
+      ru: 'Азербайджанский Университет Языков — корпус 1',
+      en: 'Azerbaijan University of Languages — Campus 1',
+    },
+    address: {
+      az: 'Bakı, Rəşid Behbudov küç. 134',
+      ru: 'Баку, ул. Рашида Бейбутова 134',
+      en: 'Baku, Rashid Behbudov St. 134',
+    },
+    query: 'Azərbaycan Dillər Universiteti, Rəşid Behbudov 134, Bakı',
+  },
+  {
+    id: 'adu-2',
+    name: {
+      az: 'Azərbaycan Dillər Universiteti — 2-ci korpus',
+      ru: 'Азербайджанский Университет Языков — корпус 2',
+      en: 'Azerbaijan University of Languages — Campus 2',
+    },
+    address: {
+      az: 'Bakı, Təbriz küç. 81 (Nərimanov)',
+      ru: 'Баку, ул. Тебриз 81 (Наримановский р-н)',
+      en: 'Baku, Tabriz St. 81 (Narimanov)',
+    },
+    query: 'Azərbaycan Dillər Universiteti 2-ci korpus, Təbriz küçəsi 81, Bakı',
+  },
+  {
+    id: 'xploit',
+    name: { az: 'Xploit Academy', ru: 'Xploit Academy', en: 'Xploit Academy' },
+    address: {
+      az: 'Bakı, Əhməd Cəmil küç. 29',
+      ru: 'Баку, ул. Ахмеда Джамиля 29',
+      en: 'Baku, Ahmad Jamil St. 29',
+    },
+    query: 'Xploit Academy, Əhməd Cəmil 29, Bakı',
+  },
+  {
+    id: 'ahmedli',
+    name: {
+      az: 'Əhmədli filialı',
+      ru: 'Филиал Ахмедли',
+      en: 'Ahmadli Branch',
+    },
+    address: {
+      az: 'Bakı, Məhəmməd Hadi küç. (Əhmədli)',
+      ru: 'Баку, ул. Мухаммеда Хади (Ахмедли)',
+      en: 'Baku, Mahammad Hadi St. (Ahmadli)',
+    },
+    query: 'Nömrə 1 Tədris Mərkəzi Əhmədli filialı, Məhəmməd Hadi, Bakı',
+  },
+];
+
+const branchEmbed = (query: string) =>
+  `https://www.google.com/maps?q=${encodeURIComponent(query)}&z=16&output=embed`;
+const branchMapsLink = (query: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
 export default function ContactPage() {
   const t = useTranslations('contact');
   const locale = useLocale();
@@ -32,6 +102,7 @@ export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [settings, setSettings] = useState<SiteSettings>({});
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [activeBranch, setActiveBranch] = useState(0);
 
   useEffect(() => {
     api
@@ -52,21 +123,21 @@ export default function ContactPage() {
     return settings[`${field}${suffix}`] || settings[`${field}Az`] || settings[`${field}En`] || fallback;
   };
 
-  const address = getLocalized('address', t('addressText'));
   const workingHours = getLocalized('workingHours', t('workingHoursText'));
   const phoneNumber = settings.phone || t('phoneText');
   const emailAddress = settings.email || t('emailText');
   const whatsappNumber = settings.whatsapp;
-  const mapsEmbed = settings.googleMapsEmbed;
-  const mapsLink = settings.googleMapsLink;
+
+  const loc: BranchLocale = (['az', 'ru', 'en'].includes(locale) ? locale : 'az') as BranchLocale;
+  const active = BRANCHES[activeBranch];
 
   const contactCards: { icon: React.ElementType; title: string; text: string; gradient: string; href?: string }[] = [
     {
       icon: MapPin,
       title: t('addressTitle'),
-      text: address,
+      text: `${active.name[loc]} — ${active.address[loc]}`,
       gradient: 'from-primary-500 to-secondary-500',
-      href: mapsLink || undefined,
+      href: branchMapsLink(active.query),
     },
     {
       icon: Phone,
@@ -182,25 +253,59 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Map + Working hours */}
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              {/* Google Maps Embed */}
-              <div className="h-72 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 mb-6">
-                {mapsEmbed ? (
-                  <iframe
-                    src={mapsEmbed}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="w-full h-full"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-primary-100 to-secondary-100 dark:from-primary-900/20 dark:to-secondary-900/20 flex items-center justify-center">
-                    <MapPin className="w-12 h-12 text-primary-400" />
-                  </div>
-                )}
+              {/* Branch selector — click a branch to move the map */}
+              <div className="mb-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <MapPin className="w-5 h-5 text-primary-500" />
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t('branchesTitle')}</h3>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {BRANCHES.map((b, i) => (
+                    <button
+                      key={b.id}
+                      type="button"
+                      onClick={() => setActiveBranch(i)}
+                      aria-pressed={i === activeBranch}
+                      className={cn(
+                        'text-left p-3 rounded-lg border transition-all',
+                        i === activeBranch
+                          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-500/40'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                      )}
+                    >
+                      <span className="block text-sm font-semibold text-gray-900 dark:text-white sm:min-h-[2.5rem]">{b.name[loc]}</span>
+                      <span className="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">{b.address[loc]}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
+
+              {/* Google Maps Embed — updates with the selected branch */}
+              <div className="h-72 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 mb-3">
+                <iframe
+                  key={active.id}
+                  title={active.name[loc]}
+                  src={branchEmbed(active.query)}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full"
+                />
+              </div>
+
+              {/* Open the selected branch in Google Maps */}
+              <a
+                href={branchMapsLink(active.query)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline mb-6"
+              >
+                {t('openInMaps')}
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
 
               {/* Working hours */}
               <div className="p-6 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800">

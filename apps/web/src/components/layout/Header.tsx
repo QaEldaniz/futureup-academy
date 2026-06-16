@@ -24,7 +24,8 @@ export function Header() {
   const navLinks = [
     { href: '/courses/kids', label: t('courses') },
     { href: '/teachers', label: t('teachers') },
-    { href: '/scholarships', label: t('scholarships') },
+    // TEMP: Scholarships hidden by request — uncomment to restore
+    // { href: '/scholarships', label: t('scholarships') },
     { href: '/corporate', label: t('corporate') },
     { href: '/about', label: t('about') },
     { href: '/faq', label: t('faq') },

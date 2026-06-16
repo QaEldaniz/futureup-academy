@@ -12,7 +12,8 @@ const pages = [
   '/contact',
   '/faq',
   '/news',
-  '/scholarships',
+  // TEMP: Scholarships hidden by request — uncomment to restore
+  // '/scholarships',
   '/corporate',
   '/teachers',
 ];

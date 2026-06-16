@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { getMessages } from 'next-intl/server';
 
 type Props = {
@@ -33,6 +34,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function ScholarshipsLayout({ children }: Props) {
-  return children;
+// TEMP: Scholarships page temporarily disabled by request.
+// It redirects to the locale home so /scholarships and /scholarships/apply are not reachable.
+// To restore: replace the body below with `return children;`.
+export default async function ScholarshipsLayout({ params }: Props) {
+  const { locale } = await params;
+  redirect(locale === 'az' ? '/' : `/${locale}`);
 }

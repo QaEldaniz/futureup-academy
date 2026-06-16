@@ -116,6 +116,147 @@ function formatDuration(duration: string, locale: string): string {
 }
 
 /* ------------------------------------------------------------------ */
+/* Offline fallback (no AI) — rule-based answers from our own data      */
+/* ------------------------------------------------------------------ */
+
+const FALLBACK_CONTACT = { phone: '+994 55 333 85 75', email: 'info@futureup.az' };
+
+const FALLBACK_TEXT: Record<string, Record<string, string>> = {
+  az: {
+    greeting: 'Salam! 👋 FutureUp Academy-yə xoş gəldiniz. Kurslar, qiymətlər, dərs cədvəli və əlaqə barədə kömək edə bilərəm.',
+    coursesIntro: '**Kurslarımız:**',
+    pricesIntro: '**Kursların qiymətləri:**',
+    coursesOutro: 'Hansısa kurs haqqında ətraflı bilmək üçün adını yazın.',
+    priceContact: 'qiymət üçün əlaqə',
+    noData: 'Kurs siyahısını indi yükləyə bilmədim. Bütün kursları saytın "Kurslar" bölməsində görə bilərsiniz.',
+    schedule: '**Dərs cədvəli:**\n- Səhər qrupları: 10:00–13:00\n- Axşam qrupları: 18:00–21:00\n- Həftəsonu qrupları da var\nDəqiq vaxt üçün bizimlə əlaqə saxlayın.',
+    apply: '**Qeydiyyat sadədir:**\n- Saytdakı müraciət formasını doldurun, və ya\n- Bizə zəng edin — 24 saat ərzində əlaqə saxlayacağıq.',
+    certificate: 'Bəli ✅ Kursu uğurla bitirdikdə unikal QR kodlu **FutureUp Academy sertifikatı** verilir.',
+    corporate: 'Bəli, şirkətlər üçün **korporativ IT təlimləri** təklif edirik. Ətraflı üçün əlaqə saxlayın.',
+    teachers: 'Komandamız təcrübəli IT mütəxəssislərindən ibarətdir — saytın "Komandamız" bölməsinə baxın.',
+    scholarship: 'Təqaüd və endirim imkanları barədə birbaşa bizimlə əlaqə saxlayın.',
+    contactLabel: '**Əlaqə:**',
+    hours: 'İş saatları: B.e–Cümə 09:00–18:00, Şənbə 10:00–15:00',
+    helpHint: 'Kurslar, qiymətlər, dərs cədvəli, sertifikat və qeydiyyat barədə soruşa bilərsiniz.',
+  },
+  ru: {
+    greeting: 'Здравствуйте! 👋 Добро пожаловать в FutureUp Academy. Помогу с вопросами о курсах, ценах, расписании и контактах.',
+    coursesIntro: '**Наши курсы:**',
+    pricesIntro: '**Стоимость курсов:**',
+    coursesOutro: 'Чтобы узнать подробнее о курсе — напишите его название.',
+    priceContact: 'цену уточняйте',
+    noData: 'Не удалось загрузить список курсов сейчас. Все курсы есть в разделе «Курсы» на сайте.',
+    schedule: '**Расписание занятий:**\n- Утренние группы: 10:00–13:00\n- Вечерние группы: 18:00–21:00\n- Есть группы выходного дня\nТочное время уточняйте у нас.',
+    apply: '**Записаться просто:**\n- Заполните форму заявки на сайте, или\n- Позвоните нам — свяжемся в течение 24 часов.',
+    certificate: 'Да ✅ После успешного окончания курса выдаётся **сертификат FutureUp Academy** с уникальным QR-кодом.',
+    corporate: 'Да, мы проводим **корпоративное IT-обучение** для компаний. Свяжитесь с нами для деталей.',
+    teachers: 'Наша команда — опытные IT-специалисты. Познакомьтесь с ними в разделе «Наша команда».',
+    scholarship: 'По стипендиям и скидкам свяжитесь с нами напрямую.',
+    contactLabel: '**Контакты:**',
+    hours: 'Часы работы: Пн–Пт 09:00–18:00, Сб 10:00–15:00',
+    helpHint: 'Можете спросить о курсах, ценах, расписании, сертификате и записи.',
+  },
+  en: {
+    greeting: 'Hi! 👋 Welcome to FutureUp Academy. I can help with courses, prices, schedule and contacts.',
+    coursesIntro: '**Our courses:**',
+    pricesIntro: '**Course prices:**',
+    coursesOutro: 'Want details on a specific course? Just type its name.',
+    priceContact: 'contact for price',
+    noData: "I couldn't load the course list right now. You can see all courses in the “Courses” section.",
+    schedule: '**Class schedule:**\n- Morning groups: 10:00–13:00\n- Evening groups: 18:00–21:00\n- Weekend groups available\nContact us for exact times.',
+    apply: '**Enrolling is easy:**\n- Fill out the application form on the website, or\n- Call us — we will get back to you within 24 hours.',
+    certificate: 'Yes ✅ Upon successful completion you receive a **FutureUp Academy certificate** with a unique QR code.',
+    corporate: 'Yes, we offer **corporate IT training** for companies. Contact us for details.',
+    teachers: 'Our team are experienced IT professionals — meet them in the “Our Team” section.',
+    scholarship: 'For scholarships and discounts, please contact us directly.',
+    contactLabel: '**Contact:**',
+    hours: 'Working hours: Mon–Fri 09:00–18:00, Sat 10:00–15:00',
+    helpHint: 'You can ask about courses, prices, schedule, certificates and enrollment.',
+  },
+};
+
+/**
+ * Static course catalog used when the live /courses API can't be reached.
+ * Mirrors the seeded catalog — keep roughly in sync, but live data always wins when available.
+ */
+type FallbackCourse = Pick<Course, 'slug' | 'titleAz' | 'titleRu' | 'titleEn' | 'duration' | 'price'>;
+const STATIC_COURSES: FallbackCourse[] = [
+  { slug: 'frontend-development', titleAz: 'Frontend Developer', titleRu: 'Frontend Разработчик', titleEn: 'Frontend Developer', duration: '6 ay', price: 1200 },
+  { slug: 'backend-java', titleAz: 'Backend Developer (Java ilə)', titleRu: 'Backend Разработчик (Java)', titleEn: 'Backend Developer (Java)', duration: '6 ay', price: 1200 },
+  { slug: 'backend-csharp', titleAz: 'Backend Developer (C# ilə)', titleRu: 'Backend Разработчик (C#)', titleEn: 'Backend Developer (C#)', duration: '6 ay', price: 1200 },
+  { slug: 'mobile-development', titleAz: 'Mobile Developer', titleRu: 'Мобильный Разработчик', titleEn: 'Mobile Developer', duration: '6 ay', price: 1300 },
+  { slug: 'ui-ux-design', titleAz: 'UI/UX dizayn', titleRu: 'UI/UX дизайн', titleEn: 'UI/UX Design', duration: '4 ay', price: 900 },
+  { slug: 'data-analytics', titleAz: 'Data Analitik', titleRu: 'Data Аналитик', titleEn: 'Data Analytics', duration: '5 ay', price: 1000 },
+  { slug: 'ai-machine-learning', titleAz: 'Süni İntellekt və ML', titleRu: 'Искусственный Интеллект и ML', titleEn: 'Artificial Intelligence & ML', duration: '6 ay', price: 1500 },
+  { slug: 'data-engineering', titleAz: 'Data Engineering', titleRu: 'Data Engineering', titleEn: 'Data Engineering', duration: '6 ay', price: 1400 },
+  { slug: 'quality-assurance', titleAz: 'Quality Assurance', titleRu: 'Quality Assurance', titleEn: 'Quality Assurance', duration: '5 ay', price: 900 },
+  { slug: 'digital-marketing', titleAz: 'Rəqəmsal marketinq', titleRu: 'Цифровой маркетинг', titleEn: 'Digital Marketing', duration: '4 ay', price: 700 },
+  { slug: 'product-owner', titleAz: 'Product Owner', titleRu: 'Product Owner', titleEn: 'Product Owner', duration: '4 ay', price: 800 },
+  { slug: 'devops-engineering', titleAz: 'DevOps Mühəndisi', titleRu: 'DevOps Инженер', titleEn: 'DevOps Engineer', duration: '6 ay', price: 1400 },
+  { slug: 'devsecops', titleAz: 'DevSecOps', titleRu: 'DevSecOps', titleEn: 'DevSecOps', duration: '5 ay', price: 1300 },
+  { slug: 'computer-systems-networks', titleAz: 'Kompüter sistemləri və şəbəkələr', titleRu: 'Компьютерные системы и сети', titleEn: 'Computer Systems & Network Software', duration: '6 ay', price: 1100 },
+  { slug: 'help-desk-specialist', titleAz: 'Help Desk mütəxəssisi', titleRu: 'Специалист Help Desk', titleEn: 'Help Desk Specialist', duration: '3 ay', price: 600 },
+  { slug: 'red-team-offensive', titleAz: 'Red Team - Offensive Security', titleRu: 'Red Team - Наступательная безопасность', titleEn: 'Red Team - Offensive Security', duration: '6 ay', price: 1500 },
+  { slug: 'blue-team-defensive', titleAz: 'Blue Team - Defensive Security', titleRu: 'Blue Team - Оборонительная безопасность', titleEn: 'Blue Team - Defensive Security', duration: '6 ay', price: 1400 },
+  { slug: 'cyber-operations-team', titleAz: 'Cyber Operations Team', titleRu: 'Команда Кибер-операций', titleEn: 'Cyber Operations Team', duration: '6 ay', price: 1600 },
+];
+
+function fbContactBlock(locale: string): string {
+  const T = FALLBACK_TEXT[locale] || FALLBACK_TEXT.az;
+  return `${T.contactLabel}\n- 📞 ${FALLBACK_CONTACT.phone}\n- ✉️ ${FALLBACK_CONTACT.email}\n- 🕐 ${T.hours}`;
+}
+
+/** Build a non-AI answer from our own data based on simple keyword matching. */
+function buildFallbackAnswer(question: string, courses: Course[], locale: string): string {
+  const T = FALLBACK_TEXT[locale] || FALLBACK_TEXT.az;
+  const raw = (question || '').trim();
+  const q = raw.toLowerCase();
+  const has = (...words: string[]) => words.some((w) => q.includes(w));
+
+  const courseList = (emphasizePrice: boolean): string => {
+    const data: FallbackCourse[] = courses && courses.length > 0 ? courses : STATIC_COURSES;
+    if (data.length === 0) return `${T.noData}\n\n${fbContactBlock(locale)}`;
+    const lines = data.slice(0, 8).map((c) => {
+      const title = getLocalized(c as unknown as Record<string, unknown>, 'title', locale) || c.titleAz;
+      const price = c.price ? `${c.price} AZN` : T.priceContact;
+      const dur = c.duration ? formatDuration(c.duration, locale) : '';
+      const meta = emphasizePrice || !dur ? price : `${price} · ${dur}`;
+      return `- **${title}** — ${meta} [[course:${c.slug}]]`;
+    });
+    const moreMap: Record<string, string> = {
+      az: 'və daha çox — saytın «Kurslar» bölməsində.',
+      ru: 'и другие — в разделе «Курсы».',
+      en: 'and more — see the “Courses” section.',
+    };
+    const more = data.length > 8 ? `\n${moreMap[locale] || moreMap.az}` : '';
+    return `${emphasizePrice ? T.pricesIntro : T.coursesIntro}\n${lines.join('\n')}${more}\n\n${T.coursesOutro}`;
+  };
+
+  // Greeting (only when the message is essentially just a greeting)
+  if (raw.length <= 14 && /^(hi|hey|hello|salam|sal|privet|здрав|привет|aleykum)\b/i.test(raw)) return T.greeting;
+  // Price
+  if (has('qiymət', 'qiymet', 'neçə', 'nece manat', 'ödəniş', 'odenis', 'цена', 'цены', 'стоит', 'стоимость', 'сколько', 'оплат', 'price', 'cost', 'how much', 'fee', 'tuition')) return courseList(true);
+  // Apply / enroll
+  if (has('qeydiyyat', 'müraciət', 'muraciet', 'yazıl', 'yazil', 'başla', 'запис', 'поступ', 'регистр', 'заявк', 'apply', 'enroll', 'register', 'sign up', 'how to join', 'get started')) return `${T.apply}\n\n${fbContactBlock(locale)}`;
+  // Schedule
+  if (has('cədvəl', 'cedvel', 'qrafik', 'nə vaxt', 'ne vaxt', 'saat', 'dərs vaxt', 'расписан', 'график', 'во сколько', 'когда занят', 'время занят', 'schedule', 'timetable', 'what time', 'class time', 'when are')) return `${T.schedule}\n\n${fbContactBlock(locale)}`;
+  // Certificate
+  if (has('sertifikat', 'diplom', 'сертификат', 'диплом', 'certificate', 'diploma')) return T.certificate;
+  // Corporate
+  if (has('korporativ', 'şirkət', 'sirket', 'biznes', 'корпоратив', 'компан', 'для бизнеса', 'corporate', 'company', 'for business', 'b2b')) return `${T.corporate}\n\n${fbContactBlock(locale)}`;
+  // Scholarship
+  if (has('təqaüd', 'teqaud', 'стипенди', 'грант', 'scholarship', 'grant', 'financial aid')) return `${T.scholarship}\n\n${fbContactBlock(locale)}`;
+  // Teachers
+  if (has('müəllim', 'muellim', 'mentor', 'преподав', 'учител', 'ментор', 'тренер', 'teacher', 'instructor', 'tutor')) return T.teachers;
+  // Contact / address / location
+  if (has('əlaqə', 'elaqe', 'ünvan', 'unvan', 'telefon', 'zəng', 'harada', 'связ', 'контакт', 'адрес', 'телефон', 'где', 'позвон', 'contact', 'address', 'phone', 'where are', 'location', 'reach you', 'call you', 'email')) return fbContactBlock(locale);
+  // Courses (generic)
+  if (has('kurs', 'ixtisas', 'öyrən', 'oyren', 'proqram', 'təlim', 'курс', 'обуч', 'програм', 'направлен', 'научит', 'course', 'learn', 'program', 'study', 'offer', 'teach', 'what do you')) return courseList(false);
+  // Default
+  return `${T.helpHint}\n\n${fbContactBlock(locale)}`;
+}
+
+/* ------------------------------------------------------------------ */
 /* Quick action presets per locale                                     */
 /* ------------------------------------------------------------------ */
 
@@ -274,6 +415,27 @@ export function CourseAdvisor() {
     }
   }
 
+  /* ---------- offline fallback (no AI): answer from our own data ---------- */
+
+  function showFallback(question: string, err: any) {
+    const content =
+      err?.message === 'RATE_LIMIT'
+        ? t('errorRateLimit')
+        : buildFallbackAnswer(question, courses, locale);
+    const matched = err?.message === 'RATE_LIMIT' ? [] : parseCourseMarkers(content, courses);
+    setMessages((prev) => {
+      const updated = [...prev];
+      const last = updated[updated.length - 1];
+      if (last && last.role === 'assistant' && !last.content) {
+        return [
+          ...updated.slice(0, -1),
+          { ...last, content, ...(matched.length > 0 ? { courses: matched } : {}) },
+        ];
+      }
+      return updated;
+    });
+  }
+
   /* ---------- send handler ---------- */
 
   async function handleSend(e?: FormEvent) {
@@ -317,18 +479,7 @@ export function CourseAdvisor() {
         return updated;
       });
     } catch (err: any) {
-      const errorMsg = err?.message === 'RATE_LIMIT' ? t('errorRateLimit') : t('errorGeneric');
-      setMessages((prev) => {
-        const updated = [...prev];
-        const last = updated[updated.length - 1];
-        if (last && last.role === 'assistant' && !last.content) {
-          return [
-            ...updated.slice(0, -1),
-            { ...last, content: errorMsg },
-          ];
-        }
-        return updated;
-      });
+      showFallback(text, err);
     } finally {
       setIsStreaming(false);
       setTimeout(() => inputRef.current?.focus(), 50);
@@ -369,15 +520,7 @@ export function CourseAdvisor() {
           });
         })
         .catch((err: any) => {
-          const errorMsg = err?.message === 'RATE_LIMIT' ? t('errorRateLimit') : t('errorGeneric');
-          setMessages((prev) => {
-            const updated = [...prev];
-            const last = updated[updated.length - 1];
-            if (last && last.role === 'assistant' && !last.content) {
-              return [...updated.slice(0, -1), { ...last, content: errorMsg }];
-            }
-            return updated;
-          });
+          showFallback(msg, err);
         })
         .finally(() => {
           setIsStreaming(false);

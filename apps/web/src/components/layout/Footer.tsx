@@ -67,7 +67,7 @@ export function Footer() {
     return settings[`address${suffix}`] || settings.addressAz || settings.addressEn || t('address');
   };
 
-  const phone = settings?.phone || '+994 50 123 45 67';
+  const phone = settings?.phone || '+994 55 333 85 75';
   const email = settings?.email || 'info@futureup.az';
   const address = getAddress();
 
@@ -86,7 +86,8 @@ export function Footer() {
   const quickLinks = [
     { href: '/courses/kids', label: navT('courses') },
     { href: '/teachers', label: navT('teachers') },
-    { href: '/scholarships', label: navT('scholarships') },
+    // TEMP: Scholarships hidden by request — uncomment to restore
+    // { href: '/scholarships', label: navT('scholarships') },
     { href: '/corporate', label: navT('corporate') },
     { href: '/about', label: navT('about') },
     { href: '/contact', label: navT('contact') },
