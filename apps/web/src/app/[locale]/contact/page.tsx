@@ -227,11 +227,11 @@ export default function ContactPage() {
                 ? { href: card.href, target: card.href.startsWith('http') ? '_blank' : undefined, rel: card.href.startsWith('http') ? 'noopener noreferrer' : undefined }
                 : {};
               return (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
+                <motion.div key={i} className="h-full" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
                   <Wrapper
                     {...wrapperProps as any}
                     className={cn(
-                      'block text-center p-8 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300',
+                      'flex flex-col items-center justify-center h-full text-center p-8 rounded-lg bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300',
                       card.href && 'cursor-pointer'
                     )}
                   >
