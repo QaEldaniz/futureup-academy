@@ -18,7 +18,25 @@ async function getJson<T>(path: string): Promise<T | null> {
   }
 }
 
+export interface SeoSyllabusModule {
+  module: string;
+  hours: number;
+  topics: string[];
+}
+
+export interface SeoCourseTeacher {
+  teacher: {
+    id: string;
+    nameAz: string; nameRu: string; nameEn: string;
+    photo: string | null;
+    specialization: string;
+    bioAz: string; bioRu: string; bioEn: string;
+    linkedin: string | null;
+  };
+}
+
 export interface SeoCourse {
+  id?: string;
   slug: string;
   titleAz: string; titleRu: string; titleEn: string;
   shortDescAz?: string; shortDescRu?: string; shortDescEn?: string;
@@ -27,8 +45,19 @@ export interface SeoCourse {
   duration?: string;
   level?: string;
   audience?: string;
+  isFeatured?: boolean;
+  image?: string | null;
+  syllabus?: SeoSyllabusModule[] | null;
+  features?: string[] | null;
+  teachers?: SeoCourseTeacher[];
   updatedAt?: string;
-  category?: { nameAz: string; nameRu: string; nameEn: string; slug: string };
+  category?: { id?: string; nameAz: string; nameRu: string; nameEn: string; slug: string; icon?: string };
+}
+
+export interface SeoReview {
+  rating: number;
+  text?: string;
+  createdAt?: string;
 }
 
 export interface SeoNews {
@@ -48,3 +77,11 @@ export const getNewsArticle = cache((slug: string) => getJson<SeoNews>(`/news/${
 
 export const getAllCourses = cache(() => getJson<SeoCourse[]>(`/courses?limit=200`));
 export const getAllNews = cache(() => getJson<SeoNews[]>(`/news?limit=200`));
+export const getCategories = cache((audience: string) =>
+  getJson<Record<string, unknown>[]>(`/categories?audience=${audience}`),
+);
+
+/** Approved public reviews for a course — used for AggregateRating + on-page reviews. */
+export const getCourseReviews = cache((courseId: string) =>
+  getJson<SeoReview[]>(`/reviews/course/${courseId}`),
+);

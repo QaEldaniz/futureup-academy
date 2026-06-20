@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useMemo, useEffect, useCallback } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { api } from '@/lib/api';
 
 export const iconMap: Record<string, React.ElementType> = {
@@ -183,29 +183,28 @@ export function CourseCard({ course, locale, isKids }: { course: Course; locale:
 
 interface CoursesPageContentProps {
   audience: 'KIDS' | 'ADULTS';
+  initialCourses?: Course[];
+  initialCategories?: Category[];
+  initialCategory?: string;
+  initialAge?: string;
+  initialSearch?: string;
 }
 
-export default function CoursesPageContent({ audience }: CoursesPageContentProps) {
+export default function CoursesPageContent({ audience, initialCourses, initialCategories, initialCategory = 'all', initialAge = 'all', initialSearch = '' }: CoursesPageContentProps) {
   const t = useTranslations('courses');
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const isKids = audience === 'KIDS';
   const otherPath = isKids ? '/courses/adults' : '/courses/kids';
 
-  // Read filters from URL
-  const initialCategory = searchParams.get('category') || 'all';
-  const initialAge = searchParams.get('age') || 'all';
-  const initialSearch = searchParams.get('q') || '';
-
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedAgeGroup, setSelectedAgeGroup] = useState(initialAge);
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [courses, setCourses] = useState<Course[]>(initialCourses || []);
+  const [categories, setCategories] = useState<Category[]>(initialCategories || []);
+  const [loading, setLoading] = useState(!initialCourses);
 
   // Sync filters to URL
   const updateURL = useCallback((cat: string, age: string, q: string) => {
@@ -233,6 +232,7 @@ export default function CoursesPageContent({ audience }: CoursesPageContentProps
   };
 
   useEffect(() => {
+    if (initialCourses) return; // server-rendered already
     async function fetchCourses() {
       try {
         const coursesRes = await api.get<{ success: boolean; data: Course[] }>('/courses?limit=50');
@@ -244,9 +244,10 @@ export default function CoursesPageContent({ audience }: CoursesPageContentProps
       }
     }
     fetchCourses();
-  }, []);
+  }, [initialCourses]);
 
   useEffect(() => {
+    if (initialCategories) return; // server-rendered already
     async function fetchCategories() {
       try {
         const categoriesRes = await api.get<{ success: boolean; data: Category[] }>(`/categories?audience=${audience}`);
@@ -256,7 +257,7 @@ export default function CoursesPageContent({ audience }: CoursesPageContentProps
       }
     }
     fetchCategories();
-  }, [audience]);
+  }, [audience, initialCategories]);
 
   const filteredCourses = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();

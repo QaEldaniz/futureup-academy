@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getMessages } from 'next-intl/server';
 import { buildMetadata, localizedUrl, pickLocalized } from '@/lib/seo';
-import { getCourse } from '@/lib/server-data';
+import { getCourse, getCourseReviews } from '@/lib/server-data';
 import { CourseJsonLd, BreadcrumbJsonLd } from '@/components/seo/StructuredData';
 
 type Props = {
@@ -40,6 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CourseDetailLayout({ children, params }: Props) {
   const { locale, slug } = await params;
   const course = await getCourse(slug);
+  const reviews = course?.id ? (await getCourseReviews(course.id)) || [] : [];
   const messages = await getMessages({ locale });
   const nav = messages.nav as Record<string, string> | undefined;
   const url = localizedUrl(locale, `/courses/${slug}`);
@@ -48,7 +49,7 @@ export default async function CourseDetailLayout({ children, params }: Props) {
     <>
       {course && (
         <>
-          <CourseJsonLd course={course} locale={locale} url={url} />
+          <CourseJsonLd course={course} locale={locale} url={url} reviews={reviews} />
           <BreadcrumbJsonLd
             items={[
               { name: nav?.home || 'Home', url: localizedUrl(locale, '') },

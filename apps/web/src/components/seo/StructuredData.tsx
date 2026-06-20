@@ -1,5 +1,5 @@
 import { SITE_URL, SITE_NAME, pickLocalized } from '@/lib/seo';
-import type { SeoCourse, SeoNews } from '@/lib/server-data';
+import type { SeoCourse, SeoNews, SeoReview } from '@/lib/server-data';
 
 /** Generic JSON-LD script tag (server component). */
 export function JsonLd({ data }: { data: Record<string, unknown> }) {
@@ -38,10 +38,12 @@ export function CourseJsonLd({
   course,
   locale,
   url,
+  reviews = [],
 }: {
   course: SeoCourse;
   locale: string;
   url: string;
+  reviews?: SeoReview[];
 }) {
   const name = pickLocalized(course as unknown as Record<string, unknown>, 'title', locale);
   const description =
@@ -91,6 +93,24 @@ export function CourseJsonLd({
       availability: 'https://schema.org/InStock',
       url,
     };
+  }
+
+  // Star rich results — only with REAL approved reviews (never fabricated).
+  if (reviews.length > 0) {
+    const sum = reviews.reduce((s, r) => s + (r.rating || 0), 0);
+    data.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: Math.round((sum / reviews.length) * 10) / 10,
+      reviewCount: reviews.length,
+      bestRating: 5,
+      worstRating: 1,
+    };
+    data.review = reviews.slice(0, 5).map((r) => ({
+      '@type': 'Review',
+      reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+      author: { '@type': 'Person', name: 'FutureUp student' },
+      ...(r.text ? { reviewBody: r.text } : {}),
+    }));
   }
 
   return <JsonLd data={data} />;

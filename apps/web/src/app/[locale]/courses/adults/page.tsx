@@ -1,16 +1,21 @@
-'use client';
+import CoursesPageContent, { type Course, type Category } from '../_components';
+import { getAllCourses, getCategories } from '@/lib/server-data';
 
-import { Suspense } from 'react';
-import CoursesPageContent from '../_components';
+type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
-function AdultsCoursesInner() {
-  return <CoursesPageContent audience="ADULTS" />;
-}
+const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) || '';
 
-export default function AdultsCoursesPage() {
+export default async function AdultsCoursesPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const [courses, categories] = await Promise.all([getAllCourses(), getCategories('ADULTS')]);
   return (
-    <Suspense>
-      <AdultsCoursesInner />
-    </Suspense>
+    <CoursesPageContent
+      audience="ADULTS"
+      initialCourses={courses ? (courses as unknown as Course[]) : undefined}
+      initialCategories={categories ? (categories as unknown as Category[]) : undefined}
+      initialCategory={one(sp.category) || 'all'}
+      initialAge={one(sp.age) || 'all'}
+      initialSearch={one(sp.q)}
+    />
   );
 }
