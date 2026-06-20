@@ -16,6 +16,8 @@ export function OrganizationJsonLd() {
     ],
     url: 'https://futureup.az',
     logo: 'https://futureup.az/images/logo.png',
+    telephone: '+994553338575',
+    email: 'info@futureup.az',
     description:
       locale === 'az'
         ? 'Bakıda ən yaxşı IT kursları — proqramlaşdırma, veb dizayn, data analitika, süni intellekt, kibertəhlükəsizlik. Uşaqlar və böyüklər üçün IT təhsil.'
@@ -98,6 +100,8 @@ export function LocalBusinessJsonLd() {
     name: 'FutureUp Academy',
     image: 'https://futureup.az/images/logo.png',
     url: 'https://futureup.az',
+    telephone: '+994553338575',
+    email: 'info@futureup.az',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Baku',

@@ -13,12 +13,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const meta = messages.meta as Record<string, string>;
   return buildMetadata({
     locale,
-    path: '/contact',
-    title: meta?.contactTitle || 'Contact — FutureUp Academy',
-    description: meta?.contactDescription,
+    path: '/courses/adults',
+    title: meta?.coursesAdultsTitle || meta?.coursesTitle || 'IT Courses for Adults — FutureUp Academy',
+    description: meta?.coursesAdultsDescription || meta?.coursesDescription,
   });
 }
 
-export default function ContactLayout({ children }: Props) {
+export default function AdultsCoursesLayout({ children }: Props) {
   return children;
 }

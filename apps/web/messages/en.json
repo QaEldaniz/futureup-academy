@@ -18,7 +18,11 @@
     "corporateTitle": "Corporate Training — FutureUp Academy | Employee Upskilling",
     "corporateDescription": "Corporate IT training programs by FutureUp Academy. Employee upskilling, team training, digital transformation for companies in Azerbaijan.",
     "teachersTitle": "Our Instructors — FutureUp Academy | Expert IT Teachers",
-    "teachersDescription": "Meet FutureUp Academy's expert instructors. Industry professionals teaching programming, design, data analytics, AI and more."
+    "teachersDescription": "Meet FutureUp Academy's expert instructors. Industry professionals teaching programming, design, data analytics, AI and more.",
+    "coursesAdultsTitle": "IT Courses for Adults — FutureUp Academy | Baku",
+    "coursesAdultsDescription": "Professional IT courses for adults in Baku: programming, web development, data analytics, cybersecurity and AI. Career change and skill development.",
+    "coursesKidsTitle": "IT Courses for Kids (ages 8-16) — FutureUp Academy | Baku",
+    "coursesKidsDescription": "Fun IT courses for kids aged 8-16 in Baku: coding, artificial intelligence and cybersecurity. Two age tracks — 8-12 and 12-16."
   },
   "nav": {
     "home": "Home",
