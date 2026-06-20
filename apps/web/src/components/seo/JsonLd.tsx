@@ -38,50 +38,6 @@ export function OrganizationJsonLd() {
       'https://www.facebook.com/futureupacademy',
       'https://www.linkedin.com/company/futureupacademy',
     ],
-    hasOfferCatalog: {
-      '@type': 'OfferCatalog',
-      name:
-        locale === 'az'
-          ? 'IT Kurslar'
-          : locale === 'ru'
-            ? 'IT Курсы'
-            : 'IT Courses',
-      itemListElement: [
-        {
-          '@type': 'OfferCatalog',
-          name:
-            locale === 'az'
-              ? 'Böyüklər üçün IT kursları'
-              : locale === 'ru'
-                ? 'IT курсы для взрослых'
-                : 'IT Courses for Adults',
-          itemListElement: [
-            'Programming', 'Web Design', 'Data Analytics',
-            'Cybersecurity', 'AI & Machine Learning', 'Digital Marketing',
-          ].map((name) => ({
-            '@type': 'Course',
-            name,
-            provider: { '@type': 'Organization', name: 'FutureUp Academy' },
-          })),
-        },
-        {
-          '@type': 'OfferCatalog',
-          name:
-            locale === 'az'
-              ? 'Uşaqlar üçün IT kursları'
-              : locale === 'ru'
-                ? 'IT курсы для детей'
-                : 'IT Courses for Kids',
-          itemListElement: [
-            'Kids Coding', 'Kids AI', 'Kids Cybersecurity',
-          ].map((name) => ({
-            '@type': 'Course',
-            name,
-            provider: { '@type': 'Organization', name: 'FutureUp Academy' },
-          })),
-        },
-      ],
-    },
   };
 
   return (
