@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocale } from 'next-intl';
-import { locales, defaultLocale, localeNames, localeFlags, type Locale } from '@/i18n/config';
+import { locales, defaultLocale, localeNames, type Locale } from '@/i18n/config';
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Globe } from 'lucide-react';
 
@@ -57,7 +57,6 @@ export function LanguageSwitcher() {
         className="flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm font-medium"
       >
         <Globe className="w-4 h-4" />
-        <span>{localeFlags[locale]}</span>
         <span className="hidden sm:inline">{localeNames[locale]}</span>
         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -74,7 +73,6 @@ export function LanguageSwitcher() {
                   : 'text-gray-700 dark:text-gray-300'
               }`}
             >
-              <span className="text-base">{localeFlags[l]}</span>
               <span>{localeNames[l]}</span>
             </button>
           ))}
