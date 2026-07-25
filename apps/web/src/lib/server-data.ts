@@ -80,6 +80,7 @@ export const getAllNews = cache(() => getJson<SeoNews[]>(`/news?limit=200`));
 export const getCategories = cache((audience: string) =>
   getJson<Record<string, unknown>[]>(`/categories?audience=${audience}`),
 );
+export const getAllCategories = cache(() => getJson<Record<string, unknown>[]>(`/categories`));
 
 /** Approved public reviews for a course — used for AggregateRating + on-page reviews. */
 export const getCourseReviews = cache((courseId: string) =>

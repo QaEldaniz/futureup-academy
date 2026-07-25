@@ -10,6 +10,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
+import Image from 'next/image';
 
 /* ─── Icon mapping by category slug ──────────────────────────────────────── */
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
@@ -63,7 +64,7 @@ const KIDS_SUBCATEGORIES: { slug: string; nameEn: string; nameAz: string; nameRu
 ];
 
 /* ─── Types ───────────────────────────────────────────────────────────────── */
-interface ApiCategory {
+export interface ApiCategory {
   id: string;
   nameAz: string;
   nameRu: string;
@@ -73,7 +74,7 @@ interface ApiCategory {
   order: number;
 }
 
-interface ApiCourse {
+export interface ApiCourse {
   id: string;
   slug: string;
   titleAz: string;
@@ -186,17 +187,21 @@ function CourseCard({ course, catSlug, isKids, locale, t }: {
 }
 
 /* ─── Main Section ────────────────────────────────────────────────────────── */
-export function CoursesSection() {
+export function CoursesSection({ initialCourses, initialCategories }: { initialCourses?: ApiCourse[]; initialCategories?: ApiCategory[] } = {}) {
   const t = useTranslations('home');
   const locale = useLocale();
   const [activeTab, setActiveTab] = useState<'adults' | 'kids'>('adults');
-  const [categories, setCategories] = useState<ApiCategory[]>([]);
-  const [courses, setCourses] = useState<ApiCourse[]>([]);
-  const [activeCategory, setActiveCategory] = useState<string>('');
-  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<ApiCategory[]>(initialCategories || []);
+  const [courses, setCourses] = useState<ApiCourse[]>(initialCourses || []);
+  const [activeCategory, setActiveCategory] = useState<string>(() => {
+    const adult = (initialCategories || []).filter((c) => c.slug !== 'kids-programs');
+    return adult[0]?.slug || '';
+  });
+  const [loading, setLoading] = useState(!(initialCourses && initialCategories));
   const isKids = activeTab === 'kids';
 
   useEffect(() => {
+    if (initialCourses && initialCategories) return; // already server-rendered
     async function fetchData() {
       try {
         const [catRes, courseRes] = await Promise.all([
@@ -278,7 +283,7 @@ export function CoursesSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-14">
           <div className="relative hidden lg:block">
             <div className="rounded-lg overflow-hidden shadow-lg">
-              <img src="/images/coding-workspace.jpg" alt="Modern coding workspace" className="w-full h-[280px] object-cover" />
+              <Image src="/images/coding-workspace.jpg" alt="Modern coding workspace" width={640} height={280} className="w-full h-[280px] object-cover" />
             </div>
           </div>
           <div className="text-center lg:text-left">

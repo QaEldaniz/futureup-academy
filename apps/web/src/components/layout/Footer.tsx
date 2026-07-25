@@ -153,18 +153,25 @@ export function Footer() {
               {t('programs')}
             </h3>
             <ul className="space-y-2.5">
-              {['Frontend Development', 'Backend Development', 'UI/UX Design', 'Data Analytics', 'Cybersecurity', 'Digital Marketing', 'DevOps', 'AI & Machine Learning'].map(
-                (program) => (
-                  <li key={program}>
-                    <Link
-                      href="/courses/adults"
-                      className="text-gray-400 hover:text-white text-sm transition-colors"
-                    >
-                      {program}
-                    </Link>
-                  </li>
-                )
-              )}
+              {[
+                { label: 'Frontend Development', slug: 'frontend-development' },
+                { label: 'Backend Development', slug: 'backend-java' },
+                { label: 'UI/UX Design', slug: 'ui-ux-design' },
+                { label: 'Data Analytics', slug: 'data-analytics' },
+                { label: 'Cybersecurity', slug: 'blue-team' },
+                { label: 'Digital Marketing', slug: 'digital-marketing' },
+                { label: 'DevOps', slug: 'devops' },
+                { label: 'AI & Machine Learning', slug: 'ai-machine-learning' },
+              ].map(({ label, slug }) => (
+                <li key={slug}>
+                  <Link
+                    href={`/courses/${slug}`}
+                    className="text-gray-400 hover:text-white text-sm transition-colors"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

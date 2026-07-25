@@ -1,0 +1,36 @@
+# FutureUp Academy
+
+> Azerbaijan's #1 IT academy — practical IT courses in Baku for kids and adults: programming, web development, data analytics, AI, cybersecurity and digital marketing. On-site and online, with certificates and career support. Content available in Azerbaijani (default), Russian and English.
+
+FutureUp Academy (futureup.az) trains students in Baku, Azerbaijan across two audiences: adults (career-focused IT programs) and kids/teens aged 8–16 (coding, AI, cybersecurity). Courses show transparent pricing in AZN, duration, a module-by-module curriculum, and a per-course FAQ.
+
+## Courses
+- [All adult IT courses](https://futureup.az/courses/adults)
+- [Kids & teens courses (ages 8–16)](https://futureup.az/courses/kids)
+- [Frontend Development](https://futureup.az/courses/frontend-development)
+- [Backend — Java](https://futureup.az/courses/backend-java)
+- [Backend — C#](https://futureup.az/courses/backend-csharp)
+- [Data Analytics](https://futureup.az/courses/data-analytics)
+- [Data Engineering](https://futureup.az/courses/data-engineering)
+- [AI & Machine Learning](https://futureup.az/courses/ai-machine-learning)
+- [UI/UX Design](https://futureup.az/courses/ui-ux-design)
+- [Digital Marketing](https://futureup.az/courses/digital-marketing)
+- [DevOps](https://futureup.az/courses/devops)
+- [Cybersecurity — Blue Team](https://futureup.az/courses/blue-team)
+- [Cybersecurity — Red Team](https://futureup.az/courses/red-team)
+- [QA Engineering](https://futureup.az/courses/qa-engineering)
+- [Mobile Development](https://futureup.az/courses/mobile-development)
+
+## Company
+- [About FutureUp Academy](https://futureup.az/about)
+- [Instructors](https://futureup.az/teachers)
+- [Corporate training](https://futureup.az/corporate)
+- [FAQ](https://futureup.az/faq)
+- [Contact & branches](https://futureup.az/contact)
+- [Apply / enrol](https://futureup.az/apply)
+
+## Contact
+- Phone: +994 55 333 85 75
+- Email: info@futureup.az
+- Location: Baku, Azerbaijan
+- Sitemap: https://futureup.az/sitemap.xml
